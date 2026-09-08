@@ -30,9 +30,10 @@ Protected: `06_FINAL_OUTPUT/V1_COMPLETE_REVIEW_03` and all earlier output folder
   - Files: `05_WEBSITE/src/content/articles/ART-010-item.md`, `05_WEBSITE/scripts/article-markdown-core.mjs`, `05_WEBSITE/scripts/extract-v2-golap.mjs`, `05_WEBSITE/tests/unit/article-markdown-core.test.mjs`, `05_WEBSITE/tests/integration/extract-v2-golap.test.mjs`, `05_WEBSITE/package.json`
   - Completed: 2026-09-08 — Confirmed the project's established convention first (existing ART-003's body is exactly `mammoth.extractRawText().value.trim()`, byte-for-byte) and replicated it. Filename uses the real `slugify()` from `lib.mjs` (Bengali title → "item", matching ART-003/ART-004's existing naming). No `NEEDS VERIFICATION` marker needed — mammoth extraction was clean with 0 warnings and the full text matches the source docx exactly. Tests: 3 unit (hermetic, markdown construction) + 1 integration (real docx extraction). Security: semgrep clean, npm audit unchanged (7 pre-existing).
 
-- [ ] Task 6: Extract Palash Biswas's article to Markdown (P0)
+- [x] Task 6: Extract Palash Biswas's article to Markdown (P0)
   - Acceptance: Full Bengali text of `বেঁচে থাকার লড়াই ও স্বপ্নের পথ` is extracted verbatim into a new UTF-8 Markdown file, text-only (the embedded `word/media/image1.png` is not extracted or referenced per the PRD's default decision); byline reflects "Palash Biswas, Mech 2006".
-  - Files: `05_WEBSITE/src/content/articles/ART-011-<slug>.md`
+  - Files: `05_WEBSITE/src/content/articles/ART-011-item.md`, `05_WEBSITE/scripts/extract-v2-palash-article.mjs`, `05_WEBSITE/tests/integration/extract-v2-palash-article.test.mjs`, `05_WEBSITE/package.json`
+  - Completed: 2026-09-08 — Reused `buildArticleMarkdown()` from Task 5. Verified: full 5,207-character Bengali text extracted verbatim (matches `mammoth.extractRawText()` exactly), byline "Palash Biswas, Mech 2006" present (embedded in the source text itself), no `<img>` markup or reference to the embedded `word/media/image1.png` introduced. Security: semgrep clean, npm audit unchanged (7 pre-existing).
 
 - [ ] Task 7: Normalize the new gallery image (Item 21) (P0)
   - Acceptance: `chatgpt kallol.jpeg` produces deterministic web and print derivatives (`GAL-007-chatgpt-web.jpg`, `GAL-007-chatgpt-print.jpg` or equivalent) under `05_WEBSITE/src/assets/normalized/images/{web,print}/`, aspect ratio preserved, no cropping; rerunning normalization does not create duplicate variants.

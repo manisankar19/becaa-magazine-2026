@@ -29,8 +29,9 @@
     "tracker:merge-v2": "node scripts/merge-v2-addendum-tracker.mjs",
     "tracker:apply-v2-exclusions": "node scripts/apply-v2-exclusions.mjs",
     "normalize:v2-cover": "node scripts/normalize-v2-cover.mjs",
+    "manifest:update-v2-cover": "node scripts/update-v2-cover-manifest.mjs",
     "test:unit": "node tests/unit/tracker-merge-core.test.mjs && node tests/unit/tracker-exclusion-core.test.mjs",
-    "test:integration": "node tests/integration/normalize-cover-core.test.mjs"
+    "test:integration": "node tests/integration/normalize-cover-core.test.mjs && node tests/integration/cover-manifest-entry.test.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

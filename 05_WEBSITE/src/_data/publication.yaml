@@ -970,6 +970,6 @@ sponsor_acknowledgement_message: BECAA Maharashtra warmly thanks our sponsors fo
 cover:
   id: COV-001
   title: একই শিকড়
-  source_file: 02_INCOMING_CONTENT/Cover page.jpg
-  asset: assets/normalized/cover/Cover page.jpg
-  source_fingerprint: d8dfb14bf8aeb93bedd74fabdd884ab51e1a433cda37c2210125a0b5f315d8e7
+  source_file: 02_INCOMING_CONTENT/v2-incoming/cover page new.png
+  asset: assets/normalized/cover/cover page new.png
+  source_fingerprint: 29a12bcbb8baca83a76e6bd6eee546471d7ece7f5d04a37468e4e5234f53d327

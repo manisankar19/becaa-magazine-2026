@@ -30,8 +30,9 @@
     "tracker:apply-v2-exclusions": "node scripts/apply-v2-exclusions.mjs",
     "normalize:v2-cover": "node scripts/normalize-v2-cover.mjs",
     "manifest:update-v2-cover": "node scripts/update-v2-cover-manifest.mjs",
-    "test:unit": "node tests/unit/tracker-merge-core.test.mjs && node tests/unit/tracker-exclusion-core.test.mjs",
-    "test:integration": "node tests/integration/normalize-cover-core.test.mjs && node tests/integration/cover-manifest-entry.test.mjs"
+    "extract:v2-golap": "node scripts/extract-v2-golap.mjs",
+    "test:unit": "node tests/unit/tracker-merge-core.test.mjs && node tests/unit/tracker-exclusion-core.test.mjs && node tests/unit/article-markdown-core.test.mjs",
+    "test:integration": "node tests/integration/normalize-cover-core.test.mjs && node tests/integration/cover-manifest-entry.test.mjs && node tests/integration/extract-v2-golap.test.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

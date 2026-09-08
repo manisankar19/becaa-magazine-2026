@@ -25,9 +25,10 @@ Protected: `06_FINAL_OUTPUT/V1_COMPLETE_REVIEW_03` and all earlier output folder
   - Files: `05_WEBSITE/src/_data/publication.yaml`, `05_WEBSITE/scripts/update-v2-cover-manifest.mjs`, `05_WEBSITE/tests/integration/cover-manifest-entry.test.mjs`, `05_WEBSITE/package.json`
   - Completed: 2026-09-08 — Targeted 3-line string replacement (not a full YAML load/dump round-trip, to avoid reformatting the other ~965 lines of the manifest). Confirmed via `git diff` that exactly those 3 lines changed. `id`/`title` unchanged. Re-parsed the file with `js-yaml` after writing to confirm it's still valid. Security: semgrep clean, npm audit unchanged (7 pre-existing).
 
-- [ ] Task 5: Extract Shubhra Basu's poem to Markdown (P0)
+- [x] Task 5: Extract Shubhra Basu's poem to Markdown (P0)
   - Acceptance: `গোলাপ` text is extracted verbatim (no rewording, no dropped line breaks) from `Shubhra Basu.docx` into a new UTF-8 Markdown file; any unclear extraction is marked with `<!-- NEEDS VERIFICATION: reason -->` rather than silently altered.
-  - Files: `05_WEBSITE/src/content/articles/ART-010-golap.md` (or equivalent deterministic name)
+  - Files: `05_WEBSITE/src/content/articles/ART-010-item.md`, `05_WEBSITE/scripts/article-markdown-core.mjs`, `05_WEBSITE/scripts/extract-v2-golap.mjs`, `05_WEBSITE/tests/unit/article-markdown-core.test.mjs`, `05_WEBSITE/tests/integration/extract-v2-golap.test.mjs`, `05_WEBSITE/package.json`
+  - Completed: 2026-09-08 — Confirmed the project's established convention first (existing ART-003's body is exactly `mammoth.extractRawText().value.trim()`, byte-for-byte) and replicated it. Filename uses the real `slugify()` from `lib.mjs` (Bengali title → "item", matching ART-003/ART-004's existing naming). No `NEEDS VERIFICATION` marker needed — mammoth extraction was clean with 0 warnings and the full text matches the source docx exactly. Tests: 3 unit (hermetic, markdown construction) + 1 integration (real docx extraction). Security: semgrep clean, npm audit unchanged (7 pre-existing).
 
 - [ ] Task 6: Extract Palash Biswas's article to Markdown (P0)
   - Acceptance: Full Bengali text of `বেঁচে থাকার লড়াই ও স্বপ্নের পথ` is extracted verbatim into a new UTF-8 Markdown file, text-only (the embedded `word/media/image1.png` is not extracted or referenced per the PRD's default decision); byline reflects "Palash Biswas, Mech 2006".

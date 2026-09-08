@@ -1,5 +1,30 @@
 # Changelog
 
+## V2_REVIEW_01 — 2026-09-08
+
+### Added
+
+- Official cover replacement: `cover page new.png`, normalized with embedded Canva/EXIF/XMP metadata stripped (same 1240×1748 @ 300 DPI dimensions as the previous cover, which is preserved unchanged for the V1 historical record).
+- `GAL-007` (Kallol Roy, "Chatgpt" painting/drawing), `ART-010` (Shubhra Basu, poem "গোলাপ"), and `ART-011` (Palash Biswas, article "বেঁচে থাকার লড়াই ও স্বপ্নের পথ") — three new approved items from the Sprint v2 addendum tracker, extracted verbatim and normalized following the same conventions established in V1.
+- `sprints/v2/MATERIAL_CHANGE_REGISTER.md`, `PRD.md`, and `TASKS.md`, documenting the full intake, classification, and implementation of this batch.
+- A local git repository for the project (previously absent) and a reproducible `npm run release:v2` command.
+
+### Excluded
+
+- Item 20 (Sudipta Chakraborty, "Climate Change and its Impact on Amchi Mumbai"): named source file `Article for BECAA Maharashtra Souveneir.pdf` was never received — not present anywhere in the project — and must not be confused with the similarly-named but differently-authored `ART-006` source already published. Recorded in the tracker as `Excluded – Source file not received`; excluded from the manifest, website, and PDF.
+- Item 24 (Siddhartha Mukhopadhyay story): source docx contains only placeholder text ("Story upcoming.") and Permission is still Pending. Recorded in the tracker as `Excluded – Content and permission pending`; excluded from the manifest, website, and PDF.
+
+### Unchanged
+
+- All 40 items from `V1_COMPLETE_REVIEW_03` carry forward with identical IDs, content, and ordering. No advertisement changes — the addendum contained no advertisement rows.
+- `06_FINAL_OUTPUT/V0_PROTOTYPE_01`, `V0_EC2_VERIFY_01`, `V1_REVIEW_01`, `V1_COMPLETE_REVIEW_01`, `V1_COMPLETE_REVIEW_02`, and `V1_COMPLETE_REVIEW_03` are untouched (verified by SHA-256 spot-check and `git status`).
+
+### Noted for follow-up (not blocking this release)
+
+- A data discrepancy: Palash Biswas's branch is recorded as "Civil" in the tracker/manifest but as "Mech" in his own byline inside the extracted article text — not corrected here, pending editorial clarification.
+- A pre-existing minor clipped-text artifact at the bottom of the print PDF's cover page, confirmed identical in the `V1_COMPLETE_REVIEW_03` baseline (not introduced by the cover replacement).
+- 7 pre-existing `npm audit` dependency findings and one pre-existing `shell: true` semgrep finding in `release.mjs`'s command runner, neither introduced by this sprint.
+
 ## V1_COMPLETE_REVIEW_03 — 2026-08-02
 
 ### Added

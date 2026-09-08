@@ -85,9 +85,10 @@ Protected: `06_FINAL_OUTPUT/V1_COMPLETE_REVIEW_03` and all earlier output folder
   - Files: none modified — verification only
   - Completed: 2026-09-08 — All 3 spot-checked files hash identically between the current working tree and their state at the very first git commit (`f90bd32`, made before any Sprint v2 tracker/content change): `release-manifest.json` `c8fd38d6…`, `website/index.html` `e74a8121…`, `website/print/BECAA-2026-complete-review.pdf` `47dfa9ac…`. `git status --short` across all 6 protected `06_FINAL_OUTPUT` folders, `01_REFERENCE_2025`, `02_INCOMING_CONTENT` (including `v2-incoming/`), `03_ADVERTISEMENTS`, and the addendum workbook returned empty — zero modifications anywhere in protected or original source material since the sprint began.
 
-- [ ] Task 17: Update `CHANGELOG.md` (P1)
+- [x] Task 17: Update `CHANGELOG.md` (P1)
   - Acceptance: A new `## V2_REVIEW_01` section is appended (not replacing prior entries) documenting the cover replacement, the three additions (`GAL-007`, `ART-010`, `ART-011`), and the two exclusions (Item 20, Item 24) with reasons, following the existing changelog format and tone.
   - Files: `CHANGELOG.md`
+  - Completed: 2026-09-08 — Added `## V2_REVIEW_01` section (Added/Excluded/Unchanged/Noted for follow-up), confirmed via `git diff --stat` to be a pure 25-line prepend with zero changes to any prior entry.
 
 - [ ] Task 18: Triage pre-existing dependency vulnerabilities found by `npm audit` (P1)
   - Acceptance: Each of the 7 findings (`xlsx` prototype pollution + ReDoS with no fix available, `js-yaml` prototype pollution/DoS, `mammoth` directory traversal, `markdown-it` ReDoS, `playwright` cert-verification issue, `sharp`/libvips CVEs, `@xmldom/xmldom` XML injection) is reviewed for real exploitability in this project's context (local build pipeline, not a public server processing untrusted input); safe non-breaking upgrades applied via `npm audit fix`; breaking-change upgrades (`sharp`, `playwright`, and anything requiring `--force`) presented to the user as a separate decision rather than applied silently. Not a v2 release blocker — discovered during Task 1's security scan, predates this sprint.

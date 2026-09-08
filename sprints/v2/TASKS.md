@@ -50,9 +50,10 @@ Protected: `06_FINAL_OUTPUT/V1_COMPLETE_REVIEW_03` and all earlier output folder
   - Files: `05_WEBSITE/validation-report.json`, `05_WEBSITE/validation-summary.md`, `05_WEBSITE/scripts/validate-tracker.mjs`
   - Completed: 2026-09-08 — `npm run validate`: 0 errors, 7 warnings — identical to V1's set; `GAL-007` did NOT trigger a low-resolution warning (1600px clears the 1116px threshold, i.e. `2480 * 0.45`). Fixed the two stale hardcoded expectations in `validate-tracker.mjs` flagged during Tasks 1/2 (row count 47→52; `COV-001` source filename `Cover page.jpg`→`cover page new.png`), and added an explicit check that Items 20/24 remain recorded but excluded (`Web/Print Include: No`, `Status` starting with "Excluded"). `npm run tracker:validate` now passes: "52 rows, 3 sheets." Security: semgrep clean, npm audit unchanged (7 pre-existing).
 
-- [ ] Task 10: Rebuild the website (P0)
+- [x] Task 10: Rebuild the website (P0)
   - Acceptance: `npm run build` completes without error; the built home page displays the new cover, the new gallery item, and both new articles in their correct sections; no existing V1 item disappears or reorders unexpectedly.
-  - Files: `05_WEBSITE/_site/**` (build output)
+  - Files: `05_WEBSITE/_site/**` (build output, gitignored/reproducible)
+  - Completed: 2026-09-08 — `npm run build` succeeded (16 files written, including `ART-010-item/index.html` and `ART-011-item/index.html`). Verified: home page's cover `<img>` now points at `cover page new.png`; `GAL-007`/`ART-010`/`ART-011` each appear exactly once; all 43 manifest items (the original 40 plus the 3 new) are present in the built home page with none missing. No new implementation code — pure rebuild against the manifest updated in Tasks 3-8, so no separate security scan needed beyond what already covers the scripts that produced the inputs.
 
 - [ ] Task 11: Rebuild the print PDF (P0)
   - Acceptance: `npm run pdf` completes without error; the new cover renders as PDF page one at correct size with no distortion; the two new articles and the new gallery image appear in the PDF without clipped text, broken Bengali conjuncts, or misplaced captions.

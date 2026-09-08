@@ -28,6 +28,7 @@
     "release:complete": "RELEASE_VERSION=V1_COMPLETE_REVIEW_01 node scripts/release.mjs",
     "release:complete:02": "RELEASE_VERSION=V1_COMPLETE_REVIEW_02 node scripts/release.mjs",
     "release:complete:03": "RELEASE_VERSION=V1_COMPLETE_REVIEW_03 node scripts/release.mjs",
+    "release:v2": "RELEASE_VERSION=V2_REVIEW_01 node scripts/release.mjs",
     "tracker:merge-v2": "node scripts/merge-v2-addendum-tracker.mjs",
     "tracker:apply-v2-exclusions": "node scripts/apply-v2-exclusions.mjs",
     "normalize:v2-cover": "node scripts/normalize-v2-cover.mjs",

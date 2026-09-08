@@ -23,8 +23,10 @@ run(npmCommand, ["run", "validate"]);
 run(npmCommand, ["run", "build"]);
 run(npmCommand, ["run", "test"]);
 run(npmCommand, ["run", "qa"]);
+run(npmCommand, ["run", "qa:v2-items"]);
 run(npmCommand, ["run", "pdf"]);
 run(npmCommand, ["run", "qa:pdf"]);
+run(npmCommand, ["run", "qa:pdf:v2-items"]);
 run(npmCommand, ["run", "qa:art006"]);
 run(npmCommand, ["run", "qa:contact"]);
 
@@ -59,7 +61,10 @@ fs.writeFileSync(path.join(outDir, "release-manifest.json"), JSON.stringify({
   build_time: new Date().toISOString(),
   git_commit: spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: projectRoot, encoding: "utf8" }).stdout.trim() || null,
   included_item_ids: manifest.items.map((item) => item.id),
-  source_fingerprints: Object.fromEntries(manifest.items.map((item) => [item.id, item.source_fingerprint]))
+  source_fingerprints: Object.fromEntries([
+    ...manifest.items.map((item) => [item.id, item.source_fingerprint]),
+    ...(manifest.cover ? [[manifest.cover.id, manifest.cover.source_fingerprint]] : [])
+  ])
 }, null, 2), "utf8");
 
 fs.writeFileSync(path.join(outDir, "BUILD_SUMMARY.md"), `# ${releaseVersion} Build Summary

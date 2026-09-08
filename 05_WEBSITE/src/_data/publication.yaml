@@ -965,6 +965,78 @@ items:
     credit: ''
     alt: CETEST advertisement artwork
     notes: 'Tracker Item ID ADV-026. Exact approved source: CETEST Advertisement_May 2025_Portrait.pptx.'
+  - id: GAL-007
+    type: gallery
+    title: Chatgpt
+    language: en
+    contributor: Kallol Roy
+    designation: ''
+    passing_year: '1991'
+    branch: Civil
+    section: gallery
+    order: 370
+    source_file: 02_INCOMING_CONTENT/v2-incoming/chatgpt kallol.jpeg
+    source_fingerprint: b3a24a9861d7c0692bca1127a510a5c5f05d96df730067e2536ad2d7541428ee
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-007-chatgpt-web.jpg
+    print_asset: assets/normalized/images/print/GAL-007-chatgpt-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: Chatgpt
+    credit: Kallol Roy
+    alt: Chatgpt — Kallol Roy
+    notes: 'Tracker Item ID 21. Exact approved source: chatgpt kallol.jpeg.'
+  - id: ART-010
+    type: article
+    title: গোলাপ
+    language: bn
+    contributor: Shubhra Basu (wife of Pranab Basu)
+    designation: ''
+    passing_year: '1978'
+    branch: Civil
+    section: articles
+    order: 200
+    source_file: 02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.docx
+    source_fingerprint: 83ae8311a1db9205946b5f7f207985eccace7dbf54d771fed3680a9a11d63af9
+    content_file: articles/ART-010-item.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: গোলাপ — Shubhra Basu (wife of Pranab Basu)
+    notes: 'Tracker Item ID 22. Exact approved source: Shubhra Basu.docx.'
+  - id: ART-011
+    type: article
+    title: বেঁচে থাকার লড়াই ও স্বপ্নের পথ
+    language: mixed
+    contributor: Palash Biswas
+    designation: ''
+    passing_year: '2006'
+    branch: Civil
+    section: articles
+    order: 210
+    source_file: 02_INCOMING_CONTENT/v2-incoming/Palash Article.docx
+    source_fingerprint: b0a1ba37a31c95ed159b8fe0e5eac6de96bcda461d5b7fe36243c21f8f3b84aa
+    content_file: articles/ART-011-item.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: বেঁচে থাকার লড়াই ও স্বপ্নের পথ — Palash Biswas
+    notes: 'Tracker Item ID 23. Exact approved source: Palash Article.docx.'
 sponsor_acknowledgements: []
 sponsor_acknowledgement_message: BECAA Maharashtra warmly thanks our sponsors for their support.
 cover:

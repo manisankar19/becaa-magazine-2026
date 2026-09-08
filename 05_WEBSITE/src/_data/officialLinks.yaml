@@ -1,0 +1,31 @@
+source_file: 04_MAGAZINE_WORKING/BECAA_2026_Official_Links.txt
+publication_title: একই শিকড়
+organisation:
+  name: BECAA Maharashtra
+  full_name: Bengal Engineering College Alumni Association, Maharashtra Chapter
+connect:
+  - id: email
+    label: Email
+    url: mailto:becaa.maharashtra@gmail.com
+    display_text: becaa.maharashtra@gmail.com
+  - id: youtube
+    label: BECAA Maharashtra on YouTube
+    url: https://www.youtube.com/@BecaaMaharashtra
+    display_text: youtube.com/@BecaaMaharashtra
+  - id: instagram
+    label: BECAA Maharashtra on Instagram
+    url: https://www.instagram.com/maharashtrabecaa/?hl=en
+    display_text: instagram.com/maharashtrabecaa
+  - id: facebook
+    label: BECAA Maharashtra on Facebook
+    url: https://www.facebook.com/beccamumbai/
+    display_text: facebook.com/beccamumbai
+cultural_programmes:
+  - id: jazim-sharma
+    label: Full Jazim Sharma Programme
+    url: https://www.youtube.com/playlist?list=PL0Bdm6asWvVblC4J0vrte9rZMqjMO0agL
+    display_text: YouTube playlist — Full Jazim Sharma Programme
+  - id: swar-setu
+    label: SWAR SETU Programme and Inauguration
+    url: https://www.youtube.com/playlist?list=PL0Bdm6asWvVa_DpwQspGzm3m6E8-lwEDC
+    display_text: YouTube playlist — SWAR SETU Programme and Inauguration

@@ -1,0 +1,88 @@
+---
+layout: layouts/base.njk
+title: একই শিকড় — BECAA Maharashtra Magazine 2026
+---
+{% set items = publication.items | whereWeb | byOrder %}
+<section class="cover" id="top" aria-labelledby="cover-title">
+  <img class="cover__art" src="{{ publication.cover.asset }}" alt="একই শিকড় — official BECAA Maharashtra Magazine 2026 cover">
+  <div class="cover__inner cover__summary">
+    <p class="eyebrow">Version 1 local review</p>
+    <h1 id="cover-title" lang="bn">একই শিকড়</h1>
+    <p class="cover__edition">BECAA Maharashtra Magazine / Souvenir 2026</p>
+    <p class="lede">A traceable review edition assembled only from approved, permission-cleared source material.</p>
+    <div class="cover__meta" aria-label="Prototype contents">
+      <span>{{ items | length }} approved web items</span>
+      <span>Website review</span>
+      <span>Print scope controlled separately</span>
+    </div>
+  </div>
+</section>
+
+<section class="contents" id="contents" aria-labelledby="contents-title">
+  <h2 id="contents-title">Prototype Contents</h2>
+  <div class="toc">
+    {% for item in items %}
+      <a href="#{{ item.id }}">
+        <span>{{ item.section | sectionLabel }}</span>
+        <strong>{{ item.title }}</strong>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% for item in items %}
+  <article class="publication-item publication-item--{{ item.type }}" id="{{ item.id }}">
+    <header class="item-header">
+      <p class="section-kicker">{{ item.section | sectionLabel }} · {{ item.id }}</p>
+      <h2>{{ item.title }}</h2>
+      {% if item.contributor %}
+        <p class="byline">{{ item | byline }}</p>
+      {% endif %}
+    </header>
+
+    {% if item.type == "advertisement" or item.type == "gallery" %}
+      <figure class="ad-frame">
+        {% if item.web_asset %}
+          <a class="ad-link" href="{{ item.web_asset }}" target="_blank" rel="noopener" aria-label="Open {{ item.title }} at larger size">
+            <img src="{{ item.web_asset }}" alt="{{ item.alt }}" loading="eager" decoding="async">
+          </a>
+        {% else %}
+          <div class="ad-placeholder" role="img" aria-label="{{ item.alt }}">Advertisement artwork awaiting verification</div>
+        {% endif %}
+        {% if item.caption %}<figcaption>{{ item.caption }}</figcaption>{% endif %}
+      </figure>
+    {% else %}
+      {% set contentPath = item.content_file %}
+      {% set body = publicationContent[contentPath] %}
+      <div class="prose{% if item.language == 'bn' or item.language == 'mixed' %} prose--bengali{% endif %}">
+        {{ body | markdown | safe }}
+      </div>
+    {% endif %}
+
+    <footer class="item-footer">
+      <span>Status: {{ item.editorial_status }}</span>
+      <span>Permission: {{ item.permission }}</span>
+      <span>Verification: {{ item.verification }}</span>
+    </footer>
+  </article>
+{% endfor %}
+
+<section class="links-section" id="cultural-programmes" aria-labelledby="cultural-title">
+  <header class="item-header"><p class="section-kicker">Official Links</p><h2 id="cultural-title">Cultural Programmes</h2></header>
+  <ul class="official-link-list">{% for link in officialLinks.cultural_programmes %}<li><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }}</a><span>{{ link.display_text }}</span></li>{% endfor %}</ul>
+</section>
+
+<section class="links-section" id="connect" aria-labelledby="connect-title">
+  <header class="item-header"><p class="section-kicker">Contact and Social</p><h2 id="connect-title">Connect with BECAA Maharashtra</h2></header>
+  <ul class="official-link-list">{% for link in officialLinks.connect %}<li><a href="{{ link.url }}"{% if link.id != "email" %} target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a><span>{{ link.display_text }}</span></li>{% endfor %}</ul>
+</section>
+
+{% if publication.sponsor_acknowledgement_message %}
+<section class="acknowledgements" id="with-thanks" aria-labelledby="with-thanks-title">
+  <header class="item-header">
+    <p class="section-kicker">Sponsor Acknowledgements</p>
+    <h2 id="with-thanks-title">With Thanks</h2>
+  </header>
+  <p>{{ publication.sponsor_acknowledgement_message }}</p>
+</section>
+{% endif %}

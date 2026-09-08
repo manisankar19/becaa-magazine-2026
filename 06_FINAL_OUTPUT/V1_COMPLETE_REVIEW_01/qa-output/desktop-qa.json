@@ -1,0 +1,101 @@
+{
+  "overflow": false,
+  "images": [
+    {
+      "src": "assets/normalized/images/web/GAL-001-ma-web.jpg",
+      "complete": true,
+      "width": 485,
+      "height": 647
+    },
+    {
+      "src": "assets/normalized/images/web/GAL-002-rhine---germany-pencil-on-paper-web.jpg",
+      "complete": true,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "src": "assets/normalized/images/web/GAL-003-college-gym-sketch-web.jpg",
+      "complete": true,
+      "width": 1200,
+      "height": 1599
+    },
+    {
+      "src": "assets/normalized/images/web/GAL-004-college-principal-sketck-web.jpg",
+      "complete": true,
+      "width": 1200,
+      "height": 1599
+    },
+    {
+      "src": "assets/normalized/images/web/GAL-005-saraswati-devi-web.jpg",
+      "complete": true,
+      "width": 1600,
+      "height": 2006
+    },
+    {
+      "src": "assets/normalized/images/web/GAL-006-college-swimming-pool-sketch-web.jpg",
+      "complete": true,
+      "width": 1600,
+      "height": 1132
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-001-skylark-advertisement-web.jpg",
+      "complete": true,
+      "width": 1414,
+      "height": 2000
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-003-vistaar-finance-advertisement-web.jpg",
+      "complete": true,
+      "width": 600,
+      "height": 200
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-007-onshore-construction-pvt-ltd-advertisement-web.jpg",
+      "complete": true,
+      "width": 1414,
+      "height": 2000
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-008-roofs-ceilings-advertisement-web.jpg",
+      "complete": true,
+      "width": 1182,
+      "height": 1073
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-011-axelon-advertisement-web.jpg",
+      "complete": true,
+      "width": 586,
+      "height": 592
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-013-anand-rathi-advertisement-web.jpg",
+      "complete": true,
+      "width": 576,
+      "height": 960
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-015-swaraj-shoes-advertisement-web.jpg",
+      "complete": true,
+      "width": 1178,
+      "height": 839
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-018-eframe-advertisement-web.jpg",
+      "complete": true,
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-022-pratap-caterer-advertisement-web.jpg",
+      "complete": true,
+      "width": 1600,
+      "height": 759
+    },
+    {
+      "src": "assets/normalized/advertisements/web/ADV-023-clover-blakefield-reality-llp-advertisement-web.jpg",
+      "complete": true,
+      "width": 1403,
+      "height": 995
+    }
+  ]
+}

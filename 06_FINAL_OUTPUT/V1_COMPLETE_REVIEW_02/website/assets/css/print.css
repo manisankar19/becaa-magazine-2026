@@ -1,0 +1,54 @@
+@page {
+  size: A4;
+  margin: 18mm;
+  @bottom-center {
+    content: counter(page);
+    color: #626057;
+    font-size: 9pt;
+  }
+}
+
+.print-preview {
+  background: #fff;
+}
+
+.print-cover, .print-contents {
+  min-height: 250mm;
+  break-after: page;
+}
+
+.print-cover {
+  display: grid;
+  align-content: center;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(135deg, #7b1e2d, #2f6652);
+  margin: -18mm;
+  padding: 24mm;
+}
+
+.print-cover h1 { font-size: 36pt; }
+.print-contents li { margin: 0 0 2mm; }
+.print-contents li span { color: #626057; font-size: 9pt; }
+
+.print-page {
+  break-after: page;
+  min-height: 250mm;
+}
+
+.print-page h1 { font-size: 22pt; }
+.print-page p { orphans: 3; widows: 3; }
+.print-page figure { break-inside: avoid; margin: 5mm 0; }
+
+.print-page:last-child {
+  break-after: auto;
+}
+
+.print-ad {
+  display: block;
+  max-width: 100%;
+  max-height: 240mm;
+  object-fit: contain;
+}
+
+.print-thanks { display: grid; align-content: center; }

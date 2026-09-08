@@ -1,0 +1,928 @@
+{
+  "generated": "2026-08-02T01:38:54.347Z",
+  "files": [
+    {
+      "relative_path": "01_REFERENCE_2025/2025 Magazine word file.docx",
+      "extension": ".docx",
+      "size": 3628197,
+      "modified_time": "2025-08-04T14:23:28.000Z",
+      "sha256": "d551eb9cd2af44f3ac133d6dcaee836b0804c67f7d939b95d10bf980147d426e",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 91289,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "01_REFERENCE_2025/Complete Magazine 2025.pdf",
+      "extension": ".pdf",
+      "size": 68092739,
+      "modified_time": "2026-05-07T14:40:42.000Z",
+      "sha256": "eebaa18e2923fe12bf9aaff8b91cf7d581283af5c300bd2806ee0cc4539ebfa1",
+      "pdf_error": "Expected instance of PDFDict, but got instance of undefined"
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/1. Artical Sudip Mazumdar .pdf",
+      "extension": ".pdf",
+      "size": 53448,
+      "modified_time": "2026-08-01T08:33:26.000Z",
+      "sha256": "68e522fe46864c011325ae88a98c5b02bd0c8f6b9d6f273747f39a7633e081bf",
+      "pdf": {
+        "pages": 2,
+        "classification": "probably text/vector PDF",
+        "text_signal_count": 43
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Article for BECAA Maharashtra Souvenir.docx",
+      "extension": ".docx",
+      "size": 24653,
+      "modified_time": "2026-08-01T13:17:49.000Z",
+      "sha256": "a31128a3a21aca3f3f0249fa51832450a0e0c6b878fbcda34cfde1c4bcdb87a3",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 10178,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Excursion.docx",
+      "extension": ".docx",
+      "size": 14125,
+      "modified_time": "2026-08-01T08:48:06.000Z",
+      "sha256": "06b99a4661fe6952af5881c327d0e6d9ec8a9b9576c56ce45b2f624ee9085f01",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 898,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Memory from 5th Year - B. Sengupta.docx",
+      "extension": ".docx",
+      "size": 29855,
+      "modified_time": "2026-08-01T13:12:46.000Z",
+      "sha256": "1360e4c07f2751bc76178a1804dcaf02f80ad9e003d72429fd0a3fcedf7ca1c9",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 4990,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Meri Kiran.docx",
+      "extension": ".docx",
+      "size": 18640,
+      "modified_time": "2026-08-01T13:38:02.000Z",
+      "sha256": "94c22d8ffceef1d01ac690ee26315594a94d44c2d931aa40146fd535600b99b2",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 5531,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Mily drawing 1.jpg",
+      "extension": ".jpg",
+      "size": 4958865,
+      "modified_time": "2026-08-01T16:08:44.000Z",
+      "sha256": "fa40a14d66a59f17fd3e4d850b7e08269ad1eafe834d00fbf790664b47f4eaf5",
+      "image": {
+        "width": 2970,
+        "height": 3723,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.7977,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/More Than a Degree.docx",
+      "extension": ".docx",
+      "size": 16522,
+      "modified_time": "2026-08-01T08:52:45.000Z",
+      "sha256": "52a83fe531612becbce6d513d90b26ae40a3f1a34951c2c94da266a419b1d503",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 5527,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/President Desk.docx",
+      "extension": ".docx",
+      "size": 16200,
+      "modified_time": "2026-08-01T16:13:32.000Z",
+      "sha256": "c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 2791,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Smritir Golite.docx",
+      "extension": ".docx",
+      "size": 14622,
+      "modified_time": "2026-08-01T13:10:51.000Z",
+      "sha256": "60280097c11019dcfcac85b1c5d398df20264dfe305169e0c284f030e1cdb469",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 1282,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Swar setu program.docx",
+      "extension": ".docx",
+      "size": 16139,
+      "modified_time": "2026-08-01T14:33:34.000Z",
+      "sha256": "c30a9e30f81a2046b6abce15bac128447c6a6ac4385b883423af133b122abf03",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 2875,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Vice president desk.docx",
+      "extension": ".docx",
+      "size": 15134,
+      "modified_time": "2026-08-01T15:45:41.000Z",
+      "sha256": "b9ac3c0485750812c21e2f2369866ddae5de511037bcc607910ff2574aae1663",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 2951,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/Why we die- B. Sengupta.docx",
+      "extension": ".docx",
+      "size": 23791,
+      "modified_time": "2026-08-01T13:12:50.000Z",
+      "sha256": "35b67c88a4678787b39239f69d69608bc26479afd77f986e02b0f7562b6d08d9",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 6142,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/college memory bhavesh.docx",
+      "extension": ".docx",
+      "size": 14579,
+      "modified_time": "2026-08-01T14:07:22.000Z",
+      "sha256": "22c90ecfb712ca8c14e75dbbeeb187e0f8066a1f1d2a2c840d4ff54f7fa02bfb",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 1701,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/gymanasium hall.jpeg",
+      "extension": ".jpeg",
+      "size": 266037,
+      "modified_time": "2026-08-01T14:02:47.000Z",
+      "sha256": "f1ec429aa3325a87d48dc656c037bedfb592f7f6c14ac6546e670f0343abc8aa",
+      "image": {
+        "width": 1200,
+        "height": 1599,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.7505,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/image0.jpeg",
+      "extension": ".jpeg",
+      "size": 200243,
+      "modified_time": "2026-08-01T13:25:20.000Z",
+      "sha256": "5f1d431bf1fdcea6eedf69fc019c93ca722948c9f0cf6b32144500a9b1d37431",
+      "image": {
+        "width": 960,
+        "height": 720,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 1.3333,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/ma.jpg",
+      "extension": ".jpg",
+      "size": 172211,
+      "modified_time": "2026-08-01T08:54:14.000Z",
+      "sha256": "9cafbc596898d910c66d85bf8c4715d08d8be248f85f6605b251e9688dff5629",
+      "image": {
+        "width": 485,
+        "height": 647,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.7496,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/main building ajay.pdf",
+      "extension": ".pdf",
+      "size": 329490,
+      "modified_time": "2026-08-01T13:52:16.000Z",
+      "sha256": "e00a30d402f5503d4f82788ae2beb3ca75355450c9e1b376a9efe772e57cdfdb",
+      "pdf": {
+        "pages": 1,
+        "classification": "probably scanned or artwork PDF",
+        "text_signal_count": 5
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/prinicpal by ajay debanth.jpeg",
+      "extension": ".jpeg",
+      "size": 122403,
+      "modified_time": "2026-08-01T14:04:17.000Z",
+      "sha256": "54be0b041223bd031bdbe4cb38eec77d0ccb47accf8c0e4dcf5def1a2b10dacf",
+      "image": {
+        "width": 1200,
+        "height": 1599,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.7505,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "02_INCOMING_CONTENT/secretary desk.docx",
+      "extension": ".docx",
+      "size": 14879,
+      "modified_time": "2026-08-01T15:32:33.000Z",
+      "sha256": "df446f4416fbf69a89cf654374f6965ceda9fb84708ed86850ef2cbf8dede687",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 2590,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/1 Skylark.png",
+      "extension": ".png",
+      "size": 376375,
+      "modified_time": "2026-04-10T17:36:06.000Z",
+      "sha256": "50575b801bc14d70ec8a7f21f65198428f216090d84d6bfa618124e4ff413567",
+      "image": {
+        "width": 1414,
+        "height": 2000,
+        "density": 171,
+        "format": "png",
+        "aspect_ratio": 0.707,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/10 Indus Grand.jpeg",
+      "extension": ".jpeg",
+      "size": 6128450,
+      "modified_time": "2026-04-10T17:54:32.000Z",
+      "sha256": "826c7f6217799b4ed72f8d739bf03b88d65611d7b6185154a20818280ab54c51",
+      "image": {
+        "width": 2601,
+        "height": 2129,
+        "density": 300,
+        "format": "jpeg",
+        "aspect_ratio": 1.2217,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/10a Indus Grand.jpeg",
+      "extension": ".jpeg",
+      "size": 67973,
+      "modified_time": "2026-04-11T06:53:56.000Z",
+      "sha256": "cfc5a74adea3fef337d9cf31b86cf55696ae8991c6a0cbf9503c90cd38ff9f2b",
+      "image": {
+        "width": 1815,
+        "height": 332,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 5.4669,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/11 Axelon.jpg",
+      "extension": ".jpg",
+      "size": 41115,
+      "modified_time": "2026-04-10T17:58:14.000Z",
+      "sha256": "9ffddb0a9dc7e76518f572eecca2cfff27adf6c11bec1775756ae12ae0302973",
+      "image": {
+        "width": 586,
+        "height": 592,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 0.9899,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/12 arvi enercon.jpeg",
+      "extension": ".jpeg",
+      "size": 42341,
+      "modified_time": "2026-04-11T18:14:10.000Z",
+      "sha256": "b81255684ec25b65088619afb5d95584795fe692c052a6779074d5c368561232",
+      "image": {
+        "width": 1250,
+        "height": 625,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 2,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/13. anand rathi logo.png",
+      "extension": ".png",
+      "size": 46723,
+      "modified_time": "2026-04-09T17:03:48.000Z",
+      "sha256": "b678ce755f1330d839d3e30ab182d5cd32562fe581ed41fabd8a29ce222d50c2",
+      "image": {
+        "width": 1049,
+        "height": 245,
+        "density": 300,
+        "format": "png",
+        "aspect_ratio": 4.2816,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/13a Anand Rathi.jpeg",
+      "extension": ".jpeg",
+      "size": 240734,
+      "modified_time": "2026-04-09T17:49:14.000Z",
+      "sha256": "b8e7945ce38845d0c0eaf68ddf6833624f954cd2c48168c39b97f0e98fb08544",
+      "image": {
+        "width": 576,
+        "height": 960,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.6,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/14 Future Netwings Solutions.png",
+      "extension": ".png",
+      "size": 109202,
+      "modified_time": "2026-04-09T17:35:10.000Z",
+      "sha256": "25d18cd3d6edd17485340b5a51e53afce175dbf8cdc9926175169ac6e011f643",
+      "image": {
+        "width": 1200,
+        "height": 1200,
+        "density": 96,
+        "format": "png",
+        "aspect_ratio": 1,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/14 a future netwings.pdf",
+      "extension": ".pdf",
+      "size": 2897000,
+      "modified_time": "2026-04-09T17:35:08.000Z",
+      "sha256": "ab377e3b40e03cd03c5ac199766511107e2f5defd219bbd72db696ac41ed9f74",
+      "pdf": {
+        "pages": 1,
+        "classification": "probably text/vector PDF",
+        "text_signal_count": 75
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/14aFuture Netwings Solutions.png",
+      "extension": ".png",
+      "size": 1638638,
+      "modified_time": "2026-04-11T06:51:50.000Z",
+      "sha256": "15b40d5571fef55a337bd086e08ce4f9e9a6423af8b909ab1c3e41f7a249950d",
+      "image": {
+        "width": 1414,
+        "height": 2000,
+        "density": 171,
+        "format": "png",
+        "aspect_ratio": 0.707,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/15 Swaraj Shoes.jpeg",
+      "extension": ".jpeg",
+      "size": 45522,
+      "modified_time": "2026-04-11T06:33:18.000Z",
+      "sha256": "785290899e1b8728c201fbb8822b6edd34cd807b9c25b16d4e0e549c04c6ab07",
+      "image": {
+        "width": 1178,
+        "height": 839,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 1.4041,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/17 UREDCONNECT.jpeg",
+      "extension": ".jpeg",
+      "size": 822219,
+      "modified_time": "2026-04-09T17:37:06.000Z",
+      "sha256": "10b2ebe1213dd36dfd8a29289827c725646e2b2410bf062905447920908747c5",
+      "image": {
+        "width": 1080,
+        "height": 1080,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 1,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/17a UREDCONNECT.jpeg",
+      "extension": ".jpeg",
+      "size": 731434,
+      "modified_time": "2026-04-09T17:37:20.000Z",
+      "sha256": "e577a1d016089cb1703ed7f878573504108f72b4432343f45c039ee9587878bc",
+      "image": {
+        "width": 1200,
+        "height": 1200,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 1,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/18 Eframe.jpeg",
+      "extension": ".jpeg",
+      "size": 853283,
+      "modified_time": "2026-04-11T06:39:06.000Z",
+      "sha256": "75db6c7b0c7375655dd40db7b07d8673d9fb211c1589ad82c5333d0b6db30605",
+      "image": {
+        "width": 1366,
+        "height": 768,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 1.7786,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/19 Network Techlabs.png",
+      "extension": ".png",
+      "size": 52765,
+      "modified_time": "2026-04-10T13:24:38.000Z",
+      "sha256": "68ede362a728d661cfa038cb23c1a8eb66849d2cfcc1b18c4a5d3a576097176c",
+      "image": {
+        "width": 2400,
+        "height": 1200,
+        "density": 300,
+        "format": "png",
+        "aspect_ratio": 2,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/19A Network Techlabs.png",
+      "extension": ".png",
+      "size": 69242,
+      "modified_time": "2026-04-10T13:24:40.000Z",
+      "sha256": "149b4688ea6c02ab46f1c41f5366b6b97972f1f0dcb2087f34ba1b6a6bbf3368",
+      "image": {
+        "width": 1677,
+        "height": 577,
+        "density": 300,
+        "format": "png",
+        "aspect_ratio": 2.9064,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/2 PNB Housing.jpg",
+      "extension": ".jpg",
+      "size": 27218140,
+      "modified_time": "2026-04-10T17:04:08.000Z",
+      "sha256": "12f3ba2ee89837e55b23135b0c02501478559548d6d09a3159a89d96ca40e225",
+      "image": {
+        "width": 10800,
+        "height": 18000,
+        "density": 300,
+        "format": "jpeg",
+        "aspect_ratio": 0.6,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/2 d PNB FD Magazine AD_A4-01.pdf",
+      "extension": ".pdf",
+      "size": 1499740,
+      "modified_time": "2026-04-09T17:01:06.000Z",
+      "sha256": "83d7d6646f2590f9e15b6cac1a8ecc0a2781e4d5ab3ddfc18911dd5d458e357b",
+      "pdf": {
+        "pages": 1,
+        "classification": "probably text/vector PDF",
+        "text_signal_count": 18
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/20 Schnelltech Global.jpeg",
+      "extension": ".jpeg",
+      "size": 91531,
+      "modified_time": "2026-04-10T16:37:36.000Z",
+      "sha256": "437b11468cff58cdd7069679eac7815e5ef61909f1b18efc946d6497fa1c28eb",
+      "image": {
+        "width": 1445,
+        "height": 695,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 2.0791,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/20 a Schnelltech Global.jpeg",
+      "extension": ".jpeg",
+      "size": 470100,
+      "modified_time": "2026-08-01T13:29:16.000Z",
+      "sha256": "fe0495aa44d7b5df4d9a2ddaa68ca5dbaa6591dc3664809a3c4a1ab9cbb52c6c",
+      "image": {
+        "width": 1587,
+        "height": 2245,
+        "density": 96,
+        "format": "jpeg",
+        "aspect_ratio": 0.7069,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/20 b Schnelltech Global.pdf",
+      "extension": ".pdf",
+      "size": 3223764,
+      "modified_time": "2026-08-01T13:29:07.000Z",
+      "sha256": "2d32a7e9e334a3f83cb13a10ae6119a3036a7eab3224e8d5f012f2445bfdd796",
+      "pdf": {
+        "pages": 1,
+        "classification": "probably text/vector PDF",
+        "text_signal_count": 58
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/21 Bhavik.jpeg",
+      "extension": ".jpeg",
+      "size": 201671,
+      "modified_time": "2026-04-10T17:19:34.000Z",
+      "sha256": "ffbe4e9773bbe1e7f072cf53ba9c1d029b9c4b363b72faebb6454529fceb80e2",
+      "image": {
+        "width": 1225,
+        "height": 1600,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.7656,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/22 pratap caterer.png",
+      "extension": ".png",
+      "size": 1460893,
+      "modified_time": "2026-04-11T06:56:52.000Z",
+      "sha256": "632c5d5a5829443e3828201548704a2b813081c3a7326321cdac88eecaaaa565",
+      "image": {
+        "width": 2268,
+        "height": 1076,
+        "density": 96,
+        "format": "png",
+        "aspect_ratio": 2.1078,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/23 Clover Blakefield Reality LLP.png",
+      "extension": ".png",
+      "size": 100884,
+      "modified_time": "2026-04-11T07:07:32.000Z",
+      "sha256": "b39ff75e7e853bcdee828de08eb4ac0e9dbc5a3936ddc9788f1debb44667dc67",
+      "image": {
+        "width": 1403,
+        "height": 995,
+        "density": 171,
+        "format": "png",
+        "aspect_ratio": 1.4101,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/2a PNB Housing.jpg",
+      "extension": ".jpg",
+      "size": 25165638,
+      "modified_time": "2026-04-10T17:04:08.000Z",
+      "sha256": "4923e8037655da5583829f20f3545d3de1ef4007616a4fe2d92add32d0f5fc79",
+      "image": {
+        "width": 10800,
+        "height": 18000,
+        "density": 300,
+        "format": "jpeg",
+        "aspect_ratio": 0.6,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/2b PNB Housing.jpg",
+      "extension": ".jpg",
+      "size": 28809966,
+      "modified_time": "2026-04-10T17:04:08.000Z",
+      "sha256": "d9c68d730e47c27b0fac60a8c8e0f3f612fce684f2fee5ccdb4fee10fddbcc4f",
+      "image": {
+        "width": 10800,
+        "height": 18000,
+        "density": 300,
+        "format": "jpeg",
+        "aspect_ratio": 0.6,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/2c PNB Housing.jpg",
+      "extension": ".jpg",
+      "size": 97273,
+      "modified_time": "2026-04-10T18:00:58.000Z",
+      "sha256": "cc06e0fbdc6a8a516467ac647ab1656d93d9684fcbbda8bc57f5c9a07f424a3e",
+      "image": {
+        "width": 1792,
+        "height": 605,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 2.962,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/3 Vistaar Finance.jpg",
+      "extension": ".jpg",
+      "size": 52397,
+      "modified_time": "2026-04-09T17:06:18.000Z",
+      "sha256": "79788f619622c2efc91252087655265fcb54f771e4be3e891910d063b3295913",
+      "image": {
+        "width": 600,
+        "height": 200,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 3,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/4 Gainwell Technologies.jpg",
+      "extension": ".jpg",
+      "size": 86073,
+      "modified_time": "2026-04-10T17:26:18.000Z",
+      "sha256": "b1e2bbb50497b052097b555c048b64f2d43edc3dc18377b1b27c12215efcb303",
+      "image": {
+        "width": 562,
+        "height": 817,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 0.6879,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/4a Gainwell cat.jpeg",
+      "extension": ".jpeg",
+      "size": 134052,
+      "modified_time": "2026-04-11T18:22:44.000Z",
+      "sha256": "11598c08b247d7324c0ac0a0bab5e88a823b34f78fd8c4508bee40b400c6a1db",
+      "image": {
+        "width": 716,
+        "height": 1600,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.4475,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/5 Tata Capital ltd. (Retail Finance).jpg",
+      "extension": ".jpg",
+      "size": 467460,
+      "modified_time": "2026-04-10T17:08:46.000Z",
+      "sha256": "2bbb0aa3336b074f7d026f010418ccfe34f23e892d44fd05f7c6759c680befd1",
+      "image": {
+        "width": 4827,
+        "height": 1984,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 2.433,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/5a Tata Capital ltd. (Retail Finance).jpg",
+      "extension": ".jpg",
+      "size": 1859598,
+      "modified_time": "2026-04-10T17:07:18.000Z",
+      "sha256": "c7b16ff1c4eff2b3aabe1f50450e2591c6d569222b74e2e26c23053fe5d94443",
+      "image": {
+        "width": 5184,
+        "height": 8640,
+        "density": 72,
+        "format": "jpeg",
+        "aspect_ratio": 0.6,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/6 Tata Capital Housing Finance Ltd..jpg",
+      "extension": ".jpg",
+      "size": 5852753,
+      "modified_time": "2026-04-10T13:26:22.000Z",
+      "sha256": "77579cd9182fe3c50f2ad911b34d88500486c6adb855f8352bfba187c8b1bb71",
+      "image": {
+        "width": 7087,
+        "height": 5315,
+        "density": 150,
+        "format": "jpeg",
+        "aspect_ratio": 1.3334,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/6 a Tata Capital Housing Finance Ltd..jpg",
+      "extension": ".jpg",
+      "size": 98597,
+      "modified_time": "2026-04-11T17:38:36.000Z",
+      "sha256": "71a1ff03247999f7270ecc85add6199661e7f4426f08ccfec0bc70ba3f3778a9",
+      "image": {
+        "width": 1606,
+        "height": 731,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 2.197,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/6 d tata capital.pdf",
+      "extension": ".pdf",
+      "size": 2349566,
+      "modified_time": "2026-04-09T17:18:42.000Z",
+      "sha256": "a815a5a28540c048fb508e6294c6571752b782c7fde90c10c1ae13e216e75228",
+      "pdf": {
+        "pages": 1,
+        "classification": "probably text/vector PDF",
+        "text_signal_count": 54
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/6b Tata Capital Housing Finance Ltd..jpg",
+      "extension": ".jpg",
+      "size": 142630,
+      "modified_time": "2026-04-11T17:39:04.000Z",
+      "sha256": "5cd00cb661631821077e7211df9272223bcb510d44cfe1193a7d1150917b6bf9",
+      "image": {
+        "width": 1632,
+        "height": 733,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 2.2265,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/6c Tata Capital Housing Finance Ltd..jpg",
+      "extension": ".jpg",
+      "size": 57366,
+      "modified_time": "2026-04-11T17:40:04.000Z",
+      "sha256": "e8fee76aedc9904523079a67eb23588f86578e33109c69520e641249fef2342c",
+      "image": {
+        "width": 791,
+        "height": 735,
+        "density": 120,
+        "format": "jpeg",
+        "aspect_ratio": 1.0762,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/7 OnShore Construction Pvt Ltd .png",
+      "extension": ".png",
+      "size": 601217,
+      "modified_time": "2026-04-10T17:28:44.000Z",
+      "sha256": "44b330116931a603e69c0daa3536a7a26ecb547799f42c22f36d3f52b1a2728d",
+      "image": {
+        "width": 1414,
+        "height": 2000,
+        "density": 171,
+        "format": "png",
+        "aspect_ratio": 0.707,
+        "a4_portrait_suitability": "possible"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/8 Roofs & Ceilings.png",
+      "extension": ".png",
+      "size": 811092,
+      "modified_time": "2026-04-10T17:46:42.000Z",
+      "sha256": "7c20b738c4ca925ded2dbb8ab4289c90f1ed3db4878e27e6c7da0b20e554316d",
+      "image": {
+        "width": 1182,
+        "height": 1073,
+        "density": 171,
+        "format": "png",
+        "aspect_ratio": 1.1016,
+        "a4_portrait_suitability": "needs review"
+      }
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/BECAAMH Cultural Programme 2026-SponsorDetail.xlsx",
+      "extension": ".xlsx",
+      "size": 24722,
+      "modified_time": "2026-08-01T15:05:20.000Z",
+      "sha256": "16d4f819c4d9c26f6715356ae2185adafc2615fbca8bac73564bf0a3500086b2"
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/CETEST Advertisement_May 2025_Portrait.pptx",
+      "extension": ".pptx",
+      "size": 453661,
+      "modified_time": "2026-08-01T13:20:50.000Z",
+      "sha256": "7540d27a2cd792f41d250068337b7da48eff2b93470add851d88bc600d0f8732"
+    },
+    {
+      "relative_path": "03_ADVERTISEMENTS/LOGO - Axelon Industries.pdf",
+      "extension": ".pdf",
+      "size": 51359,
+      "modified_time": "2026-04-10T17:54:36.000Z",
+      "sha256": "0235dda0eb2754d83d06552df3fcd44f92938526060b94bd405ea052de42cebf",
+      "pdf": {
+        "pages": 1,
+        "classification": "probably scanned or artwork PDF",
+        "text_signal_count": 2
+      }
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/BECAA_2026_Content_Tracker.xlsx",
+      "extension": ".xlsx",
+      "size": 60339,
+      "modified_time": "2026-08-02T01:36:06.940Z",
+      "sha256": "01ff5db3d4f4a2d4ee033a1f19194968a6249d784a187f16114a72a2e12b52cd"
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/BECAA_Magazine_2026_Master.docx",
+      "extension": ".docx",
+      "size": 40736,
+      "modified_time": "2026-08-01T08:37:55.000Z",
+      "sha256": "51bcdf6d91841c6a016efbeb780646fa0ebb0fccfecd90be35efc0cefa3966f0",
+      "docx": {
+        "extraction_feasible": true,
+        "extracted_characters": 5108,
+        "warnings": []
+      }
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/CONTENT_UPDATE_REPORT.md",
+      "extension": ".md",
+      "size": 5635,
+      "modified_time": "2026-08-02T01:07:06.605Z",
+      "sha256": "7d4d504eb5110f591d629525527a14434fb8f2e61a6c1fabbc53c7caf1bd2567"
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/PROTOTYPE_INSPECTION_REPORT.md",
+      "extension": ".md",
+      "size": 19888,
+      "modified_time": "2026-08-02T01:02:03.068Z",
+      "sha256": "8cd5671a3e61dfb4041c3a215f68e25a821a96473abffbf8b9c56f42c178c149"
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/BECAA_2026_Content_Tracker_2026-08-02_pre-complete-review.xlsx",
+      "extension": ".xlsx",
+      "size": 24905,
+      "modified_time": "2026-08-01T16:51:37.000Z",
+      "sha256": "c9ad909ad12b50d4972b69609faa5fed70665d8a7ea3832e4a78f1c072bc4180"
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/content-update-report.json",
+      "extension": ".json",
+      "size": 12266,
+      "modified_time": "2026-08-02T01:07:06.606Z",
+      "sha256": "bd1653d795bcc02658fe45c588557440fc2a72a0074d0daf7f64cef59d490e33"
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/source-inventory.json",
+      "extension": ".json",
+      "size": 28739,
+      "modified_time": "2026-08-02T01:02:03.041Z",
+      "sha256": "14f3f3023f0d2e2937768b1f6066278bbb5856dc9c5f9ca8f8b9ac8e7a10259e"
+    },
+    {
+      "relative_path": "04_MAGAZINE_WORKING/update-scan.json",
+      "extension": ".json",
+      "size": 16986,
+      "modified_time": "2026-08-02T01:07:06.121Z",
+      "sha256": "11632cc418ea7a63c31e0fc28030bfbdbb4099305c7a76a31bc0386f8a2652d5"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# Reproducible build/QA artifacts — regenerate via npm scripts, not versioned.
+/05_WEBSITE/node_modules/
+/05_WEBSITE/_site/
+/05_WEBSITE/.cache/
+/05_WEBSITE/qa-output/
+/05_WEBSITE/validation-report.json
+/05_WEBSITE/validation-summary.md
+/05_WEBSITE/debug.log
+*.log
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db

@@ -1,0 +1,975 @@
+meta:
+  title: একই শিকড়
+  version: 1.0.0-review.3
+  status: Complete local review 03
+  generated: '2026-08-02T04:19:33.010Z'
+  subtitle: BECAA Maharashtra Magazine / Souvenir 2026
+items:
+  - id: MSG-001
+    type: message
+    title: President Desk
+    language: mixed
+    contributor: Manik Barman
+    designation: President
+    passing_year: '1987'
+    branch: Civil
+    section: messages
+    order: 10
+    source_file: 02_INCOMING_CONTENT/President Desk.docx
+    source_fingerprint: c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb
+    content_file: messages/MSG-001-president-desk.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: President Desk — Manik Barman
+    notes: 'Tracker Item ID 16. Exact approved source: President Desk.docx.'
+  - id: MSG-002
+    type: message
+    title: Vice Preseident Desk
+    language: en
+    contributor: Debojit Dutta Biswas
+    designation: ''
+    passing_year: '1991'
+    branch: Civil
+    section: messages
+    order: 20
+    source_file: 02_INCOMING_CONTENT/Vice president desk.docx
+    source_fingerprint: b9ac3c0485750812c21e2f2369866ddae5de511037bcc607910ff2574aae1663
+    content_file: messages/MSG-002-vice-preseident-desk.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Vice Preseident Desk — Debojit Dutta Biswas
+    notes: 'Tracker Item ID 17. Exact approved source: Vice president desk.docx.'
+  - id: MSG-003
+    type: message
+    title: Secretary Desk
+    language: en
+    contributor: Abir Banerjee
+    designation: ''
+    passing_year: '1992'
+    branch: ETC
+    section: messages
+    order: 30
+    source_file: 02_INCOMING_CONTENT/secretary desk.docx
+    source_fingerprint: df446f4416fbf69a89cf654374f6965ceda9fb84708ed86850ef2cbf8dede687
+    content_file: messages/MSG-003-secretary-desk.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Secretary Desk — Abir Banerjee
+    notes: 'Tracker Item ID 18. Exact approved source: secretary desk.docx.'
+  - id: ART-001
+    type: article
+    title: SWAR SETU – Music for a Cause
+    language: mixed
+    contributor: Manisankar
+    designation: ''
+    passing_year: '2009'
+    branch: Electrical
+    section: articles
+    order: 110
+    source_file: 02_INCOMING_CONTENT/Swar setu program.docx
+    source_fingerprint: c30a9e30f81a2046b6abce15bac128447c6a6ac4385b883423af133b122abf03
+    content_file: articles/ART-001-swar-setu-program.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: SWAR SETU – Music for a Cause — Manisankar
+    notes: 'Tracker Item ID 15. Exact approved source: Swar setu program.docx.'
+  - id: ART-002
+    type: article
+    title: More Than a Degree
+    language: en
+    contributor: Subhankar Mitra
+    designation: ''
+    passing_year: '1996'
+    branch: Architecture
+    section: articles
+    order: 120
+    source_file: 02_INCOMING_CONTENT/More Than a Degree.docx
+    source_fingerprint: 52a83fe531612becbce6d513d90b26ae40a3f1a34951c2c94da266a419b1d503
+    content_file: articles/ART-002-more-than-a-degree.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: More Than a Degree — Subhankar Mitra
+    notes: 'Tracker Item ID 4. Exact approved source: More Than a Degree.docx.'
+  - id: ART-003
+    type: article
+    title: স্মৃতির গলিতে
+    language: mixed
+    contributor: বিশ্বজিৎ চক্রবর্তী
+    designation: ''
+    passing_year: '1995'
+    branch: Civil
+    section: articles
+    order: 130
+    source_file: 02_INCOMING_CONTENT/Smritir Golite.docx
+    source_fingerprint: 60280097c11019dcfcac85b1c5d398df20264dfe305169e0c284f030e1cdb469
+    content_file: articles/ART-003-item.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: স্মৃতির গলিতে — বিশ্বজিৎ চক্রবর্তী
+    notes: 'Tracker Item ID 5. Exact approved source: Smritir Golite.docx.'
+  - id: ART-004
+    type: article
+    title: হাজতবাস থেকে খুব জোর বেঁচে গেছিলাম
+    language: mixed
+    contributor: Biswajit Sengupta
+    designation: ''
+    passing_year: '1971'
+    branch: Civil
+    section: articles
+    order: 140
+    source_file: 02_INCOMING_CONTENT/Memory from 5th Year - B. Sengupta.docx
+    source_fingerprint: 1360e4c07f2751bc76178a1804dcaf02f80ad9e003d72429fd0a3fcedf7ca1c9
+    content_file: articles/ART-004-item.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: হাজতবাস থেকে খুব জোর বেঁচে গেছিলাম — Biswajit Sengupta
+    notes: 'Tracker Item ID 6. Exact approved source: Memory from 5th Year - B. Sengupta.docx.'
+  - id: ART-005
+    type: article
+    title: A Reflection on Cancer, Ageing, and Helplessness in the Face of Science
+    language: mixed
+    contributor: Biswajit Sengupta
+    designation: ''
+    passing_year: '1971'
+    branch: Civil
+    section: articles
+    order: 150
+    source_file: 02_INCOMING_CONTENT/Why we die- B. Sengupta.docx
+    source_fingerprint: 35b67c88a4678787b39239f69d69608bc26479afd77f986e02b0f7562b6d08d9
+    content_file: articles/ART-005-a-reflection-on-cancer-ageing-and-helplessness-in-the-face-of-science.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: A Reflection on Cancer, Ageing, and Helplessness in the Face of Science — Biswajit Sengupta
+    notes: 'Tracker Item ID 7. Exact approved source: Why we die- B. Sengupta.docx.'
+  - id: ART-006
+    type: article
+    title: Medicine Free Life – a dream or reality!
+    language: en
+    contributor: Indranil Ghosh
+    designation: ''
+    passing_year: '1982'
+    branch: Electrical
+    section: articles
+    order: 160
+    source_file: 02_INCOMING_CONTENT/Article for BECAA Maharashtra Souvenir.docx
+    source_fingerprint: a31128a3a21aca3f3f0249fa51832450a0e0c6b878fbcda34cfde1c4bcdb87a3
+    content_file: articles/ART-006-medicine-free-life-a-dream-or-reality.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Medicine Free Life – a dream or reality! — Indranil Ghosh
+    notes: 'Tracker Item ID 8. Exact approved source: Article for BECAA Maharashtra Souvenir.docx.'
+  - id: ART-007
+    type: article
+    title: Meri Kiran
+    language: mixed
+    contributor: Subhasish Banerjee
+    designation: ''
+    passing_year: '1978'
+    branch: ''
+    section: articles
+    order: 170
+    source_file: 02_INCOMING_CONTENT/Meri Kiran.docx
+    source_fingerprint: 94c22d8ffceef1d01ac690ee26315594a94d44c2d931aa40146fd535600b99b2
+    content_file: articles/ART-007-meri-kiran.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Meri Kiran — Subhasish Banerjee
+    notes: 'Tracker Item ID 10. Exact approved source: Meri Kiran.docx.'
+  - id: ART-008
+    type: article
+    title: Precious Memory of life
+    language: en
+    contributor: Bhavesh Sonkar
+    designation: ''
+    passing_year: '2023'
+    branch: Civil
+    section: articles
+    order: 180
+    source_file: 02_INCOMING_CONTENT/college memory bhavesh.docx
+    source_fingerprint: 22c90ecfb712ca8c14e75dbbeeb187e0f8066a1f1d2a2c840d4ff54f7fa02bfb
+    content_file: articles/ART-008-precious-memory-of-life.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Precious Memory of life — Bhavesh Sonkar
+    notes: 'Tracker Item ID 13. Exact approved source: college memory bhavesh.docx.'
+  - id: ART-009
+    type: article
+    title: 'Tokenomics: How Your CEO Learned That AI Isn''t Actually Free'
+    language: en
+    contributor: Sudip Mazumder
+    designation: ''
+    passing_year: '1992'
+    branch: Civil
+    section: articles
+    order: 190
+    source_file: 02_INCOMING_CONTENT/1. Artical Sudip Mazumdar .pdf
+    source_fingerprint: 68e522fe46864c011325ae88a98c5b02bd0c8f6b9d6f273747f39a7633e081bf
+    content_file: articles/ART-009-tokenomics-how-your-ceo-learned-that-ai-isnt-actually-free.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: 'Tokenomics: How Your CEO Learned That AI Isn''t Actually Free — Sudip Mazumder'
+    notes: 'Tracker Item ID 1. Exact approved source: 1. Artical Sudip Mazumdar .pdf.'
+  - id: GAL-001
+    type: gallery
+    title: Ma
+    language: en
+    contributor: Saikat Basu
+    designation: ''
+    passing_year: '1995'
+    branch: Minning
+    section: gallery
+    order: 310
+    source_file: 02_INCOMING_CONTENT/ma.jpg
+    source_fingerprint: 9cafbc596898d910c66d85bf8c4715d08d8be248f85f6605b251e9688dff5629
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-001-ma-web.jpg
+    print_asset: assets/normalized/images/print/GAL-001-ma-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: Ma
+    credit: Saikat Basu
+    alt: Ma — Saikat Basu
+    notes: 'Tracker Item ID 3. Exact approved source: ma.jpg.'
+  - id: GAL-002
+    type: gallery
+    title: Rhine - Germany (Pencil on paper)
+    language: en
+    contributor: Sajal Mukherjee
+    designation: ''
+    passing_year: '1980'
+    branch: Electrical
+    section: gallery
+    order: 320
+    source_file: 02_INCOMING_CONTENT/image0.jpeg
+    source_fingerprint: 5f1d431bf1fdcea6eedf69fc019c93ca722948c9f0cf6b32144500a9b1d37431
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-002-rhine---germany-pencil-on-paper-web.jpg
+    print_asset: assets/normalized/images/print/GAL-002-rhine---germany-pencil-on-paper-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: Rhine - Germany (Pencil on paper)
+    credit: Sajal Mukherjee
+    alt: Rhine - Germany (Pencil on paper) — Sajal Mukherjee
+    notes: 'Tracker Item ID 9. Exact approved source: image0.jpeg.'
+  - id: GAL-003
+    type: gallery
+    title: College Gym sketch
+    language: en
+    contributor: Ajay Debnath
+    designation: ''
+    passing_year: '1970'
+    branch: Electrical
+    section: gallery
+    order: 330
+    source_file: 02_INCOMING_CONTENT/gymanasium hall.jpeg
+    source_fingerprint: f1ec429aa3325a87d48dc656c037bedfb592f7f6c14ac6546e670f0343abc8aa
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-003-college-gym-sketch-web.jpg
+    print_asset: assets/normalized/images/print/GAL-003-college-gym-sketch-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: College Gym sketch
+    credit: Ajay Debnath
+    alt: College Gym sketch — Ajay Debnath
+    notes: 'Tracker Item ID 12. Exact approved source: gymanasium hall.jpeg.'
+  - id: GAL-004
+    type: gallery
+    title: College Principal sketck
+    language: en
+    contributor: Ajay Debnath
+    designation: ''
+    passing_year: '1970'
+    branch: Electrical
+    section: gallery
+    order: 340
+    source_file: 02_INCOMING_CONTENT/prinicpal by ajay debanth.jpeg
+    source_fingerprint: 54be0b041223bd031bdbe4cb38eec77d0ccb47accf8c0e4dcf5def1a2b10dacf
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-004-college-principal-sketck-web.jpg
+    print_asset: assets/normalized/images/print/GAL-004-college-principal-sketck-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: College Principal sketck
+    credit: Ajay Debnath
+    alt: College Principal sketck — Ajay Debnath
+    notes: 'Tracker Item ID 14. Exact approved source: prinicpal by ajay debanth.jpeg.'
+  - id: GAL-005
+    type: gallery
+    title: Saraswati Devi
+    language: en
+    contributor: Mily ( Daughter of Manisankar)
+    designation: ''
+    passing_year: '2009'
+    branch: Electrical
+    section: gallery
+    order: 350
+    source_file: 02_INCOMING_CONTENT/Mily drawing 1.jpg
+    source_fingerprint: fa40a14d66a59f17fd3e4d850b7e08269ad1eafe834d00fbf790664b47f4eaf5
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-005-saraswati-devi-web.jpg
+    print_asset: assets/normalized/images/print/GAL-005-saraswati-devi-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: Saraswati Devi
+    credit: Mily ( Daughter of Manisankar)
+    alt: Saraswati Devi — Mily ( Daughter of Manisankar)
+    notes: 'Tracker Item ID 19. Exact approved source: Mily drawing 1.jpg.'
+  - id: GAL-006
+    type: gallery
+    title: College Swimming pool sketch
+    language: en
+    contributor: Ajay Debnath
+    designation: ''
+    passing_year: '1970'
+    branch: Electrical
+    section: gallery
+    order: 360
+    source_file: 02_INCOMING_CONTENT/main building ajay.pdf
+    source_fingerprint: e00a30d402f5503d4f82788ae2beb3ca75355450c9e1b376a9efe772e57cdfdb
+    content_file: ''
+    web_asset: assets/normalized/images/web/GAL-006-college-swimming-pool-sketch-web.jpg
+    print_asset: assets/normalized/images/print/GAL-006-college-swimming-pool-sketch-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: College Swimming pool sketch
+    credit: Ajay Debnath
+    alt: College Swimming pool sketch — Ajay Debnath
+    notes: 'Tracker Item ID 11. Exact approved source: main building ajay.pdf.'
+  - id: ADV-001
+    type: advertisement
+    title: Skylark Advertisement
+    language: en
+    contributor: Skylark
+    designation: Sponsor
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 510
+    source_file: 03_ADVERTISEMENTS/1 Skylark.png
+    source_fingerprint: 50575b801bc14d70ec8a7f21f65198428f216090d84d6bfa618124e4ff413567
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-001-skylark-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-001-skylark-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Skylark advertisement artwork
+    notes: 'Tracker Item ID ADV-001. Exact approved source: 1 Skylark.png.'
+  - id: ADV-002
+    type: advertisement
+    title: PNB Housing Advertisement
+    language: en
+    contributor: PNB Housing
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 520
+    source_file: 03_ADVERTISEMENTS/2 d PNB FD Magazine AD_A4-01.pdf
+    source_fingerprint: 83d7d6646f2590f9e15b6cac1a8ecc0a2781e4d5ab3ddfc18911dd5d458e357b
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-002-pnb-housing-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-002-pnb-housing-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: PNB Housing advertisement artwork
+    notes: 'Tracker Item ID ADV-002. Exact approved source: 2 d PNB FD Magazine AD_A4-01.pdf.'
+  - id: ADV-003
+    type: advertisement
+    title: Vistaar Finance Advertisement
+    language: en
+    contributor: Vistaar Finance
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 530
+    source_file: 03_ADVERTISEMENTS/3 Vistaar Finance.jpg
+    source_fingerprint: 79788f619622c2efc91252087655265fcb54f771e4be3e891910d063b3295913
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-003-vistaar-finance-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-003-vistaar-finance-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Vistaar Finance advertisement artwork
+    notes: 'Tracker Item ID ADV-003. Exact approved source: 3 Vistaar Finance.jpg.'
+  - id: ADV-004
+    type: advertisement
+    title: Gainwell Technologies Advertisement
+    language: en
+    contributor: Gainwell Technologies
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 540
+    source_file: 03_ADVERTISEMENTS/4 Gainwell Technologies.jpg
+    source_fingerprint: b1e2bbb50497b052097b555c048b64f2d43edc3dc18377b1b27c12215efcb303
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-004-gainwell-technologies-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-004-gainwell-technologies-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Gainwell Technologies advertisement artwork
+    notes: 'Tracker Item ID ADV-004. Exact approved source: 4 Gainwell Technologies.jpg.'
+  - id: ADV-005
+    type: advertisement
+    title: Tata Capital Ltd. Retail Finance Advertisement
+    language: en
+    contributor: Tata Capital Ltd. (Retail Finance)
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 550
+    source_file: 03_ADVERTISEMENTS/5a Tata Capital ltd. (Retail Finance).jpg
+    source_fingerprint: c7b16ff1c4eff2b3aabe1f50450e2591c6d569222b74e2e26c23053fe5d94443
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-005-tata-capital-ltd-retail-finance-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-005-tata-capital-ltd-retail-finance-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Tata Capital Ltd. (Retail Finance) advertisement artwork
+    notes: 'Tracker Item ID ADV-005. Exact approved source: 5a Tata Capital ltd. (Retail Finance).jpg.'
+  - id: ADV-006
+    type: advertisement
+    title: Tata Capital Housing Finance Ltd. Advertisement
+    language: en
+    contributor: Tata Capital Housing Finance Ltd.
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 560
+    source_file: 03_ADVERTISEMENTS/6 d tata capital.pdf
+    source_fingerprint: a815a5a28540c048fb508e6294c6571752b782c7fde90c10c1ae13e216e75228
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-006-tata-capital-housing-finance-ltd-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-006-tata-capital-housing-finance-ltd-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Tata Capital Housing Finance Ltd. advertisement artwork
+    notes: 'Tracker Item ID ADV-006. Exact approved source: 6 d tata capital.pdf.'
+  - id: ADV-007
+    type: advertisement
+    title: OnShore Construction Pvt Ltd Advertisement
+    language: en
+    contributor: OnShore Construction Pvt Ltd
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 570
+    source_file: 03_ADVERTISEMENTS/7 OnShore Construction Pvt Ltd .png
+    source_fingerprint: 44b330116931a603e69c0daa3536a7a26ecb547799f42c22f36d3f52b1a2728d
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-007-onshore-construction-pvt-ltd-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-007-onshore-construction-pvt-ltd-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: OnShore Construction Pvt Ltd advertisement artwork
+    notes: 'Tracker Item ID ADV-007. Exact approved source: 7 OnShore Construction Pvt Ltd .png.'
+  - id: ADV-008
+    type: advertisement
+    title: Roofs & Ceilings Advertisement
+    language: en
+    contributor: Roofs & Ceilings
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 580
+    source_file: 03_ADVERTISEMENTS/8 Roofs & Ceilings.png
+    source_fingerprint: 7c20b738c4ca925ded2dbb8ab4289c90f1ed3db4878e27e6c7da0b20e554316d
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-008-roofs-ceilings-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-008-roofs-ceilings-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Roofs & Ceilings advertisement artwork
+    notes: 'Tracker Item ID ADV-008. Exact approved source: 8 Roofs & Ceilings.png.'
+  - id: ADV-010
+    type: advertisement
+    title: Indus Grand Advertisement
+    language: en
+    contributor: Indus Grand
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 600
+    source_file: 03_ADVERTISEMENTS/10 Indus Grand.jpeg
+    source_fingerprint: 826c7f6217799b4ed72f8d739bf03b88d65611d7b6185154a20818280ab54c51
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-010-indus-grand-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-010-indus-grand-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Indus Grand advertisement artwork
+    notes: 'Tracker Item ID ADV-010. Exact approved source: 10 Indus Grand.jpeg.'
+  - id: ADV-011
+    type: advertisement
+    title: Axelon Advertisement
+    language: en
+    contributor: Axelon
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 610
+    source_file: 03_ADVERTISEMENTS/11 Axelon.jpg
+    source_fingerprint: 9ffddb0a9dc7e76518f572eecca2cfff27adf6c11bec1775756ae12ae0302973
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-011-axelon-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-011-axelon-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Axelon advertisement artwork
+    notes: 'Tracker Item ID ADV-011. Exact approved source: 11 Axelon.jpg.'
+  - id: ADV-012
+    type: advertisement
+    title: Aarvi Encon Advertisement
+    language: en
+    contributor: Aarvi Encon
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 620
+    source_file: 03_ADVERTISEMENTS/12 arvi enercon.jpeg
+    source_fingerprint: b81255684ec25b65088619afb5d95584795fe692c052a6779074d5c368561232
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-012-aarvi-encon-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-012-aarvi-encon-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Aarvi Encon advertisement artwork
+    notes: 'Tracker Item ID ADV-012. Exact approved source: 12 arvi enercon.jpeg.'
+  - id: ADV-013
+    type: advertisement
+    title: Anand Rathi Advertisement
+    language: en
+    contributor: Anand Rathi
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 630
+    source_file: 03_ADVERTISEMENTS/13a Anand Rathi.jpeg
+    source_fingerprint: b8e7945ce38845d0c0eaf68ddf6833624f954cd2c48168c39b97f0e98fb08544
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-013-anand-rathi-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-013-anand-rathi-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Anand Rathi advertisement artwork
+    notes: 'Tracker Item ID ADV-013. Exact approved source: 13a Anand Rathi.jpeg.'
+  - id: ADV-014
+    type: advertisement
+    title: Future Netwings Solutions Advertisement
+    language: en
+    contributor: Future Netwings Solutions
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 640
+    source_file: 03_ADVERTISEMENTS/14 a future netwings.pdf
+    source_fingerprint: ab377e3b40e03cd03c5ac199766511107e2f5defd219bbd72db696ac41ed9f74
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-014-future-netwings-solutions-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-014-future-netwings-solutions-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Future Netwings Solutions advertisement artwork
+    notes: 'Tracker Item ID ADV-014. Exact approved source: 14 a future netwings.pdf.'
+  - id: ADV-015
+    type: advertisement
+    title: Swaraj Shoes Advertisement
+    language: en
+    contributor: Swaraj Shoes
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 650
+    source_file: 03_ADVERTISEMENTS/15 Swaraj Shoes.jpeg
+    source_fingerprint: 785290899e1b8728c201fbb8822b6edd34cd807b9c25b16d4e0e549c04c6ab07
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-015-swaraj-shoes-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-015-swaraj-shoes-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Swaraj Shoes advertisement artwork
+    notes: 'Tracker Item ID ADV-015. Exact approved source: 15 Swaraj Shoes.jpeg.'
+  - id: ADV-017
+    type: advertisement
+    title: UREDCONNECT Advertisement
+    language: en
+    contributor: UREDCONNECT
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 670
+    source_file: 03_ADVERTISEMENTS/17 UREDCONNECT.jpeg
+    source_fingerprint: 10b2ebe1213dd36dfd8a29289827c725646e2b2410bf062905447920908747c5
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-017-uredconnect-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-017-uredconnect-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: UREDCONNECT advertisement artwork
+    notes: 'Tracker Item ID ADV-017. Exact approved source: 17 UREDCONNECT.jpeg.'
+  - id: ADV-018
+    type: advertisement
+    title: Eframe Advertisement
+    language: en
+    contributor: Eframe
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 680
+    source_file: 03_ADVERTISEMENTS/18 Eframe.jpeg
+    source_fingerprint: 75db6c7b0c7375655dd40db7b07d8673d9fb211c1589ad82c5333d0b6db30605
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-018-eframe-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-018-eframe-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Eframe advertisement artwork
+    notes: 'Tracker Item ID ADV-018. Exact approved source: 18 Eframe.jpeg.'
+  - id: ADV-019
+    type: advertisement
+    title: Network Techlabs Advertisement
+    language: en
+    contributor: Network Techlabs
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 690
+    source_file: 03_ADVERTISEMENTS/19 Network Techlabs.png
+    source_fingerprint: 68ede362a728d661cfa038cb23c1a8eb66849d2cfcc1b18c4a5d3a576097176c
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-019-network-techlabs-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-019-network-techlabs-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Network Techlabs advertisement artwork
+    notes: 'Tracker Item ID ADV-019. Exact approved source: 19 Network Techlabs.png.'
+  - id: ADV-020
+    type: advertisement
+    title: Schnelltech Global Advertisement
+    language: en
+    contributor: Schnelltech Global
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 700
+    source_file: 03_ADVERTISEMENTS/20 b Schnelltech Global.pdf
+    source_fingerprint: 2d32a7e9e334a3f83cb13a10ae6119a3036a7eab3224e8d5f012f2445bfdd796
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-020-schnelltech-global-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-020-schnelltech-global-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Schnelltech Global advertisement artwork
+    notes: 'Tracker Item ID ADV-020. Exact approved source: 20 b Schnelltech Global.pdf.'
+  - id: ADV-021
+    type: advertisement
+    title: Bhavik Advertisement
+    language: en
+    contributor: Bhavik
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 710
+    source_file: 03_ADVERTISEMENTS/21 Bhavik.jpeg
+    source_fingerprint: ffbe4e9773bbe1e7f072cf53ba9c1d029b9c4b363b72faebb6454529fceb80e2
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-021-bhavik-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-021-bhavik-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Bhavik advertisement artwork
+    notes: 'Tracker Item ID ADV-021. Exact approved source: 21 Bhavik.jpeg.'
+  - id: ADV-022
+    type: advertisement
+    title: Pratap Caterer Advertisement
+    language: en
+    contributor: Pratap Caterer
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 720
+    source_file: 03_ADVERTISEMENTS/22 pratap caterer.png
+    source_fingerprint: 632c5d5a5829443e3828201548704a2b813081c3a7326321cdac88eecaaaa565
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-022-pratap-caterer-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-022-pratap-caterer-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Pratap Caterer advertisement artwork
+    notes: 'Tracker Item ID ADV-022. Exact approved source: 22 pratap caterer.png.'
+  - id: ADV-023
+    type: advertisement
+    title: Clover Blakefield Reality LLP Advertisement
+    language: en
+    contributor: Clover Blakefield Reality LLP
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 730
+    source_file: 03_ADVERTISEMENTS/23 Clover Blakefield Reality LLP.png
+    source_fingerprint: b39ff75e7e853bcdee828de08eb4ac0e9dbc5a3936ddc9788f1debb44667dc67
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-023-clover-blakefield-reality-llp-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-023-clover-blakefield-reality-llp-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Clover Blakefield Reality LLP advertisement artwork
+    notes: 'Tracker Item ID ADV-023. Exact approved source: 23 Clover Blakefield Reality LLP.png.'
+  - id: ADV-026
+    type: advertisement
+    title: CETEST Advertisement
+    language: en
+    contributor: CETEST
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 760
+    source_file: 03_ADVERTISEMENTS/CETEST Advertisement_May 2025_Portrait.pptx
+    source_fingerprint: 7540d27a2cd792f41d250068337b7da48eff2b93470add851d88bc600d0f8732
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-026-cetest-advertisement-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-026-cetest-advertisement-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: CETEST advertisement artwork
+    notes: 'Tracker Item ID ADV-026. Exact approved source: CETEST Advertisement_May 2025_Portrait.pptx.'
+sponsor_acknowledgements: []
+sponsor_acknowledgement_message: BECAA Maharashtra warmly thanks our sponsors for their support.
+cover:
+  id: COV-001
+  title: একই শিকড়
+  source_file: 02_INCOMING_CONTENT/Cover page.jpg
+  asset: assets/normalized/cover/Cover page.jpg
+  source_fingerprint: d8dfb14bf8aeb93bedd74fabdd884ab51e1a433cda37c2210125a0b5f315d8e7

@@ -1,0 +1,446 @@
+{
+  "generated": "2026-08-02T04:28:03.868Z",
+  "sheets": [
+    "Content Tracker",
+    "Lists",
+    "Instructions"
+  ],
+  "counts": {
+    "eligible": 41,
+    "exclude": 6
+  },
+  "items": [
+    {
+      "id": "1",
+      "title": "Tokenomics: How Your CEO Learned That AI Isn't Actually Free",
+      "decision": "eligible",
+      "reason": "Unambiguous normalized filename match: 1. Artical Sudip Mazumdar .pdf",
+      "sources": [
+        "Artical Sudip Mazumdar .pdf"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "An unusual Learning :",
+      "decision": "exclude",
+      "reason": "Not approved, permission-cleared, and web-enabled.",
+      "sources": [
+        "Excursion.docx"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Ma",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "ma.jpg"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "More Than a Degree",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "More Than a Degree.docx"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "স্মৃতির গলিতে",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Smritir Golite.docx"
+      ]
+    },
+    {
+      "id": "6",
+      "title": "হাজতবাস থেকে খুব জোর বেঁচে গেছিলাম",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Memory from 5th Year - B. Sengupta.docx"
+      ]
+    },
+    {
+      "id": "7",
+      "title": "A Reflection on Cancer, Ageing, and Helplessness in the Face of Science",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Why we die- B. Sengupta.docx"
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Medicine Free Life – a dream or reality!",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Article for BECAA Maharashtra Souvenir.docx"
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Rhine - Germany (Pencil on paper)",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "image0.jpeg"
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Meri Kiran",
+      "decision": "eligible",
+      "reason": "Contributor year confirmed: Subhasish Banerjee, 1978 Batch. Branch unavailable and intentionally omitted.",
+      "sources": [
+        "Meri Kiran.docx"
+      ]
+    },
+    {
+      "id": "11",
+      "title": "College Swimming pool sketch",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "main building ajay.pdf"
+      ]
+    },
+    {
+      "id": "12",
+      "title": "College Gym sketch",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "gymanasium hall.jpeg"
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Precious Memory of life",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "college memory bhavesh.docx"
+      ]
+    },
+    {
+      "id": "14",
+      "title": "College Principal sketck",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "prinicpal by ajay debanth.jpeg"
+      ]
+    },
+    {
+      "id": "15",
+      "title": "SWAR SETU – Music for a Cause",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Swar setu program.docx"
+      ]
+    },
+    {
+      "id": "16",
+      "title": "President Desk",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "President Desk.docx"
+      ]
+    },
+    {
+      "id": "17",
+      "title": "Vice Preseident Desk",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Vice president desk.docx"
+      ]
+    },
+    {
+      "id": "18",
+      "title": "Secretary Desk",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "secretary desk.docx"
+      ]
+    },
+    {
+      "id": "19",
+      "title": "Saraswati Devi",
+      "decision": "eligible",
+      "reason": "Approved, permission-cleared, and enabled for the current release.",
+      "sources": [
+        "Mily drawing 1.jpg"
+      ]
+    },
+    {
+      "id": "ADV-001",
+      "title": "Skylark Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 1 Skylark.png. Exact available artwork matched to tracker row.",
+      "sources": [
+        "1 Skylark.png"
+      ]
+    },
+    {
+      "id": "ADV-002",
+      "title": "PNB Housing Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 2 d PNB FD Magazine AD_A4-01.pdf. Selected full-page A4 file explicitly named Magazine AD; other PNB files are alternate designs/logo.",
+      "sources": [
+        "2 d PNB FD Magazine AD_A4-01.pdf",
+        "2 PNB Housing.jpg",
+        "2a PNB Housing.jpg",
+        "2b PNB Housing.jpg",
+        "2c PNB Housing.jpg"
+      ]
+    },
+    {
+      "id": "ADV-003",
+      "title": "Vistaar Finance Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 3 Vistaar Finance.jpg. Exact available artwork matched to tracker row.",
+      "sources": [
+        "3 Vistaar Finance.jpg"
+      ]
+    },
+    {
+      "id": "ADV-004",
+      "title": "Gainwell Technologies Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 4 Gainwell Technologies.jpg. Selected primary company artwork; CAT image is supplemental alternate artwork.",
+      "sources": [
+        "4 Gainwell Technologies.jpg",
+        "4a Gainwell cat.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-005",
+      "title": "Tata Capital Ltd. Retail Finance Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 5a Tata Capital ltd. (Retail Finance).jpg. Selected full-page retail-finance artwork; base file is logo-only.",
+      "sources": [
+        "5 Tata Capital ltd. (Retail Finance).jpg",
+        "5a Tata Capital ltd. (Retail Finance).jpg"
+      ]
+    },
+    {
+      "id": "ADV-006",
+      "title": "Tata Capital Housing Finance Ltd. Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 6 d tata capital.pdf. Selected full portrait PDF advertisement; JPG files are alternate banners/placements.",
+      "sources": [
+        "6 a Tata Capital Housing Finance Ltd..jpg",
+        "6 d tata capital.pdf",
+        "6 Tata Capital Housing Finance Ltd..jpg",
+        "6b Tata Capital Housing Finance Ltd..jpg",
+        "6c Tata Capital Housing Finance Ltd..jpg"
+      ]
+    },
+    {
+      "id": "ADV-007",
+      "title": "OnShore Construction Pvt Ltd Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 7 OnShore Construction Pvt Ltd .png. Exact available artwork matched to tracker row.",
+      "sources": [
+        "7 OnShore Construction Pvt Ltd .png"
+      ]
+    },
+    {
+      "id": "ADV-008",
+      "title": "Roofs & Ceilings Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 8 Roofs & Ceilings.png. Exact available artwork matched to tracker row.",
+      "sources": [
+        "8 Roofs & Ceilings.png"
+      ]
+    },
+    {
+      "id": "ADV-009",
+      "title": "Worldline India Advertisement",
+      "decision": "exclude",
+      "reason": "Confirmed excluded from website, print and Sponsor Acknowledgements: source artwork unavailable.",
+      "sources": []
+    },
+    {
+      "id": "ADV-010",
+      "title": "Indus Grand Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 10 Indus Grand.jpeg. Selected full advertisement; 10a is logo-only.",
+      "sources": [
+        "10 Indus Grand.jpeg",
+        "10a Indus Grand.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-011",
+      "title": "Axelon Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 11 Axelon.jpg. Exact available artwork matched to tracker row.",
+      "sources": [
+        "11 Axelon.jpg",
+        "LOGO - Axelon Industries.pdf"
+      ]
+    },
+    {
+      "id": "ADV-012",
+      "title": "Aarvi Encon Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 12 arvi enercon.jpeg. Exact tracker file exists; artwork and sponsor workbook confirm Aarvi Encon despite filename spelling.",
+      "sources": [
+        "12 arvi enercon.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-013",
+      "title": "Anand Rathi Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 13a Anand Rathi.jpeg. Exact available artwork matched to tracker row.",
+      "sources": [
+        "13. anand rathi logo.png",
+        "13a Anand Rathi.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-014",
+      "title": "Future Netwings Solutions Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 14 a future netwings.pdf. Selected full-page PDF; PNG files are logo/raster derivative alternatives.",
+      "sources": [
+        "14 a future netwings.pdf",
+        "14 Future Netwings Solutions.png",
+        "14aFuture Netwings Solutions.png"
+      ]
+    },
+    {
+      "id": "ADV-015",
+      "title": "Swaraj Shoes Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 15 Swaraj Shoes.jpeg. Exact available artwork matched to tracker row.",
+      "sources": [
+        "15 Swaraj Shoes.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-016",
+      "title": "Unidentified Advertisement",
+      "decision": "exclude",
+      "reason": "Confirmed excluded from website, print and Sponsor Acknowledgements: advertiser/company identity unavailable.",
+      "sources": []
+    },
+    {
+      "id": "ADV-017",
+      "title": "UREDCONNECT Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 17 UREDCONNECT.jpeg. Selected primary numbered advertisement; 17a is an alternate design.",
+      "sources": [
+        "17 UREDCONNECT.jpeg",
+        "17a UREDCONNECT.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-018",
+      "title": "Eframe Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 18 Eframe.jpeg. Exact available artwork matched to tracker row.",
+      "sources": [
+        "18 Eframe.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-019",
+      "title": "Network Techlabs Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 19 Network Techlabs.png. Selected primary numbered artwork; 19A is an alternate banner.",
+      "sources": [
+        "19 Network Techlabs.png",
+        "19A Network Techlabs.png"
+      ]
+    },
+    {
+      "id": "ADV-020",
+      "title": "Schnelltech Global Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 20 b Schnelltech Global.pdf. Selected full magazine PDF; base file is logo-only and 20a is a raster derivative.",
+      "sources": [
+        "20 a Schnelltech Global.jpeg",
+        "20 b Schnelltech Global.pdf",
+        "20 Schnelltech Global.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-021",
+      "title": "Bhavik Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 21 Bhavik.jpeg. Company name corrected to Bhavik from the name displayed in the approved artwork, per user authorization.",
+      "sources": [
+        "21 Bhavik.jpeg"
+      ]
+    },
+    {
+      "id": "ADV-022",
+      "title": "Pratap Caterer Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 22 pratap caterer.png. Exact available artwork matched to tracker row.",
+      "sources": [
+        "22 pratap caterer.png"
+      ]
+    },
+    {
+      "id": "ADV-023",
+      "title": "Clover Blakefield Reality LLP Advertisement",
+      "decision": "eligible",
+      "reason": "Preferred artwork: 23 Clover Blakefield Reality LLP.png. Exact available artwork matched to tracker row.",
+      "sources": [
+        "23 Clover Blakefield Reality LLP.png"
+      ]
+    },
+    {
+      "id": "ADV-024",
+      "title": "Eegrab Advertisement",
+      "decision": "exclude",
+      "reason": "Confirmed excluded from website, print and Sponsor Acknowledgements: source artwork unavailable.",
+      "sources": []
+    },
+    {
+      "id": "ADV-025",
+      "title": "mepass Advertisement",
+      "decision": "exclude",
+      "reason": "Confirmed excluded from website, print and Sponsor Acknowledgements: source artwork unavailable.",
+      "sources": []
+    },
+    {
+      "id": "ADV-026",
+      "title": "CETEST Advertisement",
+      "decision": "eligible",
+      "reason": "Explicitly approved for 2026 review publication. Render slide 1 from the original PPTX with LibreOffice Impress PDF export, then rasterize at 300 DPI; preserve original PPTX untouched.",
+      "sources": [
+        "CETEST Advertisement_May 2025_Portrait.pptx"
+      ]
+    },
+    {
+      "id": "ADV-027",
+      "title": "Aniket Pal Advertisement",
+      "decision": "exclude",
+      "reason": "Confirmed excluded from website, print and Sponsor Acknowledgements: company name incomplete or unavailable.",
+      "sources": []
+    },
+    {
+      "id": "COV-001",
+      "title": "একই শিকড় — Official Cover",
+      "decision": "eligible",
+      "reason": "Confirmed official magazine title: একই শিকড়. Source SHA-256: d8dfb14bf8aeb93bedd74fabdd884ab51e1a433cda37c2210125a0b5f315d8e7.",
+      "sources": [
+        "Cover page.jpg"
+      ]
+    }
+  ]
+}

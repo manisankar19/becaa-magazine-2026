@@ -1,0 +1,24 @@
+@page {
+  size: A4;
+  margin: 18mm;
+}
+
+.print-preview {
+  background: #fff;
+}
+
+.print-page {
+  break-after: page;
+  min-height: 250mm;
+}
+
+.print-page:last-child {
+  break-after: auto;
+}
+
+.print-ad {
+  display: block;
+  max-width: 100%;
+  max-height: 240mm;
+  object-fit: contain;
+}

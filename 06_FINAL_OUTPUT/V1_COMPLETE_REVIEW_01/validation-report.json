@@ -1,0 +1,153 @@
+{
+  "generated": "2026-08-02T01:47:01.022Z",
+  "errors": [],
+  "warnings": [
+    "GAL-001 print asset may be low resolution for A4: 485 px wide.",
+    "GAL-002 print asset may be low resolution for A4: 960 px wide.",
+    "ADV-003 print asset may be low resolution for A4: 600 px wide.",
+    "ADV-011 print asset may be low resolution for A4: 586 px wide.",
+    "ADV-013 print asset may be low resolution for A4: 576 px wide."
+  ],
+  "items": [
+    {
+      "id": "MSG-001",
+      "type": "message",
+      "title": "President Desk"
+    },
+    {
+      "id": "MSG-002",
+      "type": "message",
+      "title": "Vice Preseident Desk"
+    },
+    {
+      "id": "MSG-003",
+      "type": "message",
+      "title": "Secretary Desk"
+    },
+    {
+      "id": "ART-001",
+      "type": "article",
+      "title": "SWAR SETU – Music for a Cause"
+    },
+    {
+      "id": "ART-002",
+      "type": "article",
+      "title": "More Than a Degree"
+    },
+    {
+      "id": "ART-003",
+      "type": "article",
+      "title": "স্মৃতির গলিতে"
+    },
+    {
+      "id": "ART-004",
+      "type": "article",
+      "title": "হাজতবাস থেকে খুব জোর বেঁচে গেছিলাম"
+    },
+    {
+      "id": "ART-005",
+      "type": "article",
+      "title": "A Reflection on Cancer, Ageing, and Helplessness in the Face of Science"
+    },
+    {
+      "id": "ART-006",
+      "type": "article",
+      "title": "Medicine Free Life – a dream or reality!"
+    },
+    {
+      "id": "ART-007",
+      "type": "article",
+      "title": "Meri Kiran"
+    },
+    {
+      "id": "ART-008",
+      "type": "article",
+      "title": "Precious Memory of life"
+    },
+    {
+      "id": "ART-009",
+      "type": "article",
+      "title": "Tokenomics: How Your CEO Learned That AI Isn't Actually Free"
+    },
+    {
+      "id": "GAL-001",
+      "type": "gallery",
+      "title": "Ma"
+    },
+    {
+      "id": "GAL-002",
+      "type": "gallery",
+      "title": "Rhine - Germany (Pencil on paper)"
+    },
+    {
+      "id": "GAL-003",
+      "type": "gallery",
+      "title": "College Gym sketch"
+    },
+    {
+      "id": "GAL-004",
+      "type": "gallery",
+      "title": "College Principal sketck"
+    },
+    {
+      "id": "GAL-005",
+      "type": "gallery",
+      "title": "Saraswati Devi"
+    },
+    {
+      "id": "GAL-006",
+      "type": "gallery",
+      "title": "College Swimming pool sketch"
+    },
+    {
+      "id": "ADV-001",
+      "type": "advertisement",
+      "title": "Skylark Advertisement"
+    },
+    {
+      "id": "ADV-003",
+      "type": "advertisement",
+      "title": "Vistaar Finance Advertisement"
+    },
+    {
+      "id": "ADV-007",
+      "type": "advertisement",
+      "title": "OnShore Construction Pvt Ltd Advertisement"
+    },
+    {
+      "id": "ADV-008",
+      "type": "advertisement",
+      "title": "Roofs & Ceilings Advertisement"
+    },
+    {
+      "id": "ADV-011",
+      "type": "advertisement",
+      "title": "Axelon Advertisement"
+    },
+    {
+      "id": "ADV-013",
+      "type": "advertisement",
+      "title": "Anand Rathi Advertisement"
+    },
+    {
+      "id": "ADV-015",
+      "type": "advertisement",
+      "title": "Swaraj Shoes Advertisement"
+    },
+    {
+      "id": "ADV-018",
+      "type": "advertisement",
+      "title": "Eframe Advertisement"
+    },
+    {
+      "id": "ADV-022",
+      "type": "advertisement",
+      "title": "Pratap Caterer Advertisement"
+    },
+    {
+      "id": "ADV-023",
+      "type": "advertisement",
+      "title": "Clover Blakefield Reality LLP Advertisement"
+    }
+  ]
+}

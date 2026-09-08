@@ -1,0 +1,15 @@
+{
+  "version": "V0_PROTOTYPE_01",
+  "build_time": "2026-08-01T17:02:59.573Z",
+  "git_commit": null,
+  "included_item_ids": [
+    "MSG-001",
+    "ART-001",
+    "ADV-001"
+  ],
+  "source_fingerprints": {
+    "MSG-001": "c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb",
+    "ART-001": "c30a9e30f81a2046b6abce15bac128447c6a6ac4385b883423af133b122abf03",
+    "ADV-001": "50575b801bc14d70ec8a7f21f65198428f216090d84d6bfa618124e4ff413567"
+  }
+}

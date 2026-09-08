@@ -1,0 +1,110 @@
+{
+  "generated": "2026-08-02T02:20:40.969Z",
+  "advertisements": [
+    {
+      "id": "ADV-001",
+      "page": 40,
+      "image": "pdf-advertisements/ADV-001-page.png"
+    },
+    {
+      "id": "ADV-002",
+      "page": 41,
+      "image": "pdf-advertisements/ADV-002-page.png"
+    },
+    {
+      "id": "ADV-003",
+      "page": 42,
+      "image": "pdf-advertisements/ADV-003-page.png"
+    },
+    {
+      "id": "ADV-004",
+      "page": 43,
+      "image": "pdf-advertisements/ADV-004-page.png"
+    },
+    {
+      "id": "ADV-005",
+      "page": 44,
+      "image": "pdf-advertisements/ADV-005-page.png"
+    },
+    {
+      "id": "ADV-006",
+      "page": 45,
+      "image": "pdf-advertisements/ADV-006-page.png"
+    },
+    {
+      "id": "ADV-007",
+      "page": 46,
+      "image": "pdf-advertisements/ADV-007-page.png"
+    },
+    {
+      "id": "ADV-008",
+      "page": 47,
+      "image": "pdf-advertisements/ADV-008-page.png"
+    },
+    {
+      "id": "ADV-010",
+      "page": 48,
+      "image": "pdf-advertisements/ADV-010-page.png"
+    },
+    {
+      "id": "ADV-011",
+      "page": 49,
+      "image": "pdf-advertisements/ADV-011-page.png"
+    },
+    {
+      "id": "ADV-012",
+      "page": 50,
+      "image": "pdf-advertisements/ADV-012-page.png"
+    },
+    {
+      "id": "ADV-013",
+      "page": 51,
+      "image": "pdf-advertisements/ADV-013-page.png"
+    },
+    {
+      "id": "ADV-014",
+      "page": 52,
+      "image": "pdf-advertisements/ADV-014-page.png"
+    },
+    {
+      "id": "ADV-015",
+      "page": 53,
+      "image": "pdf-advertisements/ADV-015-page.png"
+    },
+    {
+      "id": "ADV-017",
+      "page": 54,
+      "image": "pdf-advertisements/ADV-017-page.png"
+    },
+    {
+      "id": "ADV-018",
+      "page": 55,
+      "image": "pdf-advertisements/ADV-018-page.png"
+    },
+    {
+      "id": "ADV-019",
+      "page": 56,
+      "image": "pdf-advertisements/ADV-019-page.png"
+    },
+    {
+      "id": "ADV-020",
+      "page": 57,
+      "image": "pdf-advertisements/ADV-020-page.png"
+    },
+    {
+      "id": "ADV-021",
+      "page": 58,
+      "image": "pdf-advertisements/ADV-021-page.png"
+    },
+    {
+      "id": "ADV-022",
+      "page": 59,
+      "image": "pdf-advertisements/ADV-022-page.png"
+    },
+    {
+      "id": "ADV-023",
+      "page": 60,
+      "image": "pdf-advertisements/ADV-023-page.png"
+    }
+  ]
+}

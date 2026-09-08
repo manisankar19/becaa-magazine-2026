@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} · একই শিকড়</title>
+  <meta name="description" content="BECAA Maharashtra Magazine 2026 local review edition">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#contents">Skip to contents</a>
+  <header class="site-header">
+    <a href="#top" class="brand"><span lang="bn">একই শিকড়</span> · BECAA Maharashtra 2026</a>
+    <nav aria-label="Primary">
+      <a href="#contents">Contents</a>
+      {% for item in publication.items | whereWeb | byOrder %}
+        <a href="#{{ item.id }}">{{ item.section | sectionLabel }}</a>
+      {% endfor %}
+      <a href="#cultural-programmes">Cultural Programmes</a>
+      <a href="#connect">Connect</a>
+      {% if publication.sponsor_acknowledgement_message %}<a href="#with-thanks">With Thanks</a>{% endif %}
+    </nav>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer class="site-footer">
+    <p>Local review only. Not the final 2026 magazine.</p>
+  </footer>
+  <script src="assets/js/site.js" defer></script>
+</body>
+</html>

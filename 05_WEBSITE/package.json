@@ -14,6 +14,7 @@
     "pdf": "node scripts/compile-pdf.mjs",
     "test": "node scripts/test-site.mjs",
     "qa": "node scripts/visual-qa.mjs",
+    "qa:v2-items": "node scripts/v2-items-qa.mjs",
     "qa:pdf": "node scripts/pdf-qa.mjs",
     "qa:art006": "node scripts/art006-qa.mjs",
     "qa:contact": "node scripts/render-qa-contact-sheets.mjs",

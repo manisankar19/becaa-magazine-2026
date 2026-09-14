@@ -395,7 +395,7 @@ figcaption {
 .register-form { display: grid; gap: 1.1rem; }
 .register-form .field { display: grid; gap: 0.35rem; }
 .register-form label { font-weight: 600; }
-.register-form input[type="text"], .register-form input[type="email"], .register-form input[type="tel"], .register-form select {
+.register-form input[type="text"], .register-form input[type="email"], .register-form input[type="tel"], .register-form input[type="password"], .register-form input[type="search"], .register-form select {
   font: inherit; padding: 0.65rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); width: 100%; max-width: 100%; box-sizing: border-box;
 }
 .register-form input:focus-visible, .register-form select:focus-visible, .register-form button:focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
@@ -410,3 +410,37 @@ figcaption {
 .button:hover { filter: brightness(1.08); }
 .button[disabled] { opacity: 0.6; cursor: wait; }
 .public-page .site-footer a { color: inherit; }
+
+/* ---------------------------------------------------------------------------
+   Sprint v3 — administrator dashboard (Task 31)
+   --------------------------------------------------------------------------- */
+.admin { padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 4rem; max-width: 1200px; }
+.admin-login { max-width: 420px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.button--secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+.button--danger { background: #fff; color: var(--maroon); border: 1px solid var(--maroon); padding: 0.4rem 0.7rem; font-size: 0.9rem; }
+.dashboard { display: grid; gap: 2rem; }
+.dashboard > section, .dashboard__grid > section { min-width: 0; } /* grid items must shrink so .table-scroll can scroll instead of widening the page */
+.dashboard h2 { font-size: 1.25rem; margin: 0 0 0.6rem; }
+.dashboard__toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem 1rem; display: grid; gap: 0.2rem; }
+.tile__label { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tile__value { font-size: 2rem; color: var(--maroon); }
+.dashboard__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; }
+.data-table th, .data-table td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.data-table thead th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.bar-table td:last-child { width: 40%; }
+.bar { height: 0.7rem; border-radius: 4px; background: var(--saffron); min-width: 2px; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; position: relative; } /* positioned: keeps absolutely-positioned .visually-hidden headers inside the scroll box */
+.table-scroll .data-table { min-width: 960px; }        /* scroll sideways on narrow screens instead of crushing cells */
+.data-table thead th, .data-table td:last-child { white-space: nowrap; }
+.bar-table th[scope="row"] { overflow-wrap: anywhere; }
+.bar-table td:nth-child(2) { white-space: nowrap; }
+.search-form { display: grid; gap: 0.35rem; margin: 0 0 0.8rem; max-width: 560px; }
+.search-form label { font-weight: 600; }
+.search-row { display: flex; gap: 0.5rem; }
+.search-row input { flex: 1; font: inherit; padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; min-width: 0; }
+.pager { display: flex; align-items: center; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap; }
+.button[disabled] { opacity: 0.5; cursor: default; }

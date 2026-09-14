@@ -60,7 +60,8 @@
     "db:purge": "node --env-file-if-exists=.env.local scripts/db-purge.mjs",
     "test:e2e:welcome": "node tests/e2e/welcome-page.test.mjs",
     "dev:app": "node --env-file-if-exists=.env.local --import tsx scripts/dev-app.mjs",
-    "admin:hash": "node scripts/admin-hash.mjs"
+    "admin:hash": "node scripts/admin-hash.mjs",
+    "test:e2e:admin": "node --env-file-if-exists=.env.local --import tsx tests/e2e/admin-page.test.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

@@ -3,6 +3,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { config } from "./config.mjs";
 import { siteRoot, readManifest, pathInsideSite } from "./lib.mjs";
+import { validateAdvertisementPresentation, resolveInk } from "./ad-presentation-core.mjs";
 
 const report = { generated: new Date().toISOString(), errors: [], warnings: [], items: [] };
 const manifest = readManifest();
@@ -24,6 +25,18 @@ for (const item of manifest.items || []) {
   if (!config.allowedLanguages.includes(item.language)) err(`${item.id} has unsupported language: ${item.language}`);
   if (item.verification !== "verified") warn(`${item.id} is ${item.verification}; allowed only as a labelled local prototype, not public release.`);
   if (/TBD|TODO|Needs verification/i.test(JSON.stringify(item))) warn(`${item.id} contains unresolved prototype/verification language.`);
+
+  // Sprint v3: published advertisement title wording, page background fields, and text contrast.
+  for (const message of validateAdvertisementPresentation(item)) err(message);
+  if (item.type === "advertisement" && (item.web_include || item.print_include)) {
+    const ink = resolveInk(item);
+    Object.assign(report.items.at(-1), {
+      page_background: item.page_background ?? null,
+      page_background_mode: item.page_background_mode ?? "auto",
+      page_ink: ink ? ink.ink : null,
+      contrast_ratio: ink ? Number(ink.ratio.toFixed(2)) : null
+    });
+  }
 
   if (item.content_file) {
     const rel = path.join("src", "content", item.content_file);

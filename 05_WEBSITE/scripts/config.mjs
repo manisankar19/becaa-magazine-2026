@@ -21,5 +21,12 @@ export const config = {
     minDpi: 180,
     targetDpi: 300,
     a4WidthPxAt300Dpi: 2480
+  },
+  // Sprint v3 — advertisement page presentation (sprints/v3/PRD.md §4.4).
+  advertisementPage: {
+    backgroundModes: ["auto", "manual", "none"],
+    inkModes: ["auto", "dark", "light"],
+    edgeSampleFraction: 0.02,   // width/height fraction of each edge strip sampled for the auto colour
+    minContrastRatio: 4.5       // WCAG AA for heading/kicker/caption text on the tinted page
   }
 };

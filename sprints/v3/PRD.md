@@ -258,12 +258,10 @@ Server-side sanitisation happens first, then validation, then a single parameter
 ### 5.4 Database schema
 
 ```sql
-create extension if not exists citext;
-
 create table visitors (
   id               uuid primary key default gen_random_uuid(),
   name             varchar(120) not null,
-  email            citext not null unique,
+  email            text not null,          -- unique index on lower(email), see notes
   category         text not null check (category in ('alumni','sponsor','guest')),
   batch_year       smallint check (batch_year between 1900 and 2100),
   department       varchar(40),
@@ -277,6 +275,7 @@ create table visitors (
   updated_at       timestamptz not null default now(),
   last_seen_at     timestamptz not null default now()
 );
+create unique index visitors_email_lower_key on visitors (lower(email));
 create index visitors_created_at_idx on visitors (created_at desc);
 create index visitors_category_idx on visitors (category);
 
@@ -309,7 +308,7 @@ create table schema_migrations (
 );
 ```
 
-Design notes: no raw IP addresses anywhere; IP hashes are salted and purged; no password column for visitors (Decision H recommends no visitor password — if the user insists on accounts, add `password_hash` (argon2id) and the login/reset flows as a separately approved addition); `email` is `citext` so uniqueness is case-insensitive; "total visits" = `count(*) from visits`, "total registered viewers" = `count(*) from visitors`.
+Design notes (amended in Task 19): the schema uses no PostgreSQL extensions — `email` is `text` with a unique index on `lower(email)` and the application lower-cases emails on write, instead of `citext` (unavailable on installs without the contrib package); no raw IP addresses anywhere; IP hashes are salted and purged; no password column for visitors (Decision H recommends no visitor password — if the user insists on accounts, add `password_hash` (argon2id) and the login/reset flows as a separately approved addition); `email` is `citext` so uniqueness is case-insensitive; "total visits" = `count(*) from visits`, "total registered viewers" = `count(*) from visitors`.
 
 ### 5.5 Administrator portal
 

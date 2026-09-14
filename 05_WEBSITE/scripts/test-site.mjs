@@ -10,6 +10,13 @@ if (!fs.existsSync(index)) {
   process.exit(1);
 }
 
+// Sprint v3 Task 24: per-item Markdown pages must not be emitted (they would bypass the registration gate).
+const strayContentPages = fs.existsSync(path.join(siteRoot, "_site", "content")) ? fs.readdirSync(path.join(siteRoot, "_site", "content"), { recursive: true }).filter((f) => String(f).endsWith(".html")) : [];
+if (strayContentPages.length) {
+  console.error(`Build emitted ${strayContentPages.length} per-item page(s) under _site/content/ (gate bypass): ${strayContentPages.slice(0, 3).join(", ")}…`);
+  process.exit(1);
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 await page.goto(`file://${index.replaceAll("\\", "/")}`);

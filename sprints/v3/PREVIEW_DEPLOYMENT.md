@@ -1,6 +1,32 @@
-# Sprint v3 — Preview deployment rehearsal (Task 35)
+# Sprint v3 — Preview deployment (Task 35)
 
-Status: **Not deployed — stopped before creating any resource.** Recorded 2026-09-14.
+Status: **Preview deployed and verified on the new project `becaa-magazine-2026-portal`; nothing deployed to Production.** Updated 2026-09-14. The rehearsal record that preceded it is kept below unchanged.
+
+## Result (2026-09-14)
+
+| Field | Value |
+|---|---|
+| Vercel project | `becaa-magazine-2026-portal` (team **Mani** `mani125slm`, framework *Other*, root `.` = `05_WEBSITE/`, Node 24.x) |
+| Preview URL | `https://becaa-magazine-2026-portal-4qn4qi73u-mani125slm.vercel.app` (target `preview`, behind Vercel Deployment Protection) |
+| Build | `06_FINAL_OUTPUT/V3_REVIEW_02` content; deployed from commit `c00b163` with `vercel deploy` (no `--prod`); later commits (`37e976a`, `65b3218`, `5274425`) change only the test harness, docs and ignore rules |
+| Neon | Marketplace resource `becaa-magazine-2026-preview`, plan **Free** (`free_v3`, no payment method required, region iad1), connected to this project's **Preview** environment only; `DATABASE_URL` / `DATABASE_URL_UNPOOLED` injected by the integration |
+| Migration | `db:status` against the preview database: Applied 1, Pending none |
+| Preview variables | `DATABASE_URL`, `SESSION_SECRET`, `IP_HASH_SALT`, `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `REGISTRATION_ENABLED`, `BATCH_YEAR_MIN` — Preview only; the Production and Development environments hold **no** variables |
+| Administrator | `becaa-admin` with a temporary preview-only password (hash in Vercel Preview only); the plaintext lived in a mode-600 scratch file for the automated tests and was deleted after verification |
+| `e2e:app --base-url` | **PASS — 20 steps** (desktop 1440×1000: 11 steps; mobile 390×1200: 9 steps, registrations skipped because of the per-IP limit) at 16:31 UTC; covers welcome gate, validation errors, alumni/sponsor/guest registration with cookie flags, protected artwork/gallery/PDF/print refusal, admin login and totals, search, CSV export (12 approved columns, no IP hash/token/user-agent), deletion, logout revocation. Screenshots in `05_WEBSITE/qa-output/app/` |
+| Security probes | direct content URLs, print page and PDF refused without a session (pages rewritten to `/welcome/`, PDF/artwork 403); forged session cookie treated as no session; admin APIs 401 without login; cross-origin POSTs 403; wrong method 405, oversized body 413, non-JSON 415, wrong admin password 401; CSP / nosniff / referrer-policy / HSTS present, `/admin/` carries `X-Frame-Options: DENY` and `no-store` |
+| Old project | The previous `becaa-magazine-2026` project was deleted by the owner from the dashboard on 2026-09-14 (15:53 UTC); `https://becaa-magazine-2026.vercel.app` now returns 404 `DEPLOYMENT_NOT_FOUND`. The V1 site is therefore no longer online |
+| Production | Not deployed. Promote only with an explicit instruction (`vercel deploy --prod` from `05_WEBSITE/` after setting Production variables and a production database) |
+
+Fixes needed to make the build run on Vercel (all committed): `.js` import specifiers and `moduleResolution: bundler`; the registration lists as a TypeScript data module (the edge bundler rejects JSON import attributes); `trailingSlash` removed from `vercel.json` (it 308-redirected `/api/*`); the print PDF shipped as a static release asset; the `api/` modules export a Web-standard `fetch` handler (a default export is treated as the Node `(req, res)` signature and its `Response` is discarded); the E2E suite authenticates to the protected preview with the project's Protection Bypass for Automation secret.
+
+Notes for the next run: registration is rate-limited to 5 per 10 minutes per IP, so the remote suite cannot be repeated within ten minutes; the preview database keeps the `e2e-*` rows the suite did not delete (a few test rows from the runs on 2026-09-14) — purge with `npm run db:purge` against the preview `DATABASE_URL` if a clean slate is wanted.
+
+---
+
+# Rehearsal record (superseded)
+
+Status at the time: **Not deployed — stopped before creating any resource.** Recorded 2026-09-14.
 
 ## What was checked
 

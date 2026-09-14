@@ -264,7 +264,7 @@ create table visitors (
   email            text not null,          -- unique index on lower(email), see notes
   category         text not null check (category in ('alumni','sponsor','guest')),
   batch_year       smallint check (batch_year between 1900 and 2100),
-  department       varchar(40),
+  department       varchar(80),          -- widened from 40 in Task 23: two approved names exceed 40 chars
   department_other varchar(80),
   organisation     varchar(160),
   mobile           char(10) check (mobile ~ '^[6-9][0-9]{9}$'),

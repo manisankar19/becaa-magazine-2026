@@ -1,0 +1,49 @@
+// Application configuration for the registration feature (Sprint v3, Decisions I, J, L).
+// Editorial lists live here (not in the database) so they are reviewable in a diff.
+
+export const DEPARTMENTS = [
+  "Civil Engineering",
+  "Mechanical Engineering",
+  "Electrical Engineering",
+  "Electronics & Telecommunication Engineering",
+  "Computer Science & Technology",
+  "Information Technology",
+  "Metallurgy & Materials Engineering",
+  "Mining Engineering",
+  "Architecture",
+  "Aerospace Engineering & Applied Mechanics",
+  "Other",
+] as const;
+
+export type Department = (typeof DEPARTMENTS)[number];
+
+export const CATEGORIES = ["alumni", "sponsor", "guest"] as const;
+export type Category = (typeof CATEGORIES)[number];
+
+export const BATCH_YEAR_MIN = Number(process.env.BATCH_YEAR_MIN ?? 1950);
+export function batchYearMax(): number {
+  return new Date().getFullYear();
+}
+
+// Bump when the privacy-notice wording changes so consent can be attributed to a version.
+export const PRIVACY_VERSION = 1;
+export const RETENTION_DATE = "31 December 2027";
+
+export const LIMITS = {
+  name: { min: 2, max: 120 },
+  email: { max: 254 },
+  organisation: { min: 2, max: 160 },
+  departmentOther: { min: 2, max: 80 },
+} as const;
+
+export const VISITOR_SESSION_MAX_AGE_SECONDS = 30 * 24 * 60 * 60; // 30 days
+export const ADMIN_SESSION_ABSOLUTE_SECONDS = 12 * 60 * 60;      // 12 hours
+export const ADMIN_SESSION_IDLE_SECONDS = 60 * 60;                // 60 minutes
+
+export const RATE_LIMITS = {
+  register: { limit: 5, windowSeconds: 10 * 60 },
+  adminLogin: { limit: 5, windowSeconds: 15 * 60, lockoutAfter: 10, lockoutSeconds: 15 * 60 },
+} as const;
+
+export const MIN_FORM_FILL_MS = 2000;
+export const MAX_BODY_BYTES = 8 * 1024;

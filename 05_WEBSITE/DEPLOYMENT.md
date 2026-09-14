@@ -42,7 +42,7 @@ Rotating `SESSION_SECRET` logs every visitor out (they simply register again) an
 
 ## 4. First-time setup (preview environment)
 
-1. In `05_WEBSITE/`: `vercel link` → create a **new** project (owner/team per Decision O). Framework preset: *Other*. Root directory: `05_WEBSITE`.
+1. In `05_WEBSITE/`: `vercel link` → create a **new** project (owner/team per Decision O). Framework preset: *Other*. Root directory: `05_WEBSITE`. The functions in `api/` export a Web-standard `fetch(request)` handler — Vercel's Node runtime treats a *default* export as the `(req, res)` signature and silently discards its `Response`.
 2. Vercel → Storage / Marketplace → add **Neon** (PostgreSQL). Accept the integration so `DATABASE_URL` is injected for Preview and Production. In Neon, keep a `main` branch for production and use a **branch** for previews.
 3. Create a least-privilege application role in Neon and use it in `DATABASE_URL`:
    ```sql
@@ -57,6 +57,7 @@ Rotating `SESSION_SECRET` logs every visitor out (they simply register again) an
 5. Apply the schema to the preview branch: `DATABASE_URL='<preview owner url>' npm run db:migrate` then `npm run db:status` (expect `Applied: 1`).
 6. `vercel deploy` → note the preview URL.
 7. Verify the preview: `npm run e2e:app -- --base-url https://<preview>.vercel.app` with `E2E_ADMIN_USERNAME`/`E2E_ADMIN_PASSWORD` exported for that shell only (the same credential you hashed in step 4). Also open the preview on a phone: `/` must show the welcome page, registration must open the magazine, `/admin/` must require login.
+   Previews are behind Vercel Deployment Protection. The suite authenticates with either the project's *Protection Bypass for Automation* secret (`VERCEL_AUTOMATION_BYPASS_SECRET`, sent as `x-vercel-protection-bypass`; `vercel curl` creates one on first use) or the local Trusted Sources token (`VERCEL_OIDC_TOKEN` from `vercel env pull`, sent as `x-vercel-trusted-oidc-idp-token`). Export either for that shell only; the suite never prints them. Registration is limited to 5 per 10 minutes per IP, so wait 10 minutes between remote runs.
 8. Record the preview URL and commit in `sprints/v3/PREVIEW_DEPLOYMENT.md` (Task 35).
 
 ## 5. Production release (only after explicit approval)

@@ -178,9 +178,12 @@ try {
     }
     await shot(a, `${viewport.name}-04-admin-dashboard`);
     step("admin login and dashboard counts", `visitors=${visitorsTotal}`);
-    await a.getByTestId("search").fill(people.sponsor.email.replace("@", suffix)); // exact email: the stamp alone matches both viewports' rows
+    // Wait for the row of the searched email, not merely "one row": the previous search may already show one.
+    const waitForOnly = (email) => a.waitForFunction((needle) => { const rows = [...document.querySelectorAll('[data-testid="visitors-table"] tbody tr')]; return rows.length === 1 && rows[0].textContent.includes(needle); }, email);
+    const sponsorEmail = people.sponsor.email.replace("@", suffix); // exact email: the stamp alone matches both viewports' rows
+    await a.getByTestId("search").fill(sponsorEmail);
     await a.getByTestId("search-button").click();
-    await a.waitForFunction(() => document.querySelectorAll('[data-testid="visitors-table"] tbody tr').length === 1);
+    await waitForOnly(sponsorEmail);
     assert.ok((await a.getByTestId("visitors-table").textContent()).includes("E2E Sponsor Ltd"));
     step("search finds one registration");
     // CSV via the authenticated context (download link) — parse and verify our rows are present.
@@ -194,9 +197,11 @@ try {
     fs.writeFileSync(path.join(outDir, `${viewport.name}-export.csv`), csv);
     step("CSV downloads and parses", `${lines.length - 1} rows`);
     // Delete the guest (remote mobile: the guest is already gone, so delete the alumni row instead).
-    await a.getByTestId("search").fill((remoteMobile ? people.alumni : people.guest).email.replace("@", suffix));
+    const victimEmail = (remoteMobile ? people.alumni : people.guest).email.replace("@", suffix);
+    await a.getByTestId("search").fill(victimEmail);
     await a.getByTestId("search-button").click();
-    await a.waitForFunction(() => document.querySelectorAll('[data-testid="visitors-table"] tbody tr').length === 1);
+    await waitForOnly(victimEmail);
+    assert.ok((await a.getByTestId("visitors-table").textContent()).includes(remoteMobile ? "E2E Alumni" : "E2E Guest"), "the row about to be deleted is the intended one");
     a.once("dialog", (d) => d.accept());
     await a.locator('[data-testid^="delete-"]').first().click();
     await a.waitForFunction((n) => Number(document.querySelector('[data-testid="stat-visitors"]').textContent) === n - 1, visitorsTotal);

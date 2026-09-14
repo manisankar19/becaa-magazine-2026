@@ -892,9 +892,9 @@ items:
     caption: ''
     credit: ''
     alt: Network Techlabs advertisement artwork
-    notes: 'Tracker Item ID ADV-019. Exact approved source: 19 Network Techlabs.png.'
-    page_background: '#121516'
-    page_background_mode: auto
+    notes: 'Tracker Item ID ADV-019. Exact approved source: 19 Network Techlabs.png. Sprint v3: manual background #2b2f31 (deep neutral charcoal instead of sampled near-black #121516) — Decision F.'
+    page_background: '#2b2f31'
+    page_background_mode: manual
     page_ink: light
   - id: ADV-020
     type: advertisement
@@ -1000,9 +1000,9 @@ items:
     caption: ''
     credit: ''
     alt: Clover Blakefield Reality LLP advertisement artwork
-    notes: 'Tracker Item ID ADV-023. Exact approved source: 23 Clover Blakefield Reality LLP.png.'
-    page_background: '#58d6db'
-    page_background_mode: auto
+    notes: 'Tracker Item ID ADV-023. Exact approved source: 23 Clover Blakefield Reality LLP.png. Sprint v3: manual background #baecec (sampled cyan #58d6db mixed 60% toward --paper) — Decision F.'
+    page_background: '#baecec'
+    page_background_mode: manual
     page_ink: dark
   - id: ADV-026
     type: advertisement

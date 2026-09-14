@@ -59,10 +59,12 @@ export async function searchVisitors(db: Queryable, { q = "", page = 1 }: { q?: 
   const pattern = q.trim() ? `%${escapeLike(q.trim())}%` : null;
   const where = pattern ? "where name ilike $1 escape '\\' or email ilike $1 escape '\\' or organisation ilike $1 escape '\\'" : "";
   const params: unknown[] = pattern ? [pattern] : [];
-  const total = (await db.query(`select count(*)::int as n from visitors ${where}`, params)).rows[0] as { n: number };
+  const total = (await db.query(`select count(*)::int as n from visitors ${where}`, params)).rows[0] as { n: number }; // check-sql: allow where-fragment (fixed fragment, see below)
+  // check-sql: allow — `where` is one of two fixed fragments defined above (never user input) and `$${n}` only
+  // numbers the positional placeholders; every user value still travels in `params`.
   const rows = await db.query(
     `select id, name, email, category, batch_year, department, department_other, organisation, mobile, created_at, last_seen_at, visit_count
-     from visitors ${where} order by created_at desc, id limit $${params.length + 1} offset $${params.length + 2}`,
+     from visitors ${where} order by created_at desc, id limit $${params.length + 1} offset $${params.length + 2}`, // check-sql: allow where-fragment
     [...params, PER_PAGE, (safePage - 1) * PER_PAGE],
   );
   return {

@@ -1,0 +1,22 @@
+# Files never uploaded to Vercel (the CLI does not use .gitignore for uploads).
+# Secrets and local state
+.env
+.env.*
+!.env.example
+.pgdata
+.vercel
+# Local build/QA artefacts — the site is built on Vercel from src/ via `npm run build`
+node_modules
+_site
+qa-output
+tests/screenshots
+npm-audit.json
+audit-gate.json
+validation-report.json
+validation-summary.md
+debug.log
+*.log
+# Vendor skill files the CLI may drop locally
+.agents
+.claude
+skills-lock.json

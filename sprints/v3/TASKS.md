@@ -1,0 +1,185 @@
+# Sprint v3 — Tasks
+
+## Status: In Progress (Stream A authorised 2026-09-14)
+
+Reference: `sprints/v3/PRD.md` (approved 2026-09-14, decisions A–Q approved as recommended), `sprints/v3/CHANGEV3_SUMMARY.md`
+Protected: every folder under `06_FINAL_OUTPUT/` (V0, V1, V2), `01_REFERENCE_2025/`, `03_ADVERTISEMENTS/`, `BECAA_Magazine_2026_Master.docx` — no task may modify them. `02_INCOMING_CONTENT/` is read-only for every task after Task 1 (Task 1 only commits the two revised files the user already placed there; it writes nothing into that folder).
+Conventions carried from v2: every tracker edit is preceded by a timestamped copy in `04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/`; pure logic lives in a `*-core.mjs` module with a hermetic unit test; scripts that touch real files get an integration test; each task ends with `semgrep --config auto` on new files and `npm audit`; no secrets, `.env*` files or credentials are ever committed; nothing is deployed to production in this sprint.
+Local prerequisites: Node 22, `npx playwright install chromium` (already present), PostgreSQL 16 binaries (present, cluster not running — Task 18 starts a user-owned cluster in `05_WEBSITE/.pgdata/` on port 5433, git-ignored).
+
+---
+
+## Stream A — Publication updates
+
+- [x] Task 1: Sprint v3 intake — commit the revised sources and archive the superseded originals (Decision A) (P0)
+  - Acceptance: The superseded bytes of `secretary desk.docx` (SHA-256 `df446f44…`) and `Siddhartha Mukhopadhyay story.docx` (SHA-256 `a13de2ba…`) are exported from git `HEAD` into `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/` under their original names with a `README.md` listing old and new SHA-256 values and the reason; the two revised DOCX files, the archive folder and `sprints/v3/` (PRD, TASKS, CHANGEV3_SUMMARY) are committed as one intake commit; `git status` is clean afterwards; nothing in `02_INCOMING_CONTENT/` is written by the task.
+  - Files: `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/secretary desk.docx`, `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/Siddhartha Mukhopadhyay story.docx`, `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/README.md`
+  - Completed: 2026-09-14 — Exported both superseded blobs from git `db5b6ab` into the archive folder (hashes `df446f44…` and `a13de2ba…` verified equal to HEAD; revised live files `ed3fd766…` and `9bbe16d1…`), wrote the README with both hash pairs, and added `tests/integration/superseded-sources.test.mjs` (wired into `test:integration`) asserting archive/live hashes and README contents. Nothing written into `02_INCOMING_CONTENT`. semgrep clean; npm audit unchanged at the 4 pre-existing findings (no dependency changed). Committed with the two revised DOCX files and `sprints/v3/`.
+
+- [ ] Task 2: Add DOCX soft-line-break-aware extraction to the article Markdown core (P0)
+  - Acceptance: A pure function `docxHtmlToParagraphText(html)` (or equivalent) converts `mammoth.convertToHtml` output so `<br>` becomes a Markdown hard line break (two trailing spaces + newline) and `<p>` boundaries become blank-line-separated paragraphs, with all inline tags stripped and entities decoded; unit tests cover a paragraph with `<br>`, a quoted paragraph, and a plain multi-paragraph body; existing `buildArticleMarkdown` tests still pass.
+  - Files: `05_WEBSITE/scripts/article-markdown-core.mjs`, `05_WEBSITE/tests/unit/article-markdown-core.test.mjs`
+
+- [ ] Task 3: Extract the revised Secretary's Desk into `MSG-003` (Decisions B, C) (P0)
+  - Acceptance: `src/content/messages/MSG-003-secretary-desk.md` is rewritten with the revised body verbatim (heading line "From the Secretary's Desk" kept inside the body; closing lines "With warm regards," / "Abir Banerjee" / "ETC '92" / "Secretary" / "BECAA Maharashtra" on separate lines), front-matter `source_fingerprint` = SHA-256 of the revised DOCX (`ed3fd766…`), `title` still "Secretary Desk"; the embedded signature image is not imported; an integration test re-extracts from the DOCX and asserts equality; no `NEEDS VERIFICATION` comment.
+  - Files: `05_WEBSITE/scripts/extract-v3-secretary-desk.mjs`, `05_WEBSITE/src/content/messages/MSG-003-secretary-desk.md`, `05_WEBSITE/tests/integration/extract-v3-secretary-desk.test.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 4: Extract Siddhartha Mukhopadhyay's story into `ART-012` (Decision D) (P0)
+  - Acceptance: `src/content/articles/ART-012-item.md` contains the full Bengali story verbatim (4,837 characters of body incl. the first line "প্যাঁড়া/ সিদ্ধার্থ মুখোপাধ্যায়"), front-matter `id: ART-012`, `title: "প্যাঁড়া"`, `source_fingerprint` = `9bbe16d1…`; integration test asserts equality with a fresh `mammoth` extraction and checks for no mojibake (no U+FFFD).
+  - Files: `05_WEBSITE/scripts/extract-v3-siddhartha-story.mjs`, `05_WEBSITE/src/content/articles/ART-012-item.md`, `05_WEBSITE/tests/integration/extract-v3-siddhartha-story.test.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 5: Update `publication.yaml` for `MSG-003` and add `ART-012` (P0)
+  - Acceptance: `MSG-003.source_fingerprint` becomes `ed3fd766…` (only that line changes for MSG-003); a new `ART-012` entry (type article, title "প্যাঁড়া", language bn, contributor Siddhartha Mukhopadhyay, passing_year '1986', branch Electrical, section articles, order 220, source_file `02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx`, content_file `articles/ART-012-item.md`, permission "Print and web", editorial_status Approved, verification verified, web/print include true, alt "প্যাঁড়া — Siddhartha Mukhopadhyay", notes "Tracker Item ID 24. Exact approved source: Siddhartha Mukhopadhyay story.docx.") is inserted after `ART-011` using the existing `manifest-item-yaml-core.mjs`; manifest has 44 items and re-parses as valid YAML.
+  - Files: `05_WEBSITE/scripts/add-v3-manifest-items.mjs`, `05_WEBSITE/src/_data/publication.yaml`, `05_WEBSITE/tests/integration/add-v3-manifest-items.test.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 6: Advertisement retitle core — pure title derivation (P0)
+  - Acceptance: `advertisement-title-core.mjs` exports `deriveComplimentsTitle(item)` returning `With best compliments from ${contributor}` only when `title` matches `^(.+) Advertisement$` or `^Advertisement from (.+)$` and `contributor` is non-empty, and `retitleAdvertisements(items, trackerRows)` that applies it to every `type: advertisement` item, throws on an empty contributor, on a contributor/tracker `Contributor / Company` mismatch, or on an unrecognised title pattern, and never touches non-advertisement items; unit tests cover each branch, including "Tata Capital Ltd. (Retail Finance)" and "Roofs & Ceilings" verbatim.
+  - Files: `05_WEBSITE/scripts/advertisement-title-core.mjs`, `05_WEBSITE/tests/unit/advertisement-title-core.test.mjs`
+
+- [ ] Task 7: Apply the 22 advertisement titles to the manifest and tracker (P0)
+  - Acceptance: A tracker snapshot `…_pre-v3-ad-retitle.xlsx` is created first; all 22 published `ADV-` items in `publication.yaml` and the matching 22 tracker rows get `title` / `Title / Item` = the §4.3 table values exactly, with a dated note appended to tracker `Remarks`; IDs, `alt`, `web_asset`, `print_asset`, `source_file` unchanged; excluded rows ADV-009/016/024/025/027 byte-identical; `Lists`/`Instructions` untouched; diff of the manifest shows exactly 22 changed `title` lines.
+  - Files: `05_WEBSITE/scripts/retitle-advertisements.mjs`, `05_WEBSITE/src/_data/publication.yaml`, `04_MAGAZINE_WORKING/BECAA_2026_Content_Tracker.xlsx`, `04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/`, `05_WEBSITE/package.json`
+
+- [ ] Task 8: Record Item 18 revision, approve Item 24 in the tracker (Decisions A, D) (P0)
+  - Acceptance: Snapshot `…_pre-v3-content-updates.xlsx` created first; Item 18 `Remarks` gains "Sprint v3: revised source received 2026-09-14 (SHA-256 ed3fd766…) replaces the 01.08.2026 version (SHA-256 df446f44…), preserved in 04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/ and git history."; Item 24 becomes `Title / Item` "প্যাঁড়া (Siddhartha Mukhopadhyay story)", `Permission` "Print and web", `Status` "Approved", `Web Include` "Yes", `Print Include` "Yes", `Received Date` "14.09.2026", `Remarks` appended "Sprint v3: real content received and approval confirmed 2026-09-14; published as ART-012."; all other rows byte-identical to the snapshot; reuses `tracker-exclusion-core.mjs`-style pure update function with a unit test.
+  - Files: `05_WEBSITE/scripts/tracker-v3-core.mjs`, `05_WEBSITE/scripts/apply-v3-tracker-updates.mjs`, `05_WEBSITE/tests/unit/tracker-v3-core.test.mjs`, `04_MAGAZINE_WORKING/BECAA_2026_Content_Tracker.xlsx`, `04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/`, `05_WEBSITE/package.json`
+
+- [ ] Task 9: Update `validate-tracker.mjs` for the v3 state (P0)
+  - Acceptance: The rule "Item 24 must remain excluded" is replaced by "Item 24 must be Approved, Print and web, Web/Print Include Yes"; Item 20 rule unchanged; row count still 52; new rule: every `ADV-` row with `Web Include: Yes` has `Title / Item` = `With best compliments from ${Contributor / Company}`; `npm run tracker:validate` passes on the live tracker and fails on a fixture with a stale "… Advertisement" title.
+  - Files: `05_WEBSITE/scripts/validate-tracker.mjs`, `05_WEBSITE/tests/unit/validate-tracker-rules.test.mjs`
+
+- [ ] Task 10: Manifest validator rules — advertisement titles, background fields, contrast (P0)
+  - Acceptance: `validate.mjs` errors when a published advertisement title ends with "Advertisement" or is not exactly `With best compliments from ${contributor}`; errors when `page_background` is present but not `#rrggbb`, or `page_background_mode`/`page_ink` hold values outside their enums; errors when a published advertisement has `page_background_mode: auto|manual` but no `page_background`; a pure `contrast-core.mjs` exports `relativeLuminance(hex)`, `contrastRatio(a,b)` and `chooseInk(bg)` (returns `dark` for `#20201d` ≥ 4.5:1 else `light`), unit-tested against known WCAG values (black/white = 21, `#777777`/white ≈ 4.48); the validator records the chosen ink and ratio per advertisement in `validation-report.json`.
+  - Files: `05_WEBSITE/scripts/contrast-core.mjs`, `05_WEBSITE/scripts/validate.mjs`, `05_WEBSITE/scripts/config.mjs`, `05_WEBSITE/tests/unit/contrast-core.test.mjs`
+
+- [ ] Task 11: Advertisement background sampler (Decision F) (P0)
+  - Acceptance: `sample-ad-backgrounds.mjs` computes, for every published advertisement whose `page_background_mode` is absent or `auto`, the mean colour of the four 2 % edge strips of the print asset (pure `edgeColourFromStats` helper unit-tested with synthetic stats), writes `page_background` (hex), `page_background_mode: auto` and `page_ink` (from `chooseInk`) into the manifest via targeted line insertion; `manual`/`none` items untouched; rerunning is idempotent (second run produces no diff); the resulting 22 values match the PRD §4.4 table within ±2 per channel; manifest re-parses; `npm run validate` passes.
+  - Files: `05_WEBSITE/scripts/ad-background-core.mjs`, `05_WEBSITE/scripts/sample-ad-backgrounds.mjs`, `05_WEBSITE/src/_data/publication.yaml`, `05_WEBSITE/tests/unit/ad-background-core.test.mjs`, `05_WEBSITE/tests/integration/sample-ad-backgrounds.test.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 12: Apply the manual overrides for ADV-019 and ADV-023 (Decision F) (P0)
+  - Acceptance: `ADV-023` gets `page_background_mode: manual` with a restrained tint derived from its cyan (e.g. a 60 % mix toward `--paper`, exact value recorded in the task note) and `ADV-019` gets `page_background_mode: manual` with a deep neutral charcoal (not pure black) so the light heading still reads; both documented in the manifest `notes`; `npm run validate` passes with the recorded ink/ratio; rerunning Task 11's sampler leaves both untouched.
+  - Files: `05_WEBSITE/src/_data/publication.yaml`
+
+- [ ] Task 13: Print template and CSS for tinted advertisement pages (P0)
+  - Acceptance: `print.njk` gives advertisement sections `class="print-page print-page--advertisement print-ink--{{ page_ink }}"` and `style="--ad-bg: {{ page_background }}"`; `print.css` paints `--ad-bg` on the content box (inside the 18 mm margins, no negative margins), lays the section out as a grid that vertically centres the figure, colours kicker/h1/figcaption via `.print-ink--light`/`.print-ink--dark`, keeps `.print-ad` `object-fit: contain` and `max-height: 240mm`; page number remains in the white `@page` margin box; a rendered ADV-018 page shows a yellow mount and a rendered ADV-003 page shows light text on navy, both inspected as PNG.
+  - Files: `05_WEBSITE/src/print.njk`, `05_WEBSITE/src/assets/css/print.css`
+
+- [ ] Task 14: Web template and CSS for tinted advertisement cards, advertisement byline suppressed (P0)
+  - Acceptance: `index.njk` applies the same `--ad-bg`/ink classes to `.ad-frame` for advertisements (gallery items unchanged), and no longer renders the `.byline` for `type == "advertisement"` (company name now lives in the heading); `site.css` colours the frame, heading and kicker per ink class while keeping the 1 px border and shadow; desktop and mobile screenshots of ADV-018 and ADV-019 inspected; no horizontal overflow.
+  - Files: `05_WEBSITE/src/index.njk`, `05_WEBSITE/src/assets/css/site.css`
+
+- [ ] Task 15: Site-test and PDF-QA assertions for advertisement titles and backgrounds (P0)
+  - Acceptance: `test-site.mjs` asserts every `.publication-item--advertisement h2`, every advertisement `.toc a strong` and every advertisement nav link text starts with "With best compliments from " and none ends with "Advertisement", and that no advertisement card renders a `.byline`; `pdf-qa.mjs` runs `pdftotext` on the built PDF and asserts the same for the 22 advertisement page headings and the contents page lines, and asserts the sampled pixel at the top-left of each advertisement page's content box equals `page_background` within ±6 per channel; both pass on the current build.
+  - Files: `05_WEBSITE/scripts/test-site.mjs`, `05_WEBSITE/scripts/pdf-qa.mjs`
+
+- [ ] Task 16: Advertisement-background review sheet (P0)
+  - Acceptance: `ad-backgrounds-qa.mjs` writes `qa-output/ad-backgrounds/AD_BACKGROUND_REVIEW.md` (one row per published advertisement: ID, new title, hex swatch, mode, ink, contrast ratio, thumbnail of the rendered PDF page and web card) and a single contact-sheet PNG; script wired as `npm run qa:ad-backgrounds`; sheet visually inspected and any page with clipped heading, unreadable page number or artwork distortion is fixed before the task closes.
+  - Files: `05_WEBSITE/scripts/ad-backgrounds-qa.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 17: Stream A build, validation, tests, QA (P0)
+  - Acceptance: `npm run tracker:validate`, `npm run validate` (0 errors, only the 7 pre-existing low-resolution warnings), `npm run test:unit`, `npm run test:integration`, `npm run build`, `npm run test`, `npm run qa`, `npm run pdf`, `npm run qa:pdf`, `npm run qa:ad-backgrounds` all pass; the built site shows 44 items; PDF is A4 with zero blank pages; the `MSG-003` and `ART-012` PDF pages and web sections are rendered to PNG and inspected for Bengali shaping, line breaks in the Secretary's closing, and clipping; stray `_site/content/**/*.html` count recorded (removed in Task 24).
+  - Files: `05_WEBSITE/qa-output/**` (regenerated), no source changes expected
+
+## Stream B — Registration and administration application
+
+- [ ] Task 18: Application scaffolding — dependencies, TypeScript, local PostgreSQL, env example (P0)
+  - Acceptance: `pg`, `argon2` (fallback `bcryptjs` if native build fails on Vercel — decision recorded), `typescript`, `@types/node`, `@types/pg`, `tsx` added with pinned versions and `npm audit` shows 0 new high/critical; `tsconfig.json` targets Node 22 ESM for `api/`, `lib/` and `middleware.ts`; `npm run db:local:start|stop` uses `pg_ctl` to init/start a user-owned cluster in `05_WEBSITE/.pgdata/` (port 5433, trust auth on localhost only) and creates `becaa_dev` and `becaa_test` databases; `.env.example` lists `DATABASE_URL`, `DATABASE_URL_TEST`, `SESSION_SECRET`, `IP_HASH_SALT`, `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `REGISTRATION_ENABLED`, `BATCH_YEAR_MIN`; `.gitignore` covers `.env*` (except `.env.example`), `.pgdata/`, `.vercel/`; `npm run check:secrets` greps the tree for `postgres://`, `SESSION_SECRET=` values and argon2 hashes and passes.
+  - Files: `05_WEBSITE/package.json`, `05_WEBSITE/package-lock.json`, `05_WEBSITE/tsconfig.json`, `05_WEBSITE/.env.example`, `05_WEBSITE/.gitignore`, `05_WEBSITE/scripts/db-local.mjs`, `05_WEBSITE/scripts/check-secrets.mjs`
+
+- [ ] Task 19: SQL migrations and migrate/status/purge scripts (P0)
+  - Acceptance: `db/migrations/001_init.sql` creates the PRD §5.4 schema exactly (citext, `visitors`, `visits`, `admin_sessions`, `rate_limits`, `schema_migrations`, indexes, checks) and `db/rollback/001_init.sql` drops it; `npm run db:migrate` applies pending migrations transactionally and records versions; `npm run db:status` lists applied/pending; `npm run db:purge` deletes `visits.ip_hash` older than 30 days, `rate_limits` rows older than 1 day, expired `admin_sessions`, and with `--email <addr>` deletes one visitor; integration test applies from scratch on `becaa_test`, re-runs (idempotent), and rolls back.
+  - Files: `05_WEBSITE/db/migrations/001_init.sql`, `05_WEBSITE/db/rollback/001_init.sql`, `05_WEBSITE/scripts/db-migrate.mjs`, `05_WEBSITE/scripts/db-purge.mjs`, `05_WEBSITE/lib/db.ts`, `05_WEBSITE/tests/integration/db-migrate.test.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 20: Registration validators and config (Decisions I, J, K) (P0)
+  - Acceptance: `lib/config.ts` exports the department list (Civil Engineering; Mechanical Engineering; Electrical Engineering; Electronics & Telecommunication Engineering; Computer Science & Technology; Information Technology; Metallurgy & Materials Engineering; Mining Engineering; Architecture; Aerospace Engineering & Applied Mechanics; Other), `BATCH_YEAR_MIN=1950`, `PRIVACY_VERSION=1`; `lib/validate-registration.ts` exports `validateRegistration(input)` implementing every PRD §5.3 rule (name trim/collapse/2–120/no control chars; email RFC-lite lower-cased ≤254 with non-`.com` domains accepted; category enum; alumni require batch year in range and department from list with `Other` free text; sponsor requires organisation and mobile; guest optional organisation/mobile; mobile normalised from `+91`/`0`/spaces/hyphens to 10 digits starting 6–9; consent true; unknown fields dropped) returning `{ok, value}` or `{ok:false, errors:{field:message}}`; unit tests cover at least 25 cases including `user@example.co.in`, `a@b`, `+91 98360 63677`, `1949`, and an extra `role: admin` field being ignored.
+  - Files: `05_WEBSITE/lib/config.ts`, `05_WEBSITE/lib/validate-registration.ts`, `05_WEBSITE/tests/unit/validate-registration.test.mjs`
+
+- [ ] Task 21: Session, CSRF, hashing and cookie utilities (P0)
+  - Acceptance: `lib/session.ts` signs/verifies the visitor cookie payload with HMAC-SHA256 via Web Crypto (works in Node and edge), rejects tampered or expired (>30 days) values, and builds `Set-Cookie` strings with `HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000` (`Secure` omitted only when `NODE_ENV=development`); `lib/admin-session.ts` creates 256-bit tokens, stores only `sha256(token)`, enforces 12 h absolute / 60 min idle expiry, rotates on login, revokes on logout; `lib/csrf.ts` issues and checks a synchroniser token bound to the admin session; `lib/hash.ts` wraps argon2id verify with constant-time behaviour; `lib/ip.ts` hashes the client IP with `IP_HASH_SALT`; unit tests cover sign/verify/tamper/expiry and CSRF mismatch.
+  - Files: `05_WEBSITE/lib/session.ts`, `05_WEBSITE/lib/admin-session.ts`, `05_WEBSITE/lib/csrf.ts`, `05_WEBSITE/lib/hash.ts`, `05_WEBSITE/lib/ip.ts`, `05_WEBSITE/tests/unit/session.test.mjs`
+
+- [ ] Task 22: Rate limiter and shared HTTP helpers (P0)
+  - Acceptance: `lib/rate-limit.ts` implements a PostgreSQL-backed sliding window `consume(bucket, limit, windowSeconds)` (single `INSERT … ON CONFLICT` statement, no race) and a lockout helper for logins; `lib/http.ts` provides JSON/HTML response helpers that always set `Content-Security-Policy: default-src 'self'`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Cache-Control: no-store` for `/api/*`, `X-Frame-Options: DENY` for admin, plus `assertSameOrigin(request)` and an 8 KB body cap; integration test proves the 6th `register` call in 10 minutes returns 429 and the window resets.
+  - Files: `05_WEBSITE/lib/rate-limit.ts`, `05_WEBSITE/lib/http.ts`, `05_WEBSITE/tests/integration/rate-limit.test.mjs`
+
+- [ ] Task 23: `POST /api/register` and `GET /api/health` (P0)
+  - Acceptance: `api/register.ts` (Web-standard handler) checks `REGISTRATION_ENABLED`, same-origin, body size, honeypot (silent 200), minimum 2 s form time, rate limit, then validates and performs one parameterised upsert on `visitors` (by email: update editable fields, `visit_count+1`, `last_seen_at`), inserts a `visits` row (ip_hash, user_agent ≤255), and returns 200 with the visitor session cookie and `{ok:true}`; validation failures return 422 with field errors and no raw input echoed; `api/health.ts` returns `{ok:true, db:true}` without secrets; integration tests cover new visitor, repeat visitor, honeypot, disabled flag, and foreign Origin → 403.
+  - Files: `05_WEBSITE/api/register.ts`, `05_WEBSITE/api/health.ts`, `05_WEBSITE/lib/visitors.ts`, `05_WEBSITE/tests/integration/register.test.mjs`
+
+- [ ] Task 24: Stop emitting per-item `/content/*` HTML pages (P0)
+  - Acceptance: `src/content/content.11tydata.js` sets `permalink: false` and `eleventyExcludeFromCollections: true`; after `npm run build` no file exists under `_site/content/`; `publicationContent.js` still loads all Markdown bodies; `test-site.mjs` asserts `_site/content` is absent; website item count still 44.
+  - Files: `05_WEBSITE/src/content/content.11tydata.js`, `05_WEBSITE/scripts/test-site.mjs`
+
+- [ ] Task 25: Public `/welcome/` landing page with privacy notice and registration form (Decisions G, L) (P0)
+  - Acceptance: `src/welcome.njk` (permalink `/welcome/`) renders the cover image, title "একই শিকড়", the BECAA Maharashtra Magazine 2026 subtitle, a two-sentence introduction, the PRD §5.6 privacy notice with retention date 31 December 2027, and the form (name, email, category radios, conditional alumni/sponsor/guest fieldsets, department `<select>` from `lib/config.ts`, consent checkbox, hidden honeypot and `form_started_at` fields) using semantic HTML, labels, `required`/`inputmode`/`pattern` attributes and the existing palette; no magazine text or protected asset is referenced; `src/assets/js/welcome.js` toggles fieldsets, posts JSON via `fetch`, shows field errors, and redirects to `/` on success; works without JS as a normal form POST; desktop and mobile screenshots inspected.
+  - Files: `05_WEBSITE/src/welcome.njk`, `05_WEBSITE/src/assets/js/welcome.js`, `05_WEBSITE/src/assets/css/site.css`, `05_WEBSITE/eleventy.config.mjs`
+
+- [ ] Task 26: Vercel Routing Middleware gate (P0)
+  - Acceptance: `middleware.ts` (framework-less Vercel middleware, edge runtime, Web Crypto only) matches `/`, `/index.html`, `/print/:path*`, `/content/:path*`, `/assets/normalized/advertisements/:path*`, `/assets/normalized/images/:path*`; requests with a valid `becaa_v` cookie pass through; page requests without one are rewritten to `/welcome/`; asset/PDF requests without one return 403; `/welcome/`, `/assets/css`, `/assets/js`, `/assets/normalized/cover`, `/assets/normalized/qr`, `/api/*`, `/admin/*` are never gated; unit test exercises the matcher/decision function with and without a valid cookie; `vercel.json` declares the function runtime and no rewrites that bypass the gate.
+  - Files: `05_WEBSITE/middleware.ts`, `05_WEBSITE/lib/gate.ts`, `05_WEBSITE/vercel.json`, `05_WEBSITE/tests/unit/gate.test.mjs`
+
+- [ ] Task 27: Local dev server that mirrors Vercel (P0)
+  - Acceptance: `scripts/dev-app.mjs` (run as `npm run dev:app`, port 8087) serves `_site/` statically, applies the same gate logic from `lib/gate.ts` before static files, routes `/api/*` to the handlers in `api/` (Web `Request`/`Response` adapted from Node http), loads `.env.local`, and logs no request bodies or cookies; smoke check: unauthenticated `curl /` returns the welcome page, `curl /assets/normalized/advertisements/web/ADV-018-…jpg` returns 403, `/api/health` returns `{ok:true}`.
+  - Files: `05_WEBSITE/scripts/dev-app.mjs`, `05_WEBSITE/lib/node-adapter.ts`, `05_WEBSITE/package.json`
+
+- [ ] Task 28: Admin password hash tool and login/logout endpoints (Decisions M, N) (P0)
+  - Acceptance: `npm run admin:hash` prompts (masked, no echo) and prints an argon2id hash only to the terminal; `api/admin/login.ts` accepts `username` + `password`, enforces same-origin, rate limit (5/15 min per IP and per username) and lockout (after 10 failures), verifies against `ADMIN_USERNAME`/`ADMIN_PASSWORD_HASH` in constant time, returns the identical 401 body/status for unknown user and wrong password, on success creates a server-side session (rotating any existing one) and sets `becaa_a` (`HttpOnly; Secure; SameSite=Strict; Path=/`); `api/admin/logout.ts` deletes the session row and clears the cookie; `lib/require-admin.ts` resolves and refreshes a valid session or returns 401; integration tests cover success, wrong password, unknown user (identical response), lockout, logout invalidation, idle expiry.
+  - Files: `05_WEBSITE/scripts/admin-hash.mjs`, `05_WEBSITE/api/admin/login.ts`, `05_WEBSITE/api/admin/logout.ts`, `05_WEBSITE/lib/require-admin.ts`, `05_WEBSITE/tests/integration/admin-auth.test.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 29: Admin stats and visitor search endpoints (P0)
+  - Acceptance: `GET /api/admin/stats` (auth) returns total visitors, total visits, counts by category, alumni counts by batch year and by department (Other grouped as "Other"), and the latest 10 registrations with IST timestamps; `GET /api/admin/visitors?q=&page=` (auth) searches name/email/organisation with parameterised `ILIKE`, 50 per page, returns approved fields only (never hashes, IPs, user agents, ids beyond a display id); `DELETE /api/admin/visitors/:id` (auth, CSRF token) deletes one visitor; unauthenticated calls return 401; SQL injection attempt via `q` returns normal results; integration tests seed 6 visitors and assert every aggregate.
+  - Files: `05_WEBSITE/api/admin/stats.ts`, `05_WEBSITE/api/admin/visitors.ts`, `05_WEBSITE/lib/admin-queries.ts`, `05_WEBSITE/tests/integration/admin-queries.test.mjs`
+
+- [ ] Task 30: CSV export with formula-injection protection (P0)
+  - Acceptance: `lib/csv-core.ts` (pure, unit-tested) quotes every cell, prefixes cells starting with `= + - @ \t \r` with `'`, emits CRLF rows and a UTF-8 BOM; `GET /api/admin/export.csv` (auth) streams exactly the columns `name,email,category,batch_year,department,department_other,organisation,mobile,consent_at,registered_at,last_seen_at,visit_count` with `Content-Disposition: attachment` and `Cache-Control: no-store`, and logs one line (timestamp, session display id, row count) without data; integration test parses the download, asserts headers, a Bengali name round-trips, and that no column name contains `hash`, `token`, `ip` or `agent`.
+  - Files: `05_WEBSITE/lib/csv-core.ts`, `05_WEBSITE/api/admin/export.csv.ts`, `05_WEBSITE/tests/unit/csv-core.test.mjs`, `05_WEBSITE/tests/integration/export.test.mjs`
+
+- [ ] Task 31: Admin login page and dashboard UI (P0)
+  - Acceptance: `src/admin.njk` (permalink `/admin/`) renders a login form (username, masked password, CSRF field) and, after login, a dashboard shell filled by `src/assets/js/admin.js` via `fetch`: stat tiles (registered viewers, visits, alumni/sponsor/guest), batch-wise and department-wise tables with CSS bar cells, searchable paginated registrations table with date/time and a delete action with confirmation, "Download CSV" link, logout button; all data inserted via `textContent` (no `innerHTML` with data); strict CSP satisfied (no inline scripts); `X-Frame-Options: DENY` on `/admin/`; keyboard accessible; desktop and mobile screenshots inspected.
+  - Files: `05_WEBSITE/src/admin.njk`, `05_WEBSITE/src/assets/js/admin.js`, `05_WEBSITE/src/assets/css/site.css`
+
+- [ ] Task 32: Threat-table verification tests (P0)
+  - Acceptance: A test file per PRD §5.7 row that is not already covered by Tasks 20–30: stored-XSS payload in a name renders escaped in the admin table (Playwright), CSRF with foreign Origin on delete/export → 403, open-redirect attempt via `?next=` is ignored, mass-assignment extra fields ignored end-to-end, `grep` gate that `_site/` contains no `@`-emails from the test DB and no secrets, and `npm run check:sql` fails on any template-literal SQL in `api/` or `lib/`; each row of the §5.7 table is annotated in `sprints/v3/THREAT_CHECKS.md` with the test name or the manual check performed.
+  - Files: `05_WEBSITE/tests/integration/threats.test.mjs`, `05_WEBSITE/scripts/check-sql.mjs`, `sprints/v3/THREAT_CHECKS.md`, `05_WEBSITE/package.json`
+
+- [ ] Task 33: Playwright live-browser end-to-end suite (local) (P0)
+  - Acceptance: `scripts/app-e2e.mjs` (`npm run e2e:app`) starts the dev server against `becaa_test`, then in Chromium: unauthenticated `/` lands on `/welcome/`; invalid submissions show field errors; alumni, sponsor and guest registrations each succeed and open the magazine with the cover, 44 items and Bengali text; cookie has HttpOnly/SameSite flags; a fresh context gets 403 on an advertisement image and on the PDF; admin login → dashboard counts equal the 3 registrations → search finds one → CSV downloads and parses → delete removes one → logout → `/api/admin/stats` returns 401; screenshots saved to `qa-output/app/` at desktop and mobile widths; suite exits non-zero on any failure.
+  - Files: `05_WEBSITE/scripts/app-e2e.mjs`, `05_WEBSITE/package.json`, `05_WEBSITE/qa-output/app/`
+
+- [ ] Task 34: Deployment, rollback and operations documentation (Decisions M, O, P) (P0)
+  - Acceptance: `05_WEBSITE/DEPLOYMENT.md` documents PRD §5.8 step-by-step (Vercel link, Neon via Marketplace, least-privilege role, environment variables per environment with generation commands, `db:migrate` against the preview branch, preview deploy, E2E against the preview URL, production promotion only on approval, post-deploy smoke test, recording in CHANGELOG), rollback (Vercel instant rollback, additive migrations, reverse SQL files, Neon PITR, `pg_dump` restore), the weekly manual encrypted `pg_dump` procedure, the `REGISTRATION_ENABLED=false` emergency switch, and the retention/purge procedure; contains no real credentials or URLs; `README.md` gains a "Registration application" section and the Playwright/PostgreSQL prerequisites.
+  - Files: `05_WEBSITE/DEPLOYMENT.md`, `05_WEBSITE/README.md`
+
+- [ ] Task 35: Vercel preview deployment rehearsal (no production) (P1)
+  - Acceptance: Only if the user's `vercel` CLI is already logged in: `vercel link` to a new project, Neon provisioned via Marketplace, environment variables set for Preview only, `db:migrate` run against the preview branch, `vercel deploy` produces a preview URL, `npm run e2e:app -- --base-url <preview>` passes, preview URL and commit recorded in `sprints/v3/PREVIEW_DEPLOYMENT.md`; if the CLI is not logged in, the task records exactly what the user must run and stops without deploying. Production is never targeted.
+  - Files: `sprints/v3/PREVIEW_DEPLOYMENT.md`, `05_WEBSITE/.vercel/` (git-ignored)
+
+## Stream C — Release
+
+- [ ] Task 36: `release:v3` pipeline with audit and secret gates, fixed REPRODUCTION template (P0)
+  - Acceptance: `release.mjs` gains `RELEASE_VERSION=V3_REVIEW_01` support and runs, in order: `tracker:validate`, `validate`, `test:unit`, `test:integration`, `build`, `test`, `qa`, `qa:v2-items`, `pdf`, `qa:pdf`, `qa:pdf:v2-items`, `qa:ad-backgrounds`, `qa:art006`, `qa:contact`, `e2e:app`, `check:secrets`, `check:sql`, and an `npm audit --audit-level=high` gate that fails only on advisories not in the documented pre-existing allow-list (`sharp`, `playwright`, `xlsx`); it copies `_site`, `qa-output` (incl. `app/` and `ad-backgrounds/`), validation reports, `DEPLOYMENT.md`, `THREAT_CHECKS.md` and the audit reports into `06_FINAL_OUTPUT/V3_REVIEW_01/`, refuses to overwrite, and writes a `REPRODUCTION.md` generated from the real command list plus the Playwright and PostgreSQL prerequisites; `release-manifest.json` includes 44 item IDs, cover fingerprint and git commit.
+  - Files: `05_WEBSITE/scripts/release.mjs`, `05_WEBSITE/package.json`
+
+- [ ] Task 37: Apply the non-breaking `js-yaml` audit fix (Decision 6.1-9) (P1)
+  - Acceptance: `npm audit fix` (non-force) resolves the transitive `js-yaml` 3.x advisory under `gray-matter`; `package-lock.json` diff is limited to that subtree; `npm run build`, `npm run validate` and unit tests still pass; remaining advisories are exactly `sharp`, `playwright`, `xlsx` and are listed in the release allow-list.
+  - Files: `05_WEBSITE/package-lock.json`
+
+- [ ] Task 38: Assemble `V3_REVIEW_01` (P0)
+  - Acceptance: `npm run release:v3` completes end-to-end; `06_FINAL_OUTPUT/V3_REVIEW_01/` contains website, print PDF, `qa-output/` (desktop/mobile, advertisements, pdf pages, ad-backgrounds review sheet, app E2E screenshots), `validation-report.json`, `validation-summary.md` (0 errors, 7 pre-existing warnings), `release-manifest.json`, `BUILD_SUMMARY.md`, accurate `REPRODUCTION.md`, `DEPLOYMENT.md`, `THREAT_CHECKS.md`; the PDF is inspected page-by-page for blank pages, the Secretary's closing lines, the story's Bengali shaping, and all 22 tinted advertisement pages.
+  - Files: `06_FINAL_OUTPUT/V3_REVIEW_01/**` (new folder only)
+
+- [ ] Task 39: Verify baseline integrity (P0)
+  - Acceptance: SHA-256 of `release-manifest.json`, `website/index.html` and the print PDF in `V0_PROTOTYPE_01`, `V1_COMPLETE_REVIEW_03` and `V2_REVIEW_01` match their values at git `HEAD` before this sprint; `git status --short` shows no change under any `06_FINAL_OUTPUT/` folder other than the new `V3_REVIEW_01`, nor under `01_REFERENCE_2025`, `02_INCOMING_CONTENT` (beyond Task 1's intake), `03_ADVERTISEMENTS`; results recorded in the task note.
+  - Files: none modified (verification only)
+
+- [ ] Task 40: Update `CHANGELOG.md` (P1)
+  - Acceptance: New `## V3_REVIEW_01 — <date>` section with Changed (MSG-003 body replaced, superseded source location; all 22 advertisement titles; advertisement page backgrounds with the two manual overrides), Added (ART-012; registration gate, database schema, admin dashboard, CSV export; `/welcome/` and `/admin/` pages; release pipeline gates), Removed (per-item `/content/*` HTML pages), Unchanged (all other items and V0–V2 outputs), Not deployed (preview rehearsal status), and Noted for follow-up (Item 20, Palash Biswas branch, v2 Tasks 19/20, deferred audit items); earlier entries untouched.
+  - Files: `CHANGELOG.md`
+
+- [ ] Task 41: Fix the pre-existing cover-page print clipping artifact (carried from v2 Task 19) (P2)
+  - Acceptance: Only if time allows after all P0/P1 tasks: `.print-cover` box height matches its image so no sliver of the contents page bleeds onto page 1; verified by re-rendering page 1 at 200 DPI; no other page changes; if not attempted, remains open with no file changes.
+  - Files: `05_WEBSITE/src/assets/css/print.css`, `05_WEBSITE/src/print.njk`
+
+- [ ] Task 42: Review `shell: true` in `release.mjs` (carried from v2 Task 20) (P2)
+  - Acceptance: Only if time allows: the command runner resolves the `npm` binary explicitly and drops `shell: true` while still working on Linux and Windows; semgrep finding cleared; release pipeline re-run; otherwise remains open.
+  - Files: `05_WEBSITE/scripts/release.mjs`

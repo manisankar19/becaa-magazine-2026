@@ -38,7 +38,8 @@
     "normalize:v2-gallery-image": "node scripts/normalize-v2-gallery-image.mjs",
     "manifest:add-v2-items": "node scripts/add-v2-manifest-items.mjs",
     "test:unit": "node tests/unit/tracker-merge-core.test.mjs && node tests/unit/tracker-exclusion-core.test.mjs && node tests/unit/article-markdown-core.test.mjs && node tests/unit/manifest-item-yaml-core.test.mjs",
-    "test:integration": "node tests/integration/normalize-cover-core.test.mjs && node tests/integration/cover-manifest-entry.test.mjs && node tests/integration/extract-v2-golap.test.mjs && node tests/integration/extract-v2-palash-article.test.mjs && node tests/integration/normalize-v2-gallery-image.test.mjs && node tests/integration/add-v2-manifest-items.test.mjs && node tests/integration/superseded-sources.test.mjs"
+    "test:integration": "node tests/integration/normalize-cover-core.test.mjs && node tests/integration/cover-manifest-entry.test.mjs && node tests/integration/extract-v2-golap.test.mjs && node tests/integration/extract-v2-palash-article.test.mjs && node tests/integration/normalize-v2-gallery-image.test.mjs && node tests/integration/add-v2-manifest-items.test.mjs && node tests/integration/superseded-sources.test.mjs && node tests/integration/extract-v3-secretary-desk.test.mjs",
+    "extract:v3-secretary-desk": "node scripts/extract-v3-secretary-desk.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

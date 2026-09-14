@@ -2,23 +2,40 @@
 id: MSG-003
 title: "Secretary Desk"
 source_file: "02_INCOMING_CONTENT/secretary desk.docx"
-source_fingerprint: df446f4416fbf69a89cf654374f6965ceda9fb84708ed86850ef2cbf8dede687
+source_fingerprint: ed3fd766d55e7bad364f95e8d3777c7305b52aa57458fe636f1a21d988108885
 verification: verified
 ---
-Secretary’s Desk
+From the Secretary's Desk
 
-It is a privilege and a great responsibility to serve as Secretary of BECAA Maharashtra. For all of us, Bengal Engineering College is much more than an institution where we studied. It is where lifelong friendships were formed, ideas took shape, and many of the values that continue to guide us were nurtured.
+It is both an honour and a privilege to serve as the Secretary of BECAA Maharashtra.
 
-Even after so many years, memories of the campus remain fresh. The mention of Sengupta Hall brings back the warmth of hostel life, the companionship of friends and the simple moments that made our college days unforgettable. Although our careers and responsibilities have taken us to different places, our shared connection with our alma mater continues to bring us together.
+For each one of us, Bengal Engineering College, now IIEST Shibpur, is far more than the institution where we received our education. It is where lifelong friendships were forged, dreams took shape, and values were nurtured that continue to guide us through life and career.
 
-During the past year, BECAA Maharashtra has remained active in strengthening this bond. Swar Setu, our cultural programme featuring Madhubanti Bagchi and Jazim Sharma, brought alumni, families and well-wishers together through music while supporting a meaningful cause. Our Bijoya Sammilani and annual picnic provided further opportunities to renew old friendships, welcome families and enjoy the fellowship that lies at the heart of our association. Such occasions remind us that BECAA is not merely an organisation. It is an extended family.
+“BECAA Maharashtra is more than an alumni association. It is a family united by shared memories, common values, and a commitment to carry our legacy forward.”
 
-Alongside these cultural and social gatherings, our association remains committed to its wider responsibilities. Supporting education, helping members during medical need and contributing to appropriate social-welfare initiatives are important parts of our purpose. We also hope to expand technical and educational activities, encourage the exchange of knowledge and develop stronger connections with academic institutions.
+Even after decades, our memories of the campus remain vivid. The mere mention of our Halls and hostel numbers instantly transports us back to those cherished days of friendship, late-night discussions, cultural activities, academic pursuits, and countless shared experiences. Life may have taken us along different paths and to different corners of the world, but the bond we share with our alma mater remains as strong as ever.
 
-The future strength of BECAA Maharashtra will depend on the active participation of its members. I particularly invite younger alumni and those who have recently made Maharashtra their home to join our programmes, share their ideas and take part in the association’s work. Their energy and fresh perspectives will help us carry our legacy forward.
+One of the greatest strengths of BECAA Maharashtra is its ability to keep this bond alive across generations. Over the past year, we have continued this tradition through a variety of cultural, social, and community-driven initiatives.
 
-I offer my sincere gratitude to our members, volunteers, patrons, sponsors and their families. Every programme and initiative becomes possible because people contribute their time, effort, experience and goodwill.
+Our flagship cultural event, Swar Setu, featuring acclaimed artists Madhubanti Bagchi and Jazim Sharma, brought together alumni, families, and friends for an unforgettable evening of music while supporting a meaningful social cause. Our Bijoya Sammilani and Annual Picnic provided wonderful opportunities to reconnect with old friends, welcome new members and their families, and celebrate the spirit of togetherness that defines our association.
 
-Let us continue to preserve the friendships and values we inherited from our college while working together for education, service and fellowship. May BECAA Maharashtra remain a welcoming platform where generations of alumni can reconnect with one another and keep the spirit of our alma mater alive.
+These gatherings reaffirm an important truth: BECAA Maharashtra is not merely an alumni association. It is an extended family united by shared memories, common values, and an enduring affection for our alma mater.
 
-Abir Banerjee, ETC ’92, Secretary, BECAA Maharashtra
+Beyond social and cultural engagement, we remain committed to our broader responsibilities. Supporting education, extending assistance to members during times of need, and contributing to meaningful social welfare initiatives continue to be central to our mission. Looking ahead, we aspire to expand our educational and technical activities, encourage greater knowledge sharing among alumni, and strengthen our engagement with students and academic institutions.
+
+The future of BECAA Maharashtra depends upon the active participation of its members and the infusion of fresh ideas from younger generations. I warmly invite young alumni, as well as those who have recently made Maharashtra their home, to become actively involved in our activities, contribute their perspectives, and help shape the next chapter of our journey. Their enthusiasm, energy, and innovation will play a vital role in carrying our legacy forward.
+
+I extend my heartfelt gratitude to our members, volunteers, patrons, sponsors, and their families. Every programme, initiative, and achievement of our association is made possible through their dedication, support, and generosity.
+
+As we look ahead, let us continue to cherish the friendships and values that we inherited from our college days while working together in the spirit of service, learning, and fellowship.
+
+May BECAA Maharashtra continue to serve as a vibrant platform where generations of alumni can connect, collaborate, and celebrate the enduring legacy of Bengal Engineering College and IIEST Shibpur.
+
+With warm regards,
+
+Abir Banerjee
+
+ETC '92
+
+Secretary  
+BECAA Maharashtra

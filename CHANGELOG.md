@@ -1,5 +1,45 @@
 # Changelog
 
+## V3_REVIEW_01 — 2026-09-14
+
+Local review build only (`06_FINAL_OUTPUT/V3_REVIEW_01/`, built by `npm run release:v3` at commit `8c797f2`). Not deployed.
+
+### Changed
+
+- `MSG-003` (Secretary Desk): body replaced verbatim with Abir Banerjee's revised message received 2026-09-14 (SHA-256 `ed3fd766…`); the closing lines now render on separate lines; the scanned signature image was not imported. The superseded original (`df446f44…`) is preserved in `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/` and in git history.
+- All 22 published advertisements retitled from "[Company] Advertisement" to "With best compliments from [Company Name]" using the recorded company names (manifest, tracker, website card/contents/nav, PDF page and contents). IDs, artwork, normalized files and alt text unchanged; excluded advertisements untouched. "Tata Capital Ltd. (Retail Finance)" and "Clover Blakefield Reality LLP" carried as recorded.
+- Every advertisement page (print) and card (web) now has a background colour sampled from the artwork's edge and stored in the manifest (`page_background`, `page_background_mode`, `page_ink`), with WCAG-checked heading ink and the page number kept on white. Two manual overrides: ADV-019 `#2b2f31` (charcoal instead of near-black), ADV-023 `#baecec` (softened cyan).
+- Tracker: Item 18 remark for the revised source; Item 24 approved and included; 22 advertisement display titles; all edits preceded by snapshots in `TRACKER_SNAPSHOTS/`.
+- `department` column widened to 80 characters; email uniqueness via a `lower(email)` index (no `citext`).
+
+### Added
+
+- `ART-012` — Siddhartha Mukhopadhyay, Bengali story "প্যাঁড়া" (tracker Item 24), web and print, order 220.
+- Viewer registration application: public `/welcome/` page (privacy notice, retention 31 December 2027, consent, honeypot), `POST /api/register` with server-side validation, per-IP rate limiting and a signed HttpOnly session cookie; registration gate (Vercel middleware + local server) that shows the welcome page for `/` and refuses artwork and the PDF without a session.
+- PostgreSQL schema (`visitors`, `visits`, `admin_sessions`, `rate_limits`, `schema_migrations`) with forward migrations, reverse files and `db:migrate` / `db:status` / `db:rollback` / `db:purge` commands; loopback-only local cluster for development.
+- Administrator portal: `/admin/` login (argon2id credential from environment variables, rate limit, lockout, rotating server-side sessions, CSRF), dashboard (totals, category/batch/department counts, searchable paginated registrations, delete with confirmation), CSV export of the 12 approved fields with a formula-injection guard.
+- Release pipeline gates: `check:secrets`, `check:sql`, `npm audit` allow-list (`scripts/audit-allowlist.json`), generated `REPRODUCTION.md` with Playwright and PostgreSQL prerequisites; `DEPLOYMENT.md`; `sprints/v3/THREAT_CHECKS.md`; 20 unit suites, 22 integration checks, four browser suites and a 22-step live-browser suite.
+- `js-yaml` transitive advisory (via `gray-matter`) fixed by `npm audit fix`.
+
+### Removed
+
+- The per-item HTML pages Eleventy used to emit under `/content/…` (15 in V2); they were not linked anywhere and would have bypassed the registration gate.
+
+### Unchanged
+
+- All other 41 publication items, their IDs and ordering; the cover; source artwork and normalized derivatives; `06_FINAL_OUTPUT/V0_PROTOTYPE_01`, `V0_EC2_VERIFY_01`, `V1_REVIEW_01`, `V1_COMPLETE_REVIEW_01/02/03`, `V2_REVIEW_01` (verified by SHA-256 against the pre-sprint commit).
+
+### Not deployed
+
+- No deployment was made in this sprint. The preview rehearsal (Task 35) stopped before creating any Vercel or Neon resource; the exact steps are in `sprints/v3/PREVIEW_DEPLOYMENT.md`. **Pre-existing, outside this sprint:** the Vercel project `mani125slm/becaa-magazine-2026` has served the ungated V1 magazine publicly at `https://becaa-magazine-2026.vercel.app` since 2 August 2026; it was neither created nor changed here and needs a decision before V3 goes live.
+
+### Noted for follow-up (not blocking this release)
+
+- Item 20 (Sudipta Chakraborty): source file still not received; remains excluded.
+- Palash Biswas (`ART-011`): branch recorded as "Civil" in the tracker but "Mech" in his own byline; unresolved pending the editor.
+- Three `npm audit` advisories in build tooling (`sharp`, `playwright`, `xlsx`) remain deferred and allow-listed with reasons.
+- Cover-page print clipping artifact (v2 Task 19 / v3 Task 41) and `shell: true` in `release.mjs` (v2 Task 20 / v3 Task 42): see the Sprint v3 walkthrough for their final status.
+
 ## V2_REVIEW_01 — 2026-09-08
 
 ### Added

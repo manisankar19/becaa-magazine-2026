@@ -439,7 +439,7 @@ items:
     notes: 'Tracker Item ID 11. Exact approved source: main building ajay.pdf.'
   - id: ADV-001
     type: advertisement
-    title: Skylark Advertisement
+    title: With best compliments from Skylark
     language: en
     contributor: Skylark
     designation: Sponsor
@@ -463,7 +463,7 @@ items:
     notes: 'Tracker Item ID ADV-001. Exact approved source: 1 Skylark.png.'
   - id: ADV-002
     type: advertisement
-    title: PNB Housing Advertisement
+    title: With best compliments from PNB Housing
     language: en
     contributor: PNB Housing
     designation: ''
@@ -487,7 +487,7 @@ items:
     notes: 'Tracker Item ID ADV-002. Exact approved source: 2 d PNB FD Magazine AD_A4-01.pdf.'
   - id: ADV-003
     type: advertisement
-    title: Vistaar Finance Advertisement
+    title: With best compliments from Vistaar Finance
     language: en
     contributor: Vistaar Finance
     designation: ''
@@ -511,7 +511,7 @@ items:
     notes: 'Tracker Item ID ADV-003. Exact approved source: 3 Vistaar Finance.jpg.'
   - id: ADV-004
     type: advertisement
-    title: Gainwell Technologies Advertisement
+    title: With best compliments from Gainwell Technologies
     language: en
     contributor: Gainwell Technologies
     designation: ''
@@ -535,7 +535,7 @@ items:
     notes: 'Tracker Item ID ADV-004. Exact approved source: 4 Gainwell Technologies.jpg.'
   - id: ADV-005
     type: advertisement
-    title: Tata Capital Ltd. Retail Finance Advertisement
+    title: With best compliments from Tata Capital Ltd. (Retail Finance)
     language: en
     contributor: Tata Capital Ltd. (Retail Finance)
     designation: ''
@@ -559,7 +559,7 @@ items:
     notes: 'Tracker Item ID ADV-005. Exact approved source: 5a Tata Capital ltd. (Retail Finance).jpg.'
   - id: ADV-006
     type: advertisement
-    title: Tata Capital Housing Finance Ltd. Advertisement
+    title: With best compliments from Tata Capital Housing Finance Ltd.
     language: en
     contributor: Tata Capital Housing Finance Ltd.
     designation: ''
@@ -583,7 +583,7 @@ items:
     notes: 'Tracker Item ID ADV-006. Exact approved source: 6 d tata capital.pdf.'
   - id: ADV-007
     type: advertisement
-    title: OnShore Construction Pvt Ltd Advertisement
+    title: With best compliments from OnShore Construction Pvt Ltd
     language: en
     contributor: OnShore Construction Pvt Ltd
     designation: ''
@@ -607,7 +607,7 @@ items:
     notes: 'Tracker Item ID ADV-007. Exact approved source: 7 OnShore Construction Pvt Ltd .png.'
   - id: ADV-008
     type: advertisement
-    title: Roofs & Ceilings Advertisement
+    title: With best compliments from Roofs & Ceilings
     language: en
     contributor: Roofs & Ceilings
     designation: ''
@@ -631,7 +631,7 @@ items:
     notes: 'Tracker Item ID ADV-008. Exact approved source: 8 Roofs & Ceilings.png.'
   - id: ADV-010
     type: advertisement
-    title: Indus Grand Advertisement
+    title: With best compliments from Indus Grand
     language: en
     contributor: Indus Grand
     designation: ''
@@ -655,7 +655,7 @@ items:
     notes: 'Tracker Item ID ADV-010. Exact approved source: 10 Indus Grand.jpeg.'
   - id: ADV-011
     type: advertisement
-    title: Axelon Advertisement
+    title: With best compliments from Axelon
     language: en
     contributor: Axelon
     designation: ''
@@ -679,7 +679,7 @@ items:
     notes: 'Tracker Item ID ADV-011. Exact approved source: 11 Axelon.jpg.'
   - id: ADV-012
     type: advertisement
-    title: Aarvi Encon Advertisement
+    title: With best compliments from Aarvi Encon
     language: en
     contributor: Aarvi Encon
     designation: ''
@@ -703,7 +703,7 @@ items:
     notes: 'Tracker Item ID ADV-012. Exact approved source: 12 arvi enercon.jpeg.'
   - id: ADV-013
     type: advertisement
-    title: Anand Rathi Advertisement
+    title: With best compliments from Anand Rathi
     language: en
     contributor: Anand Rathi
     designation: ''
@@ -727,7 +727,7 @@ items:
     notes: 'Tracker Item ID ADV-013. Exact approved source: 13a Anand Rathi.jpeg.'
   - id: ADV-014
     type: advertisement
-    title: Future Netwings Solutions Advertisement
+    title: With best compliments from Future Netwings Solutions
     language: en
     contributor: Future Netwings Solutions
     designation: ''
@@ -751,7 +751,7 @@ items:
     notes: 'Tracker Item ID ADV-014. Exact approved source: 14 a future netwings.pdf.'
   - id: ADV-015
     type: advertisement
-    title: Swaraj Shoes Advertisement
+    title: With best compliments from Swaraj Shoes
     language: en
     contributor: Swaraj Shoes
     designation: ''
@@ -775,7 +775,7 @@ items:
     notes: 'Tracker Item ID ADV-015. Exact approved source: 15 Swaraj Shoes.jpeg.'
   - id: ADV-017
     type: advertisement
-    title: UREDCONNECT Advertisement
+    title: With best compliments from UREDCONNECT
     language: en
     contributor: UREDCONNECT
     designation: ''
@@ -799,7 +799,7 @@ items:
     notes: 'Tracker Item ID ADV-017. Exact approved source: 17 UREDCONNECT.jpeg.'
   - id: ADV-018
     type: advertisement
-    title: Eframe Advertisement
+    title: With best compliments from Eframe
     language: en
     contributor: Eframe
     designation: ''
@@ -823,7 +823,7 @@ items:
     notes: 'Tracker Item ID ADV-018. Exact approved source: 18 Eframe.jpeg.'
   - id: ADV-019
     type: advertisement
-    title: Network Techlabs Advertisement
+    title: With best compliments from Network Techlabs
     language: en
     contributor: Network Techlabs
     designation: ''
@@ -847,7 +847,7 @@ items:
     notes: 'Tracker Item ID ADV-019. Exact approved source: 19 Network Techlabs.png.'
   - id: ADV-020
     type: advertisement
-    title: Schnelltech Global Advertisement
+    title: With best compliments from Schnelltech Global
     language: en
     contributor: Schnelltech Global
     designation: ''
@@ -871,7 +871,7 @@ items:
     notes: 'Tracker Item ID ADV-020. Exact approved source: 20 b Schnelltech Global.pdf.'
   - id: ADV-021
     type: advertisement
-    title: Bhavik Advertisement
+    title: With best compliments from Bhavik
     language: en
     contributor: Bhavik
     designation: ''
@@ -895,7 +895,7 @@ items:
     notes: 'Tracker Item ID ADV-021. Exact approved source: 21 Bhavik.jpeg.'
   - id: ADV-022
     type: advertisement
-    title: Pratap Caterer Advertisement
+    title: With best compliments from Pratap Caterer
     language: en
     contributor: Pratap Caterer
     designation: ''
@@ -919,7 +919,7 @@ items:
     notes: 'Tracker Item ID ADV-022. Exact approved source: 22 pratap caterer.png.'
   - id: ADV-023
     type: advertisement
-    title: Clover Blakefield Reality LLP Advertisement
+    title: With best compliments from Clover Blakefield Reality LLP
     language: en
     contributor: Clover Blakefield Reality LLP
     designation: ''
@@ -943,7 +943,7 @@ items:
     notes: 'Tracker Item ID ADV-023. Exact approved source: 23 Clover Blakefield Reality LLP.png.'
   - id: ADV-026
     type: advertisement
-    title: CETEST Advertisement
+    title: With best compliments from CETEST
     language: en
     contributor: CETEST
     designation: ''

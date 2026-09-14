@@ -64,7 +64,7 @@ items:
     section: messages
     order: 30
     source_file: 02_INCOMING_CONTENT/secretary desk.docx
-    source_fingerprint: df446f4416fbf69a89cf654374f6965ceda9fb84708ed86850ef2cbf8dede687
+    source_fingerprint: ed3fd766d55e7bad364f95e8d3777c7305b52aa57458fe636f1a21d988108885
     content_file: messages/MSG-003-secretary-desk.md
     web_asset: ''
     print_asset: ''
@@ -1037,6 +1037,30 @@ items:
     credit: ''
     alt: বেঁচে থাকার লড়াই ও স্বপ্নের পথ — Palash Biswas
     notes: 'Tracker Item ID 23. Exact approved source: Palash Article.docx.'
+  - id: ART-012
+    type: article
+    title: প্যাঁড়া
+    language: bn
+    contributor: Siddhartha Mukhopadhyay
+    designation: ''
+    passing_year: '1986'
+    branch: Electrical
+    section: articles
+    order: 220
+    source_file: 02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx
+    source_fingerprint: 9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65
+    content_file: articles/ART-012-item.md
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: প্যাঁড়া — Siddhartha Mukhopadhyay
+    notes: 'Tracker Item ID 24. Exact approved source: Siddhartha Mukhopadhyay story.docx.'
 sponsor_acknowledgements: []
 sponsor_acknowledgement_message: BECAA Maharashtra warmly thanks our sponsors for their support.
 cover:

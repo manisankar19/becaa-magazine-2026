@@ -461,6 +461,9 @@ items:
     credit: ''
     alt: Skylark advertisement artwork
     notes: 'Tracker Item ID ADV-001. Exact approved source: 1 Skylark.png.'
+    page_background: '#b6e2f2'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-002
     type: advertisement
     title: With best compliments from PNB Housing
@@ -485,6 +488,9 @@ items:
     credit: ''
     alt: PNB Housing advertisement artwork
     notes: 'Tracker Item ID ADV-002. Exact approved source: 2 d PNB FD Magazine AD_A4-01.pdf.'
+    page_background: '#873f3e'
+    page_background_mode: auto
+    page_ink: light
   - id: ADV-003
     type: advertisement
     title: With best compliments from Vistaar Finance
@@ -509,6 +515,9 @@ items:
     credit: ''
     alt: Vistaar Finance advertisement artwork
     notes: 'Tracker Item ID ADV-003. Exact approved source: 3 Vistaar Finance.jpg.'
+    page_background: '#284c79'
+    page_background_mode: auto
+    page_ink: light
   - id: ADV-004
     type: advertisement
     title: With best compliments from Gainwell Technologies
@@ -533,6 +542,9 @@ items:
     credit: ''
     alt: Gainwell Technologies advertisement artwork
     notes: 'Tracker Item ID ADV-004. Exact approved source: 4 Gainwell Technologies.jpg.'
+    page_background: '#c0aa74'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-005
     type: advertisement
     title: With best compliments from Tata Capital Ltd. (Retail Finance)
@@ -557,6 +569,9 @@ items:
     credit: ''
     alt: Tata Capital Ltd. (Retail Finance) advertisement artwork
     notes: 'Tracker Item ID ADV-005. Exact approved source: 5a Tata Capital ltd. (Retail Finance).jpg.'
+    page_background: '#9fbfd1'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-006
     type: advertisement
     title: With best compliments from Tata Capital Housing Finance Ltd.
@@ -581,6 +596,9 @@ items:
     credit: ''
     alt: Tata Capital Housing Finance Ltd. advertisement artwork
     notes: 'Tracker Item ID ADV-006. Exact approved source: 6 d tata capital.pdf.'
+    page_background: '#a1b5c9'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-007
     type: advertisement
     title: With best compliments from OnShore Construction Pvt Ltd
@@ -605,6 +623,9 @@ items:
     credit: ''
     alt: OnShore Construction Pvt Ltd advertisement artwork
     notes: 'Tracker Item ID ADV-007. Exact approved source: 7 OnShore Construction Pvt Ltd .png.'
+    page_background: '#cdcbcb'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-008
     type: advertisement
     title: With best compliments from Roofs & Ceilings
@@ -629,6 +650,9 @@ items:
     credit: ''
     alt: Roofs & Ceilings advertisement artwork
     notes: 'Tracker Item ID ADV-008. Exact approved source: 8 Roofs & Ceilings.png.'
+    page_background: '#8b8c8a'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-010
     type: advertisement
     title: With best compliments from Indus Grand
@@ -653,6 +677,9 @@ items:
     credit: ''
     alt: Indus Grand advertisement artwork
     notes: 'Tracker Item ID ADV-010. Exact approved source: 10 Indus Grand.jpeg.'
+    page_background: '#c2bab5'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-011
     type: advertisement
     title: With best compliments from Axelon
@@ -677,6 +704,9 @@ items:
     credit: ''
     alt: Axelon advertisement artwork
     notes: 'Tracker Item ID ADV-011. Exact approved source: 11 Axelon.jpg.'
+    page_background: '#ead9da'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-012
     type: advertisement
     title: With best compliments from Aarvi Encon
@@ -701,6 +731,9 @@ items:
     credit: ''
     alt: Aarvi Encon advertisement artwork
     notes: 'Tracker Item ID ADV-012. Exact approved source: 12 arvi enercon.jpeg.'
+    page_background: '#cfd8da'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-013
     type: advertisement
     title: With best compliments from Anand Rathi
@@ -725,6 +758,9 @@ items:
     credit: ''
     alt: Anand Rathi advertisement artwork
     notes: 'Tracker Item ID ADV-013. Exact approved source: 13a Anand Rathi.jpeg.'
+    page_background: '#d1b6aa'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-014
     type: advertisement
     title: With best compliments from Future Netwings Solutions
@@ -749,6 +785,9 @@ items:
     credit: ''
     alt: Future Netwings Solutions advertisement artwork
     notes: 'Tracker Item ID ADV-014. Exact approved source: 14 a future netwings.pdf.'
+    page_background: '#687f9a'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-015
     type: advertisement
     title: With best compliments from Swaraj Shoes
@@ -773,6 +812,9 @@ items:
     credit: ''
     alt: Swaraj Shoes advertisement artwork
     notes: 'Tracker Item ID ADV-015. Exact approved source: 15 Swaraj Shoes.jpeg.'
+    page_background: '#9ea0a1'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-017
     type: advertisement
     title: With best compliments from UREDCONNECT
@@ -797,6 +839,9 @@ items:
     credit: ''
     alt: UREDCONNECT advertisement artwork
     notes: 'Tracker Item ID ADV-017. Exact approved source: 17 UREDCONNECT.jpeg.'
+    page_background: '#655a60'
+    page_background_mode: auto
+    page_ink: light
   - id: ADV-018
     type: advertisement
     title: With best compliments from Eframe
@@ -821,6 +866,9 @@ items:
     credit: ''
     alt: Eframe advertisement artwork
     notes: 'Tracker Item ID ADV-018. Exact approved source: 18 Eframe.jpeg.'
+    page_background: '#d1cd1c'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-019
     type: advertisement
     title: With best compliments from Network Techlabs
@@ -845,6 +893,9 @@ items:
     credit: ''
     alt: Network Techlabs advertisement artwork
     notes: 'Tracker Item ID ADV-019. Exact approved source: 19 Network Techlabs.png.'
+    page_background: '#121516'
+    page_background_mode: auto
+    page_ink: light
   - id: ADV-020
     type: advertisement
     title: With best compliments from Schnelltech Global
@@ -869,6 +920,9 @@ items:
     credit: ''
     alt: Schnelltech Global advertisement artwork
     notes: 'Tracker Item ID ADV-020. Exact approved source: 20 b Schnelltech Global.pdf.'
+    page_background: '#ac9e61'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-021
     type: advertisement
     title: With best compliments from Bhavik
@@ -893,6 +947,9 @@ items:
     credit: ''
     alt: Bhavik advertisement artwork
     notes: 'Tracker Item ID ADV-021. Exact approved source: 21 Bhavik.jpeg.'
+    page_background: '#d1cfce'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-022
     type: advertisement
     title: With best compliments from Pratap Caterer
@@ -917,6 +974,9 @@ items:
     credit: ''
     alt: Pratap Caterer advertisement artwork
     notes: 'Tracker Item ID ADV-022. Exact approved source: 22 pratap caterer.png.'
+    page_background: '#d0d3d1'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-023
     type: advertisement
     title: With best compliments from Clover Blakefield Reality LLP
@@ -941,6 +1001,9 @@ items:
     credit: ''
     alt: Clover Blakefield Reality LLP advertisement artwork
     notes: 'Tracker Item ID ADV-023. Exact approved source: 23 Clover Blakefield Reality LLP.png.'
+    page_background: '#58d6db'
+    page_background_mode: auto
+    page_ink: dark
   - id: ADV-026
     type: advertisement
     title: With best compliments from CETEST
@@ -965,6 +1028,9 @@ items:
     credit: ''
     alt: CETEST advertisement artwork
     notes: 'Tracker Item ID ADV-026. Exact approved source: CETEST Advertisement_May 2025_Portrait.pptx.'
+    page_background: '#c8bb9f'
+    page_background_mode: auto
+    page_ink: dark
   - id: GAL-007
     type: gallery
     title: Chatgpt

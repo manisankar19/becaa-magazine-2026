@@ -1,6 +1,6 @@
-# Sprint v3 — Walkthrough (Streams A and B)
+# Sprint v3 — Walkthrough (Streams A, B and C)
 
-Scope of this report: **Part A** covers Stream A, Tasks 1–17 (publication updates; verified 2026-09-14 and unchanged since). **Part B** (added later the same day) covers Stream B, Tasks 18–35 (viewer registration application). Stream C (release, Tasks 36–42) has **not been started**; no `06_FINAL_OUTPUT/V3_REVIEW_01/` folder exists and this sprint has deployed nothing. Part B also records one pre-existing public deployment discovered during verification (§B-Limitations).
+Scope of this report: **Part A** covers Stream A, Tasks 1–17 (publication updates). **Part B** covers Stream B, Tasks 18–35 (viewer registration application). **Part C** (added last, same day) covers Stream C, Tasks 36–42 (release pipeline, `V3_REVIEW_01` and the superseding `V3_REVIEW_02`, changelog, and the two P2 carry-overs). All 42 tasks are done. This sprint has deployed nothing; Part B records a pre-existing public deployment discovered during verification, and Part C's verdict is the sprint verdict.
 
 ---
 
@@ -428,3 +428,130 @@ Parameterised SQL only (enforced by a gate); allow-listed input; server-side val
 - Browser evidence: `05_WEBSITE/qa-output/app/` (after `npm run e2e:app`), `05_WEBSITE/tests/screenshots/` (git-ignored)
 - Documents: `05_WEBSITE/DEPLOYMENT.md`, `sprints/v3/THREAT_CHECKS.md`, `sprints/v3/PREVIEW_DEPLOYMENT.md`
 - Live V1 site (pre-existing, outside this sprint): https://becaa-magazine-2026.vercel.app
+
+
+---
+
+# Part C — Stream C (Tasks 36–42): release
+
+Verification date: 2026-09-14 (after commits `ef6b30e` … `ec9b5f6`)
+Verifier method: independent re-derivation — both release folders read back from disk (manifests, audit gates, validation summaries, `diff -rq`, page-by-page PDF text comparison), the cover-page check and the pipeline unit tests re-run against the current build, semgrep re-run on the pipeline scripts, the V0/V1/V2 release files re-hashed against the pre-sprint commit and `HEAD`, the Stream C git history and file list re-read, and the Vercel link state re-checked.
+
+## C-Summary
+
+Stream C turned the release into a gated, reproducible pipeline and produced the sprint's reviewable outputs. `npm run release:v3` now runs 24 steps in a fixed, tested order (validation → typecheck → unit → **build** → site, integration, visual, PDF, cover, review-sheet and browser suites → secret and SQL gates → dependency-audit gate against a documented allow-list) and packages the site, QA evidence, reports and operational documents with a reproduction guide generated from the real step list. Two release folders exist: **`V3_REVIEW_01`** (commit `8c797f2`, the first complete build) and **`V3_REVIEW_02`** (commit `805b24d`), which supersedes it after the two P2 carry-overs were fixed — the cover-page sliver, resolved at its real root cause, and the shell-based command runner. Nine commits, 13 source files (438 insertions), 496 release files. Nothing deployed.
+
+## C-Independent verification results
+
+| Check | Method | Result |
+|---|---|---|
+| Release folders | `release-manifest.json`, `audit-gate.json`, `validation-summary.md` read back | `V3_REVIEW_01`: commit `8c797f2`, 44 items, 45 fingerprints; `V3_REVIEW_02`: commit `805b24d`, 44 items, 45 fingerprints; both 0 validation errors / 7 pre-existing warnings; both audit gates `ok` with exactly `playwright`, `sharp`, `xlsx` allow-listed (3 high, 0 critical) |
+| 01 vs 02 | `diff -rq` (excluding QA renders), SHA-256, `pdftotext` per page | Identical `website/index.html` and `site.css`; differ only in `print.css`, the PDF (pages 1–3 text; pages 4–69 identical), and the generated reports/manifest; both PDFs 69 pages |
+| Cover fix | `npm run test:e2e:cover` on the current build (= 02) | pass: cover ends at 270.3 mm, no stray ink before the page number, 69 pages |
+| Pipeline logic | `tests/unit/release-core.test.mjs` re-run | pass (step order incl. `build` before the integration suites, audit gate semantics, reproduction text, manifest, shell-free npm resolution incl. not-found) |
+| Shell-free runner | `grep "shell: true" release.mjs`; semgrep `--error` on `release.mjs`, `release-core.mjs`, allow-list | 0 occurrences; semgrep clean (the v2 `spawn-shell-true` finding is gone); `node …/npm-cli.js --version` → 10.9.8 |
+| Reproduction guide | `V3_REVIEW_02/REPRODUCTION.md` | Node 22.23.2, commit `805b24d`, `npx playwright install chromium`, `npm run db:local:start`, `.env.local`, every step incl. `test:e2e:cover`, `e2e:app`, `check:secrets`; no V0-era text |
+| Baselines | SHA-256 vs `db5b6ab` and `HEAD` | V0, V1, V2 key files identical; `git diff` over the six earlier folders empty; `V3_REVIEW_01` untouched by the second build |
+| Repository | `git status` | clean; no `.vercel/`; nothing deployed by this sprint |
+
+## C-Architecture (release pipeline)
+
+```
+npm run release:v3[:02]  →  scripts/release.mjs
+   │  RELEASE_VERSION → release-core.stepsForVersion()   (V3 order below; V0–V2 keep their old order)
+   │  refuses to run if 06_FINAL_OUTPUT/<VERSION>/ exists
+   │
+   ├─ for each step: spawnSync(process.execPath, [npm-cli.js, "run", step], { shell: false })   ← Task 42
+   │     tracker:validate → validate → typecheck → test:unit → build
+   │     → test → test:integration → qa → qa:v2-items → pdf → qa:pdf → test:e2e:cover → qa:pdf:v2-items
+   │     → qa:ad-backgrounds → qa:art006 → qa:contact → test:e2e:print-ads → test:e2e:web-ads
+   │     → test:e2e:welcome → test:e2e:admin → e2e:app → check:secrets → check:sql
+   ├─ audit gate: npm audit --json → release-core.auditGate(json, scripts/audit-allowlist.json)
+   │     blocks on any high/critical advisory not allow-listed; writes npm-audit.json + audit-gate.json
+   └─ packaging → 06_FINAL_OUTPUT/<VERSION>/
+         website/ (from _site) · qa-output/ (incl. app/, ad-backgrounds/) · validation-report.json/-summary.md
+         npm-audit.json · audit-gate.json · release-manifest.json · BUILD_SUMMARY.md
+         REPRODUCTION.md (generated from the step list) · DEPLOYMENT.md · THREAT_CHECKS.md · v1/v2 audit documents
+```
+
+## C-Files created/modified
+
+### 05_WEBSITE/scripts/release-core.mjs (Tasks 36, 42)
+**Purpose**: the pure, unit-tested half of the pipeline. `stepsForVersion(version)` validates the version string and returns the V3 order (or the legacy order for V0–V2 names); `auditGate(auditJson, allowlist)` returns `{ ok, blocking, allowed }`, blocking only on high/critical advisories whose package is not in the allow-list; `reproductionMarkdown(version, steps, {node, commit})` renders the prerequisites, the exact step list and the v3 content-migration commands; `buildReleaseManifest()` records version, build time, commit, item IDs and fingerprints (items + cover); `npmInvocation(args, {exists})` returns `node` + `npm-cli.js` + args with `shell: false`, resolving the entry script from `npm_execpath` or Node's Windows / Unix-prefix layouts and throwing if none exists.
+
+```js
+export function auditGate(auditJson, allowlist) {
+  const allowed = new Set((allowlist?.allow ?? []).map((a) => a.package));
+  const blocking = [];
+  for (const [name, v] of Object.entries(auditJson?.vulnerabilities ?? {})) {
+    if (!["high", "critical"].includes(v.severity)) continue;
+    if (allowed.has(name)) continue;
+    blocking.push({ package: name, severity: v.severity, titles: … });
+  }
+  return { ok: blocking.length === 0, blocking, allowed: … };
+}
+```
+
+### 05_WEBSITE/scripts/release.mjs (Tasks 36, 42)
+**Purpose**: the I/O half. Runs every step through `npmInvocation` (no shell), runs the audit gate, refuses to overwrite an existing folder, copies the outputs and writes the manifest, build summary and reproduction guide. **Why the order matters**: `build` precedes the integration suites because two of them (`dev-app`, `threats`) boot the application against `_site/` — the gap that the Stream B walkthrough found; the audit gate runs last so a stale advisory can never hide a functional failure.
+
+### 05_WEBSITE/scripts/audit-allowlist.json (Task 36)
+**Purpose**: the only way a high/critical advisory may pass the gate: `sharp` (breaking upgrade deferred by the user in v2), `playwright` (browser-download advisory; fix outside the pinned range), `xlsx` (no fixed version exists) — each with a reason and a review date. Everything else fails the release.
+
+### 05_WEBSITE/tests/unit/release-core.test.mjs (Tasks 36, 42)
+**Purpose**: pins the step order (including `build` before `test:integration` and `pdf` before `test:e2e:cover`), the legacy order, the gate semantics (allow-listed passes, unknown high blocks, moderate/low ignored, transitive `js-yaml` blocked before Task 37), the reproduction text, the manifest, and the shell-free npm resolution (not-found throws; first existing candidate wins).
+
+### 05_WEBSITE/package-lock.json (Task 37)
+**Purpose**: `npm audit fix` without `--force` moved `gray-matter`'s bundled `js-yaml` from 3.15.1 to 3.15.2 (a three-line diff). Remaining advisories are exactly the three allow-listed packages.
+
+### 05_WEBSITE/scripts/v2-items-qa.mjs (Task 38 prep)
+**Purpose**: the v2 QA step used to screenshot the standalone `/content/…` pages that Task 24 removed; it now captures the `#ART-010` and `#ART-011` sections of the magazine page. This was the only pipeline failure in the first `release:v3` run and was committed before the release was rebuilt, so the release manifest's commit contains everything used to build it.
+
+### 06_FINAL_OUTPUT/V3_REVIEW_01/ and 06_FINAL_OUTPUT/V3_REVIEW_02/ (Task 38 + addendum)
+**Purpose**: the reviewable outputs. `V3_REVIEW_01` is the first complete build (commit `8c797f2`); `V3_REVIEW_02` (commit `805b24d`) is the build to review and, if approved, deploy — same content, plus the cover fix and the shell-free runner. Each contains `website/` (`admin`, `assets`, `index.html`, `print`, `welcome`; no `content/`, `api/` or `lib/`), `qa-output/` (desktop/mobile, advertisements, PDF pages, `ad-backgrounds/` review sheet, `app/` E2E evidence, v2 items, ART-006, contact sheets), validation, audit, manifest, build summary, reproduction guide, `DEPLOYMENT.md`, `THREAT_CHECKS.md` and the v1/v2 audit documents. Earlier folders are never overwritten (`release.mjs` refuses).
+
+### CHANGELOG.md (Task 40 + addendum)
+**Purpose**: `## V3_REVIEW_02` (supersedes 01: cover fix, shell-free runner) and `## V3_REVIEW_01` (Changed / Added / Removed / Unchanged / Not deployed — including the pre-existing public V1 deployment — / Noted for follow-up), above the untouched V2 and earlier entries.
+
+### 05_WEBSITE/src/assets/css/print.css and tests/e2e/print-cover-page.test.mjs (Task 41)
+**Purpose**: the cover-page sliver, finally explained. The test renders page 1 at 200 DPI and classifies each row below the cover image; it went red on the V3_REVIEW_01 PDF with eight ink rows at 278 mm. A zoomed crop showed the ink is the tops of the Bengali glyphs of the **contents heading** on page 2 ("একই শিকড়": the vowel hook and the headline curve overflow above the heading's first line box, and Chromium paints that overflow at the foot of the previous page fragment). The v2 hypothesis — cover box height out of step with its image — was tried first and **disproved**: rewriting the cover box left the sliver exactly where it was and re-paginated the whole document to 73 pages, so it was reverted. The fix is one rule:
+
+```css
+.print-contents h1 { padding-top: 6mm; line-height: 1.5; margin-top: 0; }
+```
+
+Result: no ink between the cover and the page number, 69 pages, pages 4–69 textually identical to before (only the two contents pages reflow where the list splits). The check runs in the pipeline as `test:e2e:cover`, straight after `pdf`.
+
+## C-Data flow
+
+1. `npm run release:v3:02` → `release.mjs` validates `RELEASE_VERSION`, refuses an existing folder, resolves `npm-cli.js`, and runs the 23 npm steps in order; any non-zero exit aborts before packaging.
+2. `npm audit --json` → `auditGate` against the allow-list → `npm-audit.json` + `audit-gate.json`.
+3. `_site/`, `qa-output/`, the reports and documents are copied; `release-manifest.json`, `BUILD_SUMMARY.md` and `REPRODUCTION.md` are generated; the folder becomes immutable by convention (the next build must use a new version name).
+
+## C-Test coverage (re-run in this walkthrough)
+
+- **Unit:** `release-core` (step order, legacy order, invalid version, audit gate cases, reproduction text, manifest, `npmInvocation`) — green.
+- **Browser/PDF:** `test:e2e:cover` — green on the current build; the full V3 pipeline (all 24 steps) ran green twice today, producing both release folders.
+- **Gates:** `check:secrets`, `check:sql`, audit gate — green in both builds; semgrep on the pipeline scripts clean.
+
+## C-Security measures
+
+Dependency-audit gate with a documented, reasoned allow-list (fails on anything new); secret scan of tracked files and the built site and the SQL-literal gate wired into the release; npm invoked without a shell (arguments cannot be re-interpreted, shell environment not inherited); releases never overwritten; reproduction guide generated from the real commands, so documentation cannot drift from what runs.
+
+## C-Known limitations
+
+- Two V3 folders exist. `V3_REVIEW_01` is kept as the historical first build; `V3_REVIEW_02` is the one to review and deploy. The repository grew by roughly 140 MB of QA evidence for the two folders (the same convention as V1/V2).
+- The full pipeline takes several minutes and needs the local PostgreSQL cluster, `.env.local` and the Playwright browser (all documented in the generated `REPRODUCTION.md`).
+- `V3_REVIEW_01` still carries the page-1 sliver (it predates Task 41); `V3_REVIEW_02` does not.
+- The three allow-listed advisories remain deferred by decision; the allow-list must be re-reviewed when any of those packages is upgraded.
+- The pre-existing public, ungated V1 deployment (Part B) is unchanged and still needs your decision before V3 goes live.
+
+## C-What's next
+
+1. Review `06_FINAL_OUTPUT/V3_REVIEW_02/` (website, PDF, `qa-output/ad-backgrounds/AD_BACKGROUND_REVIEW.md`, `qa-output/app/`).
+2. Decide the deployment questions from Part B (existing project vs new; fate of the live V1 site; Neon plan; administrator username), then run the seven steps in `sprints/v3/PREVIEW_DEPLOYMENT.md` and record the preview result.
+3. Production deployment only after the preview E2E passes and you approve it (DEPLOYMENT.md §5).
+
+## C-Verdict (sprint verdict)
+
+**Sprint v3 complete: ready for review with non-blocking warnings; not deployed.** All 42 tasks are done and independently confirmed. The publication changes (Stream A), the registration application (Stream B) and the release pipeline (Stream C) are built, tested and packaged in `V3_REVIEW_02`; every earlier release is byte-identical to before the sprint. The open matters are decisions, not defects: the existing public V1 deployment, the Vercel project and Neon plan for the preview, the administrator username, and the carried-over editorial items (Item 20, the Palash Biswas branch).

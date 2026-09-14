@@ -16,3 +16,8 @@ Thumbs.db
 /05_WEBSITE/tests/screenshots/
 /05_WEBSITE/npm-audit.json
 /05_WEBSITE/audit-gate.json
+
+# Local secrets (Vercel token etc.) — never versioned, never uploaded
+.env
+.env.*
+!.env.example

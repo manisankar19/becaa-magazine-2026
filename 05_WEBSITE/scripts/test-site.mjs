@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
 import { siteRoot } from "./lib.mjs";
+import { findBadAdvertisementTitles } from "./ad-qa-checks-core.mjs";
 
 const index = path.join(siteRoot, "_site", "index.html");
 if (!fs.existsSync(index)) {
@@ -22,6 +23,22 @@ const adSources = await page.locator('.publication-item--advertisement img').eva
 const excludedIds = ["ADV-009","ADV-016","ADV-024","ADV-025","ADV-027"];
 const accidentallyIncluded = await page.locator(excludedIds.map((id) => `#${id}`).join(",")).count();
 const title = await page.locator("h1").first().textContent();
+// Sprint v3 Task 15: every published advertisement title, wherever it is rendered.
+const publishedAds = manifest.items.filter((item) => item.type === "advertisement" && item.web_include);
+const renderedAdTitles = await page.evaluate((ids) => {
+  const out = {};
+  for (const id of ids) {
+    const card = document.getElementById(id);
+    out[id] = [
+      card?.querySelector("h2")?.textContent,
+      ...[...document.querySelectorAll(`.toc a[href="#${id}"] strong`)].map((el) => el.textContent),
+    ].filter((t) => t !== undefined && t !== null);
+  }
+  return out;
+}, publishedAds.map((ad) => ad.id));
+const badAdTitles = findBadAdvertisementTitles(publishedAds, renderedAdTitles);
+const adBylines = await page.locator(".publication-item--advertisement .byline").count();
+const navAdLabels = await page.locator("nav a").evaluateAll((links) => links.map((a) => a.textContent.trim()).filter((t) => /Advertisement$/.test(t)));
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
 await browser.close();
 
@@ -53,4 +70,16 @@ if (accidentallyIncluded) {
   console.error("An excluded advertisement ID appears in the website.");
   process.exit(1);
 }
-console.log("Website smoke tests passed.");
+if (badAdTitles.length) {
+  console.error(`Advertisement title problems: ${badAdTitles.map((b) => `${b.id} "${b.text}" (${b.reason})`).join("; ")}`);
+  process.exit(1);
+}
+if (adBylines) {
+  console.error(`${adBylines} advertisement card(s) still render a byline.`);
+  process.exit(1);
+}
+if (navAdLabels.length) {
+  console.error(`Navigation still contains labels ending in "Advertisement": ${navAdLabels.join(", ")}`);
+  process.exit(1);
+}
+console.log(`Website smoke tests passed (${publishedAds.length} advertisement titles verified).`);

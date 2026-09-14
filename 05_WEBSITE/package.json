@@ -62,7 +62,8 @@
     "dev:app": "node --env-file-if-exists=.env.local --import tsx scripts/dev-app.mjs",
     "admin:hash": "node scripts/admin-hash.mjs",
     "test:e2e:admin": "node --env-file-if-exists=.env.local --import tsx tests/e2e/admin-page.test.mjs",
-    "check:sql": "node scripts/check-sql.mjs"
+    "check:sql": "node scripts/check-sql.mjs",
+    "e2e:app": "node --env-file-if-exists=.env.local --import tsx scripts/app-e2e.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

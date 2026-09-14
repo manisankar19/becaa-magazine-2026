@@ -1,11 +1,11 @@
 // GET /api/admin/export.csv — download the approved visitor fields (Sprint v3 Task 30, PRD §5.5).
 // Administrator only. One audit line is logged (timestamp, session display id, row count);
 // no visitor data is ever logged.
-import { formatIst } from "../../lib/admin-queries.ts";
-import { buildCsv, EXPORT_COLUMNS } from "../../lib/csv-core.ts";
-import { getPool } from "../../lib/db.ts";
-import { json, securityHeaders } from "../../lib/http.ts";
-import { requireAdmin } from "../../lib/require-admin.ts";
+import { formatIst } from "../../lib/admin-queries";
+import { buildCsv, EXPORT_COLUMNS } from "../../lib/csv-core";
+import { getPool } from "../../lib/db";
+import { json, securityHeaders } from "../../lib/http";
+import { requireAdmin } from "../../lib/require-admin";
 
 const PATH = "/api/admin/export.csv";
 

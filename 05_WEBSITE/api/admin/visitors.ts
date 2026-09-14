@@ -1,8 +1,8 @@
 // GET /api/admin/visitors?q=&page= — searchable, paginated registrations (Sprint v3 Task 29).
-import { MAX_QUERY_LENGTH, searchVisitors } from "../../lib/admin-queries.ts";
-import { getPool } from "../../lib/db.ts";
-import { json } from "../../lib/http.ts";
-import { requireAdmin } from "../../lib/require-admin.ts";
+import { MAX_QUERY_LENGTH, searchVisitors } from "../../lib/admin-queries";
+import { getPool } from "../../lib/db";
+import { json } from "../../lib/http";
+import { requireAdmin } from "../../lib/require-admin";
 
 const PATH = "/api/admin/visitors";
 

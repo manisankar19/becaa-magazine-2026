@@ -1,6 +1,6 @@
 // GET /api/health — liveness + database reachability (Sprint v3 Task 23). No secrets, no data.
-import { getPool } from "../lib/db.ts";
-import { json } from "../lib/http.ts";
+import { getPool } from "../lib/db";
+import { json } from "../lib/http";
 
 const PATH = "/api/health";
 

@@ -2,7 +2,7 @@
 // The raw 256-bit token lives only in the `becaa_a` cookie; the table stores sha256(token).
 // Absolute expiry 12 h, idle expiry 60 min; creating a session rotates (deletes) all others
 // because there is exactly one administrator.
-import { ADMIN_SESSION_ABSOLUTE_SECONDS, ADMIN_SESSION_IDLE_SECONDS } from "./config.ts";
+import { ADMIN_SESSION_ABSOLUTE_SECONDS, ADMIN_SESSION_IDLE_SECONDS } from "./config";
 
 export const ADMIN_COOKIE = "becaa_a";
 

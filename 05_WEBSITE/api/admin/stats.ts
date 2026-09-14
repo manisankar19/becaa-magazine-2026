@@ -1,8 +1,8 @@
 // GET /api/admin/stats — dashboard aggregates (Sprint v3 Task 29). Administrator only.
-import { stats } from "../../lib/admin-queries.ts";
-import { getPool } from "../../lib/db.ts";
-import { json } from "../../lib/http.ts";
-import { requireAdmin } from "../../lib/require-admin.ts";
+import { stats } from "../../lib/admin-queries";
+import { getPool } from "../../lib/db";
+import { json } from "../../lib/http";
+import { requireAdmin } from "../../lib/require-admin";
 
 const PATH = "/api/admin/stats";
 

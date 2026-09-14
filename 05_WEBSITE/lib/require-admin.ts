@@ -1,12 +1,12 @@
 // Administrator authentication guard for /api/admin/* handlers (Sprint v3 Task 28).
 // Resolves the `becaa_a` cookie against admin_sessions (refreshing idle expiry) and, for
 // state-changing requests, checks the CSRF synchroniser token bound to that session.
-import { ADMIN_COOKIE, hashToken, resolveAdminSession, type AdminSessionRow } from "./admin-session.ts";
-import { verifyCsrf } from "./csrf.ts";
-import { getPool } from "./db.ts";
-import { requireEnv } from "./env.ts";
-import { assertSameOrigin, json } from "./http.ts";
-import { parseCookies } from "./session.ts";
+import { ADMIN_COOKIE, hashToken, resolveAdminSession, type AdminSessionRow } from "./admin-session";
+import { verifyCsrf } from "./csrf";
+import { getPool } from "./db";
+import { requireEnv } from "./env";
+import { assertSameOrigin, json } from "./http";
+import { parseCookies } from "./session";
 
 export type AdminAuth = { ok: true; session: AdminSessionRow; token: string; tokenHash: string } | { ok: false; response: Response };
 

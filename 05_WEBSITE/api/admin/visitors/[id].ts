@@ -1,9 +1,9 @@
 // DELETE /api/admin/visitors/:id — delete one visitor and their visits (Sprint v3 Task 29, PRD §5.6).
 // Administrator session + same-origin + CSRF token (x-csrf-token header) required.
-import { deleteVisitor, isUuid } from "../../../lib/admin-queries.ts";
-import { getPool } from "../../../lib/db.ts";
-import { json } from "../../../lib/http.ts";
-import { requireAdminMutation } from "../../../lib/require-admin.ts";
+import { deleteVisitor, isUuid } from "../../../lib/admin-queries";
+import { getPool } from "../../../lib/db";
+import { json } from "../../../lib/http";
+import { requireAdminMutation } from "../../../lib/require-admin";
 
 const PATH = "/api/admin/visitors";
 

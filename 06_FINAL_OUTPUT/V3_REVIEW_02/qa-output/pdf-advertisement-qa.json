@@ -1,0 +1,291 @@
+{
+  "generated": "2026-09-14T15:16:52.030Z",
+  "advertisements": [
+    {
+      "id": "ADV-001",
+      "page": 47,
+      "image": "pdf-advertisements/ADV-001-page.png",
+      "title": "With best compliments from Skylark",
+      "page_background": "#b6e2f2",
+      "sampled_rgb": [
+        182,
+        226,
+        242
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-002",
+      "page": 48,
+      "image": "pdf-advertisements/ADV-002-page.png",
+      "title": "With best compliments from PNB Housing",
+      "page_background": "#873f3e",
+      "sampled_rgb": [
+        135,
+        63,
+        62
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-003",
+      "page": 49,
+      "image": "pdf-advertisements/ADV-003-page.png",
+      "title": "With best compliments from Vistaar Finance",
+      "page_background": "#284c79",
+      "sampled_rgb": [
+        40,
+        76,
+        121
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-004",
+      "page": 50,
+      "image": "pdf-advertisements/ADV-004-page.png",
+      "title": "With best compliments from Gainwell Technologies",
+      "page_background": "#c0aa74",
+      "sampled_rgb": [
+        192,
+        170,
+        116
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-005",
+      "page": 51,
+      "image": "pdf-advertisements/ADV-005-page.png",
+      "title": "With best compliments from Tata Capital Ltd. (Retail Finance)",
+      "page_background": "#9fbfd1",
+      "sampled_rgb": [
+        159,
+        191,
+        209
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-006",
+      "page": 52,
+      "image": "pdf-advertisements/ADV-006-page.png",
+      "title": "With best compliments from Tata Capital Housing Finance Ltd.",
+      "page_background": "#a1b5c9",
+      "sampled_rgb": [
+        161,
+        181,
+        201
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-007",
+      "page": 53,
+      "image": "pdf-advertisements/ADV-007-page.png",
+      "title": "With best compliments from OnShore Construction Pvt Ltd",
+      "page_background": "#cdcbcb",
+      "sampled_rgb": [
+        205,
+        203,
+        203
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-008",
+      "page": 54,
+      "image": "pdf-advertisements/ADV-008-page.png",
+      "title": "With best compliments from Roofs & Ceilings",
+      "page_background": "#8b8c8a",
+      "sampled_rgb": [
+        139,
+        140,
+        138
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-010",
+      "page": 55,
+      "image": "pdf-advertisements/ADV-010-page.png",
+      "title": "With best compliments from Indus Grand",
+      "page_background": "#c2bab5",
+      "sampled_rgb": [
+        194,
+        186,
+        181
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-011",
+      "page": 56,
+      "image": "pdf-advertisements/ADV-011-page.png",
+      "title": "With best compliments from Axelon",
+      "page_background": "#ead9da",
+      "sampled_rgb": [
+        234,
+        217,
+        218
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-012",
+      "page": 57,
+      "image": "pdf-advertisements/ADV-012-page.png",
+      "title": "With best compliments from Aarvi Encon",
+      "page_background": "#cfd8da",
+      "sampled_rgb": [
+        207,
+        216,
+        218
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-013",
+      "page": 58,
+      "image": "pdf-advertisements/ADV-013-page.png",
+      "title": "With best compliments from Anand Rathi",
+      "page_background": "#d1b6aa",
+      "sampled_rgb": [
+        209,
+        182,
+        170
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-014",
+      "page": 59,
+      "image": "pdf-advertisements/ADV-014-page.png",
+      "title": "With best compliments from Future Netwings Solutions",
+      "page_background": "#687f9a",
+      "sampled_rgb": [
+        104,
+        127,
+        154
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-015",
+      "page": 60,
+      "image": "pdf-advertisements/ADV-015-page.png",
+      "title": "With best compliments from Swaraj Shoes",
+      "page_background": "#9ea0a1",
+      "sampled_rgb": [
+        158,
+        160,
+        161
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-017",
+      "page": 61,
+      "image": "pdf-advertisements/ADV-017-page.png",
+      "title": "With best compliments from UREDCONNECT",
+      "page_background": "#655a60",
+      "sampled_rgb": [
+        101,
+        90,
+        96
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-018",
+      "page": 62,
+      "image": "pdf-advertisements/ADV-018-page.png",
+      "title": "With best compliments from Eframe",
+      "page_background": "#d1cd1c",
+      "sampled_rgb": [
+        209,
+        205,
+        28
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-019",
+      "page": 63,
+      "image": "pdf-advertisements/ADV-019-page.png",
+      "title": "With best compliments from Network Techlabs",
+      "page_background": "#2b2f31",
+      "sampled_rgb": [
+        43,
+        47,
+        49
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-020",
+      "page": 64,
+      "image": "pdf-advertisements/ADV-020-page.png",
+      "title": "With best compliments from Schnelltech Global",
+      "page_background": "#ac9e61",
+      "sampled_rgb": [
+        172,
+        158,
+        97
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-021",
+      "page": 65,
+      "image": "pdf-advertisements/ADV-021-page.png",
+      "title": "With best compliments from Bhavik",
+      "page_background": "#d1cfce",
+      "sampled_rgb": [
+        209,
+        207,
+        206
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-022",
+      "page": 66,
+      "image": "pdf-advertisements/ADV-022-page.png",
+      "title": "With best compliments from Pratap Caterer",
+      "page_background": "#d0d3d1",
+      "sampled_rgb": [
+        208,
+        211,
+        209
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-023",
+      "page": 67,
+      "image": "pdf-advertisements/ADV-023-page.png",
+      "title": "With best compliments from Clover Blakefield Reality LLP",
+      "page_background": "#baecec",
+      "sampled_rgb": [
+        186,
+        236,
+        236
+      ],
+      "tinted": true
+    },
+    {
+      "id": "ADV-026",
+      "page": 68,
+      "image": "pdf-advertisements/ADV-026-page.png",
+      "title": "With best compliments from CETEST",
+      "page_background": "#c8bb9f",
+      "sampled_rgb": [
+        200,
+        187,
+        159
+      ],
+      "tinted": true
+    }
+  ]
+}

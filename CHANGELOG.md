@@ -1,8 +1,15 @@
 # Changelog
 
+## V3_REVIEW_02 — 2026-09-14
+
+Supersedes `V3_REVIEW_01` (kept unchanged as the pre-fix build). Local review build only (`06_FINAL_OUTPUT/V3_REVIEW_02/`, built by `npm run release:v3:02` at commit `805b24d`). Not deployed. Same 44 items and content as V3_REVIEW_01; two fixes from the P2 carry-overs:
+
+- Cover page (v2 Task 19 / v3 Task 41): the 1 mm sliver of the contents heading no longer bleeds onto page 1 — root cause was Bengali glyph overflow of the heading on page 2, fixed with headroom on that heading; 69 pages, all other pages unchanged; now guarded by the `test:e2e:cover` pipeline step.
+- Release runner (v2 Task 20 / v3 Task 42): npm is invoked through `node npm-cli.js` with `shell: false`; the semgrep finding is cleared.
+
 ## V3_REVIEW_01 — 2026-09-14
 
-Local review build only (`06_FINAL_OUTPUT/V3_REVIEW_01/`, built by `npm run release:v3` at commit `8c797f2`). Not deployed.
+Local review build only (`06_FINAL_OUTPUT/V3_REVIEW_01/`, built by `npm run release:v3` at commit `8c797f2`). Not deployed. Superseded by `V3_REVIEW_02` above.
 
 ### Changed
 
@@ -38,7 +45,7 @@ Local review build only (`06_FINAL_OUTPUT/V3_REVIEW_01/`, built by `npm run rele
 - Item 20 (Sudipta Chakraborty): source file still not received; remains excluded.
 - Palash Biswas (`ART-011`): branch recorded as "Civil" in the tracker but "Mech" in his own byline; unresolved pending the editor.
 - Three `npm audit` advisories in build tooling (`sharp`, `playwright`, `xlsx`) remain deferred and allow-listed with reasons.
-- Cover-page print clipping artifact (v2 Task 19 / v3 Task 41) and `shell: true` in `release.mjs` (v2 Task 20 / v3 Task 42): see the Sprint v3 walkthrough for their final status.
+- Cover-page print clipping artifact (v2 Task 19) and `shell: true` in `release.mjs` (v2 Task 20): both fixed in Tasks 41–42 and shipped in `V3_REVIEW_02`.
 
 ## V2_REVIEW_01 — 2026-09-08
 

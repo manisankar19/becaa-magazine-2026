@@ -1,0 +1,323 @@
+{
+  "generated": "2026-09-14T15:15:50.878Z",
+  "errors": [],
+  "warnings": [
+    "GAL-001 print asset may be low resolution for A4: 485 px wide.",
+    "GAL-002 print asset may be low resolution for A4: 960 px wide.",
+    "ADV-003 print asset may be low resolution for A4: 600 px wide.",
+    "ADV-004 print asset may be low resolution for A4: 562 px wide.",
+    "ADV-011 print asset may be low resolution for A4: 586 px wide.",
+    "ADV-013 print asset may be low resolution for A4: 576 px wide.",
+    "ADV-017 print asset may be low resolution for A4: 1080 px wide."
+  ],
+  "items": [
+    {
+      "id": "MSG-001",
+      "type": "message",
+      "title": "President Desk"
+    },
+    {
+      "id": "MSG-002",
+      "type": "message",
+      "title": "Vice Preseident Desk"
+    },
+    {
+      "id": "MSG-003",
+      "type": "message",
+      "title": "Secretary Desk"
+    },
+    {
+      "id": "ART-001",
+      "type": "article",
+      "title": "SWAR SETU – Music for a Cause"
+    },
+    {
+      "id": "ART-002",
+      "type": "article",
+      "title": "More Than a Degree"
+    },
+    {
+      "id": "ART-003",
+      "type": "article",
+      "title": "স্মৃতির গলিতে"
+    },
+    {
+      "id": "ART-004",
+      "type": "article",
+      "title": "হাজতবাস থেকে খুব জোর বেঁচে গেছিলাম"
+    },
+    {
+      "id": "ART-005",
+      "type": "article",
+      "title": "A Reflection on Cancer, Ageing, and Helplessness in the Face of Science"
+    },
+    {
+      "id": "ART-006",
+      "type": "article",
+      "title": "Medicine Free Life – a dream or reality!"
+    },
+    {
+      "id": "ART-007",
+      "type": "article",
+      "title": "Meri Kiran"
+    },
+    {
+      "id": "ART-008",
+      "type": "article",
+      "title": "Precious Memory of life"
+    },
+    {
+      "id": "ART-009",
+      "type": "article",
+      "title": "Tokenomics: How Your CEO Learned That AI Isn't Actually Free"
+    },
+    {
+      "id": "GAL-001",
+      "type": "gallery",
+      "title": "Ma"
+    },
+    {
+      "id": "GAL-002",
+      "type": "gallery",
+      "title": "Rhine - Germany (Pencil on paper)"
+    },
+    {
+      "id": "GAL-003",
+      "type": "gallery",
+      "title": "College Gym sketch"
+    },
+    {
+      "id": "GAL-004",
+      "type": "gallery",
+      "title": "College Principal sketck"
+    },
+    {
+      "id": "GAL-005",
+      "type": "gallery",
+      "title": "Saraswati Devi"
+    },
+    {
+      "id": "GAL-006",
+      "type": "gallery",
+      "title": "College Swimming pool sketch"
+    },
+    {
+      "id": "ADV-001",
+      "type": "advertisement",
+      "title": "With best compliments from Skylark",
+      "page_background": "#b6e2f2",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 11.78
+    },
+    {
+      "id": "ADV-002",
+      "type": "advertisement",
+      "title": "With best compliments from PNB Housing",
+      "page_background": "#873f3e",
+      "page_background_mode": "auto",
+      "page_ink": "light",
+      "contrast_ratio": 7.16
+    },
+    {
+      "id": "ADV-003",
+      "type": "advertisement",
+      "title": "With best compliments from Vistaar Finance",
+      "page_background": "#284c79",
+      "page_background_mode": "auto",
+      "page_ink": "light",
+      "contrast_ratio": 8.38
+    },
+    {
+      "id": "ADV-004",
+      "type": "advertisement",
+      "title": "With best compliments from Gainwell Technologies",
+      "page_background": "#c0aa74",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 7.19
+    },
+    {
+      "id": "ADV-005",
+      "type": "advertisement",
+      "title": "With best compliments from Tata Capital Ltd. (Retail Finance)",
+      "page_background": "#9fbfd1",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 8.44
+    },
+    {
+      "id": "ADV-006",
+      "type": "advertisement",
+      "title": "With best compliments from Tata Capital Housing Finance Ltd.",
+      "page_background": "#a1b5c9",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 7.75
+    },
+    {
+      "id": "ADV-007",
+      "type": "advertisement",
+      "title": "With best compliments from OnShore Construction Pvt Ltd",
+      "page_background": "#cdcbcb",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 10.11
+    },
+    {
+      "id": "ADV-008",
+      "type": "advertisement",
+      "title": "With best compliments from Roofs & Ceilings",
+      "page_background": "#8b8c8a",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 4.83
+    },
+    {
+      "id": "ADV-010",
+      "type": "advertisement",
+      "title": "With best compliments from Indus Grand",
+      "page_background": "#c2bab5",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 8.54
+    },
+    {
+      "id": "ADV-011",
+      "type": "advertisement",
+      "title": "With best compliments from Axelon",
+      "page_background": "#ead9da",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 12.01
+    },
+    {
+      "id": "ADV-012",
+      "type": "advertisement",
+      "title": "With best compliments from Aarvi Encon",
+      "page_background": "#cfd8da",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 11.27
+    },
+    {
+      "id": "ADV-013",
+      "type": "advertisement",
+      "title": "With best compliments from Anand Rathi",
+      "page_background": "#d1b6aa",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 8.54
+    },
+    {
+      "id": "ADV-014",
+      "type": "advertisement",
+      "title": "With best compliments from Future Netwings Solutions",
+      "page_background": "#687f9a",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 5.09
+    },
+    {
+      "id": "ADV-015",
+      "type": "advertisement",
+      "title": "With best compliments from Swaraj Shoes",
+      "page_background": "#9ea0a1",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 6.22
+    },
+    {
+      "id": "ADV-017",
+      "type": "advertisement",
+      "title": "With best compliments from UREDCONNECT",
+      "page_background": "#655a60",
+      "page_background_mode": "auto",
+      "page_ink": "light",
+      "contrast_ratio": 6.32
+    },
+    {
+      "id": "ADV-018",
+      "type": "advertisement",
+      "title": "With best compliments from Eframe",
+      "page_background": "#d1cd1c",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 9.69
+    },
+    {
+      "id": "ADV-019",
+      "type": "advertisement",
+      "title": "With best compliments from Network Techlabs",
+      "page_background": "#2b2f31",
+      "page_background_mode": "manual",
+      "page_ink": "light",
+      "contrast_ratio": 12.95
+    },
+    {
+      "id": "ADV-020",
+      "type": "advertisement",
+      "title": "With best compliments from Schnelltech Global",
+      "page_background": "#ac9e61",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 6.08
+    },
+    {
+      "id": "ADV-021",
+      "type": "advertisement",
+      "title": "With best compliments from Bhavik",
+      "page_background": "#d1cfce",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 10.52
+    },
+    {
+      "id": "ADV-022",
+      "type": "advertisement",
+      "title": "With best compliments from Pratap Caterer",
+      "page_background": "#d0d3d1",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 10.83
+    },
+    {
+      "id": "ADV-023",
+      "type": "advertisement",
+      "title": "With best compliments from Clover Blakefield Reality LLP",
+      "page_background": "#baecec",
+      "page_background_mode": "manual",
+      "page_ink": "dark",
+      "contrast_ratio": 12.68
+    },
+    {
+      "id": "ADV-026",
+      "type": "advertisement",
+      "title": "With best compliments from CETEST",
+      "page_background": "#c8bb9f",
+      "page_background_mode": "auto",
+      "page_ink": "dark",
+      "contrast_ratio": 8.61
+    },
+    {
+      "id": "GAL-007",
+      "type": "gallery",
+      "title": "Chatgpt"
+    },
+    {
+      "id": "ART-010",
+      "type": "article",
+      "title": "গোলাপ"
+    },
+    {
+      "id": "ART-011",
+      "type": "article",
+      "title": "বেঁচে থাকার লড়াই ও স্বপ্নের পথ"
+    },
+    {
+      "id": "ART-012",
+      "type": "article",
+      "title": "প্যাঁড়া"
+    }
+  ]
+}

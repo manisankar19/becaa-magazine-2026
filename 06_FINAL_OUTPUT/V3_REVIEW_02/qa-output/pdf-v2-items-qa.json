@@ -1,0 +1,25 @@
+{
+  "generated": "2026-09-14T15:16:58.660Z",
+  "items": [
+    {
+      "id": "COV-001",
+      "page": 1,
+      "image": "pdf-v2-items/COV-001-page.png"
+    },
+    {
+      "id": "ART-010",
+      "page": 33,
+      "image": "pdf-v2-items/ART-010-page.png"
+    },
+    {
+      "id": "ART-011",
+      "page": 34,
+      "image": "pdf-v2-items/ART-011-page.png"
+    },
+    {
+      "id": "GAL-007",
+      "page": 46,
+      "image": "pdf-v2-items/GAL-007-page.png"
+    }
+  ]
+}

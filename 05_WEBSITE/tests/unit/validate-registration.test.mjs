@@ -3,6 +3,10 @@
 import assert from "node:assert/strict";
 import { DEPARTMENTS, BATCH_YEAR_MIN, PRIVACY_VERSION, batchYearMax } from "../../lib/config.ts";
 import { validateRegistration, normaliseMobile, normaliseEmail } from "../../lib/validate-registration.ts";
+import { registration } from "../../lib/registration-data.ts";
+import fs from "node:fs";
+// lib/registration-data.ts must stay identical to the Eleventy data file the templates render from.
+assert.deepEqual(JSON.parse(JSON.stringify(registration)), JSON.parse(fs.readFileSync(new URL("../../src/_data/registration.json", import.meta.url), "utf8")), "lib/registration-data.ts and src/_data/registration.json diverged");
 
 const year = new Date().getFullYear();
 assert.equal(BATCH_YEAR_MIN, 1950);

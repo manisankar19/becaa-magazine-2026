@@ -1,8 +1,9 @@
 // Application configuration for the registration feature (Sprint v3, Decisions I, J, L).
 // Editorial lists live here (not in the database) so they are reviewable in a diff.
 
-// Single source for the editorial lists shared with the Eleventy templates (src/_data/registration.json).
-import registration from "../src/_data/registration.json" with { type: "json" };
+// Editorial lists shared with the Eleventy templates: lib/registration-data.ts mirrors src/_data/registration.json
+// (a unit test keeps them identical). No JSON import attribute — the edge bundler does not support them.
+import { registration } from "./registration-data";
 
 export const DEPARTMENTS = registration.departments as readonly string[];
 

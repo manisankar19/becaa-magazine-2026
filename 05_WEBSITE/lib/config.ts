@@ -1,33 +1,24 @@
 // Application configuration for the registration feature (Sprint v3, Decisions I, J, L).
 // Editorial lists live here (not in the database) so they are reviewable in a diff.
 
-export const DEPARTMENTS = [
-  "Civil Engineering",
-  "Mechanical Engineering",
-  "Electrical Engineering",
-  "Electronics & Telecommunication Engineering",
-  "Computer Science & Technology",
-  "Information Technology",
-  "Metallurgy & Materials Engineering",
-  "Mining Engineering",
-  "Architecture",
-  "Aerospace Engineering & Applied Mechanics",
-  "Other",
-] as const;
+// Single source for the editorial lists shared with the Eleventy templates (src/_data/registration.json).
+import registration from "../src/_data/registration.json" with { type: "json" };
 
-export type Department = (typeof DEPARTMENTS)[number];
+export const DEPARTMENTS = registration.departments as readonly string[];
+
+export type Department = string;
 
 export const CATEGORIES = ["alumni", "sponsor", "guest"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
-export const BATCH_YEAR_MIN = Number(process.env.BATCH_YEAR_MIN ?? 1950);
+export const BATCH_YEAR_MIN = Number(process.env.BATCH_YEAR_MIN ?? registration.batchYearMin);
 export function batchYearMax(): number {
   return new Date().getFullYear();
 }
 
 // Bump when the privacy-notice wording changes so consent can be attributed to a version.
-export const PRIVACY_VERSION = 1;
-export const RETENTION_DATE = "31 December 2027";
+export const PRIVACY_VERSION = registration.privacyVersion;
+export const RETENTION_DATE = registration.retentionDate;
 
 export const LIMITS = {
   name: { min: 2, max: 120 },

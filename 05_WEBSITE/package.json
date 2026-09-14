@@ -57,7 +57,8 @@
     "db:migrate": "node --env-file-if-exists=.env.local scripts/db-migrate.mjs migrate",
     "db:status": "node --env-file-if-exists=.env.local scripts/db-migrate.mjs status",
     "db:rollback": "node --env-file-if-exists=.env.local scripts/db-migrate.mjs rollback",
-    "db:purge": "node --env-file-if-exists=.env.local scripts/db-purge.mjs"
+    "db:purge": "node --env-file-if-exists=.env.local scripts/db-purge.mjs",
+    "test:e2e:welcome": "node tests/e2e/welcome-page.test.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

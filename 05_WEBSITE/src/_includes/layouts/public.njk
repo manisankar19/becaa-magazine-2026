@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} · একই শিকড়</title>
+  <meta name="description" content="{{ description or 'BECAA Maharashtra Magazine 2026' }}">
+  <meta name="robots" content="{{ robots or 'noindex' }}">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body class="public-page">
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer class="site-footer">
+    <p>{{ officialLinks.organisation.full_name }} · <a href="{{ officialLinks.connect[0].url }}">{{ officialLinks.connect[0].display_text }}</a></p>
+  </footer>
+  {% if pageScript %}<script src="{{ pageScript }}" defer></script>{% endif %}
+</body>
+</html>

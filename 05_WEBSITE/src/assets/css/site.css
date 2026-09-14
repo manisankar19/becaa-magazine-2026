@@ -12,6 +12,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; } /* the hidden attribute must win over display rules (Sprint v3 forms) */
 
 html {
   scroll-behavior: smooth;
@@ -381,3 +382,31 @@ figcaption {
     min-height: 66vh;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Sprint v3 — public welcome page and registration form (Task 25)
+   --------------------------------------------------------------------------- */
+.public-page .cover--welcome { margin-bottom: 0; }
+.register { padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 4rem; max-width: 760px; }
+.privacy-notice { margin: 1rem 0 1.5rem; padding: 1rem 1.25rem; border: 1px solid var(--line); border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); font-size: 0.98rem; line-height: 1.55; }
+.privacy-notice h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--green); }
+.privacy-notice p { margin: 0; }
+.form-notice { margin: 0 0 1rem; padding: 0.85rem 1rem; border-radius: 8px; background: #fff3e6; border: 1px solid var(--saffron); color: var(--ink); }
+.register-form { display: grid; gap: 1.1rem; }
+.register-form .field { display: grid; gap: 0.35rem; }
+.register-form label { font-weight: 600; }
+.register-form input[type="text"], .register-form input[type="email"], .register-form input[type="tel"], .register-form select {
+  font: inherit; padding: 0.65rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); width: 100%; max-width: 100%; box-sizing: border-box;
+}
+.register-form input:focus-visible, .register-form select:focus-visible, .register-form button:focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
+.register-form [aria-invalid="true"] { border-color: var(--maroon); }
+.register-form fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem 1rem 1rem; margin: 0; display: grid; gap: 0.8rem; min-width: 0; }
+.register-form legend { font-weight: 700; color: var(--maroon); padding: 0 0.3rem; }
+.field--radios label, .field--consent label { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 500; line-height: 1.45; }
+.field--radios input, .field--consent input { margin-top: 0.3rem; flex: none; }
+.field-error { margin: 0; color: var(--maroon); font-size: 0.92rem; }
+.hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.button { font: inherit; font-weight: 700; padding: 0.85rem 1.4rem; border: 0; border-radius: 8px; background: var(--maroon); color: #fff; cursor: pointer; justify-self: start; }
+.button:hover { filter: brightness(1.08); }
+.button[disabled] { opacity: 0.6; cursor: wait; }
+.public-page .site-footer a { color: inherit; }

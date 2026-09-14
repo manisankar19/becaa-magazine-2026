@@ -1,0 +1,101 @@
+---
+layout: layouts/public.njk
+title: Welcome — BECAA Maharashtra Magazine 2026
+description: Register to read the BECAA Maharashtra 2026 magazine, একই শিকড়.
+permalink: /welcome/
+pageScript: /assets/js/welcome.js
+---
+{# Sprint v3 Task 25 (PRD §5.2, §5.3, §5.6; Decisions G, L). Public page: cover, introduction,
+   privacy notice and the registration form. No magazine text and no protected asset is
+   referenced here — everything behind the gate lives under / and /print/. #}
+<section class="cover cover--welcome" id="top" aria-labelledby="welcome-title">
+  <img class="cover__art" data-testid="cover-art" src="/{{ publication.cover.asset }}" alt="একই শিকড় — official BECAA Maharashtra Magazine 2026 cover">
+  <div class="cover__inner cover__summary">
+    <p class="eyebrow">{{ officialLinks.organisation.name }}</p>
+    <h1 id="welcome-title" lang="bn" data-testid="welcome-title">একই শিকড়</h1>
+    <p class="cover__edition" data-testid="welcome-subtitle">{{ publication.meta.subtitle }}</p>
+    <p class="lede">Messages, memories, stories, artwork and the sponsors who make it possible — from the alumni of Bengal Engineering College, now IIEST Shibpur, living in Maharashtra. Please tell us a little about yourself, and the whole magazine opens for you.</p>
+  </div>
+</section>
+
+<section class="register" id="register" aria-labelledby="register-title">
+  <header class="item-header">
+    <p class="section-kicker">Before you read</p>
+    <h2 id="register-title">Register to open the magazine</h2>
+  </header>
+
+  <div class="privacy-notice" data-testid="privacy-notice">
+    <h3>Why we ask</h3>
+    <p>{{ officialLinks.organisation.name }} collects your name, email address and, for alumni, your batch and department (or, for sponsors and guests, your organisation and optional mobile number) to understand who is reading the 2026 magazine and to keep in touch about association activities. Only the {{ officialLinks.organisation.name }} committee's designated administrator can see this information. It is stored securely on a managed database, is never sold or shared with third parties, and will be deleted by {{ registration.retentionDate }}. Write to <a href="mailto:{{ registration.contactEmail }}">{{ registration.contactEmail }}</a> to view, correct or delete your details.</p>
+  </div>
+
+  <div class="form-notice" data-testid="form-notice" role="alert" hidden></div>
+
+  <form class="register-form" method="post" action="/api/register" data-testid="register-form" autocomplete="on">
+    <input type="hidden" name="form_started_at" value="">
+    <div class="hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+
+    <div class="field">
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" data-testid="name" required minlength="2" maxlength="120" autocomplete="name">
+      <p class="field-error" data-testid="error-name" hidden></p>
+    </div>
+
+    <div class="field">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" data-testid="email" required maxlength="254" autocomplete="email" inputmode="email">
+      <p class="field-error" data-testid="error-email" hidden></p>
+    </div>
+
+    <fieldset class="field field--radios">
+      <legend>I am</legend>
+      <label><input type="radio" name="category" value="alumni" data-testid="category-alumni" required> BE College / IIEST alumni</label>
+      <label><input type="radio" name="category" value="sponsor" data-testid="category-sponsor"> Sponsor or company representative</label>
+      <label><input type="radio" name="category" value="guest" data-testid="category-guest"> Other guest</label>
+      <p class="field-error" data-testid="error-category" hidden></p>
+    </fieldset>
+
+    <fieldset class="field-group" data-testid="fieldset-alumni" data-for="alumni">
+      <legend>About your time at college</legend>
+      <div class="field">
+        <label for="batch_year">Pass-out year / batch</label>
+        <input type="text" id="batch_year" name="batch_year" data-testid="batch-year" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" placeholder="e.g. 1992" data-required-for="alumni">
+        <p class="field-error" data-testid="error-batch_year" hidden></p>
+      </div>
+      <div class="field">
+        <label for="department">Department / branch</label>
+        <select id="department" name="department" data-testid="department" data-required-for="alumni">
+          <option value="">Choose…</option>
+          {% for d in registration.departments %}<option value="{{ d }}">{{ d }}</option>{% endfor %}
+        </select>
+        <p class="field-error" data-testid="error-department" hidden></p>
+      </div>
+      <div class="field" data-testid="field-department-other" hidden>
+        <label for="department_other">Please name your department</label>
+        <input type="text" id="department_other" name="department_other" data-testid="department-other" minlength="2" maxlength="80">
+        <p class="field-error" data-testid="error-department_other" hidden></p>
+      </div>
+    </fieldset>
+
+    <fieldset class="field-group" data-testid="fieldset-sponsor" data-for="sponsor guest">
+      <legend>About your organisation</legend>
+      <div class="field">
+        <label for="organisation">Company / organisation</label>
+        <input type="text" id="organisation" name="organisation" data-testid="organisation" minlength="2" maxlength="160" autocomplete="organization" data-required-for="sponsor">
+        <p class="field-error" data-testid="error-organisation" hidden></p>
+      </div>
+      <div class="field">
+        <label for="mobile">Mobile number (10-digit Indian number)</label>
+        <input type="tel" id="mobile" name="mobile" data-testid="mobile" inputmode="numeric" autocomplete="tel-national" placeholder="e.g. 98360 63677" data-required-for="sponsor">
+        <p class="field-error" data-testid="error-mobile" hidden></p>
+      </div>
+    </fieldset>
+
+    <div class="field field--consent">
+      <label><input type="checkbox" name="consent" value="on" data-testid="consent" required> I agree to {{ officialLinks.organisation.name }} storing these details for the purpose described above.</label>
+      <p class="field-error" data-testid="error-consent" hidden></p>
+    </div>
+
+    <button type="submit" class="button" data-testid="submit">Open the magazine</button>
+  </form>
+</section>

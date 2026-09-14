@@ -42,18 +42,20 @@ for (const viewport of VIEWPORTS) {
   if (!galBox || galBox.width <= 0 || galBox.height <= 0) findings.push(`${viewport.name}: GAL-007 card has no visible bounding box.`);
   if (galOverflow) findings.push(`${viewport.name}: horizontal overflow on home page.`);
 
-  // Standalone article pages: ART-010 and ART-011.
+  // ART-010 and ART-011 as sections of the magazine page. (Sprint v3 Task 24 stopped emitting the
+  // standalone /content/… pages because they bypassed the registration gate; the items themselves
+  // are unchanged and still rendered inline on index.html.)
   for (const id of ["ART-010", "ART-011"]) {
-    const slug = id === "ART-010" ? "ART-010-item" : "ART-011-item";
-    const articlePath = path.join(siteRoot, "_site", "content", "articles", slug, "index.html");
-    if (!fs.existsSync(articlePath)) {
-      findings.push(`${viewport.name}: built page missing for ${id} at ${articlePath}`);
+    const section = page.locator(`#${id}`);
+    if ((await section.count()) !== 1) {
+      findings.push(`${viewport.name}: ${id} section missing from the magazine page.`);
       continue;
     }
-    await page.goto(`file://${articlePath.replaceAll("\\", "/")}`, { waitUntil: "networkidle" });
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
-    if (overflow) findings.push(`${viewport.name}: horizontal overflow on ${id} page.`);
-    await page.screenshot({ path: path.join(outDir, `${viewport.name}-${id}-page.png`), fullPage: true });
+    await section.scrollIntoViewIfNeeded();
+    const box = await section.boundingBox();
+    if (!box || box.width <= 0 || box.height <= 0) findings.push(`${viewport.name}: ${id} section has no visible bounding box.`);
+    if (box && box.width > viewport.width + 1) findings.push(`${viewport.name}: ${id} section wider than the viewport.`);
+    await section.screenshot({ path: path.join(outDir, `${viewport.name}-${id}-page.png`) });
   }
 
   await page.close();

@@ -14,8 +14,10 @@ const args = process.argv.slice(2);
 const baseUrlArg = args.includes("--base-url") ? args[args.indexOf("--base-url") + 1] : null;
 // Protected Vercel previews: attach the caller's short-lived OIDC token as an origin-scoped header
 // (Trusted Sources). Read from the environment only; never logged, never written anywhere.
+// (Trusted Sources), or the project's Protection Bypass for Automation secret. Neither value is ever logged.
 const OIDC = process.env.VERCEL_OIDC_TOKEN;
-const authHeaders = baseUrlArg && OIDC ? { "x-vercel-trusted-oidc-idp-token": OIDC } : {};
+const BYPASS = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+const authHeaders = !baseUrlArg ? {} : BYPASS ? { "x-vercel-protection-bypass": BYPASS } : OIDC ? { "x-vercel-trusted-oidc-idp-token": OIDC } : {};
 const ctxOptions = (extra) => ({ ...extra, extraHTTPHeaders: authHeaders });
 const apiFetch = (url, init = {}) => fetch(url, { ...init, headers: { ...authHeaders, ...(init.headers || {}) } });
 const outDir = path.join(siteRoot, "qa-output", "app");
@@ -163,13 +165,16 @@ try {
     const mine = (t) => t.includes(`e2e-alumni-${stamp}${suffix}`) || t.includes(`e2e-sponsor-${stamp}${suffix}`) || t.includes(`e2e-guest-${stamp}${suffix}`);
     await a.getByTestId("search").fill(`e2e-`);
     await a.getByTestId("search-button").click();
-    await a.waitForFunction(() => document.querySelectorAll('[data-testid="visitors-table"] tbody tr').length >= 3);
+    // Remote mobile pass registers nobody, and the desktop pass has already deleted the guest: two rows remain.
+    const remoteMobile = Boolean(baseUrlArg) && viewport.name === "mobile";
+    const minRows = remoteMobile ? 2 : 3;
+    await a.waitForFunction((n) => document.querySelectorAll('[data-testid="visitors-table"] tbody tr').length >= n, minRows);
     const visitorsTotal = Number(await a.getByTestId("stat-visitors").textContent());
     if (!baseUrlArg) {
       assert.equal(visitorsTotal, viewport.name === "desktop" ? 3 : 5, "dashboard counts the registrations made in this run (mobile run adds 3 more, minus 1 deleted)");
       assert.equal(await a.getByTestId("stat-alumni").textContent(), viewport.name === "desktop" ? "1" : "2");
     } else {
-      assert.ok(visitorsTotal >= 3, "remote dashboard counts at least this run's registrations");
+      assert.ok(visitorsTotal >= minRows, "remote dashboard counts at least this run's remaining registrations");
     }
     await shot(a, `${viewport.name}-04-admin-dashboard`);
     step("admin login and dashboard counts", `visitors=${visitorsTotal}`);
@@ -188,8 +193,8 @@ try {
     assert.ok(!/ip_hash|token|user_agent/.test(lines[0]));
     fs.writeFileSync(path.join(outDir, `${viewport.name}-export.csv`), csv);
     step("CSV downloads and parses", `${lines.length - 1} rows`);
-    // Delete the guest.
-    await a.getByTestId("search").fill(people.guest.email.replace("@", suffix));
+    // Delete the guest (remote mobile: the guest is already gone, so delete the alumni row instead).
+    await a.getByTestId("search").fill((remoteMobile ? people.alumni : people.guest).email.replace("@", suffix));
     await a.getByTestId("search-button").click();
     await a.waitForFunction(() => document.querySelectorAll('[data-testid="visitors-table"] tbody tr').length === 1);
     a.once("dialog", (d) => d.accept());

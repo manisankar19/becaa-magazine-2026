@@ -5,15 +5,15 @@
 //   method → REGISTRATION_ENABLED → same-origin → body size/shape → honeypot (silent 200)
 //   → minimum form-fill time → per-IP rate limit (one upsert) → validation → upsert visitor
 //   + visit row → session cookie.
-import { MIN_FORM_FILL_MS, PRIVACY_VERSION, RATE_LIMITS } from "../lib/config";
-import { getPool } from "../lib/db";
-import { registrationEnabled, requireEnv } from "../lib/env";
-import { assertSameOrigin, json, readJsonBody, redirect } from "../lib/http";
-import { clientIp, hashIp } from "../lib/ip";
-import { consume } from "../lib/rate-limit";
-import { isSecureCookieEnvironment, signVisitorSession, visitorCookie } from "../lib/session";
-import { validateRegistration } from "../lib/validate-registration";
-import { recordVisit, upsertVisitor } from "../lib/visitors";
+import { MIN_FORM_FILL_MS, PRIVACY_VERSION, RATE_LIMITS } from "../lib/config.js";
+import { getPool } from "../lib/db.js";
+import { registrationEnabled, requireEnv } from "../lib/env.js";
+import { assertSameOrigin, json, readJsonBody, redirect } from "../lib/http.js";
+import { clientIp, hashIp } from "../lib/ip.js";
+import { consume } from "../lib/rate-limit.js";
+import { isSecureCookieEnvironment, signVisitorSession, visitorCookie } from "../lib/session.js";
+import { validateRegistration } from "../lib/validate-registration.js";
+import { recordVisit, upsertVisitor } from "../lib/visitors.js";
 
 const PATH = "/api/register";
 const HONEYPOT_FIELD = "website";

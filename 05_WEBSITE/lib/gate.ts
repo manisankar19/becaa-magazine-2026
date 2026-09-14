@@ -4,7 +4,7 @@
 //   page   → without a valid visitor session, rewrite to /welcome/ (URL stays the same)
 //   asset  → without a valid visitor session, 403 (images, the PDF, raw content files)
 //   public → never gated (welcome page, CSS/JS, cover + QR assets, API, admin)
-import { parseCookies, verifyVisitorSession, VISITOR_COOKIE } from "./session";
+import { parseCookies, verifyVisitorSession, VISITOR_COOKIE } from "./session.js";
 
 export type PathClass = "page" | "asset" | "public";
 export type GateDecision = { action: "pass" } | { action: "rewrite"; to: "/welcome/" } | { action: "forbid" };

@@ -1,8 +1,8 @@
 // POST /api/admin/logout — revoke the server-side session and clear the cookie (Sprint v3 Task 28).
-import { clearAdminCookie, revokeAdminSession } from "../../lib/admin-session";
-import { getPool } from "../../lib/db";
-import { json, readJsonBody } from "../../lib/http";
-import { requireAdminMutation } from "../../lib/require-admin";
+import { clearAdminCookie, revokeAdminSession } from "../../lib/admin-session.js";
+import { getPool } from "../../lib/db.js";
+import { json, readJsonBody } from "../../lib/http.js";
+import { requireAdminMutation } from "../../lib/require-admin.js";
 
 const PATH = "/api/admin/logout";
 

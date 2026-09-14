@@ -2,16 +2,16 @@
 // Order: method → same-origin → body → per-IP rate limit → per-username lockout →
 // constant-cost credential check (argon2id; a missing/malformed configured hash still costs
 // one verification and yields the same 401) → rotate server-side session → cookie + CSRF.
-import { RATE_LIMITS } from "../../lib/config";
-import { adminCookie, createAdminSession, hashToken } from "../../lib/admin-session";
-import { csrfTokenFor } from "../../lib/csrf";
-import { getPool } from "../../lib/db";
-import { requireEnv } from "../../lib/env";
-import { verifyPassword } from "../../lib/hash";
-import { assertSameOrigin, json, readJsonBody } from "../../lib/http";
-import { clientIp, hashIp } from "../../lib/ip";
-import { clearLoginFailures, consume, isLockedOut, recordLoginFailure } from "../../lib/rate-limit";
-import { isSecureCookieEnvironment } from "../../lib/session";
+import { RATE_LIMITS } from "../../lib/config.js";
+import { adminCookie, createAdminSession, hashToken } from "../../lib/admin-session.js";
+import { csrfTokenFor } from "../../lib/csrf.js";
+import { getPool } from "../../lib/db.js";
+import { requireEnv } from "../../lib/env.js";
+import { verifyPassword } from "../../lib/hash.js";
+import { assertSameOrigin, json, readJsonBody } from "../../lib/http.js";
+import { clientIp, hashIp } from "../../lib/ip.js";
+import { clearLoginFailures, consume, isLockedOut, recordLoginFailure } from "../../lib/rate-limit.js";
+import { isSecureCookieEnvironment } from "../../lib/session.js";
 
 const PATH = "/api/admin/login";
 const FAILED = { ok: false, error: "Invalid username or password." }; // identical for every failure cause

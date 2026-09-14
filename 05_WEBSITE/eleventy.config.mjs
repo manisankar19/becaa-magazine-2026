@@ -6,6 +6,8 @@ export default function eleventyConfig(config) {
   config.addDataExtension("yaml", (contents) => yaml.load(contents));
   config.addDataExtension("yml", (contents) => yaml.load(contents));
   config.addPassthroughCopy({ "src/assets": "assets" });
+  // The print PDF is built locally (Playwright) and shipped from release-assets/ so the deployed site has it too.
+  config.addPassthroughCopy({ "release-assets/print": "print" });
 
   const md = markdownIt({ html: true, linkify: false, typographer: true });
   config.setLibrary("md", md);

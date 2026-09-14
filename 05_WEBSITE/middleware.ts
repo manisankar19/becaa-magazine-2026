@@ -2,7 +2,7 @@
 // Runs before the static files for the matched paths only. Uses Web Crypto via lib/gate.ts;
 // no Node-only APIs. Responses follow Vercel's middleware protocol (the same headers
 // `@vercel/edge`'s next()/rewrite() emit), so no extra dependency is needed.
-import { decide } from "./lib/gate";
+import { decide } from "./lib/gate.js";
 
 // Vercel parses this export statically: it must be a literal (no spread/computed values).
 // tests/unit/gate.test.mjs asserts it equals lib/gate.ts PROTECTED_MATCHER.

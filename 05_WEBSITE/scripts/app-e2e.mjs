@@ -12,6 +12,12 @@ import { ensureDir, siteRoot } from "./lib.mjs";
 
 const args = process.argv.slice(2);
 const baseUrlArg = args.includes("--base-url") ? args[args.indexOf("--base-url") + 1] : null;
+// Protected Vercel previews: attach the caller's short-lived OIDC token as an origin-scoped header
+// (Trusted Sources). Read from the environment only; never logged, never written anywhere.
+const OIDC = process.env.VERCEL_OIDC_TOKEN;
+const authHeaders = baseUrlArg && OIDC ? { "x-vercel-trusted-oidc-idp-token": OIDC } : {};
+const ctxOptions = (extra) => ({ ...extra, extraHTTPHeaders: authHeaders });
+const apiFetch = (url, init = {}) => fetch(url, { ...init, headers: { ...authHeaders, ...(init.headers || {}) } });
 const outDir = path.join(siteRoot, "qa-output", "app");
 fs.rmSync(outDir, { recursive: true, force: true });
 ensureDir(outDir);
@@ -60,7 +66,7 @@ const browser = await chromium.launch();
 try {
   for (const viewport of [{ name: "desktop", width: 1440, height: 1000 }, { name: "mobile", width: 390, height: 1200 }]) {
     console.log(`\n${viewport.name} (${viewport.width}×${viewport.height}) against ${baseUrl}`);
-    const context = await browser.newContext({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps });
+    const context = await browser.newContext(ctxOptions({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps }));
     const page = await context.newPage();
 
     // 1. Unauthenticated visitor lands on the welcome content (URL unchanged: rewrite, not redirect).
@@ -96,7 +102,7 @@ try {
     if (baseUrlArg && viewport.name === "mobile") step("registrations skipped on mobile (remote per-IP rate limit)");
     for (const [kind, person] of registrations) {
       if (db) await db.query("delete from rate_limits");
-      const ctx = await browser.newContext({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps });
+      const ctx = await browser.newContext(ctxOptions({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps }));
       const p = await ctx.newPage();
       await p.goto(`${baseUrl}/welcome/`, { waitUntil: "networkidle" });
       await p.getByTestId("name").fill(person.name);
@@ -120,13 +126,22 @@ try {
       assert.equal(cookie.secure, isHttps, `Secure flag ${isHttps ? "set" : "omitted locally"}`);
       const img = await ctx.request.get(`${baseUrl}/assets/normalized/advertisements/web/ADV-018-eframe-advertisement-web.jpg`);
       assert.equal(img.status(), 200, "artwork served with a session");
+      assert.equal((await p.locator(".publication-item--advertisement h2").allTextContents()).filter((t) => t.startsWith("With best compliments from")).length, 22, "22 advertisement cards with the compliments title");
+      assert.equal(await p.locator(".publication-item--advertisement img").evaluateAll((imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length), 22, "all 22 advertisement images loaded");
+      assert.ok(Math.abs(cookie.expires - (Date.now() / 1000 + 30 * 24 * 3600)) < 3600, "visitor cookie expires in ~30 days");
+      const pdf = await ctx.request.get(`${baseUrl}/print/BECAA-2026-complete-review.pdf`);
+      assert.equal(pdf.status(), 200, "PDF served with a session");
+      assert.ok((pdf.headers()["content-type"] || "").includes("application/pdf"), "PDF content type");
+      assert.ok((await pdf.body()).length > 1_000_000, "PDF is the full document");
+      const printPage = await ctx.request.get(`${baseUrl}/print/`);
+      assert.ok((await printPage.text()).includes("print-page--advertisement"), "print HTML served with a session");
       await shot(p, `${viewport.name}-03-${kind}-magazine`);
       step(`${kind} registration opens the magazine`, `cookie flags ok`);
       await ctx.close();
     }
 
     // 4. A fresh context (no cookie) is refused on protected assets.
-    const fresh = await browser.newContext({ viewport, ignoreHTTPSErrors: !isHttps });
+    const fresh = await browser.newContext(ctxOptions({ viewport, ignoreHTTPSErrors: !isHttps }));
     for (const asset of ["/assets/normalized/advertisements/web/ADV-018-eframe-advertisement-web.jpg", "/print/BECAA-2026-complete-review.pdf", "/assets/normalized/images/web/GAL-007-chatgpt-web.jpg"]) {
       const res = await fresh.request.get(`${baseUrl}${asset}`);
       assert.equal(res.status(), 403, `${asset} → 403 without a session`);
@@ -137,7 +152,7 @@ try {
     step("protected artwork, gallery image, PDF and print page refused without a session");
 
     // 5. Administrator flow.
-    const admin = await browser.newContext({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps, acceptDownloads: true });
+    const admin = await browser.newContext(ctxOptions({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps, acceptDownloads: true }));
     const a = await admin.newPage();
     await a.goto(`${baseUrl}/admin/`, { waitUntil: "networkidle" });
     await a.getByTestId("username").fill(adminUsername);

@@ -3,7 +3,7 @@
 
 // Editorial lists shared with the Eleventy templates: lib/registration-data.ts mirrors src/_data/registration.json
 // (a unit test keeps them identical). No JSON import attribute — the edge bundler does not support them.
-import { registration } from "./registration-data";
+import { registration } from "./registration-data.js";
 
 export const DEPARTMENTS = registration.departments as readonly string[];
 

@@ -3,7 +3,7 @@
 // window and increments the counter, so concurrent requests cannot race past the limit.
 // Buckets look like "register:<ip_hash>" or "login:<username>". Old rows are removed by
 // `npm run db:purge`.
-import type { Queryable } from "./admin-session";
+import type { Queryable } from "./admin-session.js";
 
 export interface ConsumeResult {
   allowed: boolean;

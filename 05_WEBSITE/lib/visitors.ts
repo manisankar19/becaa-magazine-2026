@@ -2,8 +2,8 @@
 // lower(email): a returning visitor keeps one row, editable fields are refreshed, and
 // visit_count / last_seen_at advance. A visits row records each session start with a salted
 // IP hash and a truncated user agent — never a raw IP.
-import type { Queryable } from "./admin-session";
-import type { Registration } from "./validate-registration";
+import type { Queryable } from "./admin-session.js";
+import type { Registration } from "./validate-registration.js";
 
 export interface UpsertResult {
   id: string;

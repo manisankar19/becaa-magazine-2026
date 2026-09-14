@@ -1,7 +1,7 @@
 // Administrator read/delete queries (Sprint v3 Task 29, PRD §5.5). Every statement is
 // parameterised; the only fields ever returned are the approved visitor fields plus the id
 // needed to address a row. Hashes, IP hashes, user agents and session data never leave here.
-import type { Queryable } from "./admin-session";
+import type { Queryable } from "./admin-session.js";
 
 export const PER_PAGE = 50;
 export const MAX_QUERY_LENGTH = 120;

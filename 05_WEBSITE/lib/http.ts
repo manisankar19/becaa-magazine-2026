@@ -1,8 +1,8 @@
 // Shared HTTP helpers for the Web-standard function handlers (Sprint v3 Task 22, PRD §5.5).
 // Every response carries the baseline security headers; API and admin responses are never
 // cached and admin responses cannot be framed. Request bodies are capped at 8 KB.
-export { MAX_BODY_BYTES } from "./config";
-import { MAX_BODY_BYTES } from "./config";
+export { MAX_BODY_BYTES } from "./config.js";
+import { MAX_BODY_BYTES } from "./config.js";
 
 export interface ResponseOptions {
   status?: number;

@@ -1,7 +1,7 @@
 // Stateless visitor session cookie (Sprint v3 Task 21, PRD §5.1).
 // value = base64url(JSON payload) "." base64url(HMAC-SHA256(secret, payloadPart))
 // Web Crypto only, so the same code verifies cookies inside Vercel edge middleware.
-import { VISITOR_SESSION_MAX_AGE_SECONDS } from "./config";
+import { VISITOR_SESSION_MAX_AGE_SECONDS } from "./config.js";
 
 export const VISITOR_COOKIE = "becaa_v";
 

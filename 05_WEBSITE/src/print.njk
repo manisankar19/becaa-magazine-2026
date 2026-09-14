@@ -22,7 +22,8 @@ permalink: /print/
 </section>
 {% for item in publication.items | byOrder %}
   {% if item.print_include %}
-  <section class="print-page" id="print-{{ item.id }}">
+  {% set adStyle = item | adPageStyle if item.type == "advertisement" else "" %}
+  <section class="print-page{% if item.type == "advertisement" %} print-page--advertisement {{ item | adInkClass }}{% endif %}" id="print-{{ item.id }}" data-testid="print-page-{{ item.id }}"{% if adStyle %} style="{{ adStyle }}"{% endif %}>
     <p class="section-kicker">{{ item.section | sectionLabel }} · {{ item.id }}</p>
     <h1>{{ item.title }}</h1>
     {% if item.contributor and item.type != "advertisement" %}<p class="byline">{{ item | byline }}</p>{% endif %}

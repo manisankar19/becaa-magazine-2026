@@ -55,6 +55,28 @@
   object-fit: contain;
 }
 
+/* Sprint v3 §4.4 — advertisement pages are tinted on the content box (inside the
+   18mm @page margins, so the page number stays on white) with a colour sampled from
+   or configured for each artwork; --ad-bg / --ad-ink come from the manifest via the
+   adPageStyle filter. The artwork itself is untouched: contain-fit, centred. */
+.print-page--advertisement {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-items: start;
+  min-height: 261mm;               /* 297mm - 2 × 18mm: fill the printable box */
+  box-sizing: border-box;
+  padding: 8mm 8mm 10mm;
+  background: var(--ad-bg, #fff);
+  color: var(--ad-ink, #20201d);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.print-page--advertisement .section-kicker,
+.print-page--advertisement h1,
+.print-page--advertisement figcaption { color: var(--ad-ink, #20201d); }
+.print-page--advertisement figure { align-self: center; justify-self: center; width: 100%; margin: 0; display: grid; justify-items: center; }
+.print-page--advertisement .print-ad { max-height: 215mm; }
+
 .print-thanks { display: grid; align-content: center; }
 .print-contact { break-after: page; }
 .print-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-top: 8mm; }

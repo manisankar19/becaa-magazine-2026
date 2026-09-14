@@ -1,5 +1,6 @@
 import markdownIt from "markdown-it";
 import yaml from "js-yaml";
+import { resolveInk } from "./scripts/ad-presentation-core.mjs";
 
 export default function eleventyConfig(config) {
   config.addDataExtension("yaml", (contents) => yaml.load(contents));
@@ -19,6 +20,18 @@ export default function eleventyConfig(config) {
     let line = details.filter(Boolean).join(", ");
     if (item.designation) line += `${line ? " — " : ""}${item.designation}`;
     return line;
+  });
+  // Sprint v3 §4.4: per-advertisement page tint. Returns "" for items without a
+  // background so the template can drop the style attribute entirely.
+  config.addFilter("adPageStyle", (item = {}) => {
+    const ink = resolveInk(item);
+    if (!ink || (item.page_background_mode ?? "auto") === "none") return "";
+    return `--ad-bg: ${item.page_background}; --ad-ink: ${ink.colour};`;
+  });
+  config.addFilter("adInkClass", (item = {}) => {
+    const ink = resolveInk(item);
+    if (!ink || (item.page_background_mode ?? "auto") === "none") return "";
+    return `ad-ink--${ink.ink}`;
   });
   config.addFilter("sectionLabel", (value = "") => {
     const labels = { messages: "Messages", articles: "Articles", events: "Events", gallery: "Gallery", advertisements: "Advertisements" };

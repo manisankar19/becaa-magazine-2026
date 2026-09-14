@@ -45,7 +45,8 @@
     "retitle:advertisements": "node scripts/retitle-advertisements.mjs",
     "tracker:apply-v3-updates": "node scripts/apply-v3-tracker-updates.mjs",
     "sample:ad-backgrounds": "node scripts/sample-ad-backgrounds.mjs",
-    "manifest:apply-v3-ad-overrides": "node scripts/apply-v3-ad-overrides.mjs"
+    "manifest:apply-v3-ad-overrides": "node scripts/apply-v3-ad-overrides.mjs",
+    "test:e2e:print-ads": "node tests/e2e/print-ad-pages.test.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

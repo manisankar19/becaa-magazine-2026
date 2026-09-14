@@ -11,3 +11,6 @@
 # OS/editor cruft
 .DS_Store
 Thumbs.db
+
+# Playwright debugging screenshots written by tests/e2e (evidence for releases lives in qa-output/)
+/05_WEBSITE/tests/screenshots/

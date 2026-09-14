@@ -5,3 +5,9 @@ qa-output/
 validation-report.json
 validation-summary.md
 *.log
+# Sprint v3 registration application — secrets, local database cluster, Vercel link metadata
+.env
+.env.*
+!.env.example
+.pgdata/
+.vercel/

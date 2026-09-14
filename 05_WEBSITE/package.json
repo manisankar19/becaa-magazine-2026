@@ -64,7 +64,9 @@
     "test:e2e:admin": "node --env-file-if-exists=.env.local --import tsx tests/e2e/admin-page.test.mjs",
     "check:sql": "node scripts/check-sql.mjs",
     "e2e:app": "node --env-file-if-exists=.env.local --import tsx scripts/app-e2e.mjs",
-    "release:v3": "RELEASE_VERSION=V3_REVIEW_01 node scripts/release.mjs"
+    "release:v3": "RELEASE_VERSION=V3_REVIEW_01 node scripts/release.mjs",
+    "test:e2e:cover": "node tests/e2e/print-cover-page.test.mjs",
+    "release:v3:02": "RELEASE_VERSION=V3_REVIEW_02 node scripts/release.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

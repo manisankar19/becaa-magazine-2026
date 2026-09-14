@@ -1,0 +1,8 @@
+{
+  "_comment": "npm audit allow-list for the release gate (Sprint v3 Task 36). Only these packages may carry an unresolved high/critical advisory. Each entry needs a reason and a review date; anything else fails the release. All three are local build/QA tooling with no exposure to untrusted public input (sprints/v2/WALKTHROUGH.md §14, sprints/v2/TASKS.md Task 18).",
+  "allow": [
+    { "package": "sharp", "reason": "Fix (0.35.4) is a breaking major used by 8 normalisation scripts; deferred by the user in Sprint v2 Task 18. Runs only at build time on trusted local artwork.", "reviewed": "2026-09-14" },
+    { "package": "playwright", "reason": "Advisory concerns browser download over TLS without certificate verification; the fix (1.63.0) is outside the pinned range and needs a new Chromium download. Test/QA tooling only.", "reviewed": "2026-09-14" },
+    { "package": "xlsx", "reason": "No fixed version on the public npm registry (SheetJS). Reads only the editor's own tracker workbook at build time.", "reviewed": "2026-09-14" }
+  ]
+}

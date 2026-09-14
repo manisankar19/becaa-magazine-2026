@@ -11,3 +11,5 @@ validation-summary.md
 !.env.example
 .pgdata/
 .vercel/
+npm-audit.json
+audit-gate.json

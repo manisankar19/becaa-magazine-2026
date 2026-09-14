@@ -286,6 +286,30 @@ h2 {
   display: block;
 }
 
+/* Sprint v3 §4.4 — advertisement cards take the same per-advertisement tint as
+   the print page (--ad-bg / --ad-ink from the manifest via the adPageStyle filter).
+   Only the frame and the card's own heading/kicker change; the artwork is untouched
+   and gallery cards keep the plain white frame. */
+.publication-item--advertisement .ad-frame {
+  background: var(--ad-bg, #ffffff);
+}
+.publication-item--advertisement .section-kicker,
+.publication-item--advertisement .item-header h2,
+.publication-item--advertisement figcaption {
+  color: var(--ad-ink, var(--ink));
+}
+.publication-item--advertisement .item-header {
+  width: min(740px, 100%);          /* same width as .ad-frame so header + frame read as one tinted card */
+  box-sizing: border-box;
+  padding: 0.9rem 1rem 0.2rem;
+  border-radius: 8px 8px 0 0;
+  background: var(--ad-bg, transparent);
+}
+.publication-item--advertisement .ad-frame {
+  margin-top: 0;
+  border-radius: 0 0 8px 8px;
+}
+
 .ad-placeholder {
   min-height: 22rem;
   display: grid;

@@ -31,11 +31,12 @@ title: একই শিকড় — BECAA Maharashtra Magazine 2026
 </section>
 
 {% for item in items %}
-  <article class="publication-item publication-item--{{ item.type }}" id="{{ item.id }}">
+  {% set adStyle = item | adPageStyle if item.type == "advertisement" else "" %}
+  <article class="publication-item publication-item--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="{{ item.id }}"{% if item.type == "advertisement" %} data-testid="ad-card-{{ item.id }}"{% endif %}{% if adStyle %} style="{{ adStyle }}"{% endif %}>
     <header class="item-header">
       <p class="section-kicker">{{ item.section | sectionLabel }} · {{ item.id }}</p>
       <h2>{{ item.title }}</h2>
-      {% if item.contributor %}
+      {% if item.contributor and item.type != "advertisement" %}
         <p class="byline">{{ item | byline }}</p>
       {% endif %}
     </header>

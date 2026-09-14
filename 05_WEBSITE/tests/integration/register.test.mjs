@@ -11,8 +11,8 @@ process.env.IP_HASH_SALT ||= "test-salt";
 process.env.NODE_ENV = "development";
 delete process.env.REGISTRATION_ENABLED;
 
-const { default: register } = await import("../../api/register.ts");
-const { default: health } = await import("../../api/health.ts");
+const { fetch: register } = await import("../../api/register.ts");
+const { fetch: health } = await import("../../api/health.ts");
 const { closePool } = await import("../../lib/db.ts");
 const { verifyVisitorSession, parseCookies } = await import("../../lib/session.ts");
 

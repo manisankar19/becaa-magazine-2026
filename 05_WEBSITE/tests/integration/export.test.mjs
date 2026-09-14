@@ -12,8 +12,8 @@ process.env.ADMIN_USERNAME = "committee-admin";
 await migrate(process.env.DATABASE_URL);
 const { hashPassword } = await import("../../lib/hash.ts");
 process.env.ADMIN_PASSWORD_HASH = await hashPassword("correct horse battery staple");
-const { default: login } = await import("../../api/admin/login.ts");
-const { default: exportCsv } = await import("../../api/admin/export.csv.ts");
+const { fetch: login } = await import("../../api/admin/login.ts");
+const { fetch: exportCsv } = await import("../../api/admin/export.csv.ts");
 const { closePool } = await import("../../lib/db.ts");
 const { EXPORT_COLUMNS } = await import("../../lib/csv-core.ts");
 

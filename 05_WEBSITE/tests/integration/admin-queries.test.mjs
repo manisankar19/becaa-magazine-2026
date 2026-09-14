@@ -13,10 +13,10 @@ await migrate(process.env.DATABASE_URL);
 const { hashPassword } = await import("../../lib/hash.ts");
 process.env.ADMIN_PASSWORD_HASH = await hashPassword("correct horse battery staple");
 
-const { default: login } = await import("../../api/admin/login.ts");
-const { default: stats } = await import("../../api/admin/stats.ts");
-const { default: visitors } = await import("../../api/admin/visitors.ts");
-const { default: visitorById } = await import("../../api/admin/visitors/[id].ts");
+const { fetch: login } = await import("../../api/admin/login.ts");
+const { fetch: stats } = await import("../../api/admin/stats.ts");
+const { fetch: visitors } = await import("../../api/admin/visitors.ts");
+const { fetch: visitorById } = await import("../../api/admin/visitors/[id].ts");
 const { formatIst } = await import("../../lib/admin-queries.ts");
 const { closePool } = await import("../../lib/db.ts");
 

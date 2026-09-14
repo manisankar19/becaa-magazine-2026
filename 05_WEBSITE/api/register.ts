@@ -25,7 +25,7 @@ function fail(form: boolean, status: number, body: Record<string, unknown>, erro
   return json(body, { status, path: PATH });
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   if (request.method.toUpperCase() !== "POST") return json({ ok: false, error: "Method not allowed." }, { status: 405, path: PATH, headers: { allow: "POST" } });
   if (!registrationEnabled()) return json({ ok: false, error: "Registration is temporarily closed. Please try again later." }, { status: 503, path: PATH });
   if (!assertSameOrigin(request)) return json({ ok: false, error: "Cross-site request refused." }, { status: 403, path: PATH });
@@ -64,3 +64,7 @@ export default async function handler(request: Request): Promise<Response> {
   if (form) return redirect("/", { path: PATH, headers: { "set-cookie": cookie } });
   return json({ ok: true }, { path: PATH, headers: { "set-cookie": cookie } });
 }
+
+// Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
+// (a default export would be treated as the Node (req, res) signature and its Response ignored).
+export { handler as fetch };

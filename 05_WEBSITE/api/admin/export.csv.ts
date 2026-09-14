@@ -9,7 +9,7 @@ import { requireAdmin } from "../../lib/require-admin.js";
 
 const PATH = "/api/admin/export.csv";
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   if (request.method.toUpperCase() !== "GET") return json({ ok: false, error: "Method not allowed." }, { status: 405, path: PATH, headers: { allow: "GET" } });
   const auth = await requireAdmin(request);
   if (!auth.ok) return auth.response;
@@ -33,3 +33,7 @@ export default async function handler(request: Request): Promise<Response> {
     },
   });
 }
+
+// Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
+// (a default export would be treated as the Node (req, res) signature and its Response ignored).
+export { handler as fetch };

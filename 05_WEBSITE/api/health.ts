@@ -4,7 +4,7 @@ import { json } from "../lib/http.js";
 
 const PATH = "/api/health";
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   if (request.method.toUpperCase() !== "GET") return json({ ok: false }, { status: 405, path: PATH, headers: { allow: "GET" } });
   try {
     await getPool().query("select 1");
@@ -13,3 +13,7 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ ok: false, db: false }, { status: 503, path: PATH });
   }
 }
+
+// Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
+// (a default export would be treated as the Node (req, res) signature and its Response ignored).
+export { handler as fetch };

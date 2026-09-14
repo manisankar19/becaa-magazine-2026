@@ -22,8 +22,8 @@ assert.ok(!tool.stdout.includes("correct horse"), "the tool never echoes the pas
 process.env.ADMIN_USERNAME = "committee-admin";
 process.env.ADMIN_PASSWORD_HASH = hash;
 
-const { default: login } = await import("../../api/admin/login.ts");
-const { default: logout } = await import("../../api/admin/logout.ts");
+const { fetch: login } = await import("../../api/admin/login.ts");
+const { fetch: logout } = await import("../../api/admin/logout.ts");
 const { requireAdmin } = await import("../../lib/require-admin.ts");
 const { closePool } = await import("../../lib/db.ts");
 const { verifyCsrf } = await import("../../lib/csrf.ts");

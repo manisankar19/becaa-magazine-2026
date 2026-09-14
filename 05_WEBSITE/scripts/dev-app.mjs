@@ -27,10 +27,10 @@ async function resolveHandler(pathname) {
   const rel = pathname.replace(/^\/api\//, "").replace(/\/+$/, "");
   if (!rel || rel.includes("..")) return null;
   const direct = path.join(API, `${rel}.ts`);
-  if (direct.startsWith(API) && fs.existsSync(direct)) return (await import(pathToFileURL(direct).href)).default;
+  if (direct.startsWith(API) && fs.existsSync(direct)) { const m = await import(pathToFileURL(direct).href); return m.fetch ?? m.default; }
   const dir = path.dirname(rel);
   const dynamic = path.join(API, dir, "[id].ts");
-  if (dynamic.startsWith(API) && fs.existsSync(dynamic)) return (await import(pathToFileURL(dynamic).href)).default;
+  if (dynamic.startsWith(API) && fs.existsSync(dynamic)) { const m = await import(pathToFileURL(dynamic).href); return m.fetch ?? m.default; }
   return null;
 }
 

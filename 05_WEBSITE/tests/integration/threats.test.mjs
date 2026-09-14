@@ -17,10 +17,10 @@ process.env.ADMIN_USERNAME = "committee-admin";
 await migrate(process.env.DATABASE_URL);
 const { hashPassword } = await import("../../lib/hash.ts");
 process.env.ADMIN_PASSWORD_HASH = await hashPassword("correct horse battery staple");
-const { default: register } = await import("../../api/register.ts");
-const { default: login } = await import("../../api/admin/login.ts");
-const { default: exportCsv } = await import("../../api/admin/export.csv.ts");
-const { default: visitorById } = await import("../../api/admin/visitors/[id].ts");
+const { fetch: register } = await import("../../api/register.ts");
+const { fetch: login } = await import("../../api/admin/login.ts");
+const { fetch: exportCsv } = await import("../../api/admin/export.csv.ts");
+const { fetch: visitorById } = await import("../../api/admin/visitors/[id].ts");
 const { closePool } = await import("../../lib/db.ts");
 
 const db = new pg.Client({ connectionString: process.env.DATABASE_URL });
@@ -63,7 +63,7 @@ assert.equal(r.status, 401);
 // --- Stored XSS at the API layer: values are stored verbatim and returned as JSON strings (the admin UI renders with textContent — Task 31 E2E) ---
 r = await register(new Request(`${ORIGIN}/api/register`, { method: "POST", headers: H(), body: JSON.stringify({ name: ["<scr", "ipt>alert(1)</scr", "ipt>"].join(""), email: "xss@example.org", category: "guest", consent: true, form_started_at: Date.now() - 5000 }) }));
 assert.equal(r.status, 200);
-const { default: visitors } = await import("../../api/admin/visitors.ts");
+const { fetch: visitors } = await import("../../api/admin/visitors.ts");
 r = await visitors(new Request(`${ORIGIN}/api/admin/visitors?q=xss`, { headers: { host: "magazine.example", cookie } }));
 assert.equal(r.headers.get("content-type"), "application/json; charset=utf-8", "JSON, never text/html, so a browser cannot render it as markup");
 assert.equal(r.headers.get("x-content-type-options"), "nosniff");

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { ensureDir, projectRoot, siteRoot, readManifest } from "./lib.mjs";
-import { auditGate, buildReleaseManifest, reproductionMarkdown, stepsForVersion } from "./release-core.mjs";
+import { auditGate, buildReleaseManifest, npmInvocation, reproductionMarkdown, stepsForVersion } from "./release-core.mjs";
 
 // Release pipeline. RELEASE_VERSION selects the step list (see release-core.mjs):
 //   V3_*   — Sprint v3 order: validation → typecheck → unit → build → site/integration/QA/PDF/browser
@@ -14,12 +14,14 @@ const steps = stepsForVersion(releaseVersion); // throws on unsupported characte
 const outDir = path.join(projectRoot, "06_FINAL_OUTPUT", releaseVersion);
 if (fs.existsSync(outDir)) throw new Error(`Refusing to overwrite existing release: ${releaseVersion}`);
 
-const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
+// Task 42: npm is invoked as `node npm-cli.js …` with shell: false (see release-core.npmInvocation).
+const resolveNpm = (args) => npmInvocation(args);
 
-function run(command, args) {
-  const result = spawnSync(command, args, { cwd: siteRoot, stdio: "inherit", shell: true });
+function run(_unused, args) {
+  const { command, args: fullArgs } = resolveNpm(args);
+  const result = spawnSync(command, fullArgs, { cwd: siteRoot, stdio: "inherit", shell: false });
   if (result.error) {
-    console.error(`Failed to run ${command} ${args.join(" ")}: ${result.error.message}`);
+    console.error(`Failed to run npm ${args.join(" ")}: ${result.error.message}`);
     process.exit(1);
   }
   if (result.status !== 0) process.exit(result.status || 1);
@@ -28,7 +30,8 @@ function run(command, args) {
 const auditReportPath = path.join(siteRoot, "npm-audit.json");
 
 function runAuditGate() {
-  const result = spawnSync(npmCommand, ["audit", "--json"], { cwd: siteRoot, encoding: "utf8", shell: true, maxBuffer: 20_000_000 });
+  const { command, args } = resolveNpm(["audit", "--json"]);
+  const result = spawnSync(command, args, { cwd: siteRoot, encoding: "utf8", shell: false, maxBuffer: 20_000_000 });
   let auditJson;
   try {
     auditJson = JSON.parse(result.stdout || "{}");
@@ -52,7 +55,7 @@ function runAuditGate() {
 for (const step of steps) {
   console.log(`\n=== ${step} ===`);
   if (step === "audit") runAuditGate();
-  else run(npmCommand, ["run", step]);
+  else run(null, ["run", step]);
 }
 
 // --- packaging ---

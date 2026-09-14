@@ -1,5 +1,7 @@
 // Pure pieces of the release pipeline (Sprint v3 Task 36). No I/O, so the ordering, the
 // dependency-audit gate and the generated documents can be unit tested.
+import fs from "node:fs";
+import path from "node:path";
 
 const VERSION_PATTERN = /^[A-Za-z0-9_-]+$/;
 
@@ -18,6 +20,7 @@ const V3_STEPS = [
   "qa:v2-items",
   "pdf",
   "qa:pdf",
+  "test:e2e:cover",
   "qa:pdf:v2-items",
   "qa:ad-backgrounds",
   "qa:art006",
@@ -118,4 +121,21 @@ export function buildReleaseManifest(manifest, version, commit, now = new Date()
       ...(manifest.cover ? [[manifest.cover.id, manifest.cover.source_fingerprint]] : []),
     ]),
   };
+}
+
+// Task 42 (v2 Task 20): run npm through the current Node binary and npm's own entry script,
+// with no shell, so arguments are never re-interpreted and the environment is not inherited
+// through a shell. The first existing candidate wins: npm's own npm_execpath when we are
+// already inside `npm run`, else the two layouts Node ships (Windows / Unix prefix). The
+// existence check is injectable so the logic stays unit-testable.
+export function npmInvocation(args, { exists = (p) => fs.existsSync(p) } = {}) {
+  const nodeDir = path.dirname(process.execPath);
+  const candidates = [
+    process.env.npm_execpath && /npm-cli\.js$/.test(process.env.npm_execpath) ? process.env.npm_execpath : null,
+    path.join(nodeDir, "node_modules", "npm", "bin", "npm-cli.js"),            // Windows and some Linux distributions
+    path.join(nodeDir, "..", "lib", "node_modules", "npm", "bin", "npm-cli.js"), // Unix prefix layout
+  ].filter(Boolean);
+  const npmCli = candidates.find((p) => exists(p));
+  if (!npmCli) throw new Error(`npm-cli.js not found near ${process.execPath} (looked in: ${candidates.join(", ")})`);
+  return { command: process.execPath, args: [npmCli, ...args], shell: false };
 }

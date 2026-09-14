@@ -7,9 +7,10 @@ const steps = stepsForVersion("V3_REVIEW_01");
 const idx = (name) => { const i = steps.indexOf(name); assert.ok(i >= 0, `step ${name} present`); return i; };
 assert.equal(steps[0], "tracker:validate");
 assert.equal(steps[1], "validate");
-for (const s of ["typecheck", "test:unit", "build", "test", "test:integration", "qa", "qa:v2-items", "pdf", "qa:pdf", "qa:pdf:v2-items", "qa:ad-backgrounds", "qa:art006", "qa:contact", "test:e2e:print-ads", "test:e2e:web-ads", "test:e2e:welcome", "test:e2e:admin", "e2e:app", "check:secrets", "check:sql"]) idx(s);
+for (const s of ["typecheck", "test:unit", "build", "test", "test:integration", "qa", "qa:v2-items", "pdf", "qa:pdf", "test:e2e:cover", "qa:pdf:v2-items", "qa:ad-backgrounds", "qa:art006", "qa:contact", "test:e2e:print-ads", "test:e2e:web-ads", "test:e2e:welcome", "test:e2e:admin", "e2e:app", "check:secrets", "check:sql"]) idx(s);
 assert.ok(idx("build") < idx("test:integration"), "integration tests (dev-app, threats) need _site/, so build comes first");
 assert.ok(idx("build") < idx("test") && idx("build") < idx("qa") && idx("build") < idx("e2e:app") && idx("build") < idx("test:e2e:welcome"));
+assert.ok(idx("pdf") < idx("test:e2e:cover"), "cover-page check needs the PDF");
 assert.ok(idx("pdf") < idx("qa:pdf") && idx("qa:pdf") < idx("qa:ad-backgrounds") && idx("qa") < idx("qa:ad-backgrounds"), "review sheet needs qa + qa:pdf outputs");
 assert.ok(idx("build") < idx("check:secrets"), "secret scan must also cover the built site");
 assert.equal(steps[steps.length - 1], "audit", "dependency audit gate runs last");
@@ -53,3 +54,16 @@ assert.equal(rm.git_commit, "abc1234");
 assert.equal(rm.version, "V3_REVIEW_01");
 assert.equal(rm.build_time, "2026-09-14T00:00:00.000Z");
 console.log("All release-core unit tests passed.");
+
+// --- Task 42: the pipeline runs npm without a shell ---
+import fs from "node:fs";
+import { npmInvocation } from "../../scripts/release-core.mjs";
+const inv = npmInvocation(["run", "build"]);
+assert.equal(inv.shell, false, "no shell: arguments cannot be re-interpreted");
+assert.throws(() => npmInvocation(["x"], { exists: () => false }), /npm-cli\.js not found/, "fails loudly when npm cannot be located");
+const fake = npmInvocation(["run", "x"], { exists: (p) => p.includes("lib/node_modules") });
+assert.ok(fake.args[0].includes("lib/node_modules/npm/bin/npm-cli.js"), "picks the first candidate that exists");
+assert.equal(inv.command, process.execPath, "npm is run through the current Node binary");
+assert.ok(fs.existsSync(inv.args[0]) && /npm-cli\.js$/.test(inv.args[0]), `first argument is npm-cli.js: ${inv.args[0]}`);
+assert.deepEqual(inv.args.slice(1), ["run", "build"]);
+console.log("All release-core (incl. Task 42) unit tests passed.");

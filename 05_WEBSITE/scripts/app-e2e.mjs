@@ -94,6 +94,17 @@ try {
     assert.ok(await page.getByTestId("error-department").isVisible());
     await shot(page, `${viewport.name}-02-field-errors`);
     step("invalid submission shows server field errors");
+    // A platform error (function crash) answers with {"error":{"code":"500","message":…}} — the page must
+    // show readable text, never "[object Object]". Mocked in the browser: no request reaches the server.
+    await page.route("**/api/register", (route) => route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ error: { code: "500", message: "A server error has occurred" } }) }));
+    await page.getByTestId("submit").click();
+    await page.getByTestId("form-notice").waitFor({ state: "visible" });
+    const noticeText = (await page.getByTestId("form-notice").textContent()).trim();
+    assert.ok(!noticeText.includes("[object"), `notice must be readable, got: ${noticeText}`);
+    assert.ok(/error 500/.test(noticeText) && /A server error has occurred/.test(noticeText), `notice names the failure, got: ${noticeText}`);
+    await page.unroute("**/api/register");
+    await shot(page, `${viewport.name}-02b-server-error-notice`);
+    step("server/platform error is shown as a readable message", noticeText.slice(0, 60));
     await context.close();
 
     // 3. Each category registers and opens the magazine. All requests in this suite share one IP, so the

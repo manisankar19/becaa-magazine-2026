@@ -1,7 +1,7 @@
 // GET /api/admin/stats — dashboard aggregates (Sprint v3 Task 29). Administrator only.
 import { stats } from "../../lib/admin-queries.js";
 import { getPool } from "../../lib/db.js";
-import { json } from "../../lib/http.js";
+import { json, guarded } from "../../lib/http.js";
 import { requireAdmin } from "../../lib/require-admin.js";
 
 const PATH = "/api/admin/stats";
@@ -15,4 +15,4 @@ async function handler(request: Request): Promise<Response> {
 
 // Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
 // (a default export would be treated as the Node (req, res) signature and its Response ignored).
-export { handler as fetch };
+export const fetch = guarded(handler, PATH);

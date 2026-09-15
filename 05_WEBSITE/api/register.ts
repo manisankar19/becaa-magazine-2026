@@ -8,7 +8,7 @@
 import { MIN_FORM_FILL_MS, PRIVACY_VERSION, RATE_LIMITS } from "../lib/config.js";
 import { getPool } from "../lib/db.js";
 import { registrationEnabled, requireEnv } from "../lib/env.js";
-import { assertSameOrigin, json, readJsonBody, redirect } from "../lib/http.js";
+import { assertSameOrigin, json, readJsonBody, redirect, guarded } from "../lib/http.js";
 import { clientIp, hashIp } from "../lib/ip.js";
 import { consume } from "../lib/rate-limit.js";
 import { isSecureCookieEnvironment, signVisitorSession, visitorCookie } from "../lib/session.js";
@@ -67,4 +67,4 @@ async function handler(request: Request): Promise<Response> {
 
 // Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
 // (a default export would be treated as the Node (req, res) signature and its Response ignored).
-export { handler as fetch };
+export const fetch = guarded(handler, PATH);

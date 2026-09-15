@@ -56,17 +56,34 @@
     notice.scrollIntoView({ block: "center" });
   }
 
+  // A message is only ever a non-empty string; anything else (an object, null, a number) gets a fixed text,
+  // so a platform error such as {"error":{"code":"500","message":"…"}} never renders as "[object Object]".
+  function asText(value, fallback) {
+    return typeof value === "string" && value.trim() !== "" ? value : fallback;
+  }
+
+  function messageFor(status, body) {
+    var error = body && body.error;
+    if (typeof error === "string" && error.trim() !== "") return error;
+    var detail = error && typeof error === "object" ? asText(error.message, "") : "";
+    if (status === 429) return "Too many attempts. Please wait a few minutes and try again.";
+    if (status >= 500) return "The server had a problem saving your registration (error " + status + (detail ? ": " + detail : "") + "). Please try again in a moment.";
+    if (detail) return detail + " (error " + status + "). Please check the details you entered and try again.";
+    return "Sorry, something went wrong (error " + status + "). Please try again in a moment.";
+  }
+
   function showErrors(errors) {
     var first = null;
     Object.keys(errors).forEach(function (field) {
+      var message = asText(errors[field], "Please check this field.");
       var el = form.querySelector('[data-testid="error-' + field + '"]');
       if (el) {
-        el.textContent = String(errors[field]);
+        el.textContent = message;
         el.hidden = false;
         var input = form.querySelector('[name="' + field + '"]');
         if (input) { input.setAttribute("aria-invalid", "true"); if (!first) first = input; }
       } else if (field === "form") {
-        showNotice(String(errors[field]));
+        showNotice(message);
       }
     });
     if (first && first.focus) first.focus();
@@ -98,11 +115,11 @@
       headers: { "content-type": "application/json", accept: "application/json" },
       body: JSON.stringify(payload),
     }).then(function (response) {
-      return response.json().catch(function () { return {}; }).then(function (body) { return { status: response.status, body: body }; });
+      return response.json().catch(function () { return {}; }).then(function (body) { return { status: response.status, body: body && typeof body === "object" ? body : {} }; });
     }).then(function (result) {
       if (result.status === 200 && result.body.ok) { window.location.href = "/"; return; }
-      if (result.status === 422 && result.body.errors) { showErrors(result.body.errors); return; }
-      showNotice(result.body.error || "Sorry, something went wrong. Please try again in a moment.");
+      if (result.status === 422 && result.body.errors && typeof result.body.errors === "object") { showErrors(result.body.errors); return; }
+      showNotice(messageFor(result.status, result.body));
     }).catch(function () {
       showNotice("We could not reach the server. Please check your connection and try again.");
     }).then(function () { button.disabled = false; });

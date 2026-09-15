@@ -8,7 +8,7 @@ import { csrfTokenFor } from "../../lib/csrf.js";
 import { getPool } from "../../lib/db.js";
 import { requireEnv } from "../../lib/env.js";
 import { verifyPassword } from "../../lib/hash.js";
-import { assertSameOrigin, json, readJsonBody } from "../../lib/http.js";
+import { assertSameOrigin, json, readJsonBody, guarded } from "../../lib/http.js";
 import { clientIp, hashIp } from "../../lib/ip.js";
 import { clearLoginFailures, consume, isLockedOut, recordLoginFailure } from "../../lib/rate-limit.js";
 import { isSecureCookieEnvironment } from "../../lib/session.js";
@@ -58,4 +58,4 @@ async function handler(request: Request): Promise<Response> {
 
 // Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
 // (a default export would be treated as the Node (req, res) signature and its Response ignored).
-export { handler as fetch };
+export const fetch = guarded(handler, PATH);

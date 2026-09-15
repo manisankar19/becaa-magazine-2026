@@ -93,3 +93,17 @@ export async function readJsonBody(request: Request): Promise<BodyResult> {
     return { ok: false, status: 400 };
   }
 }
+
+// Wraps a handler so an unexpected exception still yields structured JSON ({ ok: false, error: string }).
+// Without it the platform answers with its own error page/JSON whose `error` field is an object, which
+// browsers render as "[object Object]". Logs the error message only — never the request body or headers.
+export function guarded(handler: (request: Request) => Promise<Response>, path: string, message = "The server could not complete your request. Please try again in a moment."): (request: Request) => Promise<Response> {
+  return async (request: Request): Promise<Response> => {
+    try {
+      return await handler(request);
+    } catch (error) {
+      console.error(`${path} 500 ${error instanceof Error ? error.message : String(error)}`);
+      return json({ ok: false, error: message }, { status: 500, path });
+    }
+  };
+}

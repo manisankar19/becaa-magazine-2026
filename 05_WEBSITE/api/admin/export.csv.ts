@@ -4,7 +4,7 @@
 import { formatIst } from "../../lib/admin-queries.js";
 import { buildCsv, EXPORT_COLUMNS } from "../../lib/csv-core.js";
 import { getPool } from "../../lib/db.js";
-import { json, securityHeaders } from "../../lib/http.js";
+import { json, securityHeaders, guarded } from "../../lib/http.js";
 import { requireAdmin } from "../../lib/require-admin.js";
 
 const PATH = "/api/admin/export.csv";
@@ -36,4 +36,4 @@ async function handler(request: Request): Promise<Response> {
 
 // Vercel Node runtime: a Web-standard `fetch` export receives a Request and returns a Response
 // (a default export would be treated as the Node (req, res) signature and its Response ignored).
-export { handler as fetch };
+export const fetch = guarded(handler, PATH);

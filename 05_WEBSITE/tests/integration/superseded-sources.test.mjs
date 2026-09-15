@@ -33,3 +33,24 @@ for (const c of cases) {
   assert.ok(readme.includes(c.expectedArchived) && readme.includes(c.expectedLive), "README must list both hashes");
 }
 console.log("superseded-sources: OK");
+
+// Sprint v4 Task 1 — the superseded DOCX archived under 2026-09-15/ must be the
+// exact bytes that V3 was built from; the authoritative source is now the .md file.
+const archive15 = path.join(projectRoot, "04_MAGAZINE_WORKING", "SUPERSEDED_SOURCES", "2026-09-15");
+const archived15 = path.join(archive15, "Shubhra Basu.docx");
+const liveSource15 = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Shubhra Basu.md");
+const ARCHIVED_DOCX_SHA = "83ae8311a1db9205946b5f7f207985eccace7dbf54d771fed3680a9a11d63af9";
+const LIVE_MD_SHA = "0d068f30b846c0b7eba29f0c16847c4ba3dc90a81733ba8ed23a98c14f328da2";
+
+assert.ok(fs.existsSync(archived15), `archived copy missing: ${archived15}`);
+assert.equal(sha256(archived15), ARCHIVED_DOCX_SHA, "archived DOCX hash mismatch");
+assert.ok(fs.existsSync(liveSource15), `authoritative .md source missing: ${liveSource15}`);
+assert.equal(sha256(liveSource15), LIVE_MD_SHA, "authoritative .md hash mismatch");
+
+const readme15 = fs.readFileSync(path.join(archive15, "README.md"), "utf8");
+assert.ok(readme15.includes(ARCHIVED_DOCX_SHA), "README.md must list the archived DOCX hash");
+assert.ok(readme15.includes(LIVE_MD_SHA), "README.md must list the authoritative .md hash");
+assert.ok(readme15.includes("ART-010"), "README.md must identify the published item");
+assert.ok(readme15.includes("<w:br/>"), "README.md must describe the superseded break form");
+
+console.log("superseded-sources 2026-09-15: OK");

@@ -2,6 +2,7 @@
 //   npm run e2e:app                          start scripts/dev-app.mjs against DATABASE_URL_TEST and test it
 //   npm run e2e:app -- --base-url <url>      test an already-deployed preview (Task 35); needs
 //                                            E2E_ADMIN_USERNAME / E2E_ADMIN_PASSWORD in the environment
+//   npm run e2e:app -- --base-url <url> --public-only   visitor flows only (no administrator credential needed)
 // Exits non-zero on the first failed assertion. Screenshots go to qa-output/app/.
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
@@ -12,6 +13,7 @@ import { ensureDir, siteRoot } from "./lib.mjs";
 
 const args = process.argv.slice(2);
 const baseUrlArg = args.includes("--base-url") ? args[args.indexOf("--base-url") + 1] : null;
+const publicOnly = args.includes("--public-only");
 // Protected Vercel previews: attach the caller's short-lived OIDC token as an origin-scoped header
 // (Trusted Sources). Read from the environment only; never logged, never written anywhere.
 // (Trusted Sources), or the project's Protection Bypass for Automation secret. Neither value is ever logged.
@@ -55,7 +57,7 @@ if (!baseUrl) {
     child.on("exit", (code) => { clearTimeout(timer); reject(new Error(`dev-app exited (${code}):\n${logs}`)); });
   });
 }
-if (!adminUsername || !adminPassword) throw new Error("E2E_ADMIN_USERNAME and E2E_ADMIN_PASSWORD are required for --base-url runs.");
+if (!publicOnly && (!adminUsername || !adminPassword)) throw new Error("E2E_ADMIN_USERNAME and E2E_ADMIN_PASSWORD are required for --base-url runs (or pass --public-only).");
 const isHttps = baseUrl.startsWith("https://");
 const stamp = Date.now();
 const people = {
@@ -165,6 +167,7 @@ try {
     step("protected artwork, gallery image, PDF and print page refused without a session");
 
     // 5. Administrator flow.
+    if (publicOnly) { step("administrator flow skipped (--public-only)"); continue; }
     const admin = await browser.newContext(ctxOptions({ viewport, bypassCSP: true, ignoreHTTPSErrors: !isHttps, acceptDownloads: true }));
     const a = await admin.newPage();
     await a.goto(`${baseUrl}/admin/`, { waitUntil: "networkidle" });

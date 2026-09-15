@@ -1,6 +1,19 @@
 # Sprint v3 — Preview deployment (Task 35)
 
-Status: **Preview deployed and verified on the new project `becaa-magazine-2026-portal`.** Updated 2026-09-15 — see *Incident 2026-09-15* below: the project's first CLI deployment was registered by Vercel as its Production deployment. The rehearsal record that preceded it is kept below unchanged.
+Status: **Released to Production on 2026-09-15 (commit `d707355`).** The preview record and the 2026-09-15 incident follow below.
+
+## Production release (2026-09-15)
+
+| Field | Value |
+|---|---|
+| Production URL | `https://becaa-magazine-2026-portal.vercel.app` (deployment `…-c846gz3qp-…`, target `production`, commit `d707355`, deployed 01:50 UTC with `vercel deploy --prod`) |
+| Previews | Untouched: `…-bu5zjgbsm-…` (b403465), `…-jt4s92ag7-…` (be6297b), `…-4qn4qi73u-…` (c00b163) remain, all target `preview` |
+| Neon (production) | New marketplace resource `becaa-magazine-2026-production`, plan **Free** (`free_v3`, no payment method required), region iad1, connected to **Production** only. Separate Neon project and host from `becaa-magazine-2026-preview`, which stays on Preview |
+| Migration | `db:migrate` against the production database: Applied 1, Pending none. After verification the database holds 0 visitors, 0 visits, 0 rate-limit rows, 0 admin sessions |
+| Production variables | `DATABASE_URL` (+ Neon extras) from the integration; fresh `SESSION_SECRET` and `IP_HASH_SALT` generated with `openssl rand -hex 32` and piped straight into `vercel env add … --sensitive`; `ADMIN_USERNAME=becaa-admin`; `REGISTRATION_ENABLED=true`; `BATCH_YEAR_MIN=1950`; `ADMIN_PASSWORD_HASH` entered by the owner with `npm run --silent admin:hash \| vercel env add ADMIN_PASSWORD_HASH production --sensitive` (sensitive: nobody can read it back). Format check: the script prints only `$argon2id$…` and the CLI strips the trailing newline (verified with a throwaway Development variable, removed afterwards); the app requires exactly that prefix |
+| Verification (01:52 UTC) | Unauthenticated probes: `/` and gated pages show the welcome page, health ok/db true, PDF 403, forged cookie 403, CSP/nosniff/referrer/HSTS present, `/admin/` DENY + no-store, admin APIs 401, wrong password 401, cross-origin 403, wrong method 405. Browser suite `--public-only`: **PASS 14 steps** (field errors, platform-error notice, alumni/sponsor/guest registration, protected assets; desktop + mobile). The three test registrations were then deleted from the production database and the rate-limit rows cleared |
+| Not yet verified | The administrator dashboard with the owner's real password (login → totals → search → CSV → delete → logout). Only the owner holds it: run `E2E_ADMIN_USERNAME=becaa-admin E2E_ADMIN_PASSWORD='…' npm run e2e:app -- --base-url https://becaa-magazine-2026-portal.vercel.app` from a private shell (it registers and deletes `e2e-*` test visitors), or log in at `/admin/` by hand |
+| Protection | Deployment Protection is *Standard* (`all_except_custom_domains`): the production domain is public, per-deployment URLs and previews still require Vercel login or the automation bypass |
 
 ## Result (2026-09-14)
 

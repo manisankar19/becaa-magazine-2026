@@ -2,6 +2,8 @@
 
 ## V3_REVIEW_02 — 2026-09-14
 
+**Released to production 2026-09-15** at `https://becaa-magazine-2026-portal.vercel.app` (Vercel project `becaa-magazine-2026-portal`, commit `d707355`); see `sprints/v3/PREVIEW_DEPLOYMENT.md` for the release record, the preview history and the 2026-09-15 incident.
+
 Supersedes `V3_REVIEW_01` (kept unchanged as the pre-fix build). Local review build only (`06_FINAL_OUTPUT/V3_REVIEW_02/`, built by `npm run release:v3:02` at commit `805b24d`). Not deployed. Same 44 items and content as V3_REVIEW_01; two fixes from the P2 carry-overs:
 
 - Cover page (v2 Task 19 / v3 Task 41): the 1 mm sliver of the contents heading no longer bleeds onto page 1 — root cause was Bengali glyph overflow of the heading on page 2, fixed with headroom on that heading; 69 pages, all other pages unchanged; now guarded by the `test:e2e:cover` pipeline step.

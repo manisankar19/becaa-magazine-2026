@@ -182,7 +182,7 @@ Five corrections to already-approved content, received after Task 1. None adds, 
   - Acceptance: `CHANGELOG.md` gets a `V4_REVIEW_01` section listing added items (`ADV-028`, `ADV-029` — new; `ADV-027` updated from excluded to approved, not "added"), changed (`ART-010` re-extraction, navigation fix, consolidation moves with hashes, retired `extract-v2-golap`, and the five committee corrections: `MSG-001` wording, `MSG-002` title, `ART-003` spellings, `Late Biswajit Sengupta` on `ART-004`/`ART-005`, print-only article justification), unchanged counts (47 items); `05_WEBSITE/DEPLOYMENT.md` unchanged except a note that `V4` uses the same pipeline; `README.md` section on the intake folder mentions the consolidation date. *(Corrects a drafting error in the 2026-09-15 plan, which listed the added items as "ADV-028/029/030" — there is no `ADV-030` in this sprint.)*
   - Files: `CHANGELOG.md`, `05_WEBSITE/README.md`
 
-- [ ] Task 33: Build `V4_REVIEW_01` (P0)
+- [x] Task 33: Build `V4_REVIEW_01` (P0) — **Complete, commit `ee2e9a2` (built at `b96f581`). All 30 gated steps passed; 47 items; 72-page PDF; PDF compare 0 unexplained; nav/v4-pages/justification evidence included; V0–V3 unchanged; no local secret in the output. Two background attempts were killed by the harness for low memory before completion (no output written); the third, foreground run succeeded. Task 34 then found a Decision E deviation (Task 39), so this release is superseded by `V4_REVIEW_02` (Task 40) and kept unchanged.**
   - Acceptance: `npm run release:v4` completes every gated step (validate, typecheck, unit, build, site, integration, visual, PDF, cover, ad, nav, poem, committee-corrections, app E2E, secret and SQL gates, audit gate, PDF compare); `06_FINAL_OUTPUT/V4_REVIEW_01/` contains the site, PDF, QA evidence (nav screenshots, affected PDF page renders, justification screenshots), reports, `REPRODUCTION.md`, `release-manifest.json` with 47 items; V0–V3 folders byte-identical to `HEAD` (existing baseline check); committed.
   - Files: `06_FINAL_OUTPUT/V4_REVIEW_01/**`
 
@@ -194,11 +194,11 @@ Five corrections to already-approved content, received after Task 1. None adds, 
   - Acceptance: `vercel deploy` (no `--prod`) from `05_WEBSITE/` at the release commit; `npm run e2e:app -- --base-url <preview> --public-only` passes; test registrations created on the *preview* database are identified and removed; preview URL, commit and results recorded in `sprints/v4/PREVIEW_DEPLOYMENT.md`; nothing promoted; production untouched (verified by `vercel ls` target list).
   - Files: `sprints/v4/PREVIEW_DEPLOYMENT.md`
 
-- [ ] Task 36: `js-yaml`/audit allow-list review (P1)
+- [x] Task 36: `js-yaml`/audit allow-list review (P1) — **Complete (verification only). `package-lock.json` unchanged since Sprint v3 (`dbc61cb`); release audit gate ok with 3 high advisories, all allow-listed (`playwright`, `sharp`, `xlsx`); no new finding; `audit-allowlist.json` unchanged.**
   - Acceptance: `npm audit --json` gate still `ok` with the unchanged allow-list (`sharp`, `playwright`, `xlsx`); any new finding introduced by this sprint is fixed or explicitly reported, never allow-listed silently.
   - Files: `05_WEBSITE/scripts/audit-allowlist.json` (only if a finding must be documented)
 
-- [ ] Task 37: Retire the `add-v2`/`add-v3` manifest scripts' `v2-incoming` comments and dead code paths (P2)
+- [x] Task 37: Retire the `add-v2`/`add-v3` manifest scripts' `v2-incoming` comments and dead code paths (P2) — **Complete. No `v2-incoming` literal remained in either script (removed in Task 4); both now carry a HISTORICAL header naming what they did and the Sprint v4 path layout; no behavioural change; both integration tests and test:unit pass. (Task 38 had already fixed add-v2's superseded-source path.)**
   - Acceptance: comments and constants referencing the old folder in retired one-shot scripts are updated or the scripts are marked historical in their header; no behavioural change; unit/integration suites green.
   - Files: `05_WEBSITE/scripts/add-v2-manifest-items.mjs`, `05_WEBSITE/scripts/add-v3-manifest-items.mjs`
 

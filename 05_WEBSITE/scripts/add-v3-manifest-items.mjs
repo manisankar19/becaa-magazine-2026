@@ -1,3 +1,7 @@
+// HISTORICAL (Sprint v3 Task 5): one-shot manifest edit (MSG-003 fingerprint, ART-012 insertion)
+// in publication.yaml. Already applied; kept for reproducibility and exercised by
+// tests/integration/add-v3-manifest-items.test.mjs. Paths reflect the Sprint v4 layout: the
+// former 02_INCOMING_CONTENT/v2-incoming/ files now live directly in 02_INCOMING_CONTENT/.
 import fs from "node:fs";
 import path from "node:path";
 import { projectRoot, siteRoot, sha256, readManifest, stripFrontMatter } from "./lib.mjs";

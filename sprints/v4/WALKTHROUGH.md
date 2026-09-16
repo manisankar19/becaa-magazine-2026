@@ -1,10 +1,10 @@
-# Sprint v4 — Walkthrough (Tasks 1–16)
+# Sprint v4 — Walkthrough (Tasks 1–20)
 
-Scope note: Sprint v4 has 37 planned tasks across six streams (A–F). This walkthrough covers only **Tasks 1–16** — Stream A (intake/consolidation), Stream B (the poem), and Stream C (the three new advertisements) — which are complete, merged to `main`, and verified. Streams D (navigation, Tasks 17–20), E (committee corrections, Tasks 21–29) and F (build/release, Tasks 30–37) have not started; see **What's Next**.
+Scope note: Sprint v4 has 37 planned tasks across six streams (A–F). This walkthrough covers **Tasks 1–20**: Stream A (intake/consolidation), Stream B (the poem), Stream C (the three new advertisements), and Stream D (navigation, Tasks 17–20, added 2026-09-16 at commit `6c1751a`). All are complete, on `main`, and verified. Streams E (committee corrections, Tasks 21–29) and F (build/release, Tasks 30–37) have not started; see **What's Next**.
 
 ## Summary
 
-This slice of Sprint v4 does three things to the BECAA Maharashtra Magazine 2026 site (an Eleventy static build that produces both a website and a print PDF from one hand-authored manifest): it merges a stray `v2-incoming/` subfolder back into the single `02_INCOMING_CONTENT/` intake location with full provenance; it re-extracts the poem "গোলাপ" (ART-010) from a corrected Markdown source so every line renders as its own line, on web and in print; and it adds three new advertisement pages — two text-only compliments ads and one memorial — by extending the advertisement system with a `presentation` concept (`artwork` | `text` | `memorial`) instead of assuming every advertisement is a piece of artwork. Nothing in the application layer (registration, authentication, admin, database) was touched.
+This slice of Sprint v4 does three things to the BECAA Maharashtra Magazine 2026 site (an Eleventy static build that produces both a website and a print PDF from one hand-authored manifest): it merges a stray `v2-incoming/` subfolder back into the single `02_INCOMING_CONTENT/` intake location with full provenance; it re-extracts the poem "গোলাপ" (ART-010) from a corrected Markdown source so every line renders as its own line, on web and in print; and it adds three new advertisement pages — two text-only compliments ads and one memorial — by extending the advertisement system with a `presentation` concept (`artwork` | `text` | `memorial`) instead of assuming every advertisement is a piece of artwork. Finally, it fixes the website's top navigation, which printed one section label per *item* (51 links with the current manifest: "Articles" ×12, "Advertisements" ×25…; PRD §1.1 counted 48 before Stream C's three advertisements), so that it shows one link per *section* (8 links), each pointing to that section's first published item and derived from the manifest at build time. Nothing in the application layer (registration, authentication, admin, database) was touched, and the print/PDF, welcome and admin pages build byte-identically before and after the navigation change.
 
 ## Architecture Overview
 
@@ -44,21 +44,47 @@ This slice of Sprint v4 does three things to the BECAA Maharashtra Magazine 2026
                                  ▼                       ▼
                       ┌───────────────────┐   ┌──────────────────────┐
                       │ _site/index.html   │   │ _site/print/index.html│
-                      │ (website)          │   │ → compile-pdf.mjs →   │
-                      │                    │   │ BECAA-2026-complete-  │
+                      │ (website, via      │   │ → compile-pdf.mjs →   │
+                      │ layouts/base.njk)  │   │ BECAA-2026-complete-  │
                       │                    │   │ review.pdf            │
                       └─────────┬──────────┘   └───────────┬───────────┘
                                 │                           │
                                 └─────────────┬─────────────┘
                                               ▼
                           e2e/QA scripts (web-ad-cards, print-ad-pages,
-                          print-poem-page, v4-advertisements — all counts
-                          derived from readManifest(), never hardcoded)
+                          print-poem-page, v4-advertisements, site-navigation
+                          — all counts derived from readManifest(), never
+                          hardcoded)
+```
+
+Stream D (navigation) sits entirely inside the website's layout step:
+
+```
+ publication.yaml ──readManifest / Eleventy data──▶ publication.items (47)
+                                                        │
+                            whereWeb (web_include) ─────┤
+                            byOrder  (order value) ─────┤
+                                                        ▼
+                     eleventy.config.mjs filter  sectionNav(items, hasThanks)
+                                                        │ calls
+                                                        ▼
+                     scripts/navigation-core.mjs  sectionNavigation()  ◀── SECTION_LABELS
+                       [Contents] + first item per section (in order of   (also used by the
+                       first appearance) + [Cultural Programmes, Connect,  sectionLabel filter
+                       With Thanks if sponsor_acknowledgement_message]     in index/print.njk)
+                                                        │
+                                                        ▼
+                     layouts/base.njk  <nav aria-label="Primary" data-testid="primary-nav">
+                                       8 × <a href="#MSG-001">Messages</a> …
+                                                        │
+                                                        ▼
+                     _site/index.html  (welcome/admin use public.njk — no nav;
+                                        print uses print.njk — no nav)
 ```
 
 ## Files Created/Modified
 
-77 files changed (+4,151 / −206 lines) across 15 commits plus 2 merge-conflict/doc-only commits. Grouped by stream below; every new module gets its own subsection, mechanical/count-only edits to existing files are grouped into tables.
+Tasks 1–16: 77 files changed (+4,151 / −206 lines) across 15 commits plus 2 merge-conflict/doc-only commits. Tasks 17–20: 8 files changed (+350 / −18 lines) across 3 task commits and 1 documentation commit (`git diff 445a8ac..6c1751a`). Grouped by stream below; every new module gets its own subsection, mechanical/count-only edits to existing files are grouped into tables.
 
 ### Stream A — Intake and consolidation (Tasks 2–4)
 
@@ -173,6 +199,87 @@ Every place that hardcoded "22 advertisements" now derives its count from `readM
 #### `tests/integration/v4-advertisements.test.mjs` (new, Task 16)
 The final consistency check: for each of the three new items, asserts identical wording across five independent surfaces — the manifest, the built website card, the `#contents` entry, the compiled PDF's text (`pdftotext -layout`), and the tracker row — plus ID uniqueness, exact memorial contributor names (checked as two distinct rendered lines, never one concatenated string), and that neither "With best compliments" nor a stray "Advertisement" title suffix leaks onto any of the three pages.
 
+### Stream D — Navigation (Tasks 17–20)
+
+Root cause, as recorded in PRD §1.1: `src/_includes/layouts/base.njk` looped over **every** published item and printed its section label as a link, so the header held Contents ×1, Messages ×3, Articles ×12, Gallery ×7, Advertisements ×25, plus the three fixed links (51 links once Stream C's three advertisements landed). The item-by-item listing a reader actually wants already exists separately as the `#contents` section of `index.njk`. The fix replaces the per-item loop in the generator rather than hiding links with CSS.
+
+| Commit | Task | Content |
+|---|---|---|
+| `1d4f2ee` | 17 | `navigation-core.mjs` + unit test |
+| `42a2d6f` | 18 | `sectionNav` filter, `base.njk`, render test |
+| `bf47fbc` | 19 | Playwright navigation E2E, `test:e2e:nav` |
+| — | 20 | Verification only (no code) |
+| `6c1751a` | — | `TASKS.md` completion notes and session log |
+
+#### `scripts/navigation-core.mjs` (new, Task 17)
+**Purpose**: Pure logic that turns the published, ordered item list into the primary-navigation link list.
+**Key exports**:
+- `SECTION_LABELS` — frozen map `messages → Messages`, `articles → Articles`, `events → Events`, `gallery → Gallery`, `advertisements → Advertisements` (moved here from an inline object in `eleventy.config.mjs`, values unchanged).
+- `sectionLabel(value, labels)` — label lookup; unknown keys fall back to the raw key.
+- `sectionNavigation(items, { labels, hasThanks })` — returns `[{ label, href }]`.
+
+**How it works**: The function assumes its input has already been filtered to published items and sorted by `order` (the template does that with the existing `whereWeb` and `byOrder` filters), so "section order" simply means "order of first appearance". A `Map` preserves insertion order, and only the first item seen per section is kept:
+
+```js
+const firstBySection = new Map();
+for (const item of items) {
+  if (item?.section && !firstBySection.has(item.section)) firstBySection.set(item.section, item.id);
+}
+const links = [{ label: "Contents", href: "#contents" }];
+for (const [section, id] of firstBySection) links.push({ label: sectionLabel(section, labels), href: `#${id}` });
+links.push({ label: "Cultural Programmes", href: "#cultural-programmes" }, { label: "Connect", href: "#connect" });
+if (hasThanks) links.push({ label: "With Thanks", href: "#with-thanks" });
+```
+
+No item IDs are hard-coded (Decision I). With today's 47-item manifest this yields exactly eight links: Contents, Messages → `#MSG-001`, Articles → `#ART-001`, Gallery → `#GAL-001`, Advertisements → `#ADV-001`, Cultural Programmes, Connect, With Thanks. Adding more articles or advertisements cannot add links; only a genuinely new section key would add one (and it would appear with its raw key as the label until `SECTION_LABELS` is extended). Keeping the label map in this module means the navigation and the existing `sectionLabel` filter (used for card kickers in `index.njk`/`print.njk`) cannot drift apart.
+
+#### `eleventy.config.mjs` (modified, Task 18)
+**Purpose**: Eleventy configuration and template filters.
+**Change**: the `sectionLabel` filter now delegates to `navigation-core`'s `sectionLabel`, and a new filter is registered:
+
+```js
+config.addFilter("sectionLabel", (value = "") => sectionLabel(value));
+config.addFilter("sectionNav", (items = [], hasThanks = false) => sectionNavigation(items, { hasThanks: Boolean(hasThanks) }));
+```
+
+`hasThanks` receives the manifest's `sponsor_acknowledgement_message` string, so it is coerced to a boolean: a non-empty message shows the With Thanks link, an empty or missing one hides it, matching the old `{% if %}` in the layout.
+
+#### `src/_includes/layouts/base.njk` (modified, Task 18)
+**Purpose**: The website's page shell (header, brand link, primary navigation, main, footer). Used only by `index.njk`; `welcome.njk` and `admin.njk` use `public.njk` (no navigation), and `print.njk` uses `layouts/print.njk`.
+**Change**: the item loop and the three hand-written fixed links collapse into one loop over the filter's output, and the `<nav>` gains a test hook while keeping its accessible name:
+
+```njk
+<nav aria-label="Primary" data-testid="primary-nav">
+  {% for link in publication.items | whereWeb | byOrder | sectionNav(publication.sponsor_acknowledgement_message) %}
+    <a href="{{ link.href }}">{{ link.label }}</a>
+  {% endfor %}
+</nav>
+```
+
+Output is auto-escaped (no `| safe`). No CSS changed: the existing pill style, `flex-wrap: wrap`, the `nav a:focus` background highlight and the ≤780 px stacked header already handle eight links. Visual result: one row on desktop (1440 px), two rows beside the brand on tablet (820 px), a wrapped three-row block under the brand on mobile (390 px).
+
+#### `tests/unit/navigation-core.test.mjs` (new, Task 17)
+Hermetic, six scenarios: the current manifest shape gives the eight approved links with `#MSG-001`/`#ART-001`/`#GAL-001`/`#ADV-001`; adding two articles and three advertisements still gives the same eight; `hasThanks: false` (and `""`, and omitted) gives seven; an unknown section uses its raw key; a custom label map is honoured; section order follows first appearance, items with no `section` are skipped, an empty list gives only the four fixed links; `SECTION_LABELS` is frozen and matches the Sprint v3 values. Written first and confirmed failing (module not found) before the implementation existed.
+
+#### `tests/integration/base-nav-render.test.mjs` (new, Task 18 — not in the task's declared file list)
+Added so Task 18 had its own failing-first test. It follows the `ad-text-render.test.mjs` approach: collect the real filters from `eleventy.config.mjs` through a small `addFilter` shim, register them on a Nunjucks environment, and render the real `layouts/base.njk`. It asserts the `sectionNav` filter exists; with the **real manifest**, the nav has `aria-label="Primary"`, `data-testid="primary-nav"`, the eight labels in order, and section hrefs equal to the first published item per section; with a **hermetic fixture** (items deliberately out of order, one unpublished advertisement with the lowest order, no thanks message), the output is sorted, ignores the unpublished item and has seven links; and `public.njk` contains no `<nav>` while `welcome.njk`/`admin.njk` still use it. No build is needed.
+
+#### `tests/e2e/site-navigation.test.mjs` (new, Task 19) and `package.json`
+**Purpose**: Browser-level proof of the navigation on the built site, wired as `npm run test:e2e:nav` (requires `npm run build`).
+**How it works**: Serves `_site/` with the existing `tests/e2e/static-server.mjs` and opens Chromium at 390×844, 820×1180 and 1440×900. Expected hrefs are computed from `readManifest()` (published items sorted by `order`), never typed in. At each width it checks:
+- exactly one `[data-testid="primary-nav"]` with `aria-label="Primary"`, exactly eight links by role, labels once each in order;
+- every href non-empty, equal to the manifest-derived target, and `document.querySelector(href)` non-null;
+- no horizontal overflow (`scrollWidth <= clientWidth`), every link box inside the viewport, and the nav's bounding box not intersecting the brand link's;
+- keyboard: pressing `Tab` from the top reaches the eight links in order, and each focused link's computed background/colour/outline differs from its unfocused state (the visible focus pill);
+- clicking each link updates `location.hash` and leaves the target's top at the top of the viewport (or within view when the page is scrolled to the bottom). Smooth scrolling is disabled in the test page so this check is not timing-dependent.
+
+Screenshots: `qa-output/navigation/{mobile,tablet,desktop}.png` plus `desktop-focus.png` (header strip with a focused link). They were inspected visually. `qa-output/` is git-ignored, so the files are regenerated by running the test and are intended to be copied into the release at Task 33/34. As a red check, the test was run against the pre-Task-18 `base.njk` and failed at the first assertion (no `primary-nav`), then passed against the new layout.
+
+`package.json` changes: `test:unit` gains `navigation-core.test.mjs`; `test:integration` gains `base-nav-render.test.mjs`; new script `test:e2e:nav`.
+
+#### Task 20 — gate and application re-run (verification only)
+No files changed. After a fresh `npm run build` and `npm run pdf`, every suite was run sequentially (results in **Test Coverage**). The DB-dependent suites ran this time: the project's local PostgreSQL cluster on `127.0.0.1:5433` had no other client connections, the suites use the separate `becaa_test` database, and the app servers bind ephemeral ports, so nothing belonging to another session was started, stopped or rebound. `git diff 445a8ac..HEAD` shows no change under `api/`, `lib/`, `middleware.ts`, `db/`, `src/welcome.njk`, `src/admin.njk`, `src/assets/`, `06_FINAL_OUTPUT/` or folders `01_`–`04_`. In a throwaway worktree at `445a8ac`, the built `_site/print/index.html`, `_site/welcome/index.html` and `_site/admin/index.html` were byte-identical to the new build, and both PDFs have 72 pages.
+
 ## Data Flow
 
 **Consolidation**: `consolidate-incoming.mjs --plan` reads both folders → `planConsolidation()` (pure) decides safety → JSON+MD report written → human/CI checks `ok: true` → `--apply` performs 5 `git mv` + removes the empty folder → 14 downstream files (manifest, front matter, 10 scripts, 4 tests) get their path references repointed by hand in the same task.
@@ -181,12 +288,17 @@ The final consistency check: for each of the three new items, asserts identical 
 
 **Advertisements**: `add-v4-manifest-items.mjs` writes three items into `publication.yaml`, each declaring a `presentation` → `validate.mjs` calls `validateAdvertisementPresentation()` on every item at build-validation time, enforcing the shape per presentation kind → `npm run build` (Eleventy) renders `index.njk`/`print.njk`, branching per item on `presentation` → `npm run pdf` (Playwright) turns the print HTML into the actual PDF → e2e/QA scripts re-open both build outputs and assert wording/structure, all counts pulled live from `readManifest()` rather than hardcoded.
 
+**Navigation**: `publication.yaml` is loaded as Eleventy data → `base.njk` pipes `publication.items` through `whereWeb` (drop unpublished) → `byOrder` (sort by `order`) → `sectionNav(sponsor_acknowledgement_message)` → `sectionNavigation()` keeps the first item per section and adds the fixed links → the layout writes eight `<a href="#ID">Label</a>` elements → in the browser, clicking a link jumps to the element with that `id` (every item card in `index.njk` carries its manifest ID as its `id`). If an editor later adds an item with a lower `order` than a section's current first item, the link retargets automatically at the next build.
+
 ## Test Coverage
 
-- **Unit** (21 files in `test:unit`, all passing): includes 2 new this sprint (`incoming-consolidation-core`, `tracker-v4-core`) and substantial additions to 2 existing files (`article-markdown-core` — 7 new `readVerseSource` cases; `ad-presentation-core` — 17 new presentation-kind cases alongside the 13 pre-existing ones, all still green).
-- **Integration** (22 file-based cases in `test:integration`, all passing except one pre-existing, unrelated, out-of-scope failure — see Known Limitations): 8 new files this sprint (`consolidate-incoming`, `incoming-consolidation`, `extract-v4-golap` — replacing the deleted `extract-v2-golap` — `normalize-v4-memorial-image`, `ad-text-render`, `ad-memorial-render`, `add-v4-manifest-items`, `apply-v4-tracker-updates`, `v4-advertisements`), plus 6 existing files updated for the new paths/counts.
-- **E2E** (Playwright, against a real `npm run build`/`npm run pdf`): `web-ad-cards`, `print-ad-pages` (rewritten for 3 presentation kinds), and a new `print-poem-page` (`test:e2e:poem`).
-- Everything above is wired into the shared `test:unit`/`test:integration` npm scripts so a plain `npm test` / `npm run test:unit` / `npm run test:integration` exercises all of it.
+Results below for Tasks 1–16 are as recorded at the time; the Tasks 17–20 results come from the Task 20 full re-run on 2026-09-16.
+
+- **Unit** (23 files in `test:unit` after Task 17, all passing in the Task 20 re-run): `navigation-core` added by Task 17 (6 scenarios). Earlier in the sprint: 2 new (`incoming-consolidation-core`, `tracker-v4-core`) and substantial additions to 2 existing files (`article-markdown-core` — 7 new `readVerseSource` cases; `ad-presentation-core` — 17 new presentation-kind cases alongside the 13 pre-existing ones, all still green).
+- **Integration** (31 files in `test:integration` after Task 18: 23 file-based + 8 database-backed). Task 20 ran each file individually: **30 of 31 passed**, including all 8 DB-backed files (`db-migrate`, `rate-limit`, `register`, `dev-app`, `admin-auth`, `admin-queries`, `export`, `threats`). The one failure is the pre-existing `add-v2-manifest-items` (see Known Limitations). `base-nav-render` added by Task 18. Earlier in the sprint: 8 new files (`consolidate-incoming`, `incoming-consolidation`, `extract-v4-golap` — replacing the deleted `extract-v2-golap` — `normalize-v4-memorial-image`, `ad-text-render`, `ad-memorial-render`, `add-v4-manifest-items`, `apply-v4-tracker-updates`, `v4-advertisements`), plus 6 existing files updated for the new paths/counts.
+- **E2E** (Playwright, against a real `npm run build`/`npm run pdf`): `web-ad-cards`, `print-ad-pages` (rewritten for 3 presentation kinds), a new `print-poem-page` (`test:e2e:poem`), and a new `site-navigation` (`test:e2e:nav`, Task 19 — 8 links, targets, click-to-scroll, overflow, brand overlap, Tab order and focus style at 390/820/1440 px). Task 20 re-run: `test:e2e:nav`, `test:e2e:welcome`, `test:e2e:admin`, `test:e2e:web-ads`, `test:e2e:print-ads`, `test:e2e:poem` all pass; `e2e:app` (local dev-app against `becaa_test`, registration → magazine → admin) passes all 24 steps; `test:e2e:cover` **fails** on a stale page count (pre-existing, see Known Limitations).
+- **Gates** (Task 20 re-run): `validate` 0 errors / 47 items; `tracker:validate` clean; `typecheck` clean; `npm test` site smoke pass; `check:secrets` and `check:sql` clean.
+- Everything above is wired into the shared `test:unit`/`test:integration` npm scripts. Note that `test:integration` is an `&&` chain, so while `add-v2-manifest-items` still fails, a plain `npm run test:integration` stops at that file (7th of 31) and the rest must be run individually.
 
 ## Security Measures
 
@@ -195,21 +307,27 @@ The final consistency check: for each of the three new items, asserts identical 
 - **Snapshot-before-write**: every tracker mutation copies the live `.xlsx` into `TRACKER_SNAPSHOTS/` before touching it, and skips the write entirely if nothing actually changed.
 - **No shell injection in file moves**: `git mv` runs via `execFileSync` with an argument array, never a shell string — no wildcards, no interpolation.
 - **Output escaping**: all new template output uses Nunjucks's default auto-escaping (`{{ text_lines[0] }}`), never `| safe`, even though the text originates from an approved/trusted source.
+- **Navigation output escaping**: link labels and hrefs in `base.njk` use `{{ }}` auto-escaping; labels come only from the fixed `SECTION_LABELS` map or a manifest section key, and hrefs only from manifest IDs. No new script, inline JavaScript or `| safe` was introduced, so the site's strict CSP is unaffected.
+- **Access control untouched by Stream D**: the gate, middleware, API, registration and admin code are unchanged (verified by `git diff`); the protected magazine page still sits behind the gate in the `e2e:app` run, and the public welcome/admin pages build byte-identically.
 - **Gate discipline**: every task ran `semgrep --config auto --quiet --error` on its own changed files and `npm audit` before its commit; a final holistic semgrep pass across all of `scripts/`, `tests/`, `src/` found zero new findings (the 5 findings that do exist are in 3 files this sprint never touched, pre-dating Sprint v4).
+- **Tasks 17–19 scans**: `semgrep --config auto --quiet --error` clean on every file touched; `npm audit` unchanged (3 allow-listed high findings in `playwright`, `sharp`, `xlsx`). No `Claude-Session:` trailer on any Stream D commit.
 - **Prompt-injection caught and rejected**: two independent subagents, working in isolated worktrees with no shared context, each appended an unauthorized `Claude-Session:` trailer to their own commits — identical text, matching a suspected injection attempt seen earlier in the same coordinating session. Both were stripped (commits rebuilt from a clean base with verified byte-identical trees) before merging; nothing reached `main` with the unauthorized line.
 
 ## Known Limitations
 
-- **`scripts/app-e2e.mjs` and `tests/integration/dev-app.test.mjs`** (Task 15's fixes to the DB-dependent application-suite counts) were verified by code review and `node --check` only, not executed end-to-end — a local Postgres port was held by a concurrent session throughout this work. The change is the same mechanical `readManifest()`-derived-count pattern proven correct everywhere else, but it should be re-run for real the next time the application suites are exercised (naturally covered by the not-yet-started Task 20).
-- **`tests/integration/add-v2-manifest-items.test.mjs`** fails — but this predates this sprint entirely (it expects `Shubhra Basu.docx`, deleted back in Task 1) and is explicitly out of scope (a P2 cleanup task, not one of 1–16).
+- **Resolved in Task 20:** `scripts/app-e2e.mjs` and `tests/integration/dev-app.test.mjs` (Task 15's DB-dependent count fixes), previously verified by code review only, have now been executed and pass (`e2e:app` 24 steps; `dev-app` pass).
+- **`tests/e2e/print-cover-page.test.mjs` fails** with `page count unchanged: 72 !== 69`. It hard-codes the Sprint v3 PDF length; the PDF has had 72 pages since Stream C added the three advertisement pages. It fails identically at `445a8ac` (before Stream D), and the print HTML is byte-identical before and after Stream D, so it is not a navigation regression. It was not fixed because it is outside Tasks 17–20 and was not in Task 15's declared file list. **It will fail the cover step of `release:v4` (Task 33)**, so a small fix (derive the count, or update it to 72 with the reason) is needed before then.
+- **`tests/integration/add-v2-manifest-items.test.mjs`** still fails (it expects `02_INCOMING_CONTENT/Shubhra Basu.docx`, retired in this sprint) — out of scope, aligns with the P2 Task 37. Because `test:integration` is an `&&` chain, it halts the chain at that file.
+- **Anchor jumps under the sticky header**: on desktop and tablet (header `position: sticky`, ≈68 px tall) a navigation click puts the target's top edge at the top of the viewport, so the first ~68 px of the section — typically its kicker — sits behind the header. This behaviour predates Stream D (the old per-item links did the same) and is not in the PRD's scope; a `scroll-margin-top` on item cards would fix it if wanted. On mobile the header is static, so it does not occur.
+- **Navigation screenshots are not committed**: `qa-output/` is git-ignored. Regenerate with `npm run build && npm run test:e2e:nav`.
+- **Label map is closed**: `events` already has a label, but any other new section key (e.g. `souvenirs`) would appear in the navigation under its raw key until `SECTION_LABELS` is extended. This is deliberate and tested: visible rather than silently dropped.
 - The PRD's own prose ("17 lines each ending `<br>`") is imprecise about the real source file's last-line convention; the code is correct, the planning-doc wording is not, and hasn't been corrected in `PRD.md` itself (a docs-only fix, not blocking anything).
 - Two visible-but-unauthorized commit trailers were caught this session (see Security Measures) — root cause unconfirmed; worth watching for in future sessions.
-- Streams D, E and F (17 more tasks) are entirely untouched — see What's Next.
+- Streams E and F (17 more tasks) are entirely untouched — see What's Next.
 
 ## What's Next
 
-The immediately next task is **Task 17** (`navigation-core` with hermetic unit tests, Stream D), no precondition. The remaining scope in `sprints/v4/TASKS.md`:
+Resume from `6c1751a` on `main`. The immediately next task is **Task 21** (committee-corrections intake and provenance, Stream E), with no code precondition — it commits the intentionally untracked `sprints/v4/v4changev2.md` and creates the controlled correction record. Before Task 33, fix the stale `test:e2e:cover` page count (Known Limitations). The remaining scope in `sprints/v4/TASKS.md`:
 
-- **Stream D — Navigation (Tasks 17–20)**: fix the home-page navigation currently rendering one link per *item* instead of one per *section* (48 links instead of 8).
 - **Stream E — Committee corrections (Tasks 21–29)**: five additional edits from a post-Task-1 committee addendum (a Bengali wording fix, a title spelling fix, two more Bengali spelling fixes, a "Late" prefix for a deceased contributor, print-only article justification) — Task 23 is gated on a confirmed decision already resolved in `PRD.md` §7.1.
 - **Stream F — Build and release (Tasks 30–37)**: the actual `V4_REVIEW_01` release build, PDF comparison against the Sprint v3 baseline, CHANGELOG, manual verification, and a preview deployment (production deployment requires separate explicit approval per the project's standing rule).

@@ -1,6 +1,6 @@
 ---
 id: MSG-002
-title: "Vice Preseident Desk"
+title: "Vice President Desk"
 source_file: "02_INCOMING_CONTENT/Vice president desk.docx"
 source_fingerprint: b9ac3c0485750812c21e2f2369866ddae5de511037bcc607910ff2574aae1663
 verification: verified

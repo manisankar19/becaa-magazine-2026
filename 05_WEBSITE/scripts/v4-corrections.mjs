@@ -10,6 +10,8 @@
 // `file` is relative to 05_WEBSITE/.
 export const V4_FILE_CORRECTIONS = [
   { id: "MSG-001", file: "src/content/messages/MSG-001-president-desk.md", find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF", expectedCount: 1 },
+  { id: "MSG-002", file: "src/_data/publication.yaml", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 2 }, // title and alt
+  { id: "MSG-002", file: "src/content/messages/MSG-002-vice-preseident-desk.md", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 1 },
 ];
 
 // How each correction shows up in rendered text (website, PDF); used by the regression

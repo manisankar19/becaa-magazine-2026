@@ -31,7 +31,7 @@ items:
     notes: 'Tracker Item ID 16. Exact approved source: President Desk.docx.'
   - id: MSG-002
     type: message
-    title: Vice Preseident Desk
+    title: Vice President Desk
     language: en
     contributor: Debojit Dutta Biswas
     designation: ''
@@ -51,7 +51,7 @@ items:
     print_include: true
     caption: ''
     credit: ''
-    alt: Vice Preseident Desk — Debojit Dutta Biswas
+    alt: Vice President Desk — Debojit Dutta Biswas
     notes: 'Tracker Item ID 17. Exact approved source: Vice president desk.docx.'
   - id: MSG-003
     type: message

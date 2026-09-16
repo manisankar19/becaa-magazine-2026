@@ -90,4 +90,40 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   assert.ok(pdf.includes(squash(MSG001_SENTENCE.untouched)), "MSG-001 PDF: salutation unchanged");
 }
 
+// --- MSG-002: title spelling (Task 24, Decision P) ------------------------------
+{
+  const OLD = "Vice Preseident Desk";
+  const NEW = "Vice President Desk";
+  const msg002 = item("MSG-002");
+  assert.equal(msg002.title, NEW, "MSG-002 manifest title corrected");
+  assert.equal(msg002.alt, `${NEW} — Debojit Dutta Biswas`, "MSG-002 manifest alt repeats the corrected title");
+  const content = read("src/content/messages/MSG-002-vice-preseident-desk.md");
+  assert.match(content, /^title: "Vice President Desk"$/m, "MSG-002 front matter title corrected");
+  assert.ok(content.includes("Vice President\u2019s Desk"), "MSG-002 body heading left unchanged (Decision P)");
+  assert.ok(fs.existsSync(path.join(siteRoot, "src/content/messages/MSG-002-vice-preseident-desk.md")), "content filename unchanged (Decision P)");
+  assertOnlyRecordedSubstitutions("MSG-002");
+
+  // Nowhere in the source data or the build output.
+  assert.equal(countOccurrences(read("src/_data/publication.yaml"), OLD), 0, "manifest: superseded title absent");
+  const builtFiles = [];
+  const walk = (dir) => { for (const e of fs.readdirSync(dir, { withFileTypes: true })) { const f = path.join(dir, e.name); if (e.isDirectory()) walk(f); else if (/\.(html|json|txt|xml)$/.test(e.name)) builtFiles.push(f); } };
+  walk(path.join(siteRoot, "_site"));
+  for (const f of builtFiles) assert.ok(!fs.readFileSync(f, "utf8").includes(OLD), `${path.relative(siteRoot, f)}: superseded title absent`);
+
+  // Website: card heading once, contents entry once; title not duplicated on the item.
+  const web = webArticle("MSG-002");
+  assert.match(web, /<h2[^>]*>Vice President Desk<\/h2>/, "MSG-002 website heading corrected");
+  assert.equal(countOccurrences(web, NEW), 1, "MSG-002 website: title shown once on the item");
+  const contents = indexHtml.slice(indexHtml.indexOf('id="contents"'), indexHtml.indexOf("</section>", indexHtml.indexOf('id="contents"')));
+  assert.equal(countOccurrences(contents, NEW), 1, "MSG-002 website contents entry corrected");
+  assert.equal(countOccurrences(contents, OLD), 0);
+
+  // Print HTML and PDF: contents entry and heading.
+  assert.match(printSection("MSG-002"), /<h1>Vice President Desk<\/h1>/, "MSG-002 print heading corrected");
+  assert.equal(countOccurrences(pdfItemText("MSG-002"), NEW), 1, "MSG-002 PDF heading corrected, shown once");
+  assert.ok(!pdfItemText("MSG-002").includes(OLD), "MSG-002 PDF page: superseded title absent");
+  assert.match(pdfContents, /\d+\.\s+Vice President Desk\s+MSG-002/, "MSG-002 PDF contents entry corrected");
+  assert.ok(!pages.join("\f").includes(OLD), "PDF: superseded title absent everywhere");
+}
+
 console.log("v4-committee-corrections: all assertions passed");

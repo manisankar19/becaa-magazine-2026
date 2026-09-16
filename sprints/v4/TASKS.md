@@ -1,17 +1,48 @@
 # Sprint v4 — Tasks
 
-## Status: Approved (2026-09-15); `/dev` not started
+## Status: Approved (2026-09-16); `/dev` not started beyond Task 1
 
-Reference: `sprints/v4/PRD.md` (draft 2026-09-15), `sprints/v4/Changev4.md`
-Protected: every folder under `06_FINAL_OUTPUT/` (V0–V3), `01_REFERENCE_2025/`, `03_ADVERTISEMENTS/`, `BECAA_Magazine_2026_Master.docx`, the database, migrations, Neon resources, environment variables, and every file under `05_WEBSITE/api/`, `lib/`, `middleware.ts`, `db/`, `src/welcome.njk`, `src/admin.njk`, `src/assets/js/`. `02_INCOMING_CONTENT/` is written only by Task 1 (commit of the two files the owner placed there) and Task 4 (`git mv` of five files, authorised by Changev4 §7).
-Conventions carried from v3: every tracker edit is preceded by a timestamped copy in `04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/` (`tracker-io.mjs`); pure logic lives in a `*-core.mjs` module with a hermetic unit test written first; scripts that touch real files get an integration test; each task ends with `semgrep --config auto --quiet --error` on new files and `npm audit` (allow-list unchanged); no secrets, `.env*` files or credentials are ever committed; nothing is deployed to production in this sprint (preview only, Task 33); production database contents are never modified. Decision letters refer to PRD §7; each task below uses the *recommended* value, so an amended decision changes only that value.
+Reference: `sprints/v4/PRD.md` (amended and re-approved 2026-09-16), `sprints/v4/Changev4.md`, `sprints/v4/v4changev2.md` (committee corrections addendum)
+**Task 1 is complete** — commit `fbe59d6`. It is recorded below for history only; do not repeat, revert or rewrite it. `/dev` resumes at Task 2, the next uncompleted task. All decisions, including O–U (PRD §7.1), are resolved and approved.
+Protected: every folder under `06_FINAL_OUTPUT/` (V0–V3 and any earlier V4 output), `01_REFERENCE_2025/`, `03_ADVERTISEMENTS/`, `BECAA_Magazine_2026_Master.docx`, the database, migrations, Neon resources, environment variables, every file under `05_WEBSITE/api/`, `lib/`, `middleware.ts`, `db/`, `src/welcome.njk`, `src/admin.njk`, `src/assets/js/`, and every original file already committed under `02_INCOMING_CONTENT/`. `02_INCOMING_CONTENT/` is written only by Task 1 (done), Task 4 (`git mv` of five files, authorised by Changev4 §7), and Task 21 (the committee correction record, authorised by v4changev2 §3.2 — a new file, never an overwrite of an original).
+Conventions carried from v3: every tracker edit is preceded by a timestamped copy in `04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/` (`tracker-io.mjs`); pure logic lives in a `*-core.mjs` module with a hermetic unit test written first; scripts that touch real files get an integration test; each task ends with `semgrep --config auto --quiet --error` on new files and `npm audit` (allow-list unchanged); no secrets, `.env*` files or credentials are ever committed; nothing is deployed to production in this sprint (preview only, Task 35); production database contents are never modified. Decision letters refer to PRD §7 (A–N) and §7.1 (O–U); each task below uses the *recommended* value, so an amended decision changes only that value.
 Local prerequisites: Node 22, `unzip`, `pdftotext` (all present); Playwright Chromium; local PostgreSQL cluster (`npm run db:local:start`) for the application suites only.
+
+## Session handoff protocol (every `/dev` session)
+
+Every implementation session — whether it completes one task or several — ends by appending a dated entry to a `## Session log` section at the bottom of this file (create it if absent) with exactly these fields, before stopping:
+
+- **Completed task(s):** task number(s) and title(s) finished this session.
+- **Commit:** the commit hash(es) created.
+- **Changed files:** the file list actually touched (not just the task's declared file list — note any deviation).
+- **Test results:** which suites/scripts were run and their outcome (pass/fail counts, not just "passed").
+- **Unresolved issues:** anything found but not fixed, any decision still open, any test skipped or weakened, with a reason.
+- **Next task:** the exact next task number to pick up, and any precondition it is waiting on (e.g. "Task 12 is waiting on the memorial image normalisation script from Task 12's own dependencies").
+
+This is required regardless of whether the task list below already has a "handoff" note baked into a task's acceptance criteria — it is a whole-session requirement, not a per-task one.
+
+## Task renumbering — old to new mapping
+
+The committee-corrections addendum (`v4changev2.md`) is inserted as a new **Stream E — Committee corrections** between the original Stream D (Navigation) and the original Stream E (Release), which is renamed **Stream F — Build and release** and renumbered. Tasks 1–20 keep their original numbers; nothing before the insertion point moved.
+
+| Old # (2026-09-15 plan) | New # | Title |
+|---|---|---|
+| 21 | 30 | `release:v4` and version mapping |
+| 22 | 31 | PDF comparison against the Sprint v3 baseline |
+| 23 | 32 | CHANGELOG and documentation |
+| 24 | 33 | Build `V4_REVIEW_01` |
+| 25 | 34 | Manual browser and PDF verification evidence |
+| 26 | 35 | Preview deployment of `V4_REVIEW_01` for manual approval |
+| 27 | 36 | `js-yaml`/audit allow-list review |
+| 28 | 37 | Retire `add-v2`/`add-v3` manifest scripts' dead code |
+
+New tasks 21–29 (Stream E, committee corrections) have no old number — they did not exist in the 2026-09-15 plan.
 
 ---
 
 ## Stream A — Intake and consolidation
 
-- [ ] Task 1: Archive the superseded poem source and make the intake commit (P0)
+- [x] Task 1: Archive the superseded poem source and make the intake commit (P0) — **Complete, commit `fbe59d6`. Do not repeat.**
   - Acceptance: `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-15/Shubhra Basu.docx` equals the git `HEAD` blob (SHA-256 `83ae8311a1db9205…`), with a `README.md` in the 2026-09-14 format listing superseded hash (`83ae8311a1db9205…`) and the new authoritative source (`Shubhra Basu.md`, SHA-256 `0d068f30b846c0b7…`, 1,533 bytes), the format change (committed DOCX with `<w:br/>` → authoritative Markdown `.md` with `<br>` line breaks) and "published as ART-010"; `tests/integration/superseded-sources.test.mjs` extended to assert the new archive and README; one commit contains `02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.md`, `02_INCOMING_CONTENT/Supriyo.JPG` (SHA-256 `d15810866b6bf285…`), the archive folder and `sprints/v4/`; `git status` clean afterwards (the deleted `.docx` entry is staged as removed).
   - Files: `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-15/Shubhra Basu.docx` (archived from git HEAD), `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-15/README.md`, `02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.md` (new source), `02_INCOMING_CONTENT/Supriyo.JPG`, `sprints/v4/PRD.md`, `sprints/v4/TASKS.md`, `05_WEBSITE/tests/integration/superseded-sources.test.mjs`
 
@@ -97,36 +128,80 @@ Local prerequisites: Node 22, `unzip`, `pdftotext` (all present); Playwright Chr
   - Acceptance: `npm run build`, `test:unit`, `test:integration`, `test:e2e:welcome`, `test:e2e:admin`, `e2e:app` (local) all green with the new nav and the 47-item manifest; `check:secrets` and `check:sql` clean; no file under `api/`, `lib/`, `middleware.ts` changed (`git diff --stat` shows none).
   - Files: none (verification task; record results in TASKS.md completion note)
 
-## Stream E — Release, verification and preview
+## Stream E — Committee corrections (added 2026-09-16, from `sprints/v4/v4changev2.md`)
 
-- [ ] Task 21: `release:v4` and version mapping (P0, Decision L)
-  - Acceptance: `stepsForVersion("V4_REVIEW_01")` returns the V3 step list plus the new steps `test:e2e:nav`, `test:e2e:poem`, `test:v4-advertisements` (or their `npm` names) in the tested order; unit test updated; `package.json` gains `release:v4` (`RELEASE_VERSION=V4_REVIEW_01`); reproduction text mentions `unzip`/`pdftotext`.
+Five corrections to already-approved content, received after Task 1. None adds, removes or reorders a publication item; the manifest stays at 47 items. Ordered before Stream F so the release build (Task 33) sees a fully corrected manifest. Every task here is its own commit, snapshotting the tracker first where the tracker is touched.
+
+- [ ] Task 21: Committee-corrections intake and provenance (P0, Decision T)
+  - Acceptance: `sprints/v4/v4changev2.md` is committed (already present, untracked); a new controlled correction record `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` lists, per manifest item ID (`MSG-001`, `MSG-002`, `ART-003`, `ART-004`, `ART-005`), the exact old text, the exact new text, and the committee's stated reason; the `MSG-001` entry records the confirmed sentence exactly (Decision O, PRD §7.1): old `কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, বেকান পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।` → new `কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, BECAA-র পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।`, with an explicit note that the other standalone `বেকান` ("প্রিয় বেকান ও বেকানী বন্ধুরা") and `বেকানী` are out of scope and must not be touched; no file under `02_INCOMING_CONTENT/` other than these two new files is touched; `git status` clean afterwards.
+  - Files: `sprints/v4/v4changev2.md`, `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md`
+
+- [ ] Task 22: Text-correction core and fixtures (P0)
+  - Acceptance: pure `scripts/text-correction-core.mjs` exports `applyCorrection(text, { find, replace, expectedCount })` returning the corrected text and throwing (not silently no-op-ing) if `find` occurs zero times or a different number of times than `expectedCount`, so a corrected file can never drift silently on a later re-run; failing-first unit tests cover: single occurrence replaced, zero occurrences throws, more-than-expected occurrences throws, a fixture reproducing the real `বেকান` vs `বেকানী` word-boundary distinction (word-boundary match required, substring match rejected) built from the verified counts (§1.2 of the PRD: 2 standalone `বেকান`, 1 `বেকানী`).
+  - Files: `05_WEBSITE/scripts/text-correction-core.mjs`, `05_WEBSITE/tests/unit/text-correction-core.test.mjs`
+
+- [ ] Task 23: `MSG-001` page-5 Bengali wording correction (P0, Decision O — resolved)
+  - Acceptance: using the confirmed sentence recorded in Task 21's correction record, `text-correction-core.applyCorrection` replaces `বেকান পরিচয়` with `BECAA-র পরিচয়` in exactly one place (`expectedCount: 1`, matched as a whole word, not a substring) in `05_WEBSITE/src/content/messages/MSG-001-president-desk.md`; the other standalone occurrence ("প্রিয় বেকান ও বেকানী বন্ধুরা") and every occurrence of `বেকানী` are byte-identical before and after; integration test asserts `BECAA-র পরিচয়` present, the corrected sentence matches the recorded new text verbatim, `বেকান পরিচয়` absent, `প্রিয় বেকান ও বেকানী বন্ধুরা` still present unchanged, in both the built website and the extracted PDF text for `MSG-001`'s page.
+  - Files: `05_WEBSITE/src/content/messages/MSG-001-president-desk.md`, `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`
+
+- [ ] Task 24: `MSG-002` title spelling correction (P0, Decision P)
+  - Acceptance: `title` corrected from `Vice Preseident Desk` to `Vice President Desk` in `publication.yaml` and the content front matter (content filename and the body's existing `Vice President's Desk` heading left unchanged, per Decision P); title not duplicated on the item page; integration test asserts `Vice President Desk` appears in the manifest, the built website card/heading, the website contents entry, and the PDF contents/heading, and `Vice Preseident Desk` appears nowhere in the build output.
+  - Files: `05_WEBSITE/src/_data/publication.yaml`, `05_WEBSITE/src/content/messages/MSG-002-vice-preseident-desk.md`, `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`
+
+- [ ] Task 25: `ART-003` Biswajit Chakraborty spelling corrections (P0, Decision Q)
+  - Acceptance: `ভাইবই` → `ভাবায়` and `পারিমা` → `পরিমা`, one occurrence each (verified counts, PRD §1.2), applied via `text-correction-core`; every other character, punctuation mark, paragraph break and mixed-language expression preserved (byte-diff the file outside the two corrected spans); integration test asserts both corrected forms present and both superseded forms absent in the built website and the extracted PDF text for `ART-003`.
+  - Files: `05_WEBSITE/src/content/articles/ART-003-item.md`, `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`
+
+- [ ] Task 26: `display_name` field and `Late Biswajit Sengupta` on `ART-004`/`ART-005` (P0, Decision R)
+  - Acceptance: new optional manifest field `display_name: string`; `byline` Eleventy filter (`eleventy.config.mjs`) uses `item.display_name || item.contributor` for the primary name while every other byline detail (branch, passing year, designation) and the `contributor` field itself are unchanged; `ART-004` and `ART-005` set `display_name: "Late Biswajit Sengupta"`; no date or circumstances of death added anywhere; integration test asserts `Late Biswajit Sengupta` in the built website byline and PDF byline for both items, `contributor: Biswajit Sengupta` unchanged in the manifest, and no other item's rendered byline carries a `Late` prefix.
+  - Files: `05_WEBSITE/eleventy.config.mjs`, `05_WEBSITE/src/_data/publication.yaml`, `05_WEBSITE/scripts/config.mjs` (schema, if field allow-list is enforced there), `05_WEBSITE/tests/unit/eleventy-config.test.mjs` or equivalent, `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`
+
+- [ ] Task 27: Print-only article-prose justification (P0, Decision S)
+  - Acceptance: `print.njk` gains a `print-page--{{ item.type }}` modifier class on the page `<section>` (extending the existing `print-page--advertisement` pattern); print CSS adds `.print-page--article .prose p { text-align: justify; }` scoped so titles, bylines, headings, lists, captions, quotations, messages, gallery, advertisements, memorial text and contents are unaffected, and `.prose p:has(br)` (verse, Task 7) continues to win for `ART-010`; website CSS unchanged (no justification); every article page visually inspected (screenshots into `qa-output/v4-justification/`) for word-spacing, stretched lines, Bengali conjunct rendering, mixed-script lines, unbreakable long words/URLs, clipping, overflow and pagination shift versus the pre-justification PDF; findings recorded, any defect becomes a task before Task 33.
+  - Files: `05_WEBSITE/src/print.njk`, `05_WEBSITE/src/assets/css/print.css`, `05_WEBSITE/qa-output/v4-justification/*.png`, `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`
+
+- [ ] Task 28: Tracker updates for the five committee corrections (P0)
+  - Acceptance: snapshot-first (`tracker-io.mjs`); pure `tracker-corrections-core.mjs` builds note updates for the `MSG-001`, `MSG-002`, `ART-003`, `ART-004` and `ART-005` tracker rows recording each correction and its source (the addendum), plus the `Late` display name where the tracker has a suitable field; unit test checks the row updates; `scripts/apply-v4-corrections-tracker-updates.mjs` applies them idempotently, preserves styles; `npm run tracker:validate` passes; integration test re-reads the workbook.
+  - Files: `05_WEBSITE/scripts/tracker-corrections-core.mjs`, `05_WEBSITE/scripts/apply-v4-corrections-tracker-updates.mjs`, `05_WEBSITE/tests/unit/tracker-corrections-core.test.mjs`, `05_WEBSITE/tests/integration/apply-v4-corrections-tracker-updates.test.mjs`, `04_MAGAZINE_WORKING/BECAA_2026_Content_Tracker.xlsx`, `04_MAGAZINE_WORKING/TRACKER_SNAPSHOTS/…`
+
+- [ ] Task 29: Committee-corrections regression suite and full gate re-run (P0)
+  - Acceptance: `tests/integration/v4-committee-corrections.test.mjs` (built up across Tasks 23–27) asserts, for each correction: corrected form present and superseded form absent, in manifest where applicable, built website, and extracted PDF text; `npm run validate` → 47 items, 0 errors; `tracker:validate` clean; `test:unit`, `test:integration`, `check:secrets`, `check:sql` all green; `git diff --stat` against the pre-Task-21 tree touches only files declared in Tasks 21–28; no file under `06_FINAL_OUTPUT/`, `01_REFERENCE_2025/`, `03_ADVERTISEMENTS/`, `api/`, `lib/`, `middleware.ts`, or any pre-existing `02_INCOMING_CONTENT/` original changed.
+  - Files: `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`
+
+## Stream F — Build and release
+
+- [ ] Task 30: `release:v4` and version mapping (P0, Decision L)
+  - Acceptance: `stepsForVersion("V4_REVIEW_01")` returns the V3 step list plus the new steps `test:e2e:nav`, `test:e2e:poem`, `test:v4-advertisements`, `test:v4-committee-corrections` (or their `npm` names) in the tested order; unit test updated; `package.json` gains `release:v4` (`RELEASE_VERSION=V4_REVIEW_01`); reproduction text mentions `unzip`/`pdftotext`.
   - Files: `05_WEBSITE/scripts/release-core.mjs`, `05_WEBSITE/tests/unit/release-core.test.mjs`, `05_WEBSITE/package.json`
 
-- [ ] Task 22: PDF comparison against the Sprint v3 baseline (P0, Decision L)
-  - Acceptance: pure `pdf-compare-core.mjs` diffs two arrays of page texts (from `pdftotext`) and classifies each changed page as `contents`, `poem`, `new-item`, `shifted` (same text as a baseline page at another index) or `unexplained`; unit tests; `scripts/pdf-compare.mjs` writes `qa-output/pdf-compare/V3_REVIEW_02-vs-current.{json,md}` and exits non-zero when any page is `unexplained`; run as a release step after `pdf`.
+- [ ] Task 31: PDF comparison against the Sprint v3 baseline (P0, Decision L)
+  - Acceptance: pure `pdf-compare-core.mjs` diffs two arrays of page texts (from `pdftotext`) and classifies each changed page as `contents`, `poem`, `new-item`, `shifted` (same text as a baseline page at another index), `correction` (a `MSG-001`/`MSG-002`/`ART-003`/`ART-004`/`ART-005` page whose only diff is an expected Stream-E correction, including reflow caused by justification) or `unexplained`; unit tests cover the new `correction` class alongside the existing ones; `scripts/pdf-compare.mjs` writes `qa-output/pdf-compare/V3_REVIEW_02-vs-current.{json,md}` and exits non-zero when any page is `unexplained`; run as a release step after `pdf`.
   - Files: `05_WEBSITE/scripts/pdf-compare-core.mjs`, `05_WEBSITE/scripts/pdf-compare.mjs`, `05_WEBSITE/tests/unit/pdf-compare-core.test.mjs`, `05_WEBSITE/scripts/release-core.mjs`, `05_WEBSITE/package.json`
 
-- [ ] Task 23: CHANGELOG and documentation (P0)
-  - Acceptance: `CHANGELOG.md` gets a `V4_REVIEW_01` section listing added items (ADV-028/029/030), changed (`ART-010` re-extraction, navigation fix, consolidation moves with hashes, retired `extract-v2-golap`), unchanged counts; `05_WEBSITE/DEPLOYMENT.md` unchanged except a note that `V4` uses the same pipeline; `README.md` section on the intake folder mentions the consolidation date.
+- [ ] Task 32: CHANGELOG and documentation (P0)
+  - Acceptance: `CHANGELOG.md` gets a `V4_REVIEW_01` section listing added items (`ADV-028`, `ADV-029` — new; `ADV-027` updated from excluded to approved, not "added"), changed (`ART-010` re-extraction, navigation fix, consolidation moves with hashes, retired `extract-v2-golap`, and the five committee corrections: `MSG-001` wording, `MSG-002` title, `ART-003` spellings, `Late Biswajit Sengupta` on `ART-004`/`ART-005`, print-only article justification), unchanged counts (47 items); `05_WEBSITE/DEPLOYMENT.md` unchanged except a note that `V4` uses the same pipeline; `README.md` section on the intake folder mentions the consolidation date. *(Corrects a drafting error in the 2026-09-15 plan, which listed the added items as "ADV-028/029/030" — there is no `ADV-030` in this sprint.)*
   - Files: `CHANGELOG.md`, `05_WEBSITE/README.md`
 
-- [ ] Task 24: Build `V4_REVIEW_01` (P0)
-  - Acceptance: `npm run release:v4` completes every gated step (validate, typecheck, unit, build, site, integration, visual, PDF, cover, ad, nav, poem, app E2E, secret and SQL gates, audit gate, PDF compare); `06_FINAL_OUTPUT/V4_REVIEW_01/` contains the site, PDF, QA evidence (nav screenshots, affected PDF page renders), reports, `REPRODUCTION.md`, `release-manifest.json` with 47 items; V0–V3 folders byte-identical to `HEAD` (existing baseline check); committed.
+- [ ] Task 33: Build `V4_REVIEW_01` (P0)
+  - Acceptance: `npm run release:v4` completes every gated step (validate, typecheck, unit, build, site, integration, visual, PDF, cover, ad, nav, poem, committee-corrections, app E2E, secret and SQL gates, audit gate, PDF compare); `06_FINAL_OUTPUT/V4_REVIEW_01/` contains the site, PDF, QA evidence (nav screenshots, affected PDF page renders, justification screenshots), reports, `REPRODUCTION.md`, `release-manifest.json` with 47 items; V0–V3 folders byte-identical to `HEAD` (existing baseline check); committed.
   - Files: `06_FINAL_OUTPUT/V4_REVIEW_01/**`
 
-- [ ] Task 25: Manual browser and PDF verification evidence (P0)
-  - Acceptance: with the local dev-app or static server: nav at desktop/tablet/mobile, poem lines, two text pages, memorial page, registration → magazine, protected content after refresh, admin page unaffected; PDF pages for ART-010 and the three new items rendered to PNG at 150 dpi via `pdftoppm` into `qa-output/v4-pages/`; findings recorded for the walkthrough; any defect becomes a new task before Task 26.
+- [ ] Task 34: Manual browser and PDF verification evidence (P0)
+  - Acceptance: with the local dev-app or static server: nav at desktop/tablet/mobile, poem lines, two text pages, memorial page, `MSG-001` corrected wording, `MSG-002` title, `ART-003` corrected spellings, `Late Biswajit Sengupta` bylines, justified article prose with no overflow/clipping, registration → magazine, protected content after refresh, admin page unaffected; PDF pages for `ART-010`, the three new advertisement items, and every page touched by a committee correction rendered to PNG at 150 dpi via `pdftoppm` into `qa-output/v4-pages/`; findings recorded for the walkthrough; any defect becomes a new task before Task 35.
   - Files: `05_WEBSITE/qa-output/v4-pages/*.png`, `05_WEBSITE/qa-output/navigation/*.png`
 
-- [ ] Task 26: Preview deployment of `V4_REVIEW_01` for manual approval (P0, Decision N)
+- [ ] Task 35: Preview deployment of `V4_REVIEW_01` for manual approval (P0, Decision N)
   - Acceptance: `vercel deploy` (no `--prod`) from `05_WEBSITE/` at the release commit; `npm run e2e:app -- --base-url <preview> --public-only` passes; test registrations created on the *preview* database are identified and removed; preview URL, commit and results recorded in `sprints/v4/PREVIEW_DEPLOYMENT.md`; nothing promoted; production untouched (verified by `vercel ls` target list).
   - Files: `sprints/v4/PREVIEW_DEPLOYMENT.md`
 
-- [ ] Task 27: `js-yaml`/audit allow-list review (P1)
+- [ ] Task 36: `js-yaml`/audit allow-list review (P1)
   - Acceptance: `npm audit --json` gate still `ok` with the unchanged allow-list (`sharp`, `playwright`, `xlsx`); any new finding introduced by this sprint is fixed or explicitly reported, never allow-listed silently.
   - Files: `05_WEBSITE/scripts/audit-allowlist.json` (only if a finding must be documented)
 
-- [ ] Task 28: Retire the `add-v2`/`add-v3` manifest scripts' `v2-incoming` comments and dead code paths (P2)
+- [ ] Task 37: Retire the `add-v2`/`add-v3` manifest scripts' `v2-incoming` comments and dead code paths (P2)
   - Acceptance: comments and constants referencing the old folder in retired one-shot scripts are updated or the scripts are marked historical in their header; no behavioural change; unit/integration suites green.
   - Files: `05_WEBSITE/scripts/add-v2-manifest-items.mjs`, `05_WEBSITE/scripts/add-v3-manifest-items.mjs`
+
+## Session log
+
+_(append one dated entry per `/dev` session here, per the handoff protocol above)_

@@ -1,17 +1,19 @@
-# Sprint v4 — PRD: Publication Updates, Intake Consolidation and Navigation Correction
+# Sprint v4 — PRD: Publication Updates, Intake Consolidation, Navigation Correction and Committee Corrections
 
-Status: **Approved** (decisions A–N resolved 2026-09-15)
-Prepared: 2026-09-15
+Status: **Approved** — decisions A–N resolved 2026-09-15; decisions O–U resolved 2026-09-16 (approved as recommended, with Decision O narrowed to a single confirmed sentence — see §7.1). Task 1 complete at commit `fbe59d6` and not repeated. `/dev` may resume at the next uncompleted task (Task 2).
+Prepared: 2026-09-15; amended 2026-09-16; re-approved 2026-09-16
 Baseline: `06_FINAL_OUTPUT/V3_REVIEW_02/` (protected; 44 items, 69-page PDF) and production `https://becaa-magazine-2026-portal.vercel.app` at commit `d707355`
-Requirements source: `sprints/v4/Changev4.md`
-Proposed output: `06_FINAL_OUTPUT/V4_REVIEW_01/`
-Preserve unchanged: every folder under `06_FINAL_OUTPUT/` (V0–V3), every file in `01_REFERENCE_2025/` and `03_ADVERTISEMENTS/`, `BECAA_Magazine_2026_Master.docx`, the database, migrations, Neon resources, environment variables, authentication, gate, middleware, registration and administrator code.
+Requirements source: `sprints/v4/Changev4.md`; amended by `sprints/v4/v4changev2.md` (BECAA committee corrections received after Task 1, commit `fbe59d6`)
+Proposed output: `06_FINAL_OUTPUT/V4_REVIEW_01/` (unchanged — the committee corrections are folded into this not-yet-built release rather than opening a `V4_REVIEW_02`, since Task 24/33 has not run; see Decision U)
+Preserve unchanged: every folder under `06_FINAL_OUTPUT/` (V0–V3 and any earlier V4 output), every file in `01_REFERENCE_2025/` and `03_ADVERTISEMENTS/`, `BECAA_Magazine_2026_Master.docx`, the database, migrations, Neon resources, environment variables, authentication, gate, middleware, registration and administrator code, and every original file already committed under `02_INCOMING_CONTENT/` (corrections are layered on top via manifest/content/tracker changes and, where no revised source exists, a controlled correction record — never a silent overwrite of a contributor's original document).
 
 ---
 
 ## 1. Overview
 
 Sprint v4 is a small publication-and-presentation sprint on top of the deployed Sprint v3 portal. It does five things: (1) updates the extracted form of Shubhra Basu's poem "গোলাপ" (`ART-010`) from the authoritative `Shubhra Basu.md` source, preserving its 17 lines and `<br>` line breaks exactly with no added stanza gaps; (2) adds a text-only advertisement page for M/s Balajee Infrate; (3) adds a text-only advertisement page for Sarc Epic; (4) adds a memorial page for Late Shri Bhakta Mohon Mitra with the supplied photograph; (5) merges the `02_INCOMING_CONTENT/v2-incoming` folder into `02_INCOMING_CONTENT` and fixes the home-page navigation so each section appears once. Nothing in the application layer (registration, gate, admin, database) changes. The sprint ends with a new review release `V4_REVIEW_01`, a preview deployment for manual approval, and a separately authorised production deployment.
+
+**Addendum (2026-09-16):** after Task 1 (the intake commit, `fbe59d6`) landed, the BECAA committee sent six further corrections, recorded in `sprints/v4/v4changev2.md`: a Bengali wording fix on the current PDF's page 5, a spelling fix to the `MSG-002` title, two Bengali spelling fixes in Biswajit Chakraborty's article (`ART-003`), a `Late` prefix for the late Biswajit Sengupta on his two articles (`ART-004`, `ART-005`), and print-only justification of article body prose. These are corrections to already-approved content, not new publication items — the addendum does not add, remove or reorder any item and the manifest item count stays at 47 (44 + the three Sprint v4 advertisements). They are folded into this same PRD and into `V4_REVIEW_01` as a sixth work package (§4.7) that must complete, with its own tests, before the release build (Task 24, renumbered 33). Task 1 is unaffected and is not repeated.
 
 ### 1.1 Verified findings (2026-09-15)
 
@@ -28,6 +30,20 @@ Sprint v4 is a small publication-and-presentation sprint on top of the deployed 
 | Counting assumptions | `tests/e2e/web-ad-cards.test.mjs`, `tests/e2e/print-ad-pages.test.mjs` and `scripts/app-e2e.mjs` hard-code 22 advertisements / 22 loaded images. They must derive counts from the manifest (published ads → 25; ads with artwork → 23). |
 | Release pipeline | `release-core.stepsForVersion()` returns the V3 step list only for versions starting with `V3`; `V4_REVIEW_01` must map to the same list. |
 
+### 1.2 Verified findings — committee corrections addendum (2026-09-16)
+
+Each item below was independently located and checked against the current repository source (not assumed from the addendum text), per the addendum's own instruction to "verify the committee corrections against the repository source files and manifest IDs" before amending the plan.
+
+| Topic | Finding |
+|---|---|
+| Page 5 wording — item and location | The text is in `MSG-001` ("President Desk" / সভাপতির কলম থেকে), not `MSG-002`. Confirmed by `pdftotext -layout` on `06_FINAL_OUTPUT/V3_REVIEW_02/website/print/BECAA-2026-complete-review.pdf`: the paragraph falls between the page-4 and page-5 footer numbers. Source: `05_WEBSITE/src/content/messages/MSG-001-president-desk.md`. |
+| Page 5 wording — occurrence count | The substring `বেকান` appears **3** times in the file, but only **2** are the standalone word `বেকান`: "প্রিয় **বেকান** ও বেকানী বন্ধুরা," (line 12) and "…বেকান পরিচয় আমাদের সবাইকে…" (line 14). The third match is the first four letters of **বেকানী** ("BECAA-ni", the feminine form used alongside বেকান in the same sentence — a different word, not a mis-rendering of বেকান). **Resolved 2026-09-16 (Decision O):** only the second occurrence is corrected — see §7.1 for the confirmed sentence, old text and new text. |
+| MSG-002 title vs. body | Manifest/front matter title is `Vice Preseident Desk` (misspelled, confirmed at `src/_data/publication.yaml:34` and the front matter of `src/content/messages/MSG-002-vice-preseident-desk.md`). The **body's own first line already reads** `Vice President's Desk` (with apostrophe) — a pre-existing, unrelated mismatch between title and body heading that predates this addendum. The committee's instruction is specifically `Vice President Desk` (no apostrophe) for the title; the body heading is left untouched as out of scope (Decision P). |
+| ART-003 spellings | Both corrections verified at exactly one occurrence each in `src/content/articles/ART-003-item.md`: `ভাইবই` in "...যা আজকের দিনে কোন কলেজে ভাইবই যায় না" and `পারিমা` in "...লেডিস হোস্টেল পারিমা টার্গেট করলাম।" Manifest `contributor: বিশ্বজিৎ চক্রবর্তী` (Biswajit Chakraborty), `order: 130`. |
+| Late Biswajit Sengupta — schema gap | No `display_name` (or equivalent reader-facing override) field exists today. `ART-004` and `ART-005` both carry `contributor: Biswajit Sengupta` in `publication.yaml`; the `byline` Eleventy filter (`eleventy.config.mjs`) reads `item.contributor` directly and is shared by both `index.njk` and `print.njk`. The website contents list (`#contents` in `index.njk`, and the PDF contents in `print.njk`) renders `item.title` only, not the contributor — so, contrary to the addendum's checklist, "contents" is not actually an affected location; the real surfaces are the card/page byline (web and print) and the tracker. |
+| Print justification — template gap | `.prose` is shared by messages, articles and any other non-advertisement/gallery item (`print.njk`); there is currently no per-type modifier class (only advertisement pages get one, `print-page--advertisement`). Scoping justification to article prose only, as the addendum requires, needs a new `print-page--{{ item.type }}` (or `--article`) class, not just a CSS rule. |
+| Supplied replacement material | `git status` shows only `sprints/v4/v4changev2.md` as new; no corrected replacement page, revised DOCX, or other file has actually been supplied for any of the five content corrections. Per the addendum's own §3.1–3.2, the authoritative treatment is a controlled correction record in `02_INCOMING_CONTENT`, not a revised original — see Decision T. |
+
 ## 2. Goals
 
 - `ART-010` renders the complete revised poem with a line break after every source line, on the website and in the PDF; the four-line example renders as exactly four lines.
@@ -35,6 +51,7 @@ Sprint v4 is a small publication-and-presentation sprint on top of the deployed 
 - `02_INCOMING_CONTENT` is the only incoming location; every live reference is updated; nothing is lost; both poem versions remain recoverable.
 - The main navigation shows exactly eight links, once each, in the approved order, each pointing at the section start or the first published item, derived from the manifest.
 - `V4_REVIEW_01` passes the full gated pipeline; the PDF differs from `V3_REVIEW_02` only where authorised; a preview is reviewed before a separately approved production deployment.
+- The five committee corrections (page-5 wording, `MSG-002` title, the two `ART-003` spellings, `Late Biswajit Sengupta` on `ART-004`/`ART-005`, and print-only article justification) are applied precisely, at the source-of-truth level, with the superseded forms verified absent everywhere they used to appear — with no change to any unrelated content, no new or removed publication item, and no silent overwrite of an original contributor document.
 
 ## 3. User stories
 
@@ -43,6 +60,7 @@ Sprint v4 is a small publication-and-presentation sprint on top of the deployed 
 - As the family of a departed alumnus, I want the memorial wording exactly as supplied, with the photograph intact, and not presented as a company advertisement.
 - As a reader on desktop or phone, I want one link per section at the top of the page instead of 48 repeated labels.
 - As the editor, I want one incoming folder and a traceable record of every revised or superseded source.
+- As the BECAA committee, I want my post-review corrections applied exactly as worded, traceably, and without disturbing anything I did not ask to change.
 
 ## 4. Work packages
 
@@ -106,6 +124,19 @@ Steps, in order, each backed by a script or test so the result is auditable:
 - **Presentation**: keep the pill style; nav already wraps (`flex-wrap`). Add `data-testid="primary-nav"` and keep `aria-label="Primary"`. No dropdown. Verify no overlap with the brand link at 390, 820 and 1440 px and no horizontal overflow.
 - **Tests** (`tests/unit/navigation-core.test.mjs`, `tests/e2e/site-navigation.test.mjs`): exactly eight links; labels once each in order; hrefs non-empty and resolving to an element in the built page; Messages/Articles/Gallery/Advertisements hrefs equal the first published item of each section computed from the manifest; a hermetic fixture with an extra article and an extra advertisement still yields eight links; keyboard: `Tab` reaches each link and `:focus` style is visible; three viewport widths screenshotted for the walkthrough.
 
+### 4.7 Committee corrections (post-Task-1 addendum, its own commits)
+
+Five corrections to already-approved, already-published content, applied at the source-of-truth level and traced through to manifest, tracker, website and PDF. None of these adds, removes or reorders a publication item.
+
+1. **Intake and provenance (Decision T).** Commit `sprints/v4/v4changev2.md` (already present, untracked) together with a new controlled correction record `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` that lists, per item ID, the exact old text, the exact new text (or, for the page-5 item, both candidate forms marked pending), and the committee's stated reason. No original contributor document is touched by this task.
+2. **Page 5 — `MSG-001` Bengali wording (Decision O, resolved — see §7.1).** Replace `বেকান` with `BECAA-র` in exactly the confirmed sentence ("...বেকান পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।" → "...BECAA-র পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।") in `05_WEBSITE/src/content/messages/MSG-001-president-desk.md`; the other standalone `বেকান` ("প্রিয় বেকান ও বেকানী বন্ধুরা") and `বেকানী` are left unchanged.
+3. **`MSG-002` title spelling (Decision P).** Correct `title` from `Vice Preseident Desk` to `Vice President Desk` in `publication.yaml` and the content front matter; leave the content filename and the body's existing `Vice President's Desk` heading unchanged (pre-existing, out of scope).
+4. **`ART-003` — two Bengali spellings.** Replace `ভাইবই` → `ভাবায়` and `পারিমা` → `পরিমা`, one occurrence each, in `05_WEBSITE/src/content/articles/ART-003-item.md`; no other character changes.
+5. **`Late Biswajit Sengupta` on `ART-004` and `ART-005` (Decision R).** Add an optional `display_name` manifest field; set it to `Late Biswajit Sengupta` for both items; the `byline` filter and any other contributor-name rendering prefer `display_name` over `contributor`; `contributor` itself (the provenance/audit field) is left as `Biswajit Sengupta`. No date or cause of death is added anywhere in the publication.
+6. **Print-only article justification (Decision S).** Add a `print-page--{{ item.type }}` (or equivalent) modifier class in `print.njk` and a print-only CSS rule that justifies `.print-page--article .prose p` (ordinary prose paragraphs only — not titles, bylines, headings, lists, captions, quotations, verse, messages, gallery, advertisements, memorial text or contents), while `.prose p:has(br)` (verse, §4.2) continues to force left alignment. The website is not justified. Every article page is visually re-inspected after the change for word-spacing, stretched lines, Bengali conjunct rendering, mixed-script lines, unbreakable long words/URLs, clipping, overflow and pagination shift.
+7. **Tracker updates.** One snapshot-first tracker pass records the `MSG-001`, `MSG-002`, `ART-003` and `ART-004`/`ART-005` corrections in the relevant rows' notes (and the `Late` display name where the tracker has a suitable field), following the same pattern as Task 14.
+8. **Regression suite.** One consistency test per correction (superseded form absent, corrected form present, in manifest, built website and extracted PDF text as applicable) plus a full re-run of `npm run validate`, `tracker:validate`, `test:unit`, `test:integration` and the secret/SQL gates, confirming the item count is still 47 and no file outside this work package's scope changed.
+
 ## 5. Data model and validator changes
 
 - New optional manifest fields on advertisement items: `presentation: artwork | text | memorial` (default `artwork`), `text_lines: string[]` (required and non-empty for `text` and `memorial`; forbidden for `artwork`).
@@ -113,6 +144,8 @@ Steps, in order, each backed by a script or test so the result is auditable:
 - `config.advertisementPage.presentations = ["artwork", "text", "memorial"]`.
 - Templates (`src/index.njk`, `src/print.njk`) render by `presentation`: artwork → existing figure; text → `<p class="ad-text">` with the sentence; memorial → figure (uncropped image, `max-height` bounded) followed by `<div class="ad-memorial">` with one line per `text_lines` entry. Text is placed with `{{ }}` escaping, never `| safe`.
 - Contents list, PDF contents page and QA scripts use `title` unchanged, so the three new titles appear there verbatim.
+- New optional field on any item: `display_name: string` — when present, the `byline` filter (and any other reader-facing contributor rendering) uses it in place of `contributor`; `contributor` itself keeps its current meaning (provenance/audit identity) and is unchanged. Only `ART-004` and `ART-005` set it, to `Late Biswajit Sengupta`. Contents lists render `title` only and are unaffected.
+- Committee-correction provenance: a single controlled correction record `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` (per addendum §3.2) is the authoritative source for the five §4.7 corrections in place of a revised contributor document; no schema change is needed for this beyond the file's existence.
 
 ## 6. Tests to add or update (maps to Changev4 §14)
 
@@ -129,6 +162,12 @@ Steps, in order, each backed by a script or test so the result is auditable:
 | 18 | three IDs unique and consistent | same test + `npm run validate` + `tracker:validate` |
 | 19 | no live `v2-incoming` reference | `tests/integration/incoming-consolidation.test.mjs` |
 | 20 | inventory proves nothing lost | same test against the consolidation JSON |
+| 21 | page-5 corrected expression present, superseded form absent | `tests/integration/v4-committee-corrections.test.mjs` |
+| 22 | `Vice President Desk` present, `Vice Preseident Desk` absent, everywhere the title is shown | same test |
+| 23 | `ভাবায়`/`পরিমা` present and `ভাইবই`/`পারিমা` absent in `ART-003` (website + PDF) | same test |
+| 24 | `Late Biswajit Sengupta` shown for `ART-004` and `ART-005` (web byline + PDF byline + tracker); no other contributor gets `Late` | same test |
+| 25 | article body prose justified in print only; verse, headings, bylines, lists, captions, quotations, messages, advertisements, memorial text and contents are not | same test + visual QA pass over every article page |
+| 26 | earlier Sprint v4 requirements (1–20) still pass after the corrections layer | full suite re-run |
 
 Existing tests that assert `22` advertisements are rewritten to derive the count from the manifest.
 
@@ -149,9 +188,24 @@ Existing tests that assert `22` advertisements are rewritten to derive the count
 - **M. Received date** for the three tracker rows: 15.09.2026 (the day the files and request arrived).
 - **N. Commit plan.** (1) intake, (2) consolidation, then per-task commits as in v3; deployment to preview after `/walkthrough`; production only after explicit approval.
 
+### 7.1 Committee-corrections decisions (resolved 2026-09-16)
+
+- **O. Page-5 Bengali correction — RESOLVED.** Only the specific standalone occurrence of `বেকান` identified as grammatically matching a possessive correction is replaced with `BECAA-র`; the other standalone occurrence, and the unrelated word `বেকানী`, are left unchanged. The two standalone occurrences in `05_WEBSITE/src/content/messages/MSG-001-president-desk.md` are: (1) "প্রিয় বেকান ও বেকানী বন্ধুরা," — here `বেকান` functions as a plain adjective paired with `বেকানী`; `BECAA-র` (possessive "BECAA's") would not parse grammatically in this position, so **this occurrence is not touched**. (2) "কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, বেকান পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।" — here `বেকান পরিচয়` ("BECAA identity") becomes `BECAA-র পরিচয়` ("BECAA's identity"), which is the correct possessive construction; **this is the approved occurrence.**
+  - **Confirmed sentence (old):** `কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, বেকান পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।`
+  - **Confirmed sentence (new):** `কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, BECAA-র পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।`
+  - Location: `05_WEBSITE/src/content/messages/MSG-001-president-desk.md`, line 14 (the last sentence of the message's second paragraph). This exact sentence must be recorded in the Task 21 correction record before Task 23 touches the file, so the wrong instance cannot be changed.
+- **P. `MSG-002` scope — RESOLVED.** Correct only the `title` field (manifest and front matter) to `Vice President Desk`. The content filename (`MSG-002-vice-preseident-desk.md`) and the body's own existing `Vice President's Desk` heading are left unchanged — neither was named by the committee, both are pre-existing, and the approval only extends to "exact title consistency," which the title-field-only change already satisfies (the body heading is not the `title` field and is not duplicated with it on the rendered page).
+- **Q. `ART-003` corrections — RESOLVED.** Both replacements as specified, one occurrence each, verified against the current file; no other change to the article.
+- **R. `Late` prefix mechanism — RESOLVED.** Add a new optional `display_name` manifest field (§5) and set it for `ART-004`/`ART-005`; `contributor` stays `Biswajit Sengupta`, preserved separately as the canonical/provenance name.
+- **S. Print justification implementation — RESOLVED.** Add a `print-page--{{ item.type }}` modifier class in `print.njk` (extending the existing `print-page--advertisement` pattern) and scope the CSS rule to `.print-page--article .prose p` only. Poems (`.prose p:has(br)`), titles, headings, bylines, lists, messages and advertisements are excluded, per approval.
+- **T. Correction provenance format — RESOLVED.** One controlled correction record, `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md`, listing item IDs and exact old→new text (Decision O's confirmed sentence included in full, not marked pending), committed alongside `v4changev2.md` as the first committee-corrections task (Task 21). No original contributor document is reconstructed or overwritten.
+- **U. Release scope — RESOLVED.** Fold all five corrections into the still-unbuilt `V4_REVIEW_01` (Task 33) rather than opening a `V4_REVIEW_02`, since no earlier V4 output has been built or shipped yet.
+
 ## 8. Out of scope
 
 Everything listed in Changev4 §13: unrelated content, ordering, titles, tracker rows, backgrounds and artwork; registration, validation, authentication, cookies, middleware, gate, admin, database, migrations, Neon, rate limiting, security headers, environment variables; V0–V3 release folders; production data. Also out of scope: replacing the "Version 1 local review" eyebrow on the cover, the item-level contents list, and any dropdown navigation.
+
+Also out of scope, per the committee-corrections addendum (§4 item 6, §3.3): any editorial change beyond the five named corrections; the date or circumstances of Biswajit Sengupta's death (recorded here only as the committee's stated reason, never published); a `Late` prefix for any other contributor; website justification (print only); silently editing or overwriting any original file already in `02_INCOMING_CONTENT`; renaming the `MSG-002` content file or aligning its body heading (Decision P); and any change to item count, order, or the three already-approved Sprint v4 advertisements.
 
 ## 9. Dependencies
 
@@ -166,11 +220,13 @@ Sprint v3 complete (`d707355` in production); Node 22, `unzip`, `pdftotext` (pre
 - Consolidation: `v2-incoming` absent; inventory JSON proves 26 files present with unchanged hashes.
 - Security and secret scans, dependency audit gate, `git diff` review: only files needed for this sprint.
 - Earlier release folders byte-identical (existing baseline check).
+- Committee corrections: the confirmed page-5 wording present and the superseded form absent from `MSG-001` (web + PDF); `MSG-002` title reads `Vice President Desk` everywhere it is shown and `Vice Preseident Desk` appears nowhere; `ART-003` shows `ভাবায়`/`পরিমা` and never `ভাইবই`/`পারিমা` (web + PDF); `ART-004` and `ART-005` show `Late Biswajit Sengupta` in every byline location (web + PDF) with no other contributor affected; article body prose is justified in the PDF only, with verse/headings/lists/captions/quotations/messages/ads/memorial/contents unaffected and no overflow, clipping or broken Bengali glyphs on visual inspection; manifest item count unchanged at 47; `02_INCOMING_CONTENT` originals byte-identical to before this work package.
 
 ## 11. Proposed task streams for `/prd` (indicative)
 
-**Stream A — intake and consolidation (P0):** superseded-source archive + intake commit → consolidation plan/apply script + inventory + reference updates + test → commit.
+**Stream A — intake and consolidation (P0):** superseded-source archive + intake commit *(Task 1, complete — `fbe59d6`)* → consolidation plan/apply script + inventory + reference updates + test → commit.
 **Stream B — poem (P0):** verse extraction core + fixtures → `extract-v4-golap` + integration test → CSS verse modifier → site and PDF line tests.
 **Stream C — advertisements (P0):** manifest `presentation`/`text_lines` schema + validator + unit tests → templates and CSS for text and memorial pages → memorial image normalisation → manifest entries + tracker rows (snapshot) → count-derived E2E/QA updates → wording/consistency tests.
 **Stream D — navigation (P0):** `navigation-core` + unit test → `base.njk` filter → E2E at three widths with screenshots.
-**Stream E — release (P0/P1):** `release:v4`, `stepsForVersion`, PDF comparison report, CHANGELOG, `V4_REVIEW_01`, preview deployment (no `--prod`), walkthrough evidence.
+**Stream E — committee corrections (P0, added 2026-09-16):** correction-record intake → text-correction core + fixtures → page-5 `MSG-001` fix (Decision O resolved) → `MSG-002` title fix → `ART-003` spelling fixes → `display_name`/`Late Biswajit Sengupta` → print-only article justification → tracker updates (snapshot) → regression suite. Ordered before Stream F so the release build sees a fully corrected manifest.
+**Stream F — build and release (P0/P1):** `release:v4`, `stepsForVersion`, PDF comparison report, CHANGELOG, `V4_REVIEW_01`, preview deployment (no `--prod`), walkthrough evidence.

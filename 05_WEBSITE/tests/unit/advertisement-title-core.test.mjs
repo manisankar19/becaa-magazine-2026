@@ -65,7 +65,24 @@ function runRetitleGuards() {
   console.log("PASS: retitleAdvertisements guards.");
 }
 
+// Sprint v4 (sprints/v4/PRD.md §5, Decision E): text-only and memorial
+// advertisements are never retitled to the compliments pattern, even though
+// they are published — their title is intentionally something other than
+// "With best compliments from [Company]" and does not match either generic
+// pattern, so without this guard retitleAdvertisements would throw.
+function runTextAndMemorialPresentationsAreNeverRetitled() {
+  const textAd = { id: "ADV-027", type: "advertisement", title: "Best Compliment from Sarc Epic", contributor: "Sarc Epic", presentation: "text", web_include: true, print_include: true };
+  const memorialAd = { id: "ADV-029", type: "advertisement", title: "In fond memory of Late Shri Bhakta Mohon Mitra", contributor: "Subrata Mitra (son), Soma Mitra (daughter)", presentation: "memorial", web_include: true, print_include: true };
+  const result = retitleAdvertisements([textAd, memorialAd], []);
+  assert.deepEqual(result.items[0], textAd, "a text-presentation advertisement is left exactly as-is");
+  assert.deepEqual(result.items[1], memorialAd, "a memorial-presentation advertisement is left exactly as-is");
+  assert.deepEqual(result.changes, [], "neither generates a change");
+  // No tracker row is even looked up for them (no throw despite an empty tracker rows array).
+  console.log("PASS: text/memorial presentation advertisements are never retitled to the compliments pattern.");
+}
+
 runDerive();
 runRetitleHappyPath();
 runRetitleGuards();
+runTextAndMemorialPresentationsAreNeverRetitled();
 console.log("All advertisement-title-core unit tests passed.");

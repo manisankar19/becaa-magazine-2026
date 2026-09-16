@@ -9,7 +9,19 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
-import { ensureDir, siteRoot } from "./lib.mjs";
+import { ensureDir, siteRoot, readManifest } from "./lib.mjs";
+
+// Sprint v4 Task 15 (sprints/v4/PRD.md §4.3-4.4, Decision K): counts derived
+// from the manifest rather than hard-coded, so this suite keeps working as
+// items are added. "Compliments-titled" cards are artwork-presentation
+// advertisements only (text/memorial carry their own approved wording);
+// "images loaded" covers every published advertisement with a web_asset
+// (artwork + memorial — text-only ads have no artwork at all).
+const manifestItems = readManifest().items;
+const publishedItemCount = manifestItems.filter((item) => item.web_include).length;
+const publishedAds = manifestItems.filter((item) => item.type === "advertisement" && item.web_include);
+const complimentsAdCount = publishedAds.filter((item) => (item.presentation ?? "artwork") === "artwork").length;
+const adsWithArtworkCount = publishedAds.filter((item) => item.web_asset).length;
 
 const args = process.argv.slice(2);
 const baseUrlArg = args.includes("--base-url") ? args[args.indexOf("--base-url") + 1] : null;
@@ -132,7 +144,7 @@ try {
       await p.waitForURL(`${baseUrl}/`);
       await p.waitForSelector("#cover-title");
       assert.equal(await p.locator("#cover-title").textContent(), "একই শিকড়", "cover title (Bengali) on the magazine");
-      assert.equal(await p.locator(".publication-item").count(), 44, "44 publication items");
+      assert.equal(await p.locator(".publication-item").count(), publishedItemCount, `${publishedItemCount} publication items`);
       assert.ok((await p.locator("#ART-012 .prose").textContent()).includes("প্যাঁড়া"), "Bengali story text renders");
       const cookie = (await ctx.cookies()).find((c) => c.name === "becaa_v");
       assert.ok(cookie, "visitor cookie set");
@@ -141,8 +153,8 @@ try {
       assert.equal(cookie.secure, isHttps, `Secure flag ${isHttps ? "set" : "omitted locally"}`);
       const img = await ctx.request.get(`${baseUrl}/assets/normalized/advertisements/web/ADV-018-eframe-advertisement-web.jpg`);
       assert.equal(img.status(), 200, "artwork served with a session");
-      assert.equal((await p.locator(".publication-item--advertisement h2").allTextContents()).filter((t) => t.startsWith("With best compliments from")).length, 22, "22 advertisement cards with the compliments title");
-      assert.equal(await p.locator(".publication-item--advertisement img").evaluateAll((imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length), 22, "all 22 advertisement images loaded");
+      assert.equal((await p.locator(".publication-item--advertisement h2").allTextContents()).filter((t) => t.startsWith("With best compliments from")).length, complimentsAdCount, `${complimentsAdCount} advertisement cards with the compliments title (artwork presentation only)`);
+      assert.equal(await p.locator(".publication-item--advertisement img").evaluateAll((imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length), adsWithArtworkCount, `all ${adsWithArtworkCount} advertisement images loaded (artwork + memorial)`);
       assert.ok(Math.abs(cookie.expires - (Date.now() / 1000 + 30 * 24 * 3600)) < 3600, "visitor cookie expires in ~30 days");
       const pdf = await ctx.request.get(`${baseUrl}/print/BECAA-2026-complete-review.pdf`);
       assert.equal(pdf.status(), 200, "PDF served with a session");

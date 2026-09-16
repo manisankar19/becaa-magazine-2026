@@ -14,6 +14,16 @@ function isPublished(item) {
   return Boolean(item.web_include) || Boolean(item.print_include);
 }
 
+// Sprint v4 (sprints/v4/PRD.md §5, Decision E): the "With best compliments
+// from [Company]" retitling rule applies to artwork-presentation
+// advertisements only — text-only and memorial advertisements carry their
+// own approved wording (enforced separately by
+// ad-presentation-core.mjs's validateAdvertisementPresentation) and must
+// never be rewritten to the compliments pattern.
+function isArtworkPresentation(item) {
+  return (item.presentation ?? "artwork") === "artwork";
+}
+
 export function deriveComplimentsTitle(item) {
   const contributor = String(item.contributor ?? "").trim();
   if (!contributor) throw new Error(`${item.id}: empty contributor — cannot derive a compliments title`);
@@ -31,7 +41,7 @@ export function retitleAdvertisements(items, trackerRows = []) {
   const trackerById = new Map(trackerRows.map((row) => [String(row["Item ID"]).trim(), row]));
   const changes = [];
   const next = items.map((item) => {
-    if (item.type !== "advertisement" || !isPublished(item)) return item;
+    if (item.type !== "advertisement" || !isPublished(item) || !isArtworkPresentation(item)) return item;
     const row = trackerById.get(String(item.id).trim());
     if (!row) throw new Error(`${item.id}: no tracker row found for a published advertisement`);
     const trackerCompany = String(row["Contributor / Company"] ?? "").trim();

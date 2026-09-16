@@ -43,7 +43,11 @@ async function run() {
   assert.equal(art012.source_fingerprint, "9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65");
   assert.equal(after.items.indexOf(art012), after.items.findIndex((i) => i.id === "ART-011") + 1, "ART-012 is inserted directly after ART-011");
   assert.ok(fs.existsSync(path.join(siteRoot, "src", "content", art012.content_file)), "content file referenced by ART-012 must exist");
-  assert.equal(after.items.length, 44, "manifest has 44 items (43 + ART-012)");
+  // The absolute item count (44 when this test was written, Sprint v3) is not
+  // asserted here — it grows in later sprints (Sprint v4 Task 13 takes it to
+  // 47). "exactly one new item" (line 35, beforeCount + 1) is the invariant
+  // this script owns; the manifest's current total is asserted by whichever
+  // sprint's tests own that count (see tests/integration/add-v4-manifest-items.test.mjs).
 
   const ids = after.items.map((item) => item.id);
   assert.equal(new Set(ids).size, ids.length, "no duplicate manifest IDs");

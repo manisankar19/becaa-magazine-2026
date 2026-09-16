@@ -4,7 +4,7 @@ import { normalizeImageVariant, WEB_SPEC, PRINT_SPEC } from "./image-normalize-c
 
 // base = `${id}-${slugify(title)}`, matching import-approved.mjs's naming
 // (slugify("Chatgpt") -> "chatgpt").
-export const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "chatgpt kallol.jpeg");
+export const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "chatgpt kallol.jpeg");
 export const webOutputPath = path.join(siteRoot, "src", "assets", "normalized", "images", "web", "GAL-007-chatgpt-web.jpg");
 export const printOutputPath = path.join(siteRoot, "src", "assets", "normalized", "images", "print", "GAL-007-chatgpt-print.jpg");
 

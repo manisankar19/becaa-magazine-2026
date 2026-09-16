@@ -14,11 +14,11 @@ async function run() {
   assert.ok(cover, "manifest must have a cover block");
   assert.equal(cover.id, "COV-001", "cover id must not be renumbered");
   assert.equal(cover.title, "একই শিকড়", "cover title must be unchanged");
-  assert.equal(cover.source_file, "02_INCOMING_CONTENT/v2-incoming/cover page new.png");
+  assert.equal(cover.source_file, "02_INCOMING_CONTENT/cover page new.png");
   assert.equal(cover.asset, "assets/normalized/cover/cover page new.png");
 
   const expectedFingerprint = sha256(path.join(projectRoot, cover.source_file));
-  assert.equal(cover.source_fingerprint, expectedFingerprint, "fingerprint must match the actual v2-incoming source file");
+  assert.equal(cover.source_fingerprint, expectedFingerprint, "fingerprint must match the actual source file (consolidated into 02_INCOMING_CONTENT, Sprint v4 Task 4)");
 
   console.log("PASS: COV-001 manifest entry points at the new v2 cover with a matching fingerprint.");
 }

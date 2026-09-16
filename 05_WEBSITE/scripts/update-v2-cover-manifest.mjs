@@ -3,7 +3,7 @@ import path from "node:path";
 import { projectRoot, siteRoot, sha256, readManifest } from "./lib.mjs";
 
 const manifestPath = path.join(siteRoot, "src", "_data", "publication.yaml");
-const newSourceFile = "02_INCOMING_CONTENT/v2-incoming/cover page new.png";
+const newSourceFile = "02_INCOMING_CONTENT/cover page new.png";
 const newAsset = "assets/normalized/cover/cover page new.png";
 
 const before = readManifest();

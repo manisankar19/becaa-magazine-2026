@@ -4,7 +4,7 @@ import mammoth from "mammoth";
 import { projectRoot, siteRoot, sha256, ensureDir } from "./lib.mjs";
 import { buildArticleMarkdown } from "./article-markdown-core.mjs";
 
-export const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Palash Article.docx");
+export const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "Palash Article.docx");
 export const outputPath = path.join(siteRoot, "src", "content", "articles", "ART-011-item.md");
 
 // Text-only import per sprints/v2/PRD.md #5: the docx contains one embedded
@@ -15,7 +15,7 @@ export async function extractPalashArticle() {
   const markdown = buildArticleMarkdown({
     id: "ART-011",
     title: "বেঁচে থাকার লড়াই ও স্বপ্নের পথ",
-    sourceFile: "02_INCOMING_CONTENT/v2-incoming/Palash Article.docx",
+    sourceFile: "02_INCOMING_CONTENT/Palash Article.docx",
     fingerprint: sha256(sourcePath),
     bodyText: rawText,
   });

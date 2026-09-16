@@ -11,7 +11,7 @@ import sharp from "sharp";
 import { normalizeCoverBuffer } from "../../scripts/normalize-cover-core.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const sourcePath = path.join(__dirname, "..", "..", "..", "02_INCOMING_CONTENT", "v2-incoming", "cover page new.png");
+const sourcePath = path.join(__dirname, "..", "..", "..", "02_INCOMING_CONTENT", "cover page new.png");
 
 async function run() {
   const input = fs.readFileSync(sourcePath);

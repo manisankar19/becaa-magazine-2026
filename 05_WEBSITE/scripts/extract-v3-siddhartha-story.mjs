@@ -8,7 +8,7 @@ import { buildArticleMarkdown, docxHtmlToParagraphText } from "./article-markdow
 // now approved, becomes ART-012. The revised DOCX (received 2026-09-14) holds
 // the complete Bengali story "প্যাঁড়া"; the superseded placeholder file is
 // archived under 04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-14/.
-export const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Siddhartha Mukhopadhyay story.docx");
+export const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "Siddhartha Mukhopadhyay story.docx");
 export const outputPath = path.join(siteRoot, "src", "content", "articles", "ART-012-item.md");
 
 export async function extractSiddharthaStory() {
@@ -16,7 +16,7 @@ export async function extractSiddharthaStory() {
   const markdown = buildArticleMarkdown({
     id: "ART-012",
     title: "প্যাঁড়া",
-    sourceFile: "02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx",
+    sourceFile: "02_INCOMING_CONTENT/Siddhartha Mukhopadhyay story.docx",
     fingerprint: sha256(sourcePath),
     bodyText: docxHtmlToParagraphText(html),
   });

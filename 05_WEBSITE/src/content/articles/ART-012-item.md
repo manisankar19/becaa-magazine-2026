@@ -1,7 +1,7 @@
 ---
 id: ART-012
 title: "প্যাঁড়া"
-source_file: "02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx"
+source_file: "02_INCOMING_CONTENT/Siddhartha Mukhopadhyay story.docx"
 source_fingerprint: 9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65
 verification: verified
 ---

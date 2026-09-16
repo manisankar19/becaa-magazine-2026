@@ -7,7 +7,7 @@ import { mergeAddendumRows } from "./tracker-merge-core.mjs";
 const trackerPath = path.join(projectRoot, "04_MAGAZINE_WORKING", "BECAA_2026_Content_Tracker.xlsx");
 const addendumPath = path.join(projectRoot, "04_MAGAZINE_WORKING", "BECAA_2026_Content_Tracker addendum.xlsx");
 const snapshotsDir = path.join(projectRoot, "04_MAGAZINE_WORKING", "TRACKER_SNAPSHOTS");
-const newCoverPath = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "cover page new.png");
+const newCoverPath = path.join(projectRoot, "02_INCOMING_CONTENT", "cover page new.png");
 
 const SHEET_NAME = "Content Tracker";
 

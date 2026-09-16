@@ -19,7 +19,7 @@ async function run() {
   assert.equal(sha256(sourcePath), "9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65", "the revised DOCX must be the file received on 2026-09-14");
   assert.match(written, /^---\nid: ART-012\n/);
   assert.match(written, /\ntitle: "প্যাঁড়া"\n/, "manifest title is the document's own title (Decision D)");
-  assert.match(written, /\nsource_file: "02_INCOMING_CONTENT\/v2-incoming\/Siddhartha Mukhopadhyay story\.docx"\n/);
+  assert.match(written, /\nsource_file: "02_INCOMING_CONTENT\/Siddhartha Mukhopadhyay story\.docx"\n/);
   assert.match(written, /\nsource_fingerprint: 9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65\n/);
   assert.match(written, /\nverification: verified\n/);
   assert.ok(written.endsWith(`---\n${expectedBody}\n`), "body must equal the independent re-extraction exactly");

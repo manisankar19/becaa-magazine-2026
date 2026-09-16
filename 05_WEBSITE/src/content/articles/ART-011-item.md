@@ -1,7 +1,7 @@
 ---
 id: ART-011
 title: "বেঁচে থাকার লড়াই ও স্বপ্নের পথ"
-source_file: "02_INCOMING_CONTENT/v2-incoming/Palash Article.docx"
+source_file: "02_INCOMING_CONTENT/Palash Article.docx"
 source_fingerprint: b0a1ba37a31c95ed159b8fe0e5eac6de96bcda461d5b7fe36243c21f8f3b84aa
 verification: verified
 ---

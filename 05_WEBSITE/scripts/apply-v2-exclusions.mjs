@@ -17,7 +17,7 @@ const DECISIONS = {
     printInclude: "No",
     status: "Excluded – Source file not received",
     remarksNote:
-      'Sprint v2: named source file "Article for BECAA Maharashtra Souveneir.pdf" was not found in v2-incoming or anywhere else in the project. Distinct from the already-published ART-006 source ("Article for BECAA Maharashtra Souvenir.docx", a different author). Excluded pending the correct file or an editorial correction of this row. See sprints/v2/MATERIAL_CHANGE_REGISTER.md.',
+      'Sprint v2: named source file "Article for BECAA Maharashtra Souveneir.pdf" was not found under 02_INCOMING_CONTENT (including the then-separate incoming subfolder, since consolidated — Sprint v4 Task 4) or anywhere else in the project. Distinct from the already-published ART-006 source ("Article for BECAA Maharashtra Souvenir.docx", a different author). Excluded pending the correct file or an editorial correction of this row. See sprints/v2/MATERIAL_CHANGE_REGISTER.md.',
   },
   24: {
     webInclude: "No",

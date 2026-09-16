@@ -1,0 +1,356 @@
+{
+  "generated_at": "2026-09-16T14:57:26.984Z",
+  "parent_dir": "02_INCOMING_CONTENT",
+  "sub_dir": "02_INCOMING_CONTENT/v2-incoming",
+  "counts": {
+    "parent": 21,
+    "sub": 5,
+    "total": 26
+  },
+  "inventory": {
+    "parent": [
+      {
+        "name": "1. Artical Sudip Mazumdar .pdf",
+        "bytes": 53448,
+        "sha256": "68e522fe46864c011325ae88a98c5b02bd0c8f6b9d6f273747f39a7633e081bf"
+      },
+      {
+        "name": "Article for BECAA Maharashtra Souvenir.docx",
+        "bytes": 24653,
+        "sha256": "a31128a3a21aca3f3f0249fa51832450a0e0c6b878fbcda34cfde1c4bcdb87a3"
+      },
+      {
+        "name": "college memory bhavesh.docx",
+        "bytes": 14579,
+        "sha256": "22c90ecfb712ca8c14e75dbbeeb187e0f8066a1f1d2a2c840d4ff54f7fa02bfb"
+      },
+      {
+        "name": "Cover page.jpg",
+        "bytes": 346886,
+        "sha256": "d8dfb14bf8aeb93bedd74fabdd884ab51e1a433cda37c2210125a0b5f315d8e7"
+      },
+      {
+        "name": "Excursion.docx",
+        "bytes": 14125,
+        "sha256": "06b99a4661fe6952af5881c327d0e6d9ec8a9b9576c56ce45b2f624ee9085f01"
+      },
+      {
+        "name": "gymanasium hall.jpeg",
+        "bytes": 266037,
+        "sha256": "f1ec429aa3325a87d48dc656c037bedfb592f7f6c14ac6546e670f0343abc8aa"
+      },
+      {
+        "name": "image0.jpeg",
+        "bytes": 200243,
+        "sha256": "5f1d431bf1fdcea6eedf69fc019c93ca722948c9f0cf6b32144500a9b1d37431"
+      },
+      {
+        "name": "ma.jpg",
+        "bytes": 172211,
+        "sha256": "9cafbc596898d910c66d85bf8c4715d08d8be248f85f6605b251e9688dff5629"
+      },
+      {
+        "name": "main building ajay.pdf",
+        "bytes": 329490,
+        "sha256": "e00a30d402f5503d4f82788ae2beb3ca75355450c9e1b376a9efe772e57cdfdb"
+      },
+      {
+        "name": "Memory from 5th Year - B. Sengupta.docx",
+        "bytes": 29855,
+        "sha256": "1360e4c07f2751bc76178a1804dcaf02f80ad9e003d72429fd0a3fcedf7ca1c9"
+      },
+      {
+        "name": "Meri Kiran.docx",
+        "bytes": 18640,
+        "sha256": "94c22d8ffceef1d01ac690ee26315594a94d44c2d931aa40146fd535600b99b2"
+      },
+      {
+        "name": "Mily drawing 1.jpg",
+        "bytes": 4958865,
+        "sha256": "fa40a14d66a59f17fd3e4d850b7e08269ad1eafe834d00fbf790664b47f4eaf5"
+      },
+      {
+        "name": "More Than a Degree.docx",
+        "bytes": 16522,
+        "sha256": "52a83fe531612becbce6d513d90b26ae40a3f1a34951c2c94da266a419b1d503"
+      },
+      {
+        "name": "President Desk.docx",
+        "bytes": 16200,
+        "sha256": "c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb"
+      },
+      {
+        "name": "prinicpal by ajay debanth.jpeg",
+        "bytes": 122403,
+        "sha256": "54be0b041223bd031bdbe4cb38eec77d0ccb47accf8c0e4dcf5def1a2b10dacf"
+      },
+      {
+        "name": "secretary desk.docx",
+        "bytes": 32923,
+        "sha256": "ed3fd766d55e7bad364f95e8d3777c7305b52aa57458fe636f1a21d988108885"
+      },
+      {
+        "name": "Smritir Golite.docx",
+        "bytes": 14622,
+        "sha256": "60280097c11019dcfcac85b1c5d398df20264dfe305169e0c284f030e1cdb469"
+      },
+      {
+        "name": "Supriyo.JPG",
+        "bytes": 484751,
+        "sha256": "d15810866b6bf28578b8a897de55e89820a426ee088a2c0be970803e55eb16e8"
+      },
+      {
+        "name": "Swar setu program.docx",
+        "bytes": 16139,
+        "sha256": "c30a9e30f81a2046b6abce15bac128447c6a6ac4385b883423af133b122abf03"
+      },
+      {
+        "name": "Vice president desk.docx",
+        "bytes": 15134,
+        "sha256": "b9ac3c0485750812c21e2f2369866ddae5de511037bcc607910ff2574aae1663"
+      },
+      {
+        "name": "Why we die- B. Sengupta.docx",
+        "bytes": 23791,
+        "sha256": "35b67c88a4678787b39239f69d69608bc26479afd77f986e02b0f7562b6d08d9"
+      }
+    ],
+    "sub": [
+      {
+        "name": "chatgpt kallol.jpeg",
+        "bytes": 191370,
+        "sha256": "b3a24a9861d7c0692bca1127a510a5c5f05d96df730067e2536ad2d7541428ee"
+      },
+      {
+        "name": "cover page new.png",
+        "bytes": 1836117,
+        "sha256": "29a12bcbb8baca83a76e6bd6eee546471d7ece7f5d04a37468e4e5234f53d327"
+      },
+      {
+        "name": "Palash Article.docx",
+        "bytes": 3497514,
+        "sha256": "b0a1ba37a31c95ed159b8fe0e5eac6de96bcda461d5b7fe36243c21f8f3b84aa"
+      },
+      {
+        "name": "Shubhra Basu.md",
+        "bytes": 1533,
+        "sha256": "0d068f30b846c0b7eba29f0c16847c4ba3dc90a81733ba8ed23a98c14f328da2"
+      },
+      {
+        "name": "Siddhartha Mukhopadhyay story.docx",
+        "bytes": 11870,
+        "sha256": "9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65"
+      }
+    ]
+  },
+  "collisions": [],
+  "near_names": [
+    {
+      "sub": {
+        "name": "cover page new.png",
+        "sha256": "29a12bcbb8baca83a76e6bd6eee546471d7ece7f5d04a37468e4e5234f53d327"
+      },
+      "parent": {
+        "name": "Cover page.jpg",
+        "sha256": "d8dfb14bf8aeb93bedd74fabdd884ab51e1a433cda37c2210125a0b5f315d8e7"
+      },
+      "similarity": 0.8181818181818182
+    }
+  ],
+  "moves": [
+    {
+      "from": "v2-incoming/chatgpt kallol.jpeg",
+      "to": "chatgpt kallol.jpeg"
+    },
+    {
+      "from": "v2-incoming/cover page new.png",
+      "to": "cover page new.png"
+    },
+    {
+      "from": "v2-incoming/Palash Article.docx",
+      "to": "Palash Article.docx"
+    },
+    {
+      "from": "v2-incoming/Shubhra Basu.md",
+      "to": "Shubhra Basu.md"
+    },
+    {
+      "from": "v2-incoming/Siddhartha Mukhopadhyay story.docx",
+      "to": "Siddhartha Mukhopadhyay story.docx"
+    }
+  ],
+  "ok": true,
+  "live_references": [
+    {
+      "file": "05_WEBSITE/scripts/add-v2-manifest-items.mjs",
+      "lines": [
+        21,
+        22,
+        23,
+        37,
+        63,
+        89
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/add-v3-manifest-items.mjs",
+      "lines": [
+        18,
+        46
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/apply-v2-exclusions.mjs",
+      "lines": [
+        20
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/consolidate-incoming.mjs",
+      "lines": [
+        7,
+        11,
+        16,
+        30,
+        49,
+        182,
+        184,
+        214
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/extract-v2-golap.mjs",
+      "lines": [
+        7,
+        15
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/extract-v2-palash-article.mjs",
+      "lines": [
+        7,
+        18
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/extract-v3-siddhartha-story.mjs",
+      "lines": [
+        11,
+        19
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/incoming-consolidation-core.mjs",
+      "lines": [
+        1,
+        6,
+        55
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/merge-v2-addendum-tracker.mjs",
+      "lines": [
+        10
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/normalize-v2-cover.mjs",
+      "lines": [
+        6
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/normalize-v2-gallery-image.mjs",
+      "lines": [
+        7
+      ]
+    },
+    {
+      "file": "05_WEBSITE/scripts/update-v2-cover-manifest.mjs",
+      "lines": [
+        6
+      ]
+    },
+    {
+      "file": "05_WEBSITE/src/_data/publication.yaml",
+      "lines": [
+        1044,
+        1068,
+        1092,
+        1116,
+        1135
+      ]
+    },
+    {
+      "file": "05_WEBSITE/src/content/articles/ART-010-item.md",
+      "lines": [
+        4
+      ]
+    },
+    {
+      "file": "05_WEBSITE/src/content/articles/ART-011-item.md",
+      "lines": [
+        4
+      ]
+    },
+    {
+      "file": "05_WEBSITE/src/content/articles/ART-012-item.md",
+      "lines": [
+        4
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/integration/consolidate-incoming.test.mjs",
+      "lines": [
+        23,
+        109,
+        116,
+        125
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/integration/cover-manifest-entry.test.mjs",
+      "lines": [
+        17,
+        21
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/integration/extract-v3-siddhartha-story.test.mjs",
+      "lines": [
+        22
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/integration/normalize-cover-core.test.mjs",
+      "lines": [
+        14
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/integration/superseded-sources.test.mjs",
+      "lines": [
+        19,
+        41
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/unit/article-markdown-core.test.mjs",
+      "lines": [
+        10,
+        18,
+        105,
+        112
+      ]
+    },
+    {
+      "file": "05_WEBSITE/tests/unit/incoming-consolidation-core.test.mjs",
+      "lines": [
+        19,
+        20,
+        79,
+        98
+      ]
+    }
+  ]
+}

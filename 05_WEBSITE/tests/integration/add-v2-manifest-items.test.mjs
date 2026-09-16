@@ -14,7 +14,11 @@ async function run() {
   const after = readManifest();
   assert.equal(after.items.length, beforeCount + 3, "exactly 3 new items must be added");
 
-  for (const expected of NEW_ITEMS) {
+  // Sprint v4 Task 6 (authorised) re-sourced ART-010 from Shubhra Basu.md; only its
+  // source_file and source_fingerprint may differ from the Sprint v2 entry.
+  const SPRINT_V4_ART010 = { source_file: "02_INCOMING_CONTENT/Shubhra Basu.md", source_fingerprint: "0d068f30b846c0b7eba29f0c16847c4ba3dc90a81733ba8ed23a98c14f328da2" };
+  for (const v2Entry of NEW_ITEMS) {
+    const expected = v2Entry.id === "ART-010" ? { ...v2Entry, ...SPRINT_V4_ART010 } : v2Entry;
     const actual = after.items.find((item) => item.id === expected.id);
     assert.ok(actual, `${expected.id} must be present in the manifest`);
     assert.deepEqual(actual, expected, `${expected.id} fields must match exactly`);

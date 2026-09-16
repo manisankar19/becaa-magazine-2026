@@ -40,22 +40,34 @@ for (const viewport of [
       height: img.naturalHeight
     }))
   }));
+  // Sprint v4: advertisements are artwork, text-only (.ad-text, no image) or memorial
+  // (photograph letterboxed with object-fit: contain, so its box ratio may differ).
   const ads = await page.locator(".publication-item--advertisement").evaluateAll((items) => items.map((item) => {
     const img = item.querySelector("img");
     const rect = img?.getBoundingClientRect();
-    return { id: item.id, naturalWidth: img?.naturalWidth || 0, naturalHeight: img?.naturalHeight || 0, displayWidth: rect?.width || 0, displayHeight: rect?.height || 0 };
+    const adText = item.querySelector(".ad-text");
+    const kind = adText ? "text" : item.querySelector(".ad-frame--memorial") ? "memorial" : "artwork";
+    const textRect = adText?.getBoundingClientRect();
+    return { id: item.id, kind, hasImg: Boolean(img), text: adText?.textContent.trim() ?? "", textWidth: textRect?.width || 0, objectFit: img ? getComputedStyle(img).objectFit : "", naturalWidth: img?.naturalWidth || 0, naturalHeight: img?.naturalHeight || 0, displayWidth: rect?.width || 0, displayHeight: rect?.height || 0 };
   }));
   for (const ad of ads) {
-    const naturalRatio = ad.naturalWidth / ad.naturalHeight;
-    const displayRatio = ad.displayWidth / ad.displayHeight;
-    if (!ad.naturalWidth || !ad.displayWidth || Math.abs(naturalRatio - displayRatio) > 0.02) {
+    const fail = async (message) => {
       await browser.close();
-      console.error(`${viewport.name} ${ad.id} advertisement is broken or distorted.`);
+      console.error(`${viewport.name} ${ad.id} ${message}`);
       process.exit(1);
+    };
+    if (ad.kind === "text") {
+      if (ad.hasImg || !ad.text || !ad.textWidth) await fail("text-only advertisement is empty, hidden or renders an image.");
+    } else if (ad.kind === "memorial") {
+      if (!ad.naturalWidth || !ad.displayWidth || ad.objectFit !== "contain") await fail("memorial photograph is broken or not shown uncropped (object-fit: contain).");
+    } else {
+      const naturalRatio = ad.naturalWidth / ad.naturalHeight;
+      const displayRatio = ad.displayWidth / ad.displayHeight;
+      if (!ad.naturalWidth || !ad.displayWidth || Math.abs(naturalRatio - displayRatio) > 0.02) await fail("advertisement is broken or distorted.");
     }
-    const frame = page.locator(`#${ad.id} .ad-frame`);
-    await frame.scrollIntoViewIfNeeded();
-    await frame.screenshot({ path: path.join(adOutDir, `${viewport.name}-${ad.id}.png`) });
+    const target = page.locator(ad.kind === "text" ? `#${ad.id}` : `#${ad.id} .ad-frame`);
+    await target.scrollIntoViewIfNeeded();
+    await target.screenshot({ path: path.join(adOutDir, `${viewport.name}-${ad.id}.png`) });
   }
   fs.writeFileSync(path.join(outDir, `${viewport.name}-qa.json`), JSON.stringify(issues, null, 2), "utf8");
   if (issues.overflow) {

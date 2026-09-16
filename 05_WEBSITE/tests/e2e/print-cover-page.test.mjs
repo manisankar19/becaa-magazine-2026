@@ -54,7 +54,10 @@ assert.deepEqual(stray, [], `ink rows between the cover image (ends at ${mm(imag
 
 // The contents heading must be the first thing on page 2, and nothing else moves.
 const text = execFileSync("pdftotext", ["-layout", pdf, "-"], { encoding: "utf8", maxBuffer: 30_000_000 }).split("\f");
-assert.equal(text.length - 1, 69, "page count unchanged");
+// 69 pages at V3_REVIEW_02; Sprint v4 adds one page each for ADV-027, ADV-028 and ADV-029.
+// The ART-010 re-extraction, committee corrections and print justification add none.
+const EXPECTED_PAGES = 72;
+assert.equal(text.length - 1, EXPECTED_PAGES, "page count unchanged");
 assert.match(text[1].trim().split("\n")[0], /একই শিকড়/, "page 2 starts with the contents heading");
 assert.ok(!/একই শিকড়.*Contents/.test(text[0]), "page 1 carries no contents text");
-console.log(`PASS: cover page clean — image ends at ${mm(imageBottom)} mm, no stray ink before the page number, 69 pages.`);
+console.log(`PASS: cover page clean — image ends at ${mm(imageBottom)} mm, no stray ink before the page number, ${EXPECTED_PAGES} pages.`);

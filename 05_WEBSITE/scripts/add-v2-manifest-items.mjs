@@ -7,7 +7,8 @@ const manifestPath = path.join(siteRoot, "src", "_data", "publication.yaml");
 const ANCHOR = "sponsor_acknowledgements:";
 
 // Same heuristic as import-approved.mjs's language() helper.
-function detectLanguage(text) {
+function detectLanguage(markdown) {
+  const text = markdown.replace(/<[^>]*>/g, ""); // markup such as the poem's <br> is not language
   const bengali = (text.match(/[ঀ-৿]/g) || []).length;
   const latin = (text.match(/[A-Za-z]/g) || []).length;
   return bengali && latin ? "mixed" : bengali ? "bn" : "en";
@@ -18,7 +19,9 @@ function readExtractedBody(relContentFile) {
   return stripFrontMatter(fs.readFileSync(abs, "utf8"));
 }
 
-const golapSource = path.join(projectRoot, "02_INCOMING_CONTENT", "Shubhra Basu.docx");
+// Sprint v2 source for ART-010. Superseded in Sprint v4 (Task 6 re-extracted the poem from
+// Shubhra Basu.md); the original bytes are archived, so this historical entry still hashes.
+const golapSource = path.join(projectRoot, "04_MAGAZINE_WORKING", "SUPERSEDED_SOURCES", "2026-09-15", "Shubhra Basu.docx");
 const palashSource = path.join(projectRoot, "02_INCOMING_CONTENT", "Palash Article.docx");
 const chatgptSource = path.join(projectRoot, "02_INCOMING_CONTENT", "chatgpt kallol.jpeg");
 

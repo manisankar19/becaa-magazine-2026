@@ -202,6 +202,14 @@ Five corrections to already-approved content, received after Task 1. None adds, 
   - Acceptance: comments and constants referencing the old folder in retired one-shot scripts are updated or the scripts are marked historical in their header; no behavioural change; unit/integration suites green.
   - Files: `05_WEBSITE/scripts/add-v2-manifest-items.mjs`, `05_WEBSITE/scripts/add-v3-manifest-items.mjs`
 
+## Stream G — Pre-release fixes (added 2026-09-16 during `/dev`)
+
+Defects in existing code found while executing Tasks 20–29 (a dry run of the `release:v3` step list against `HEAD` in a scratch worktree). Each blocks the gated release (Task 33) or Task 29's green `test:integration`, so it runs before Task 29. Recorded as a new task rather than folded silently into an unrelated one.
+
+- [x] Task 38: Make the release gates reflect the approved Sprint v4 state (P0) — **Complete, commit recorded in the session log.**
+  - Acceptance: (a) `scripts/visual-qa.mjs` (`npm run qa`) no longer fails on `ADV-027` "broken or distorted": text-only advertisements are checked for a visible, non-empty `.ad-text` and no image; the memorial photograph is checked as loaded with `object-fit: contain`; artwork keeps the aspect-ratio check; a screenshot is still written per advertisement. (b) `tests/e2e/print-cover-page.test.mjs` expects 72 pages (69 + the three Sprint v4 advertisement pages), with the reason in a comment. (c) `tests/integration/add-v2-manifest-items.test.mjs` passes: the historical Sprint v2 script hashes ART-010's superseded source from its archive (`SUPERSEDED_SOURCES/2026-09-15/Shubhra Basu.docx`) instead of the removed `02_INCOMING_CONTENT` path, ignores markup when detecting language (the poem's `<br>` made it "mixed"), and the test allows only ART-010's Task-6-authorised `source_file`/`source_fingerprint` change. No manifest or content change.
+  - Files: `05_WEBSITE/scripts/visual-qa.mjs`, `05_WEBSITE/tests/e2e/print-cover-page.test.mjs`, `05_WEBSITE/scripts/add-v2-manifest-items.mjs`, `05_WEBSITE/tests/integration/add-v2-manifest-items.test.mjs`
+
 ## Session log
 
 ### 2026-09-16 — Tasks 2–16

@@ -65,6 +65,15 @@
   hyphens: none;
 }
 
+/* Sprint v4 Task 27 (PRD §4.7 item 6, Decision S): the committee asked for justified
+   article prose in print only. Scoped to ordinary paragraphs inside article bodies:
+   verse (p with <br>, rule above), list items and quotations are excluded, and titles,
+   bylines, messages, gallery, advertisements, memorial text and contents are outside
+   .print-page--article .prose. The website stylesheet is not changed. */
+.print-page--article .prose p:not(:has(br)):not(li p):not(blockquote p) {
+  text-align: justify;
+}
+
 .print-ad {
   display: block;
   max-width: 100%;

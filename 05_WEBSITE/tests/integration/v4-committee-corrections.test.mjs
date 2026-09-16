@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { chromium } from "playwright";
 import { readManifest, siteRoot } from "../../scripts/lib.mjs";
 import { countOccurrences } from "../../scripts/text-correction-core.mjs";
 import { MSG001_SENTENCE, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
@@ -173,6 +174,58 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   // The addendum's reason (date of death) is never published.
   for (const [where, text] of [["website", indexHtml], ["print", printHtml], ["PDF", pages.join("\f")]]) {
     assert.ok(!/9(?:th)?\s+September|September\s+9|passed away/i.test(text), `${where}: no date or circumstances of death`);
+  }
+}
+
+// --- Print-only justification of article prose (Task 27, Decision S) ---------------
+{
+  const printedItems = manifest.items.filter((i) => i.print_include);
+  assert.ok(printHtml.includes('class="print-page print-page--article'), "print.njk adds the print-page--{type} modifier");
+  for (const it of printedItems) {
+    const open = printSection(it.id).slice(0, 80);
+    assert.ok(open.startsWith(`<section class="print-page print-page--${it.type} `) || open.startsWith(`<section class="print-page print-page--${it.type}"`), `${it.id}: section carries print-page--${it.type}`);
+  }
+  assert.ok(!/text-align\s*:\s*justify/.test(read("src/assets/css/site.css")), "website stylesheet has no text justification");
+  assert.equal(read("src/assets/css/site.css"), baseline("src/assets/css/site.css"), "website stylesheet unchanged since the corrections began");
+
+  const browser = await chromium.launch();
+  try {
+    // Print media on the print HTML (the PDF is rendered from this page with print media).
+    const page = await browser.newPage();
+    await page.emulateMedia({ media: "print" });
+    await page.goto(`file://${path.join(siteRoot, "_site", "print", "index.html")}`, { waitUntil: "load" });
+    const rows = await page.evaluate(() => {
+      const align = (el) => getComputedStyle(el).textAlign;
+      const out = [];
+      for (const section of document.querySelectorAll("section.print-page[data-testid]")) {
+        const id = section.dataset.testid.replace("print-page-", "");
+        const add = (kind, el) => out.push({ id, kind, align: align(el), text: el.textContent.trim().slice(0, 40) });
+        section.querySelectorAll(".prose p").forEach((p) => add(p.querySelector("br") ? "verse" : p.closest("blockquote, li") ? "quote-or-list" : "prose", p));
+        section.querySelectorAll("h1, h2, h3, h4, .section-kicker, .byline, li, figcaption, .ad-text, .ad-memorial p").forEach((el) => add("other", el));
+      }
+      document.querySelectorAll(".print-contents li, .print-contents h1, .print-contact p, .print-thanks p").forEach((el) => out.push({ id: "(non-item)", kind: "other", align: align(el), text: el.textContent.trim().slice(0, 40) }));
+      return out;
+    });
+    const typeOf = Object.fromEntries(printedItems.map((i) => [i.id, i.type]));
+    const articleProse = rows.filter((r) => typeOf[r.id] === "article" && r.kind === "prose");
+    assert.ok(articleProse.length > 50, `found article prose paragraphs to check (${articleProse.length})`);
+    for (const r of articleProse) assert.equal(r.align, "justify", `${r.id}: article prose paragraph justified in print ("${r.text}")`);
+    const verse = rows.filter((r) => r.kind === "verse");
+    assert.ok(verse.some((r) => r.id === "ART-010"), "ART-010 verse paragraphs found");
+    for (const r of verse) assert.equal(r.align, "left", `${r.id}: verse stays left-aligned ("${r.text}")`);
+    for (const r of rows.filter((x) => x.kind === "quote-or-list" || x.kind === "other" || (x.kind === "prose" && typeOf[x.id] !== "article"))) {
+      assert.notEqual(r.align, "justify", `${r.id} ${r.kind}: not justified ("${r.text}")`);
+    }
+    const types = new Set(rows.filter((r) => r.kind === "prose" && typeOf[r.id] !== "article").map((r) => typeOf[r.id]));
+    assert.ok(types.has("message"), "message prose checked and not justified");
+
+    // Screen media on the website: nothing justified.
+    const web = await browser.newPage();
+    await web.goto(`file://${path.join(siteRoot, "_site", "index.html")}`, { waitUntil: "load" });
+    const justified = await web.evaluate(() => [...document.querySelectorAll("body *")].filter((el) => getComputedStyle(el).textAlign === "justify").length);
+    assert.equal(justified, 0, "website: no justified element");
+  } finally {
+    await browser.close();
   }
 }
 

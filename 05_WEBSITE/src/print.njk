@@ -24,7 +24,7 @@ permalink: /print/
   {% if item.print_include %}
   {% set adStyle = item | adPageStyle if item.type == "advertisement" else "" %}
   {% set kickerLabel = "Advertisements · In memoriam" if (item.type == "advertisement" and item.presentation == "memorial") else (item.section | sectionLabel) %}
-  <section class="print-page{% if item.type == "advertisement" %} print-page--advertisement {{ item | adInkClass }}{% endif %}" id="print-{{ item.id }}" data-testid="print-page-{{ item.id }}"{% if adStyle %} style="{{ adStyle }}"{% endif %}>
+  <section class="print-page print-page--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="print-{{ item.id }}" data-testid="print-page-{{ item.id }}"{% if adStyle %} style="{{ adStyle }}"{% endif %}>
     <p class="section-kicker">{{ kickerLabel }} · {{ item.id }}</p>
     <h1>{{ item.title }}</h1>
     {% if item.contributor and item.type != "advertisement" %}<p class="byline">{{ item | byline }}</p>{% endif %}

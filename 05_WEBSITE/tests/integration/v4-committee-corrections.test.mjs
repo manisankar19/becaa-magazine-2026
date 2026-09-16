@@ -146,4 +146,34 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   assertOnlyRecordedSubstitutions("ART-003");
 }
 
+// --- ART-004 / ART-005: Late Biswajit Sengupta (Task 26, Decision R) ---------------
+{
+  const LATE = "Late Biswajit Sengupta";
+  const expectedBylines = {};
+  for (const id of ["ART-004", "ART-005"]) {
+    const it = item(id);
+    assert.equal(it.display_name, LATE, `${id}: manifest display_name`);
+    assert.equal(it.contributor, "Biswajit Sengupta", `${id}: contributor (provenance) unchanged`);
+    expectedBylines[id] = [LATE, it.branch, it.passing_year ? `${it.passing_year} Batch` : ""].filter(Boolean).join(", ") + (it.designation ? ` — ${it.designation}` : "");
+    assert.ok(webArticle(id).includes(`<p class="byline">${expectedBylines[id]}</p>`), `${id}: website byline "${expectedBylines[id]}"`);
+    assert.ok(printSection(id).includes(`<p class="byline">${expectedBylines[id]}</p>`), `${id}: print byline`);
+    const pdfLines = pdfItemText(id).split("\n").map((l) => l.trim());
+    assert.ok(pdfLines.includes(expectedBylines[id]), `${id}: PDF byline line "${expectedBylines[id]}"`);
+  }
+  assert.equal(manifest.items.filter((i) => i.display_name).map((i) => i.id).join(","), "ART-004,ART-005", "only ART-004 and ART-005 carry a display_name");
+  assertOnlyRecordedSubstitutions("ART-004/ART-005");
+
+  // No other contributor gets a "Late" prefix, on the website or in print/PDF.
+  const lateBylines = (html) => [...html.matchAll(/<p class="byline">([^<]*)<\/p>/g)].map((m) => decode(m[1])).filter((b) => /\bLate\b/.test(b));
+  assert.equal(lateBylines(indexHtml).length, 2, "website: exactly two bylines carry Late");
+  assert.equal(lateBylines(printHtml).length, 2, "print: exactly two bylines carry Late");
+  const memorialLines = new Set(item("ADV-029").text_lines); // "Late Shri Bhakta Mohon Mitra" is approved memorial wording, not a byline
+  const pdfLateLines = pages.flatMap((p) => p.split("\n")).map((l) => l.trim()).filter((l) => /^Late /.test(l) && !memorialLines.has(l));
+  assert.deepEqual(pdfLateLines, [expectedBylines["ART-004"], expectedBylines["ART-005"]], "PDF: the only Late-prefixed lines outside the memorial page are the two bylines");
+  // The addendum's reason (date of death) is never published.
+  for (const [where, text] of [["website", indexHtml], ["print", printHtml], ["PDF", pages.join("\f")]]) {
+    assert.ok(!/9(?:th)?\s+September|September\s+9|passed away/i.test(text), `${where}: no date or circumstances of death`);
+  }
+}
+
 console.log("v4-committee-corrections: all assertions passed");

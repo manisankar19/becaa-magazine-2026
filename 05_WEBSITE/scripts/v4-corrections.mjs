@@ -14,6 +14,8 @@ export const V4_FILE_CORRECTIONS = [
   { id: "MSG-002", file: "src/content/messages/MSG-002-vice-preseident-desk.md", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 1 },
   { id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "ভাইবই", replace: "ভাবা\u09AF\u09BC", expectedCount: 1 },
   { id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "পারিমা", replace: "পরিমা", expectedCount: 1 },
+  // Decision R: reader-facing display_name added under both of Biswajit Sengupta's items; contributor unchanged.
+  { id: "ART-004/ART-005", file: "src/_data/publication.yaml", find: "    contributor: Biswajit Sengupta\n", replace: "    contributor: Biswajit Sengupta\n    display_name: Late Biswajit Sengupta\n", expectedCount: 2 },
 ];
 
 // How each correction shows up in rendered text (website, PDF); used by the regression

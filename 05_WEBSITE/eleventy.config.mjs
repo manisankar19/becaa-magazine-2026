@@ -17,7 +17,10 @@ export default function eleventyConfig(config) {
   config.addFilter("whereWeb", (items = []) => items.filter((item) => item.web_include));
   config.addFilter("byOrder", (items = []) => [...items].sort((a, b) => Number(a.order) - Number(b.order)));
   config.addFilter("byline", (item = {}) => {
-    const details = [item.contributor];
+    // Sprint v4 Decision R: display_name is the reader-facing name (e.g. "Late …");
+    // contributor stays the provenance/audit identity.
+    const displayName = typeof item.display_name === "string" && item.display_name.trim() ? item.display_name : item.contributor;
+    const details = [displayName];
     if (item.branch) details.push(item.branch);
     if (item.passing_year) details.push(`${item.passing_year} Batch`);
     let line = details.filter(Boolean).join(", ");

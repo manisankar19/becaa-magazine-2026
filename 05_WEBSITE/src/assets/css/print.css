@@ -54,6 +54,17 @@
   break-after: auto;
 }
 
+/* Sprint v4 Task 7 (sprints/v4/PRD.md §4.2): a paragraph containing a hard
+   break is verse (e.g. ART-010, "গোলাপ") — force left alignment, a relaxed
+   line-height and no hyphenation so it never gets justified or broken
+   mid-word in print, regardless of any future prose-justification rule
+   elsewhere (Decision S, Task 27: verse must continue to win). */
+.prose p:has(br) {
+  text-align: left;
+  line-height: 1.6;
+  hyphens: none;
+}
+
 .print-ad {
   display: block;
   max-width: 100%;

@@ -83,6 +83,55 @@
 .print-page--advertisement figure { align-self: center; justify-self: center; width: 100%; margin: 0; display: grid; justify-items: center; }
 .print-page--advertisement .print-ad { max-height: 215mm; }
 
+/* Sprint v4 §4.3, Task 10 (Decisions F, G) — text-only advertisement pages: the
+   approved sentence fills the same 1fr grid row the artwork figure otherwise
+   occupies, centred both ways within the tinted page box. */
+.print-page--advertisement .ad-text {
+  align-self: center;
+  justify-self: center;
+  max-width: 20ch;
+  margin: 0;
+  font-size: 30pt;
+  line-height: 1.35;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ad-ink, #20201d);
+}
+
+/* Sprint v4 §4.4, Task 11 (Decisions F, G, J) — memorial page: the uncropped
+   photograph (contained, bounded height so the square scan never overflows
+   the page) followed by the seven centred text_lines, name line emphasised. */
+.print-page--advertisement .ad-frame--memorial {
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  margin: 0;
+  display: grid;
+  justify-items: center;
+}
+.print-page--advertisement .ad-frame--memorial .print-ad {
+  max-height: 130mm;
+  object-fit: contain;
+}
+.print-page--advertisement .ad-memorial {
+  align-self: start;
+  justify-self: center;
+  width: 100%;
+  margin: 4mm 0 0;
+  text-align: center;
+  display: grid;
+  gap: 2mm;
+  font-size: 16pt;
+  line-height: 1.4;
+}
+.print-page--advertisement .ad-memorial p {
+  margin: 0;
+}
+.print-page--advertisement .ad-memorial .ad-memorial__name {
+  font-size: 18pt;
+  font-weight: 700;
+}
+
 .print-thanks { display: grid; align-content: center; }
 .print-contact { break-after: page; }
 .print-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-top: 8mm; }

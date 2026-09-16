@@ -11,7 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { readManifest, siteRoot } from "../../scripts/lib.mjs";
 import { countOccurrences } from "../../scripts/text-correction-core.mjs";
-import { MSG001_SENTENCE, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
+import { MSG001_SENTENCE, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
 import { applyV4FileCorrections } from "../../scripts/apply-v4-committee-corrections.mjs";
 
 const read = (rel) => fs.readFileSync(path.join(siteRoot, rel), "utf8");
@@ -124,6 +124,26 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   assert.ok(!pdfItemText("MSG-002").includes(OLD), "MSG-002 PDF page: superseded title absent");
   assert.match(pdfContents, /\d+\.\s+Vice President Desk\s+MSG-002/, "MSG-002 PDF contents entry corrected");
   assert.ok(!pages.join("\f").includes(OLD), "PDF: superseded title absent everywhere");
+}
+
+// --- ART-003: two Bengali spellings (Task 25, Decision Q) --------------------------
+{
+  const spellings = V4_CORRECTIONS.filter((c) => c.id === "ART-003");
+  assert.equal(spellings.length, 2, "ART-003 has two recorded spelling corrections");
+  const content = read("src/content/articles/ART-003-item.md");
+  const web = webArticle("ART-003");
+  const pdf = squash(pdfItemText("ART-003"));
+  for (const { find, replace } of spellings) {
+    assert.equal(countOccurrences(content, replace), 1, `ART-003 content: "${replace}" present once`);
+    assert.equal(countOccurrences(content, find), 0, `ART-003 content: "${find}" absent`);
+    assert.equal(countOccurrences(web, replace), 1, `ART-003 website: "${replace}" present once`);
+    assert.ok(!web.includes(find), `ART-003 website: "${find}" absent`);
+    assert.ok(pdf.includes(squash(replace)), `ART-003 PDF: "${replace}" present`);
+    assert.ok(!pdf.includes(squash(find)), `ART-003 PDF: "${find}" absent`);
+    assert.ok(!squash(indexHtml).includes(squash(find)) && !pages.some((p) => squash(p).includes(squash(find))), `"${find}" absent from the whole website and PDF`);
+  }
+  // Every other character, punctuation mark and paragraph break preserved.
+  assertOnlyRecordedSubstitutions("ART-003");
 }
 
 console.log("v4-committee-corrections: all assertions passed");

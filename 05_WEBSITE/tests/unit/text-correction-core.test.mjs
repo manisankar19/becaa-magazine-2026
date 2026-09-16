@@ -83,4 +83,13 @@ import { applyCorrection, countOccurrences, correctionState } from "../../script
   assert.throws(() => applyCorrection("by Late Biswajit Sengupta", late), /found 0/, "already-applied text is not corrected twice");
 }
 
+// --- Scenario 8: matching is code-point exact; a normalisation mismatch is explained --
+{
+  const precomposed = "বেকান পরিচ\u09DF আমাদের"; // য় as U+09DF (as in MSG-001)
+  const decomposed = "বেকান পরিচ\u09AF\u09BC"; // য় as U+09AF U+09BC
+  assert.throws(() => applyCorrection(precomposed, { find: decomposed, replace: "BECAA-র পরিচ\u09AF\u09BC", expectedCount: 1 }), /found 0 \(1 after Unicode NFC normalisation/);
+  const fixed = applyCorrection(precomposed, { find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF", expectedCount: 1 });
+  assert.equal(fixed, "BECAA-র পরিচ\u09DF আমাদের", "the file's own code points are preserved");
+}
+
 console.log("text-correction-core: all assertions passed");

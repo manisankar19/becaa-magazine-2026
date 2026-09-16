@@ -47,7 +47,11 @@ export function applyCorrection(text, { find, replace, expectedCount, wholeWord 
   const source = String(text);
   const indices = pendingIndices(source, find, replace, wholeWord);
   if (indices.length !== expectedCount) {
-    throw new Error(`applyCorrection: expected ${expectedCount} occurrence(s) of "${find}", found ${indices.length}`);
+    // Bengali text can spell the same letter with different code points (য় is U+09DF or
+    // U+09AF U+09BC). Matching stays byte-exact so each file keeps its own encoding, but say why.
+    const nfc = pendingIndices(source.normalize("NFC"), find.normalize("NFC"), replace.normalize("NFC"), wholeWord).length;
+    const hint = nfc !== indices.length ? ` (${nfc} after Unicode NFC normalisation — match the file's code points exactly)` : "";
+    throw new Error(`applyCorrection: expected ${expectedCount} occurrence(s) of "${find}", found ${indices.length}${hint}`);
   }
   let result = "";
   let last = 0;

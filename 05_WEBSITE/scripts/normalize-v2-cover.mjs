@@ -3,7 +3,7 @@ import path from "node:path";
 import { projectRoot, sha256 } from "./lib.mjs";
 import { normalizeCoverBuffer } from "./normalize-cover-core.mjs";
 
-const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "cover page new.png");
+const sourcePath = path.join(projectRoot, "02_INCOMING_CONTENT", "cover page new.png");
 const outputDir = path.join(projectRoot, "05_WEBSITE", "src", "assets", "normalized", "cover");
 const outputPath = path.join(outputDir, "cover page new.png");
 

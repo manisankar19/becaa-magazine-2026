@@ -18,9 +18,9 @@ function readExtractedBody(relContentFile) {
   return stripFrontMatter(fs.readFileSync(abs, "utf8"));
 }
 
-const golapSource = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Shubhra Basu.docx");
-const palashSource = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Palash Article.docx");
-const chatgptSource = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "chatgpt kallol.jpeg");
+const golapSource = path.join(projectRoot, "02_INCOMING_CONTENT", "Shubhra Basu.docx");
+const palashSource = path.join(projectRoot, "02_INCOMING_CONTENT", "Palash Article.docx");
+const chatgptSource = path.join(projectRoot, "02_INCOMING_CONTENT", "chatgpt kallol.jpeg");
 
 export const NEW_ITEMS = [
   {
@@ -34,7 +34,7 @@ export const NEW_ITEMS = [
     branch: "Civil",
     section: "gallery",
     order: 370,
-    source_file: "02_INCOMING_CONTENT/v2-incoming/chatgpt kallol.jpeg",
+    source_file: "02_INCOMING_CONTENT/chatgpt kallol.jpeg",
     source_fingerprint: sha256(chatgptSource),
     content_file: "",
     web_asset: "assets/normalized/images/web/GAL-007-chatgpt-web.jpg",
@@ -60,7 +60,7 @@ export const NEW_ITEMS = [
     branch: "Civil",
     section: "articles",
     order: 200,
-    source_file: "02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.docx",
+    source_file: "02_INCOMING_CONTENT/Shubhra Basu.docx",
     source_fingerprint: sha256(golapSource),
     content_file: "articles/ART-010-item.md",
     web_asset: "",
@@ -86,7 +86,7 @@ export const NEW_ITEMS = [
     branch: "Civil",
     section: "articles",
     order: 210,
-    source_file: "02_INCOMING_CONTENT/v2-incoming/Palash Article.docx",
+    source_file: "02_INCOMING_CONTENT/Palash Article.docx",
     source_fingerprint: sha256(palashSource),
     content_file: "articles/ART-011-item.md",
     web_asset: "",

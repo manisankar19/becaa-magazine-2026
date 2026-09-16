@@ -16,7 +16,7 @@ const cases = [
   },
   {
     archived: path.join(archive, "Siddhartha Mukhopadhyay story.docx"),
-    live: path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Siddhartha Mukhopadhyay story.docx"),
+    live: path.join(projectRoot, "02_INCOMING_CONTENT", "Siddhartha Mukhopadhyay story.docx"),
     expectedArchived: "a13de2ba0199d8f791cd4d89a335fe26d41a1de92da657da41b42a2009fce4a4",
     expectedLive: "9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65",
   },
@@ -38,7 +38,7 @@ console.log("superseded-sources: OK");
 // exact bytes that V3 was built from; the authoritative source is now the .md file.
 const archive15 = path.join(projectRoot, "04_MAGAZINE_WORKING", "SUPERSEDED_SOURCES", "2026-09-15");
 const archived15 = path.join(archive15, "Shubhra Basu.docx");
-const liveSource15 = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Shubhra Basu.md");
+const liveSource15 = path.join(projectRoot, "02_INCOMING_CONTENT", "Shubhra Basu.md");
 const ARCHIVED_DOCX_SHA = "83ae8311a1db9205946b5f7f207985eccace7dbf54d771fed3680a9a11d63af9";
 const LIVE_MD_SHA = "0d068f30b846c0b7eba29f0c16847c4ba3dc90a81733ba8ed23a98c14f328da2";
 

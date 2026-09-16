@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { projectRoot as defaultProjectRoot, siteRoot, sha256, walkFiles } from "./lib.mjs";
 import { planConsolidation } from "./incoming-consolidation-core.mjs";
 
@@ -221,13 +222,56 @@ export function runPlan(options = {}) {
   return { ok: report.ok, report, jsonPath, mdPath };
 }
 
+// Runs --apply: performs one git mv per planned move (execFileSync, no
+// shell, no wildcards) and, only once every move has succeeded, removes the
+// now-empty sub directory. Refuses to run if the plan has any collision or
+// if the number of planned moves is not exactly 5 (Task 4 acceptance) —
+// either condition means the folders are not in the expected pre-apply
+// state and applying could do something other than the reviewed plan.
+export function runApply(options = {}) {
+  const dirs = resolveDirs(options);
+  const report = buildPlanReport(options);
+
+  if (!report.ok) {
+    console.error("Refusing to apply: the consolidation plan has collision(s). Resolve them first (see --plan report).");
+    process.exit(1);
+  }
+  if (report.moves.length !== 5) {
+    console.error(`Refusing to apply: expected exactly 5 planned moves, found ${report.moves.length}.`);
+    process.exit(1);
+  }
+
+  const parentRel = relTo(dirs.projectRoot, dirs.parentDir);
+  const moved = [];
+  for (const move of report.moves) {
+    const from = `${parentRel}/${move.from}`;
+    const to = `${parentRel}/${move.to}`;
+    execFileSync("git", ["mv", from, to], { cwd: dirs.projectRoot });
+    moved.push({ from, to });
+    console.log(`git mv "${from}" "${to}"`);
+  }
+
+  const remaining = fs.readdirSync(dirs.subDir);
+  if (remaining.length !== 0) {
+    console.error(`Refusing to remove ${dirs.subDir}: not empty after all ${moved.length} move(s) succeeded (remaining: ${remaining.join(", ")}).`);
+    process.exit(1);
+  }
+  fs.rmdirSync(dirs.subDir);
+  console.log(`Removed empty directory: ${relTo(dirs.projectRoot, dirs.subDir)}`);
+
+  return { moved, subDirRemoved: true };
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = process.argv.slice(2);
   if (args.includes("--plan")) {
     const { ok } = runPlan();
     process.exit(ok ? 0 : 1);
+  } else if (args.includes("--apply")) {
+    runApply();
+    process.exit(0);
   } else {
-    console.error('Usage: node scripts/consolidate-incoming.mjs --plan');
+    console.error("Usage: node scripts/consolidate-incoming.mjs --plan | --apply");
     process.exit(1);
   }
 }

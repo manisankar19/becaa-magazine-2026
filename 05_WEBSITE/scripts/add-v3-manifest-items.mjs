@@ -15,7 +15,7 @@ const manifestPath = path.join(siteRoot, "src", "_data", "publication.yaml");
 const ANCHOR = "sponsor_acknowledgements:";
 
 const secretarySource = path.join(projectRoot, "02_INCOMING_CONTENT", "secretary desk.docx");
-const storySource = path.join(projectRoot, "02_INCOMING_CONTENT", "v2-incoming", "Siddhartha Mukhopadhyay story.docx");
+const storySource = path.join(projectRoot, "02_INCOMING_CONTENT", "Siddhartha Mukhopadhyay story.docx");
 
 export const MSG_003_OLD_FINGERPRINT = "df446f4416fbf69a89cf654374f6965ceda9fb84708ed86850ef2cbf8dede687";
 export const MSG_003_NEW_FINGERPRINT = sha256(secretarySource);
@@ -43,7 +43,7 @@ export const ART_012 = {
   branch: "Electrical",
   section: "articles",
   order: 220,
-  source_file: "02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx",
+  source_file: "02_INCOMING_CONTENT/Siddhartha Mukhopadhyay story.docx",
   source_fingerprint: sha256(storySource),
   content_file: "articles/ART-012-item.md",
   web_asset: "",

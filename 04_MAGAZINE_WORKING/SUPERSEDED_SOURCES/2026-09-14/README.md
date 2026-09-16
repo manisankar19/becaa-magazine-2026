@@ -13,3 +13,12 @@ were placed at the same paths. Nothing here is used by any build.
 Reason: the revised files were dropped in place by the editor on 2026-09-14 (Sprint v3,
 decision A in `sprints/v3/PRD.md`). The publication pipeline never writes into
 `02_INCOMING_CONTENT`; this archive was created by exporting the previous git blobs.
+
+2026-09-16 addendum (Sprint v4 Task 4, `sprints/v4/PRD.md` §4.5, Decision H): on
+2026-09-15/16 the `02_INCOMING_CONTENT/v2-incoming/` folder was consolidated into
+`02_INCOMING_CONTENT/` via `git mv` (byte-identical; history preserved). The row above
+for `Siddhartha Mukhopadhyay story.docx` referenced the file at
+`02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx`; the same file (same
+SHA-256, `9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65`) now lives at
+`02_INCOMING_CONTENT/Siddhartha Mukhopadhyay story.docx`. This archive folder itself was
+not moved and needs no other change.

@@ -1,7 +1,7 @@
 ---
 id: ART-010
 title: "গোলাপ"
-source_file: "02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.docx"
+source_file: "02_INCOMING_CONTENT/Shubhra Basu.docx"
 source_fingerprint: 83ae8311a1db9205946b5f7f207985eccace7dbf54d771fed3680a9a11d63af9
 verification: verified
 ---

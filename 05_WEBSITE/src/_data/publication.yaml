@@ -1041,7 +1041,7 @@ items:
     branch: Civil
     section: gallery
     order: 370
-    source_file: 02_INCOMING_CONTENT/v2-incoming/chatgpt kallol.jpeg
+    source_file: 02_INCOMING_CONTENT/chatgpt kallol.jpeg
     source_fingerprint: b3a24a9861d7c0692bca1127a510a5c5f05d96df730067e2536ad2d7541428ee
     content_file: ''
     web_asset: assets/normalized/images/web/GAL-007-chatgpt-web.jpg
@@ -1065,7 +1065,7 @@ items:
     branch: Civil
     section: articles
     order: 200
-    source_file: 02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.docx
+    source_file: 02_INCOMING_CONTENT/Shubhra Basu.docx
     source_fingerprint: 83ae8311a1db9205946b5f7f207985eccace7dbf54d771fed3680a9a11d63af9
     content_file: articles/ART-010-item.md
     web_asset: ''
@@ -1089,7 +1089,7 @@ items:
     branch: Civil
     section: articles
     order: 210
-    source_file: 02_INCOMING_CONTENT/v2-incoming/Palash Article.docx
+    source_file: 02_INCOMING_CONTENT/Palash Article.docx
     source_fingerprint: b0a1ba37a31c95ed159b8fe0e5eac6de96bcda461d5b7fe36243c21f8f3b84aa
     content_file: articles/ART-011-item.md
     web_asset: ''
@@ -1113,7 +1113,7 @@ items:
     branch: Electrical
     section: articles
     order: 220
-    source_file: 02_INCOMING_CONTENT/v2-incoming/Siddhartha Mukhopadhyay story.docx
+    source_file: 02_INCOMING_CONTENT/Siddhartha Mukhopadhyay story.docx
     source_fingerprint: 9bbe16d10ca51c310a61ca0936ee886b761eb45710a8c46d655473afebdb1c65
     content_file: articles/ART-012-item.md
     web_asset: ''
@@ -1132,6 +1132,6 @@ sponsor_acknowledgement_message: BECAA Maharashtra warmly thanks our sponsors fo
 cover:
   id: COV-001
   title: একই শিকড়
-  source_file: 02_INCOMING_CONTENT/v2-incoming/cover page new.png
+  source_file: 02_INCOMING_CONTENT/cover page new.png
   asset: assets/normalized/cover/cover page new.png
   source_fingerprint: 29a12bcbb8baca83a76e6bd6eee546471d7ece7f5d04a37468e4e5234f53d327

@@ -1,0 +1,103 @@
+{
+  "generated": "2026-09-16T16:45:39.353Z",
+  "target": "local dev-app",
+  "steps": [
+    {
+      "name": "unauthenticated / shows the welcome page",
+      "detail": "url http://127.0.0.1:43629/"
+    },
+    {
+      "name": "invalid submission shows server field errors",
+      "detail": ""
+    },
+    {
+      "name": "server/platform error is shown as a readable message",
+      "detail": "The server had a problem saving your registration (error 500"
+    },
+    {
+      "name": "alumni registration opens the magazine",
+      "detail": "cookie flags ok"
+    },
+    {
+      "name": "sponsor registration opens the magazine",
+      "detail": "cookie flags ok"
+    },
+    {
+      "name": "guest registration opens the magazine",
+      "detail": "cookie flags ok"
+    },
+    {
+      "name": "protected artwork, gallery image, PDF and print page refused without a session",
+      "detail": ""
+    },
+    {
+      "name": "admin login and dashboard counts",
+      "detail": "visitors=3"
+    },
+    {
+      "name": "search finds one registration",
+      "detail": ""
+    },
+    {
+      "name": "CSV downloads and parses",
+      "detail": "3 rows"
+    },
+    {
+      "name": "delete removes a registration and refreshes counts",
+      "detail": ""
+    },
+    {
+      "name": "logout revokes the session",
+      "detail": ""
+    },
+    {
+      "name": "unauthenticated / shows the welcome page",
+      "detail": "url http://127.0.0.1:43629/"
+    },
+    {
+      "name": "invalid submission shows server field errors",
+      "detail": ""
+    },
+    {
+      "name": "server/platform error is shown as a readable message",
+      "detail": "The server had a problem saving your registration (error 500"
+    },
+    {
+      "name": "alumni registration opens the magazine",
+      "detail": "cookie flags ok"
+    },
+    {
+      "name": "sponsor registration opens the magazine",
+      "detail": "cookie flags ok"
+    },
+    {
+      "name": "guest registration opens the magazine",
+      "detail": "cookie flags ok"
+    },
+    {
+      "name": "protected artwork, gallery image, PDF and print page refused without a session",
+      "detail": ""
+    },
+    {
+      "name": "admin login and dashboard counts",
+      "detail": "visitors=5"
+    },
+    {
+      "name": "search finds one registration",
+      "detail": ""
+    },
+    {
+      "name": "CSV downloads and parses",
+      "detail": "5 rows"
+    },
+    {
+      "name": "delete removes a registration and refreshes counts",
+      "detail": ""
+    },
+    {
+      "name": "logout revokes the session",
+      "detail": ""
+    }
+  ],
+  "result": "pass"
+}

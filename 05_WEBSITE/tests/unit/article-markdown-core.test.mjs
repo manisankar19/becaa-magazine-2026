@@ -97,3 +97,156 @@ runPlainMultiParagraphBody();
 runImageOnlyParagraphDroppedAndEntitiesDecoded();
 runHeadingsAndListItemsAreBlocks();
 console.log("All docxHtmlToParagraphText unit tests passed.");
+
+// ---------------------------------------------------------------------------
+// Sprint v4 Task 5 — readVerseSource(): validates and parses the verse
+// source Markdown convention (# heading, **author**, blank line, N lines
+// each ending "<br>") used by the authoritative poem source
+// 02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.md (sha256 0d068f30b846c0b7…).
+// Fixtures below are built from that file's real, verbatim Bengali text
+// (read via the Read tool), never paraphrased or retyped from memory.
+// ---------------------------------------------------------------------------
+import { readVerseSource } from "../../scripts/article-markdown-core.mjs";
+
+// The heading, author and all 17 poem lines, copied verbatim from
+// "02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.md". Note: in the real file
+// itself, only 16 of the 17 poem lines end with "<br>" — the 17th (last)
+// line ends with an em dash and a bare newline, with no "<br>" marker at
+// all. That is a genuine property of the authoritative source, not a
+// transcription slip here (independently confirmed: `grep -c '<br>'` on the
+// file returns 16, and a hex dump of the file's tail shows the last line
+// ending "...e2 80 94 0a", i.e. em dash + newline, no "<br>"). This matters
+// for Task 6 (extract-v4-golap), which is expected to call this function
+// with { expectedCount: 17 } against that same file — see the final report
+// for this task. REAL_VERSE_SOURCE below reproduces the real file's exact
+// structure, including its missing final "<br>", and is used for the
+// "missing <br> throws" case below. WELL_FORMED_VERSE_SOURCE derives from
+// it by appending only that one missing "<br>", so the "17 valid lines"
+// case can be exercised without inventing or altering any Bengali text.
+const REAL_VERSE_SOURCE = `# গোলাপ
+
+**শুভ্রা বসু**
+
+এনেছি এক গোলাপের চারা—<br>
+রেখেছি তার ভার ভার মাটি ভরা টবে,<br>
+জল দিই তারে, রোদ্দুরেও রাখি তারে।<br>
+ধীরে ধীরে বেড়ে ওঠে, গোলাপের চারা—<br>
+মেলেছে তার সবুজ কচি পাতা।<br>
+ডাল ভরে এসেছে তার কুঁড়ি,<br>
+দুদিন বাদেই কখন মেলেছে কলি।<br>
+একে একে আমন্ত্রণ করেছে, গোলাপেরা<br>
+পেয়েছে নিমন্ত্রণ, মৌমাছিরা আর প্রজাপতিরা।<br>
+রোজই খুশি, আনন্দেতে করছে ছুটোছুটি—<br>
+তারা আসে, পায়ে ফুলের রেণু নিয়ে<br>
+করছে মাখামাখি, দিচ্ছে গড়াগড়ি।<br>
+কত কথা, কত ব্যথা শোনায় গোলাপেরে—<br>
+চুপচাপ, ফিসফাস সেই কথা কানাকানি,<br>
+গুন গুন গুঞ্জন গান গায় মৌমাছি।<br>
+সারাদিন খেলাধুলো হয়ে এল শেষ—<br>
+অবশেষে মধুপুরা নিয়ে গেল রেশ—
+`;
+
+const WELL_FORMED_VERSE_SOURCE = `${REAL_VERSE_SOURCE.trimEnd()}<br>\n`;
+
+// The 17 real poem lines (each still ending "<br>"), sliced out of the
+// well-formed fixture so the four-line fixture and the expected parsed
+// output below are derived from the same verbatim text, not retyped again.
+const REAL_POEM_LINES_WITH_BR = WELL_FORMED_VERSE_SOURCE.trimEnd().split("\n").slice(4, 21);
+
+function runValidSeventeenLineSourceParsesToSeventeenEntries() {
+  const result = readVerseSource(WELL_FORMED_VERSE_SOURCE, { expectedCount: 17 });
+  assert.equal(result.heading, "গোলাপ");
+  assert.equal(result.author, "শুভ্রা বসু");
+  assert.equal(result.lines.length, 17, "must return exactly 17 poem lines");
+  assert.deepEqual(
+    result.lines,
+    REAL_POEM_LINES_WITH_BR.map((line) => line.slice(0, -"<br>".length)),
+    "each returned line must equal the source line with only the trailing <br> removed"
+  );
+  console.log("PASS: valid 17-line verse source parses to 17 entries.");
+}
+
+function runFourLineExampleVerbatim() {
+  const fourLineSource = [
+    "# গোলাপ",
+    "",
+    "**শুভ্রা বসু**",
+    "",
+    ...REAL_POEM_LINES_WITH_BR.slice(0, 4),
+    "",
+  ].join("\n");
+
+  const result = readVerseSource(fourLineSource, { expectedCount: 4 });
+  assert.deepEqual(
+    result.lines,
+    REAL_POEM_LINES_WITH_BR.slice(0, 4).map((line) => line.slice(0, -"<br>".length)),
+    "four consecutive real poem lines must round-trip verbatim, in order, with only <br> stripped"
+  );
+  console.log("PASS: four-line example renders exactly as the four verbatim source lines.");
+}
+
+function runMissingBrThrows() {
+  assert.throws(
+    () => readVerseSource(REAL_VERSE_SOURCE, { expectedCount: 17 }),
+    /line 17 is missing the trailing "<br>"/,
+    "must throw when a poem line (here, the real source's own un-terminated 17th line) has no trailing <br>"
+  );
+  console.log("PASS: a poem line missing <br> throws a descriptive error.");
+}
+
+function runEmptyBodyThrows() {
+  const emptyBodySource = "# গোলাপ\n\n**শুভ্রা বসু**\n\n";
+  assert.throws(
+    () => readVerseSource(emptyBodySource),
+    /no poem lines found/,
+    "must throw when there are no poem lines at all"
+  );
+  console.log("PASS: an empty body throws a descriptive error.");
+}
+
+function runExpectedCountMismatchThrows() {
+  const fourLineSource = [
+    "# গোলাপ",
+    "",
+    "**শুভ্রা বসু**",
+    "",
+    ...REAL_POEM_LINES_WITH_BR.slice(0, 4),
+    "",
+  ].join("\n");
+
+  assert.throws(
+    () => readVerseSource(fourLineSource, { expectedCount: 17 }),
+    /expected 17 poem lines, found 4/,
+    "must throw when expectedCount does not match the actual number of poem lines"
+  );
+  console.log("PASS: an expectedCount mismatch throws a descriptive error.");
+}
+
+function runWrongHeadingLevelThrows() {
+  const wrongHeadingSource = WELL_FORMED_VERSE_SOURCE.replace(/^# গোলাপ/, "## গোলাপ");
+  assert.throws(
+    () => readVerseSource(wrongHeadingSource),
+    /level-1 heading/,
+    "must throw when the heading is not a level-1 (single #) heading"
+  );
+  console.log("PASS: a non-H1 heading throws a descriptive error.");
+}
+
+function runAuthorNotBoldThrows() {
+  const notBoldAuthorSource = WELL_FORMED_VERSE_SOURCE.replace("**শুভ্রা বসু**", "শুভ্রা বসু");
+  assert.throws(
+    () => readVerseSource(notBoldAuthorSource),
+    /bold author line/,
+    "must throw when the author line is not wrapped in ** **"
+  );
+  console.log("PASS: a non-bold author line throws a descriptive error.");
+}
+
+runValidSeventeenLineSourceParsesToSeventeenEntries();
+runFourLineExampleVerbatim();
+runMissingBrThrows();
+runEmptyBodyThrows();
+runExpectedCountMismatchThrows();
+runWrongHeadingLevelThrows();
+runAuthorNotBoldThrows();
+console.log("All readVerseSource unit tests passed.");

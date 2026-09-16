@@ -27,6 +27,8 @@ export const config = {
     backgroundModes: ["auto", "manual", "none"],
     inkModes: ["auto", "dark", "light"],
     edgeSampleFraction: 0.02,   // width/height fraction of each edge strip sampled for the auto colour
-    minContrastRatio: 4.5       // WCAG AA for heading/kicker/caption text on the tinted page
+    minContrastRatio: 4.5,      // WCAG AA for heading/kicker/caption text on the tinted page
+    // Sprint v4 — advertisement content presentation kinds (sprints/v4/PRD.md §5, Decision E).
+    presentations: ["artwork", "text", "memorial"]
   }
 };

@@ -10,6 +10,20 @@ if (!fs.existsSync(index)) {
   process.exit(1);
 }
 
+// Sprint v4 Task 7 (sprints/v4/PRD.md §4.2): derive the expected poem lines
+// from the committed ART-010-item.md itself (not retyped), so this check
+// stays correct if the poem is ever re-extracted.
+const golapContentPath = path.join(siteRoot, "src", "content", "articles", "ART-010-item.md");
+const golapExpectedLines = fs
+  .readFileSync(golapContentPath, "utf8")
+  .split("\n")
+  .filter((line) => line.endsWith("<br>"))
+  .map((line) => line.slice(0, -"<br>".length));
+if (golapExpectedLines.length !== 17) {
+  console.error(`Expected 17 <br>-terminated lines in ART-010-item.md, found ${golapExpectedLines.length}.`);
+  process.exit(1);
+}
+
 // Sprint v3 Task 24: per-item Markdown pages must not be emitted (they would bypass the registration gate).
 const strayContentPages = fs.existsSync(path.join(siteRoot, "_site", "content")) ? fs.readdirSync(path.join(siteRoot, "_site", "content"), { recursive: true }).filter((f) => String(f).endsWith(".html")) : [];
 if (strayContentPages.length) {
@@ -47,6 +61,25 @@ const badAdTitles = findBadAdvertisementTitles(publishedAds, renderedAdTitles);
 const adBylines = await page.locator(".publication-item--advertisement .byline").count();
 const navAdLabels = await page.locator("nav a").evaluateAll((links) => links.map((a) => a.textContent.trim()).filter((t) => /Advertisement$/.test(t)));
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+// Sprint v4 Task 7: the poem's hard breaks must render as real <br> tags
+// inside #ART-010 .prose, one <p> per stanza-free block, 17 lines total.
+const golapBrCount = await page.locator("#ART-010 .prose br").count();
+const golapRenderedLines = await page.evaluate(() => {
+  const poemParagraph = document.querySelector("#ART-010 .prose p:has(br)");
+  if (!poemParagraph) return null;
+  const lines = [];
+  let current = "";
+  for (const node of poemParagraph.childNodes) {
+    if (node.nodeName === "BR") {
+      lines.push(current.trim());
+      current = "";
+    } else {
+      current += node.textContent;
+    }
+  }
+  if (current.trim()) lines.push(current.trim());
+  return lines;
+});
 await browser.close();
 
 if (itemCount !== expectedItemCount) {
@@ -89,4 +122,24 @@ if (navAdLabels.length) {
   console.error(`Navigation still contains labels ending in "Advertisement": ${navAdLabels.join(", ")}`);
   process.exit(1);
 }
-console.log(`Website smoke tests passed (${publishedAds.length} advertisement titles verified).`);
+if (golapBrCount !== 17) {
+  console.error(`Expected 17 <br> tags inside #ART-010 .prose, found ${golapBrCount}.`);
+  process.exit(1);
+}
+if (!golapRenderedLines) {
+  console.error("Could not find the ART-010 poem paragraph (#ART-010 .prose p:has(br)).");
+  process.exit(1);
+}
+if (golapRenderedLines.length !== 17) {
+  console.error(`Expected 17 <br>-separated poem lines rendered inside #ART-010 .prose, found ${golapRenderedLines.length}.`);
+  process.exit(1);
+}
+if (JSON.stringify(golapRenderedLines) !== JSON.stringify(golapExpectedLines)) {
+  console.error("Rendered ART-010 poem lines do not match the committed ART-010-item.md lines, in order.");
+  process.exit(1);
+}
+if (JSON.stringify(golapRenderedLines.slice(0, 4)) !== JSON.stringify(golapExpectedLines.slice(0, 4))) {
+  console.error("The four-line example did not render as four consecutive lines matching the source.");
+  process.exit(1);
+}
+console.log(`Website smoke tests passed (${publishedAds.length} advertisement titles verified, ART-010 poem 17 lines verified).`);

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Sprint v4 (`V4_REVIEW_01`, in progress)
+
+### Changed
+
+- `ART-010` ("গোলাপ"): re-extracted from the authoritative `02_INCOMING_CONTENT/Shubhra Basu.md` (SHA-256 `0d068f30b846c0b7…`) instead of the superseded `Shubhra Basu.docx`; all 17 poem lines now carry a trailing `<br>` in the published body, with no stanza gaps. Manifest `source_file`/`source_fingerprint` updated to match.
+
+### Removed
+
+- `scripts/extract-v2-golap.mjs` (the DOCX-based extractor for the superseded poem source) and its integration test are retired, replaced by `scripts/extract-v4-golap.mjs`.
+
 ## V3_REVIEW_02 — 2026-09-14
 
 **Released to production 2026-09-15** at `https://becaa-magazine-2026-portal.vercel.app` (Vercel project `becaa-magazine-2026-portal`, commit `d707355`); see `sprints/v3/PREVIEW_DEPLOYMENT.md` for the release record, the preview history and the 2026-09-15 incident.

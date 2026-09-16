@@ -35,11 +35,49 @@ const V3_STEPS = [
   "audit",
 ];
 
+// Sprint v4 (Decision L): the V3 list plus the v4 suites and evidence. `pdf` moves up to
+// just after `build` because build deletes _site/ and test:integration now includes
+// suites that read the PDF; every step leaving evidence in qa-output/ runs after `qa`,
+// which deletes that folder.
+const V4_STEPS = [
+  "tracker:validate",
+  "validate",
+  "typecheck",
+  "test:unit",
+  "build",
+  "pdf",
+  "test",
+  "test:integration",
+  "qa",
+  "qa:v2-items",
+  "qa:pdf",
+  "qa:pdf-compare",
+  "test:e2e:cover",
+  "test:e2e:poem",
+  "qa:pdf:v2-items",
+  "qa:ad-backgrounds",
+  "qa:art006",
+  "qa:contact",
+  "qa:v4-pages",
+  "test:e2e:print-ads",
+  "test:e2e:web-ads",
+  "test:e2e:nav",
+  "test:v4-advertisements",
+  "test:v4-committee-corrections",
+  "test:e2e:welcome",
+  "test:e2e:admin",
+  "e2e:app",
+  "check:secrets",
+  "check:sql",
+  "audit",
+];
+
 // The sequence used for V0–V2 releases (unchanged behaviour for those versions).
 const LEGACY_STEPS = ["tracker:validate", "validate", "build", "test", "qa", "qa:v2-items", "pdf", "qa:pdf", "qa:pdf:v2-items", "qa:art006", "qa:contact"];
 
 export function stepsForVersion(version) {
   if (!VERSION_PATTERN.test(String(version ?? ""))) throw new Error("RELEASE_VERSION contains unsupported characters.");
+  if (String(version).startsWith("V4")) return [...V4_STEPS];
   return String(version).startsWith("V3") ? [...V3_STEPS] : [...LEGACY_STEPS];
 }
 
@@ -69,7 +107,19 @@ export const V3_CONTENT_MIGRATION = [
   "manifest:apply-v3-ad-overrides",
 ];
 
+// Commands that rebuild the v4 content state from the V3_REVIEW_02 manifest/tracker, in order
+// (the one-time incoming-folder consolidation is `node scripts/consolidate-incoming.mjs --apply`).
+export const V4_CONTENT_MIGRATION = [
+  "extract:v4-golap",
+  "normalize:v4-memorial-image",
+  "manifest:apply-v4-updates",
+  "tracker:apply-v4-updates",
+  "corrections:apply-v4",
+  "tracker:apply-v4-corrections",
+];
+
 export function reproductionMarkdown(version, steps, { node, commit }) {
+  if (String(version).startsWith("V4")) return reproductionMarkdownV4(version, steps, { node, commit });
   const pipeline = steps.map((s) => (s === "audit" ? "npm audit --json   # gate: high/critical only if allow-listed in scripts/audit-allowlist.json" : `npm run ${s}`)).join("\n");
   return `# Reproduction — ${version}
 
@@ -104,6 +154,48 @@ Only needed to replay the Sprint v3 content migration on a tracker/manifest as t
 
 \`\`\`sh
 ${V3_CONTENT_MIGRATION.map((s) => `npm run ${s}`).join("\n")}
+\`\`\`
+
+Deployment is a separate, approved step — see \`DEPLOYMENT.md\`.
+`;
+}
+
+function reproductionMarkdownV4(version, steps, { node, commit }) {
+  const pipeline = steps.map((s) => (s === "audit" ? "npm audit --json   # gate: high/critical only if allow-listed in scripts/audit-allowlist.json" : `npm run ${s}`)).join("\n");
+  return `# Reproduction — ${version}
+
+Built with Node ${node} at git commit \`${commit}\`. All commands run from \`05_WEBSITE/\`.
+
+## Prerequisites (once per machine)
+
+\`\`\`sh
+npm install
+npx playwright install chromium          # browser for tests, visual QA and the PDF (not installed by npm install)
+# unzip, and poppler-utils for pdftotext/pdftoppm (PDF text checks, page renders, PDF comparison)
+npm run db:local:start                    # PostgreSQL 16 cluster in .pgdata/ (needs pg_ctl/initdb on PATH); creates becaa_dev + becaa_test
+cp .env.example .env.local                # then fill in DATABASE_URL(_TEST), SESSION_SECRET, IP_HASH_SALT (never commit it)
+\`\`\`
+
+## Rebuild the release from the current repository state
+
+\`\`\`sh
+RELEASE_VERSION=${version} node scripts/release.mjs     # = npm run release:v4
+\`\`\`
+
+which runs, in this order:
+
+\`\`\`sh
+${pipeline}
+\`\`\`
+
+and then copies \`_site/\`, \`qa-output/\`, the validation and audit reports and the operational documents into \`06_FINAL_OUTPUT/${version}/\` (refusing to overwrite an existing folder). \`qa:pdf-compare\` compares the PDF with \`06_FINAL_OUTPUT/V3_REVIEW_02\` and fails on any unexplained page difference.
+
+## Rebuilding the v4 content changes from the V3_REVIEW_02 state
+
+Only needed to replay the Sprint v4 content migration; the repository already contains the results. Each command is idempotent.
+
+\`\`\`sh
+${V4_CONTENT_MIGRATION.map((s) => `npm run ${s}`).join("\n")}
 \`\`\`
 
 Deployment is a separate, approved step — see \`DEPLOYMENT.md\`.

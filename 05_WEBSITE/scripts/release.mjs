@@ -7,6 +7,8 @@ import { auditGate, buildReleaseManifest, npmInvocation, reproductionMarkdown, s
 // Release pipeline. RELEASE_VERSION selects the step list (see release-core.mjs):
 //   V3_*   — Sprint v3 order: validation → typecheck → unit → build → site/integration/QA/PDF/browser
 //            suites → secret + SQL gates → dependency-audit gate, then packaging.
+//   V4_*   — the V3 order plus the Sprint v4 suites, PDF comparison and page renders, with
+//            `pdf` straight after `build` (see release-core.mjs).
 //   others — the sequence used for V0–V2 releases.
 // The output folder must not already exist: releases are never overwritten.
 const releaseVersion = process.env.RELEASE_VERSION || "V0_PROTOTYPE_01";

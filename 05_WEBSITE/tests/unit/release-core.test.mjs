@@ -20,6 +20,36 @@ const v2 = stepsForVersion("V2_REVIEW_01");
 assert.ok(!v2.includes("e2e:app") && !v2.includes("audit") && v2.includes("qa:pdf:v2-items"));
 assert.throws(() => stepsForVersion("../evil"), /RELEASE_VERSION/);
 
+// --- Sprint v4 (Task 30, Decision L): V4 step order ---
+{
+  const v4 = stepsForVersion("V4_REVIEW_01");
+  const at = (name) => { const i = v4.indexOf(name); assert.ok(i >= 0, `V4 step ${name} present`); return i; };
+  // Every V3 step is kept.
+  for (const s of steps) at(s);
+  for (const s of ["test:e2e:nav", "test:e2e:poem", "test:v4-advertisements", "test:v4-committee-corrections", "qa:pdf-compare", "qa:v4-pages"]) at(s);
+  assert.equal(new Set(v4).size, v4.length, "V4: no duplicate steps");
+  assert.equal(v4[0], "tracker:validate");
+  assert.equal(v4[v4.length - 1], "audit", "V4: dependency audit gate runs last");
+  // build deletes _site/, and the integration chain includes tests that read the PDF.
+  assert.ok(at("build") < at("pdf") && at("pdf") < at("test:integration"), "V4: pdf is rebuilt before the integration suite reads it");
+  // visual-qa (`qa`) deletes qa-output/; every step that leaves evidence there runs after it.
+  for (const s of ["qa:pdf-compare", "qa:v4-pages", "test:e2e:nav", "qa:pdf", "e2e:app"]) assert.ok(at("qa") < at(s), `V4: ${s} after qa (qa-output wipe)`);
+  for (const s of ["qa:pdf-compare", "qa:v4-pages", "test:e2e:poem", "test:v4-advertisements", "test:v4-committee-corrections", "test:e2e:cover"]) assert.ok(at("pdf") < at(s), `V4: ${s} needs the PDF`);
+  assert.ok(at("build") < at("test:e2e:nav"));
+  assert.ok(at("check:secrets") > at("build"));
+  // V3 versions keep the V3 list exactly.
+  assert.deepEqual(stepsForVersion("V3_REVIEW_02"), steps, "V3 list unchanged");
+  assert.ok(!steps.includes("qa:pdf-compare") && !steps.includes("test:e2e:nav"), "V3 list does not gain V4 steps");
+
+  const md4 = reproductionMarkdown("V4_REVIEW_01", v4, { node: "22.23.2", commit: "def5678" });
+  assert.ok(md4.includes("npm run release:v4"), "V4 reproduction names release:v4");
+  assert.ok(!md4.includes("release:v3"), "V4 reproduction does not name release:v3");
+  assert.ok(md4.includes("unzip") && md4.includes("pdftotext") && md4.includes("pdftoppm"), "V4 reproduction lists unzip/pdftotext/pdftoppm (poppler-utils)");
+  for (const s of v4.filter((x) => x !== "audit")) assert.ok(md4.includes(`npm run ${s}`), `V4 step ${s} listed`);
+  for (const s of ["extract:v4-golap", "normalize:v4-memorial-image", "manifest:apply-v4-updates", "tracker:apply-v4-updates", "corrections:apply-v4", "tracker:apply-v4-corrections"]) assert.ok(md4.includes(`npm run ${s}`), `V4 content migration step ${s} listed`);
+  assert.ok(md4.includes("V3_REVIEW_02"), "V4 reproduction mentions the PDF comparison baseline");
+}
+
 // --- audit gate ---
 const allow = { allow: [{ package: "sharp" }, { package: "playwright" }, { package: "xlsx" }] };
 const audit = (vulns) => ({ vulnerabilities: Object.fromEntries(vulns.map(([name, severity, via]) => [name, { name, severity, via: via ?? [{ title: "x" }] }])), metadata: { vulnerabilities: {} } });

@@ -79,7 +79,10 @@ async function run() {
   const manifestText = fs.readFileSync(path.join(siteRoot, "src", "_data", "publication.yaml"), "utf8");
   assert.ok(!manifestText.includes("v2-incoming"), "publication.yaml must not reference v2-incoming");
   assert.ok(manifestText.includes("source_file: 02_INCOMING_CONTENT/chatgpt kallol.jpeg"));
-  assert.ok(manifestText.includes("source_file: 02_INCOMING_CONTENT/Shubhra Basu.docx"));
+  // ART-010 was deliberately left pointing at the superseded .docx by Task 4
+  // (its own source_file/source_fingerprint update is Task 6's job, Decisions
+  // A/B); Task 6 has since re-pointed it at the authoritative .md.
+  assert.ok(manifestText.includes("source_file: 02_INCOMING_CONTENT/Shubhra Basu.md"));
   assert.ok(manifestText.includes("source_file: 02_INCOMING_CONTENT/Palash Article.docx"));
   assert.ok(manifestText.includes("source_file: 02_INCOMING_CONTENT/Siddhartha Mukhopadhyay story.docx"));
   assert.ok(manifestText.includes("source_file: 02_INCOMING_CONTENT/cover page new.png"));
@@ -105,6 +108,11 @@ async function run() {
   // acceptance criteria are clean (a more direct check than the generic scan
   // above, so a future refactor of findLiveReferences can't silently widen
   // the allow-list and hide a regression here).
+  //
+  // "scripts/extract-v2-golap.mjs" was in this list originally (Task 4 made
+  // it clean of "v2-incoming"); Sprint v4 Task 6 retired the file entirely
+  // (replaced by scripts/extract-v4-golap.mjs), so it is removed from this
+  // check rather than left pointing at a deleted file.
   const mustBeClean = [
     "scripts/merge-v2-addendum-tracker.mjs",
     "scripts/update-v2-cover-manifest.mjs",
@@ -114,7 +122,6 @@ async function run() {
     "scripts/apply-v2-exclusions.mjs",
     "scripts/normalize-v2-cover.mjs",
     "scripts/extract-v3-siddhartha-story.mjs",
-    "scripts/extract-v2-golap.mjs",
     "scripts/add-v3-manifest-items.mjs",
     "tests/integration/cover-manifest-entry.test.mjs",
     "tests/integration/normalize-cover-core.test.mjs",

@@ -5,6 +5,10 @@ import fs from "node:fs";
 import xlsx from "xlsx";
 import { trackerPath, snapshotsDir } from "../../scripts/tracker-io.mjs";
 import { applyV3TrackerUpdates, DECISIONS } from "../../scripts/apply-v3-tracker-updates.mjs";
+// Sprint v4 Task 14 appended two rows (ADV-028, ADV-029) to the live tracker
+// after this Sprint v3 test was written; EXPECTED_ROW_COUNT is the single
+// source of truth for "how many rows does the live tracker have right now".
+import { EXPECTED_ROW_COUNT } from "../../scripts/validate-tracker-core.mjs";
 
 function readRows() {
   const wb = xlsx.readFile(trackerPath, { cellDates: false });
@@ -18,7 +22,7 @@ const after = readRows();
 const snapsAfter = fs.readdirSync(snapshotsDir).filter((f) => f.includes("pre-v3-content-updates")).length;
 
 assert.deepEqual(after.sheets, ["Content Tracker", "Lists", "Instructions"]);
-assert.equal(after.rows.length, 52);
+assert.equal(after.rows.length, EXPECTED_ROW_COUNT);
 assert.deepEqual(after.lists, before.lists, "Lists untouched");
 assert.equal(snapsAfter, changedIds.length ? snapsBefore + 1 : snapsBefore, "snapshot only on a mutating run");
 

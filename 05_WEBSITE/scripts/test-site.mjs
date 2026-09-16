@@ -41,7 +41,9 @@ const acknowledgementText = await page.locator("#with-thanks").textContent();
 const acknowledgementImages = await page.locator("#with-thanks img").count();
 const missingAnchors = await page.locator('a[href^="#"]').evaluateAll((links) => links.map((link) => link.getAttribute("href")).filter((href) => href && !document.querySelector(href)));
 const adSources = await page.locator('.publication-item--advertisement img').evaluateAll((images) => images.map((img) => img.getAttribute("src")));
-const excludedIds = ["ADV-009","ADV-016","ADV-024","ADV-025","ADV-027"];
+// Sprint v4 Task 15 (Decision C): ADV-027 (Sarc Epic) is now a published
+// text-only advertisement, not excluded — removed from this list.
+const excludedIds = ["ADV-009","ADV-016","ADV-024","ADV-025"];
 const accidentallyIncluded = await page.locator(excludedIds.map((id) => `#${id}`).join(",")).count();
 const title = await page.locator("h1").first().textContent();
 // Sprint v3 Task 15: every published advertisement title, wherever it is rendered.

@@ -4,8 +4,12 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import path from "node:path";
-import { siteRoot } from "../../scripts/lib.mjs";
+import { siteRoot, readManifest } from "../../scripts/lib.mjs";
 import { migrate } from "../../scripts/db-migrate.mjs";
+
+// Sprint v4 Task 15 (sprints/v4/PRD.md §4.3-4.4, Decision K): derived from
+// the manifest, not hard-coded, so this keeps working as items are added.
+const publishedItemCount = readManifest().items.filter((item) => item.web_include).length;
 
 const DATABASE_URL = process.env.DATABASE_URL_TEST || "postgres://becaa@127.0.0.1:5433/becaa_test";
 await migrate(DATABASE_URL); // other tests may have rolled the schema back
@@ -66,7 +70,7 @@ try {
   body = await r.text();
   assert.equal(r.status, 200);
   assert.ok(body.includes("With best compliments from Eframe"), "valid session → magazine page");
-  assert.equal((body.match(/class="publication-item /g) || []).length, 44);
+  assert.equal((body.match(/class="publication-item /g) || []).length, publishedItemCount, `${publishedItemCount} publication items`);
   r = await get("/assets/normalized/advertisements/web/ADV-018-eframe-advertisement-web.jpg", { cookie });
   assert.equal(r.status, 200, "valid session → artwork served");
   assert.ok(r.headers.get("content-type").startsWith("image/jpeg"));

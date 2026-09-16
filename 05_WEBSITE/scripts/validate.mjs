@@ -12,11 +12,22 @@ const ids = new Set();
 function err(message) { report.errors.push(message); }
 function warn(message) { report.warnings.push(message); }
 
+// Sprint v4 (sprints/v4/PRD.md §4.3, Decision E): text-only advertisements
+// intentionally have no source artwork at all — the fact is recorded in
+// `notes` rather than a real source_file/source_fingerprint/alt, so those
+// three fields are not "missing", they are meaningless for this presentation
+// kind and are exempted from the general required-field rule. `artwork` and
+// `memorial` advertisements (which do have a real source photograph) keep
+// the full requirement.
+const TEXT_PRESENTATION_EXEMPT_FIELDS = new Set(["source_file", "source_fingerprint", "alt"]);
+
 if (!manifest.items || !Array.isArray(manifest.items)) err("Manifest items must be an array.");
 
 for (const item of manifest.items || []) {
   report.items.push({ id: item.id, type: item.type, title: item.title });
+  const isTextAd = item.type === "advertisement" && item.presentation === "text";
   for (const field of config.requiredFields) {
+    if (isTextAd && TEXT_PRESENTATION_EXEMPT_FIELDS.has(field)) continue;
     if (item[field] === undefined || item[field] === null || String(item[field]).trim() === "") err(`${item.id || "(missing id)"} missing required field: ${field}`);
   }
   if (ids.has(item.id)) err(`Duplicate manifest ID: ${item.id}`);

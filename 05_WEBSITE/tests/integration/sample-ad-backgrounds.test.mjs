@@ -31,7 +31,13 @@ assert.equal(second.written.length, 0, "second run writes nothing");
 const after = readManifest();
 assert.equal(after.items.length, before.items.length);
 const ads = after.items.filter((i) => i.type === "advertisement" && (i.web_include || i.print_include));
-assert.equal(ads.length, 22);
+// Sprint v4 Task 15 (Decision K): 22 artwork ads + 2 text-only + 1 memorial.
+// All three Sprint v4 additions are `page_background_mode: "manual"`, so the
+// loop below already skips them (untouched by the sampler), same as the two
+// pre-existing Sprint v3 manual overrides (ADV-019, ADV-023).
+assert.equal(ads.length, 25, "25 published advertisements (22 artwork + 2 text-only + 1 memorial)");
+// 20 = 22 artwork ads minus the two pre-existing Sprint v3 manual overrides (ADV-019, ADV-023).
+assert.equal(ads.filter((ad) => (ad.page_background_mode ?? "auto") === "auto").length, 20, "20 advertisements sampled automatically");
 for (const ad of ads) {
   if (ad.page_background_mode === "manual" || ad.page_background_mode === "none") continue; // untouched by the sampler
   assert.equal(ad.page_background_mode, "auto", `${ad.id} mode`);

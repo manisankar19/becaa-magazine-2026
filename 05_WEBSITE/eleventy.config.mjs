@@ -1,6 +1,7 @@
 import markdownIt from "markdown-it";
 import yaml from "js-yaml";
 import { resolveInk } from "./scripts/ad-presentation-core.mjs";
+import { sectionLabel, sectionNavigation } from "./scripts/navigation-core.mjs";
 
 export default function eleventyConfig(config) {
   config.addDataExtension("yaml", (contents) => yaml.load(contents));
@@ -35,10 +36,9 @@ export default function eleventyConfig(config) {
     if (!ink || (item.page_background_mode ?? "auto") === "none") return "";
     return `ad-ink--${ink.ink}`;
   });
-  config.addFilter("sectionLabel", (value = "") => {
-    const labels = { messages: "Messages", articles: "Articles", events: "Events", gallery: "Gallery", advertisements: "Advertisements" };
-    return labels[value] || value;
-  });
+  config.addFilter("sectionLabel", (value = "") => sectionLabel(value));
+  // Sprint v4 §4.6: one primary-nav link per section (first published item), not one per item.
+  config.addFilter("sectionNav", (items = [], hasThanks = false) => sectionNavigation(items, { hasThanks: Boolean(hasThanks) }));
 
   return {
     dir: {

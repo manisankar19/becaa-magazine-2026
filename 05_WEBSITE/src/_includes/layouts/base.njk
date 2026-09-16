@@ -11,14 +11,10 @@
   <a class="skip-link" href="#contents">Skip to contents</a>
   <header class="site-header">
     <a href="#top" class="brand"><span lang="bn">একই শিকড়</span> · BECAA Maharashtra 2026</a>
-    <nav aria-label="Primary">
-      <a href="#contents">Contents</a>
-      {% for item in publication.items | whereWeb | byOrder %}
-        <a href="#{{ item.id }}">{{ item.section | sectionLabel }}</a>
+    <nav aria-label="Primary" data-testid="primary-nav">
+      {% for link in publication.items | whereWeb | byOrder | sectionNav(publication.sponsor_acknowledgement_message) %}
+        <a href="{{ link.href }}">{{ link.label }}</a>
       {% endfor %}
-      <a href="#cultural-programmes">Cultural Programmes</a>
-      <a href="#connect">Connect</a>
-      {% if publication.sponsor_acknowledgement_message %}<a href="#with-thanks">With Thanks</a>{% endif %}
     </nav>
   </header>
   <main>

@@ -109,20 +109,17 @@ console.log("All docxHtmlToParagraphText unit tests passed.");
 import { readVerseSource } from "../../scripts/article-markdown-core.mjs";
 
 // The heading, author and all 17 poem lines, copied verbatim from
-// "02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.md". Note: in the real file
-// itself, only 16 of the 17 poem lines end with "<br>" — the 17th (last)
-// line ends with an em dash and a bare newline, with no "<br>" marker at
-// all. That is a genuine property of the authoritative source, not a
-// transcription slip here (independently confirmed: `grep -c '<br>'` on the
-// file returns 16, and a hex dump of the file's tail shows the last line
-// ending "...e2 80 94 0a", i.e. em dash + newline, no "<br>"). This matters
-// for Task 6 (extract-v4-golap), which is expected to call this function
-// with { expectedCount: 17 } against that same file — see the final report
-// for this task. REAL_VERSE_SOURCE below reproduces the real file's exact
-// structure, including its missing final "<br>", and is used for the
-// "missing <br> throws" case below. WELL_FORMED_VERSE_SOURCE derives from
-// it by appending only that one missing "<br>", so the "17 valid lines"
-// case can be exercised without inventing or altering any Bengali text.
+// "02_INCOMING_CONTENT/v2-incoming/Shubhra Basu.md". In the real file, only
+// 16 of the 17 poem lines end with "<br>" — the 17th (last) line ends with
+// an em dash and a bare newline, with no "<br>" marker at all (independently
+// confirmed: `grep -c '<br>'` on the file returns 16, and a hex dump of the
+// file's tail shows the last line ending "...e2 80 94 0a", i.e. em dash +
+// newline, no "<br>"). This is correct, not truncated: "<br>" is the
+// separator BETWEEN lines, so N lines need only N-1 separators — there is
+// nothing after the last line to break to. readVerseSource() treats it
+// this way (last line exempt from the "<br>" requirement); see the
+// production code comment above the parsing loop for the same note. This
+// fixture is therefore a VALID 17-line source, not a "missing <br>" one.
 const REAL_VERSE_SOURCE = `# গোলাপ
 
 **শুভ্রা বসু**
@@ -146,24 +143,24 @@ const REAL_VERSE_SOURCE = `# গোলাপ
 অবশেষে মধুপুরা নিয়ে গেল রেশ—
 `;
 
-const WELL_FORMED_VERSE_SOURCE = `${REAL_VERSE_SOURCE.trimEnd()}<br>\n`;
-
-// The 17 real poem lines (each still ending "<br>"), sliced out of the
-// well-formed fixture so the four-line fixture and the expected parsed
-// output below are derived from the same verbatim text, not retyped again.
-const REAL_POEM_LINES_WITH_BR = WELL_FORMED_VERSE_SOURCE.trimEnd().split("\n").slice(4, 21);
+// The 17 real poem lines, raw (lines 1-16 still end "<br>"; line 17 does
+// not — see the note above), sliced out of the real fixture so the
+// four-line fixture and the expected parsed output below are derived from
+// the same verbatim text, not retyped again.
+const REAL_POEM_LINES_RAW = REAL_VERSE_SOURCE.trimEnd().split("\n").slice(4, 21);
+const stripBr = (line) => (line.endsWith("<br>") ? line.slice(0, -"<br>".length) : line);
 
 function runValidSeventeenLineSourceParsesToSeventeenEntries() {
-  const result = readVerseSource(WELL_FORMED_VERSE_SOURCE, { expectedCount: 17 });
+  const result = readVerseSource(REAL_VERSE_SOURCE, { expectedCount: 17 });
   assert.equal(result.heading, "গোলাপ");
   assert.equal(result.author, "শুভ্রা বসু");
   assert.equal(result.lines.length, 17, "must return exactly 17 poem lines");
   assert.deepEqual(
     result.lines,
-    REAL_POEM_LINES_WITH_BR.map((line) => line.slice(0, -"<br>".length)),
-    "each returned line must equal the source line with only the trailing <br> removed"
+    REAL_POEM_LINES_RAW.map(stripBr),
+    "each returned line must equal the source line with only a trailing <br> removed (none to remove on the last line)"
   );
-  console.log("PASS: valid 17-line verse source parses to 17 entries.");
+  console.log("PASS: valid 17-line verse source (real file structure, last line has no trailing <br>) parses to 17 entries.");
 }
 
 function runFourLineExampleVerbatim() {
@@ -172,26 +169,35 @@ function runFourLineExampleVerbatim() {
     "",
     "**শুভ্রা বসু**",
     "",
-    ...REAL_POEM_LINES_WITH_BR.slice(0, 4),
+    ...REAL_POEM_LINES_RAW.slice(0, 4),
     "",
   ].join("\n");
 
   const result = readVerseSource(fourLineSource, { expectedCount: 4 });
   assert.deepEqual(
     result.lines,
-    REAL_POEM_LINES_WITH_BR.slice(0, 4).map((line) => line.slice(0, -"<br>".length)),
+    REAL_POEM_LINES_RAW.slice(0, 4).map(stripBr),
     "four consecutive real poem lines must round-trip verbatim, in order, with only <br> stripped"
   );
   console.log("PASS: four-line example renders exactly as the four verbatim source lines.");
 }
 
 function runMissingBrThrows() {
+  // A genuine defect: a MIDDLE line (not the last) missing its "<br>"
+  // separator — this must still throw, since only the very last line is
+  // exempt. Line 5 ("মেলেছে তার সবুজ কচি পাতা।<br>") has its marker
+  // stripped to construct the broken fixture.
+  const brokenLines = [...REAL_POEM_LINES_RAW];
+  assert.ok(brokenLines[4].endsWith("<br>"), "fixture precondition: line 5 must have a <br> to remove");
+  brokenLines[4] = stripBr(brokenLines[4]);
+  const brokenSource = ["# গোলাপ", "", "**শুভ্রা বসু**", "", ...brokenLines, ""].join("\n");
+
   assert.throws(
-    () => readVerseSource(REAL_VERSE_SOURCE, { expectedCount: 17 }),
-    /line 17 is missing the trailing "<br>"/,
-    "must throw when a poem line (here, the real source's own un-terminated 17th line) has no trailing <br>"
+    () => readVerseSource(brokenSource, { expectedCount: 17 }),
+    /line 5 is missing the trailing "<br>"/,
+    "must throw when a non-final poem line has no trailing <br>"
   );
-  console.log("PASS: a poem line missing <br> throws a descriptive error.");
+  console.log("PASS: a non-final poem line missing <br> throws a descriptive error.");
 }
 
 function runEmptyBodyThrows() {
@@ -210,7 +216,7 @@ function runExpectedCountMismatchThrows() {
     "",
     "**শুভ্রা বসু**",
     "",
-    ...REAL_POEM_LINES_WITH_BR.slice(0, 4),
+    ...REAL_POEM_LINES_RAW.slice(0, 4),
     "",
   ].join("\n");
 
@@ -223,7 +229,7 @@ function runExpectedCountMismatchThrows() {
 }
 
 function runWrongHeadingLevelThrows() {
-  const wrongHeadingSource = WELL_FORMED_VERSE_SOURCE.replace(/^# গোলাপ/, "## গোলাপ");
+  const wrongHeadingSource = REAL_VERSE_SOURCE.replace(/^# গোলাপ/, "## গোলাপ");
   assert.throws(
     () => readVerseSource(wrongHeadingSource),
     /level-1 heading/,
@@ -233,7 +239,7 @@ function runWrongHeadingLevelThrows() {
 }
 
 function runAuthorNotBoldThrows() {
-  const notBoldAuthorSource = WELL_FORMED_VERSE_SOURCE.replace("**শুভ্রা বসু**", "শুভ্রা বসু");
+  const notBoldAuthorSource = REAL_VERSE_SOURCE.replace("**শুভ্রা বসু**", "শুভ্রা বসু");
   assert.throws(
     () => readVerseSource(notBoldAuthorSource),
     /bold author line/,

@@ -114,14 +114,25 @@ export function readVerseSource(markdownText, { expectedCount } = {}) {
     throw new Error("readVerseSource: no poem lines found (empty body)");
   }
 
+  // <br> is the separator BETWEEN poem lines, not a per-line terminator: N
+  // lines need only N-1 separators, so the last line is exempt (there is
+  // nothing after it to break to). The authoritative source for ART-010
+  // follows exactly this convention — 16 "<br>" markers for its 17 lines,
+  // confirmed against the real file (SHA-256 0d068f30b846c0b7…) during
+  // Sprint v4 Task 5/6. If a source's last line does carry a trailing
+  // "<br>" anyway, it is stripped too, so both conventions round-trip.
   const lines = bodyLines.map((line, lineIndex) => {
     const withoutTrailingWhitespace = line.replace(/[ \t\r]+$/, "");
-    if (!withoutTrailingWhitespace.endsWith(BR_MARKER)) {
-      throw new Error(
-        `readVerseSource: line ${lineIndex + 1} is missing the trailing "${BR_MARKER}" marker: ${JSON.stringify(line)}`
-      );
+    const isLastLine = lineIndex === bodyLines.length - 1;
+    if (withoutTrailingWhitespace.endsWith(BR_MARKER)) {
+      return withoutTrailingWhitespace.slice(0, -BR_MARKER.length);
     }
-    return withoutTrailingWhitespace.slice(0, -BR_MARKER.length);
+    if (isLastLine) {
+      return withoutTrailingWhitespace;
+    }
+    throw new Error(
+      `readVerseSource: line ${lineIndex + 1} is missing the trailing "${BR_MARKER}" marker: ${JSON.stringify(line)}`
+    );
   });
 
   if (expectedCount !== undefined && lines.length !== expectedCount) {

@@ -1127,6 +1127,105 @@ items:
     credit: ''
     alt: প্যাঁড়া — Siddhartha Mukhopadhyay
     notes: 'Tracker Item ID 24. Exact approved source: Siddhartha Mukhopadhyay story.docx.'
+  - id: ADV-027
+    type: advertisement
+    title: Best Compliment from Sarc Epic
+    language: en
+    contributor: Sarc Epic
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 770
+    source_file: ''
+    source_fingerprint: ''
+    content_file: ''
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: ''
+    presentation: text
+    text_lines:
+      - Best Compliment from Sarc Epic
+    notes: >-
+      Text-only advertisement; no source artwork supplied. Source: AniketPal (Debojit da). ADV-027 row updated: company name
+      confirmed as Sarc Epic (same sponsor as the excluded "Aniket Pal" entry, source via Debojit da); tracker status
+      changed from Excluded to Approved.
+    page_background: '#f3efe6'
+    page_background_mode: manual
+    page_ink: auto
+  - id: ADV-028
+    type: advertisement
+    title: Best Compliment from M/s Balajee Infrate
+    language: en
+    contributor: M/s Balajee Infrate
+    designation: ''
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 780
+    source_file: ''
+    source_fingerprint: ''
+    content_file: ''
+    web_asset: ''
+    print_asset: ''
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: ''
+    presentation: text
+    text_lines:
+      - Best Compliment from M/s Balajee Infrate
+    notes: 'Text-only advertisement; no source artwork supplied. Source: Keya Mukhopadhya. Intended for magazine printing.'
+    page_background: '#f3efe6'
+    page_background_mode: manual
+    page_ink: auto
+  - id: ADV-029
+    type: advertisement
+    title: In fond memory of Late Shri Bhakta Mohon Mitra
+    language: en
+    contributor: Subrata Mitra (son), Soma Mitra (daughter)
+    designation: Memorial contribution
+    passing_year: ''
+    branch: ''
+    section: advertisements
+    order: 790
+    source_file: 02_INCOMING_CONTENT/Supriyo.JPG
+    source_fingerprint: d15810866b6bf28578b8a897de55e89820a426ee088a2c0be970803e55eb16e8
+    content_file: ''
+    web_asset: assets/normalized/advertisements/web/ADV-029-late-shri-bhakta-mohon-mitra-web.jpg
+    print_asset: assets/normalized/advertisements/print/ADV-029-late-shri-bhakta-mohon-mitra-print.jpg
+    permission: Print and web
+    editorial_status: Approved
+    verification: verified
+    web_include: true
+    print_include: true
+    caption: ''
+    credit: ''
+    alt: Portrait of Late Shri Bhakta Mohon Mitra
+    presentation: memorial
+    text_lines:
+      - In fond memory of
+      - Late Shri Bhakta Mohon Mitra
+      - B E (Mechanical) April 1951
+      - Bengal Engineering College, Shibpur, Howrah.
+      - With Love from
+      - Subrata Mitra (son)
+      - Soma Mitra (daughter)
+    notes: 'Memorial contribution sponsored by the son and daughter; not a company advertisement. Source: SUPRIO CHOUDHURY.'
+    page_background: '#f3efe6'
+    page_background_mode: manual
+    page_ink: auto
 sponsor_acknowledgements: []
 sponsor_acknowledgement_message: BECAA Maharashtra warmly thanks our sponsors for their support.
 cover:

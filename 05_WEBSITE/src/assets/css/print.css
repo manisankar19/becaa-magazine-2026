@@ -83,6 +83,21 @@
 .print-page--advertisement figure { align-self: center; justify-self: center; width: 100%; margin: 0; display: grid; justify-items: center; }
 .print-page--advertisement .print-ad { max-height: 215mm; }
 
+/* Sprint v4 §4.3, Task 10 (Decisions F, G) — text-only advertisement pages: the
+   approved sentence fills the same 1fr grid row the artwork figure otherwise
+   occupies, centred both ways within the tinted page box. */
+.print-page--advertisement .ad-text {
+  align-self: center;
+  justify-self: center;
+  max-width: 20ch;
+  margin: 0;
+  font-size: 30pt;
+  line-height: 1.35;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ad-ink, #20201d);
+}
+
 .print-thanks { display: grid; align-content: center; }
 .print-contact { break-after: page; }
 .print-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-top: 8mm; }

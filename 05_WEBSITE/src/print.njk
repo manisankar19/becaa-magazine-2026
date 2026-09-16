@@ -27,7 +27,9 @@ permalink: /print/
     <p class="section-kicker">{{ item.section | sectionLabel }} · {{ item.id }}</p>
     <h1>{{ item.title }}</h1>
     {% if item.contributor and item.type != "advertisement" %}<p class="byline">{{ item | byline }}</p>{% endif %}
-    {% if item.type == "advertisement" or item.type == "gallery" %}
+    {% if item.type == "advertisement" and item.presentation == "text" %}
+      <p class="ad-text" data-testid="ad-text-{{ item.id }}">{{ item.text_lines[0] }}</p>
+    {% elif item.type == "advertisement" or item.type == "gallery" %}
       {% if item.print_asset %}<figure><img class="print-ad" src="../{{ item.print_asset }}" alt="{{ item.alt }}">{% if item.caption %}<figcaption>{{ item.caption }}{% if item.credit %} — {{ item.credit }}{% endif %}</figcaption>{% endif %}</figure>{% endif %}
     {% else %}
       <div class="prose">

@@ -332,6 +332,42 @@ h2 {
   white-space: normal;
 }
 
+/* Sprint v4 §4.4, Task 11 (Decisions F, G, J) — memorial page: the uncropped
+   photograph (contained, bounded height, no crop) sits between the shared
+   .item-header and the seven centred text_lines; the two pieces share one
+   tinted card the same way .item-header + .ad-frame do for artwork ads. */
+.publication-item--advertisement .ad-frame--memorial {
+  border-radius: 0;
+}
+.ad-frame--memorial img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 26rem;
+  object-fit: contain;
+  margin: 0 auto;
+}
+.ad-memorial {
+  width: min(740px, 100%);
+  margin: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 0 0 8px 8px;
+  background: var(--ad-bg, #ffffff);
+  color: var(--ad-ink, var(--ink));
+  text-align: center;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+.ad-memorial p {
+  margin: 0;
+}
+.ad-memorial__name {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
 .ad-placeholder {
   min-height: 22rem;
   display: grid;

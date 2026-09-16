@@ -32,9 +32,10 @@ title: একই শিকড় — BECAA Maharashtra Magazine 2026
 
 {% for item in items %}
   {% set adStyle = item | adPageStyle if item.type == "advertisement" else "" %}
+  {% set kickerLabel = "Advertisements · In memoriam" if (item.type == "advertisement" and item.presentation == "memorial") else (item.section | sectionLabel) %}
   <article class="publication-item publication-item--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="{{ item.id }}"{% if item.type == "advertisement" %} data-testid="ad-card-{{ item.id }}"{% endif %}{% if adStyle %} style="{{ adStyle }}"{% endif %}>
     <header class="item-header">
-      <p class="section-kicker">{{ item.section | sectionLabel }} · {{ item.id }}</p>
+      <p class="section-kicker">{{ kickerLabel }} · {{ item.id }}</p>
       <h2>{{ item.title }}</h2>
       {% if item.contributor and item.type != "advertisement" %}
         <p class="byline">{{ item | byline }}</p>
@@ -43,6 +44,19 @@ title: একই শিকড় — BECAA Maharashtra Magazine 2026
 
     {% if item.type == "advertisement" and item.presentation == "text" %}
       <p class="ad-text" data-testid="ad-text-{{ item.id }}">{{ item.text_lines[0] }}</p>
+    {% elif item.type == "advertisement" and item.presentation == "memorial" %}
+      <figure class="ad-frame ad-frame--memorial">
+        {% if item.web_asset %}
+          <img src="{{ item.web_asset }}" alt="{{ item.alt }}" loading="eager" decoding="async">
+        {% else %}
+          <div class="ad-placeholder" role="img" aria-label="{{ item.alt }}">Advertisement artwork awaiting verification</div>
+        {% endif %}
+      </figure>
+      <div class="ad-memorial" data-testid="ad-memorial-{{ item.id }}">
+        {% for line in item.text_lines %}
+          <p{% if loop.index0 == 1 %} class="ad-memorial__name"{% endif %}>{{ line }}</p>
+        {% endfor %}
+      </div>
     {% elif item.type == "advertisement" or item.type == "gallery" %}
       <figure class="ad-frame">
         {% if item.web_asset %}

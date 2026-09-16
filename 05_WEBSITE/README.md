@@ -28,6 +28,8 @@ The prototype includes exactly:
 
 Original files in `01_REFERENCE_2025`, `02_INCOMING_CONTENT`, `03_ADVERTISEMENTS`, and source workbooks/documents in `04_MAGAZINE_WORKING` are not modified.
 
+**Incoming folder (Sprint v4, 2026-09-15):** `02_INCOMING_CONTENT/` is the single intake location. The former `02_INCOMING_CONTENT/v2-incoming/` subfolder was merged into it with `git mv` (byte-identical, hashes recorded in `04_MAGAZINE_WORKING/INCOMING_CONSOLIDATION_2026-09-15.md`). Corrections without a revised contributor document are recorded as a controlled correction file in that folder (e.g. `BECAA Committee Corrections 2026-09-16.md`), never by editing an original. Superseded originals are archived under `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/<date>/`.
+
 ---
 
 ## Current state (Sprint v3, September 2026)

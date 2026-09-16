@@ -63,6 +63,7 @@ Rotating `SESSION_SECRET` logs every visitor out (they simply register again) an
 ## 5. Production release (only after explicit approval)
 
 1. Run the full release pipeline at the commit to be released: `npm run release:v3` (validation, unit/integration tests, build, site tests, visual QA, PDF, PDF QA, advertisement-background review, application E2E, secret and SQL gates, dependency audit) and complete `/walkthrough`.
+   Sprint v4 note: releases from `V4_REVIEW_01` onwards use the same deployment steps; build them with `npm run release:v4` (the V3 pipeline plus the navigation, poem, v4 advertisement and committee-correction suites, `qa:pdf-compare` and `qa:v4-pages`). The smoke test then expects 47 items.
 2. Set the **Production** variables (§3) — fresh secrets, not the preview ones.
 3. Apply the schema to the production database: `DATABASE_URL='<production owner url>' npm run db:migrate`.
 4. Deploy exactly the reviewed commit: `vercel deploy --prod` (or promote the verified preview in the Vercel dashboard).

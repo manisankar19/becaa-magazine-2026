@@ -1,14 +1,45 @@
 # Changelog
 
-## Unreleased — Sprint v4 (`V4_REVIEW_01`, in progress)
+## V4_REVIEW_01 — 2026-09-16
+
+Local review build (`06_FINAL_OUTPUT/V4_REVIEW_01/`, built by `npm run release:v4`; the exact commit is in that folder's `release-manifest.json`). Not deployed: a preview deployment needs separate approval, and production needs explicit approval after that. 47 publication items (44 + 3). The PDF has 72 pages (69 + 3). `qa:pdf-compare` explains every page difference against `V3_REVIEW_02`.
+
+### Added
+
+- `ADV-028` — "Best Compliment from M/s Balajee Infrate": text-only advertisement page (no artwork supplied), order 780.
+- `ADV-029` — "In fond memory of Late Shri Bhakta Mohon Mitra": memorial page with the supplied photograph (`Supriyo.JPG`, uncropped) and the seven approved lines, from Subrata Mitra (son) and Soma Mitra (daughter), order 790.
+- Advertisement `presentation` field (`artwork` | `text` | `memorial`) with `text_lines`, validator rules, templates and styles for text-only and memorial pages.
+- Optional manifest field `display_name` (reader-facing name; `contributor` stays the provenance identity).
+- Release steps and tools: `test:e2e:nav`, `test:e2e:poem`, `test:v4-advertisements`, `test:v4-committee-corrections`, `qa:pdf-compare` (page-by-page comparison with `V3_REVIEW_02`), and `qa:v4-pages` (renders the PDF pages that changed, plus every article page).
 
 ### Changed
 
-- `ART-010` ("গোলাপ"): re-extracted from the authoritative `02_INCOMING_CONTENT/Shubhra Basu.md` (SHA-256 `0d068f30b846c0b7…`) instead of the superseded `Shubhra Basu.docx`; all 17 poem lines now carry a trailing `<br>` in the published body, with no stanza gaps. Manifest `source_file`/`source_fingerprint` updated to match.
+- `ADV-027` updated, not added: it was the excluded "Aniket Pal" tracker entry. The company name is now confirmed as Sarc Epic, and it is published as the text-only advertisement "Best Compliment from Sarc Epic", order 770.
+- `ART-010` ("গোলাপ"): re-extracted from the authoritative `02_INCOMING_CONTENT/Shubhra Basu.md` (SHA-256 `0d068f30b846c0b7…`) instead of the superseded `Shubhra Basu.docx`, which is archived in `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-15/`. Each of the 17 poem lines renders on its own line, with no stanza gaps. Verse is never justified, on the web or in print.
+- Website navigation: one link per section (8 links, each pointing to that section's first published item and derived from the manifest), replacing one label per item (51 links).
+- Incoming content consolidated on 2026-09-15: the five files in `02_INCOMING_CONTENT/v2-incoming/` were moved with `git mv`, byte-identical, into `02_INCOMING_CONTENT/`: `chatgpt kallol.jpeg` (`b3a24a98…`), `cover page new.png` (`29a12bcb…`), `Palash Article.docx` (`b0a1ba37…`), `Shubhra Basu.md` (`0d068f30…`) and `Siddhartha Mukhopadhyay story.docx` (`9bbe16d1…`). `v2-incoming/` no longer exists, and every live reference was updated (record: `04_MAGAZINE_WORKING/INCOMING_CONSOLIDATION_2026-09-15.{md,json}`).
+- Committee corrections (record: `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md`; no original contributor document changed):
+  - `MSG-001`: `বেকান পরিচয়` → `BECAA-র পরিচয়` in one sentence. The salutation `প্রিয় বেকান ও বেকানী বন্ধুরা` is unchanged.
+  - `MSG-002`: title `Vice Preseident Desk` → `Vice President Desk` (manifest, website, contents, PDF, tracker).
+  - `ART-003`: `ভাইবই` → `ভাবায়` and `পারিমা` → `পরিমা`.
+  - `ART-004` and `ART-005`: bylines read `Late Biswajit Sengupta`, via `display_name`.
+  - Printed article prose is justified; the website, verse, headings, bylines, messages, advertisements, memorial text and contents are not.
+- Tracker: `ADV-027` revised, `ADV-028`/`ADV-029` appended, an Item 22 remark added for the revised poem source, the corrections recorded on Items 16, 17, 5, 6 and 7 (Item 17's title corrected). Every edit was preceded by a snapshot in `TRACKER_SNAPSHOTS/`.
+- Tests and QA derive advertisement counts from the manifest (25 published, 23 with artwork). Visual QA handles text-only and memorial advertisements. The cover-page check expects 72 pages.
 
 ### Removed
 
-- `scripts/extract-v2-golap.mjs` (the DOCX-based extractor for the superseded poem source) and its integration test are retired, replaced by `scripts/extract-v4-golap.mjs`.
+- `scripts/extract-v2-golap.mjs` (the DOCX-based extractor for the superseded poem source) and its integration test, replaced by `scripts/extract-v4-golap.mjs`.
+
+### Unchanged
+
+- The other 41 publication items and their IDs and order (apart from the named corrections); the cover; source artwork; registration, gate, administrator, API, database and migrations; `06_FINAL_OUTPUT/V0`–`V3` folders.
+
+### Noted for follow-up (not blocking this release)
+
+- `ART-004`/`ART-005` bodies still open with the Bengali author line `বিশ্বজিৎ সেনগুপ্ত`, unprefixed. Decision R changed only the byline; a Bengali "Late" wording would need the committee's approval.
+- `ART-009` shows a missing-glyph box before "meeting" on its second page, caused by a stray form-feed character (U+000C) in the extracted content. It is present in `V3_REVIEW_02` too and has not been changed.
+- On desktop and tablet, the sticky header covers the top of a section after a navigation jump; this was already the case before this sprint.
 
 ## V3_REVIEW_02 — 2026-09-14
 

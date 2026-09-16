@@ -1,6 +1,6 @@
 # Sprint v4 — Tasks
 
-## Status: Tasks 1–29 and 38 complete (2026-09-16); `/dev` next resumes at Task 30
+## Status: Tasks 1–32 and 38 complete (2026-09-16); `/dev` next resumes at Task 33
 
 Reference: `sprints/v4/PRD.md` (amended and re-approved 2026-09-16), `sprints/v4/Changev4.md`, `sprints/v4/v4changev2.md` (committee corrections addendum)
 **Task 1 is complete** — commit `fbe59d6`. It is recorded below for history only; do not repeat, revert or rewrite it. `/dev` resumes at Task 2, the next uncompleted task. All decisions, including O–U (PRD §7.1), are resolved and approved.
@@ -170,15 +170,15 @@ Five corrections to already-approved content, received after Task 1. None adds, 
 
 ## Stream F — Build and release
 
-- [ ] Task 30: `release:v4` and version mapping (P0, Decision L)
+- [x] Task 30: `release:v4` and version mapping (P0, Decision L) — **Complete, commit `d5350a0`. V4 list also moves `pdf` to straight after `build` (build deletes `_site/`; `test:integration` now reads the PDF) and adds `qa:pdf-compare` and a new `qa:v4-pages` render step (`render-v4-pages.mjs` + `v4-pages-core.mjs`, not in the declared file list) so the release carries the PDF evidence after `qa` wipes `qa-output/`.**
   - Acceptance: `stepsForVersion("V4_REVIEW_01")` returns the V3 step list plus the new steps `test:e2e:nav`, `test:e2e:poem`, `test:v4-advertisements`, `test:v4-committee-corrections` (or their `npm` names) in the tested order; unit test updated; `package.json` gains `release:v4` (`RELEASE_VERSION=V4_REVIEW_01`); reproduction text mentions `unzip`/`pdftotext`.
   - Files: `05_WEBSITE/scripts/release-core.mjs`, `05_WEBSITE/tests/unit/release-core.test.mjs`, `05_WEBSITE/package.json`
 
-- [ ] Task 31: PDF comparison against the Sprint v3 baseline (P0, Decision L)
+- [x] Task 31: PDF comparison against the Sprint v3 baseline (P0, Decision L) — **Complete, commit `357aebf`. Built by a delegated agent in an isolated worktree, reviewed and integrated; adds a `reflow` class. Real run: 60 unchanged, 1 shifted, 2 contents, 1 poem, 3 new-item, 5 correction, 0 unexplained; `--no-corrections` fails as expected. Wired as `qa:pdf-compare` (release step in Task 30).**
   - Acceptance: pure `pdf-compare-core.mjs` diffs two arrays of page texts (from `pdftotext`) and classifies each changed page as `contents`, `poem`, `new-item`, `shifted` (same text as a baseline page at another index), `correction` (a `MSG-001`/`MSG-002`/`ART-003`/`ART-004`/`ART-005` page whose only diff is an expected Stream-E correction, including reflow caused by justification) or `unexplained`; unit tests cover the new `correction` class alongside the existing ones; `scripts/pdf-compare.mjs` writes `qa-output/pdf-compare/V3_REVIEW_02-vs-current.{json,md}` and exits non-zero when any page is `unexplained`; run as a release step after `pdf`.
   - Files: `05_WEBSITE/scripts/pdf-compare-core.mjs`, `05_WEBSITE/scripts/pdf-compare.mjs`, `05_WEBSITE/tests/unit/pdf-compare-core.test.mjs`, `05_WEBSITE/scripts/release-core.mjs`, `05_WEBSITE/package.json`
 
-- [ ] Task 32: CHANGELOG and documentation (P0)
+- [x] Task 32: CHANGELOG and documentation (P0) — **Complete, commit `a3fa4cc`. `05_WEBSITE/DEPLOYMENT.md` gained the one-line V4 note.**
   - Acceptance: `CHANGELOG.md` gets a `V4_REVIEW_01` section listing added items (`ADV-028`, `ADV-029` — new; `ADV-027` updated from excluded to approved, not "added"), changed (`ART-010` re-extraction, navigation fix, consolidation moves with hashes, retired `extract-v2-golap`, and the five committee corrections: `MSG-001` wording, `MSG-002` title, `ART-003` spellings, `Late Biswajit Sengupta` on `ART-004`/`ART-005`, print-only article justification), unchanged counts (47 items); `05_WEBSITE/DEPLOYMENT.md` unchanged except a note that `V4` uses the same pipeline; `README.md` section on the intake folder mentions the consolidation date. *(Corrects a drafting error in the 2026-09-15 plan, which listed the added items as "ADV-028/029/030" — there is no `ADV-030` in this sprint.)*
   - Files: `CHANGELOG.md`, `05_WEBSITE/README.md`
 

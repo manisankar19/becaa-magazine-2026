@@ -46,6 +46,7 @@
     "manifest:apply-v3-updates": "node scripts/add-v3-manifest-items.mjs",
     "retitle:advertisements": "node scripts/retitle-advertisements.mjs",
     "tracker:apply-v3-updates": "node scripts/apply-v3-tracker-updates.mjs",
+    "tracker:apply-v4-updates": "node scripts/apply-v4-tracker-updates.mjs",
     "sample:ad-backgrounds": "node scripts/sample-ad-backgrounds.mjs",
     "manifest:apply-v3-ad-overrides": "node scripts/apply-v3-ad-overrides.mjs",
     "test:e2e:print-ads": "node tests/e2e/print-ad-pages.test.mjs",

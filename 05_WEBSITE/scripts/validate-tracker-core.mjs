@@ -1,9 +1,25 @@
-// Pure tracker rule evaluation (Sprint v3 Task 9). No xlsx, no file I/O —
-// validate-tracker.mjs reads the workbook and hands rows/sheet names here.
-// Returns an array of error strings (empty = valid).
+// Pure tracker rule evaluation (Sprint v3 Task 9; extended Sprint v4 Task 14
+// for the ADV-028/029 rows and the text/memorial title wording, sprints/v4/PRD.md
+// §4.3-4.4, Decision E). No xlsx, no file I/O — validate-tracker.mjs reads the
+// workbook and hands rows/sheet names here. Returns an array of error strings
+// (empty = valid).
 export const EXPECTED_SHEETS = ["Content Tracker", "Lists", "Instructions"];
-export const EXPECTED_ROW_COUNT = 52; // COV-001 + Items 1–24 + ADV-001…ADV-027
+export const EXPECTED_ROW_COUNT = 54; // COV-001 + Items 1–24 + ADV-001…ADV-029 (52 + ADV-028 + ADV-029)
 export const COMPLIMENTS_PREFIX = "With best compliments from ";
+
+// Sprint v4: text-only advertisements carry the approved sentence verbatim
+// (not the v3 "With best compliments from ..." pattern) and, by design, have
+// no source artwork at all — recorded as "—" in Source File Name, which is
+// not a missing-intake defect for these two rows. The memorial keeps a real
+// source photograph (Source File Name "Supriyo.JPG") but also uses its own
+// approved wording rather than the compliments pattern.
+export const TEXT_ONLY_ADVERTISEMENT_TITLES = {
+  "ADV-027": "Best Compliment from Sarc Epic",
+  "ADV-028": "Best Compliment from M/s Balajee Infrate",
+};
+export const MEMORIAL_ADVERTISEMENT_TITLES = {
+  "ADV-029": "In fond memory of Late Shri Bhakta Mohon Mitra",
+};
 
 const yes = (v) => /^yes$/i.test(String(v ?? "").trim());
 const id = (row) => String(row["Item ID"] ?? "").trim();
@@ -37,12 +53,21 @@ export function validateTrackerRows(rows, sheetNames) {
     const rid = id(row);
     const webOn = yes(row["Web Include"]);
     const printOn = yes(row["Print Include"]);
-    if (webOn && (!/^approved$/i.test(String(row.Status)) || !String(row["Source File Name"]).trim() || row["Source File Name"] === "—")) {
+    const isTextOnly = Object.hasOwn(TEXT_ONLY_ADVERTISEMENT_TITLES, rid);
+    const isMemorial = Object.hasOwn(MEMORIAL_ADVERTISEMENT_TITLES, rid);
+    if (webOn && !isTextOnly && (!/^approved$/i.test(String(row.Status)) || !String(row["Source File Name"]).trim() || row["Source File Name"] === "—")) {
       errors.push(`${rid} is web-enabled without approved available artwork.`);
+    }
+    if (webOn && isTextOnly && !/^approved$/i.test(String(row.Status))) {
+      errors.push(`${rid} is web-enabled without an approved status.`);
     }
     if (printOn && !webOn) errors.push(`${rid} print/web inclusion is inconsistent.`);
     if (webOn || printOn) {
-      const expected = `${COMPLIMENTS_PREFIX}${String(row["Contributor / Company"] ?? "").trim()}`;
+      const expected = isTextOnly
+        ? TEXT_ONLY_ADVERTISEMENT_TITLES[rid]
+        : isMemorial
+          ? MEMORIAL_ADVERTISEMENT_TITLES[rid]
+          : `${COMPLIMENTS_PREFIX}${String(row["Contributor / Company"] ?? "").trim()}`;
       if (String(row["Title / Item"] ?? "").trim() !== expected) {
         errors.push(`${rid} published advertisement display title must be "${expected}" (found "${row["Title / Item"]}").`);
       }

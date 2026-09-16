@@ -1,6 +1,6 @@
 # Sprint v4 — Tasks
 
-## Status: Tasks 1–32 and 38 complete (2026-09-16); `/dev` next resumes at Task 33
+## Status: Tasks 1–34 and 36–38 complete (2026-09-16); Task 35 (preview deployment) awaits explicit approval
 
 Reference: `sprints/v4/PRD.md` (amended and re-approved 2026-09-16), `sprints/v4/Changev4.md`, `sprints/v4/v4changev2.md` (committee corrections addendum)
 **Task 1 is complete** — commit `fbe59d6`. It is recorded below for history only; do not repeat, revert or rewrite it. `/dev` resumes at Task 2, the next uncompleted task. All decisions, including O–U (PRD §7.1), are resolved and approved.
@@ -182,15 +182,15 @@ Five corrections to already-approved content, received after Task 1. None adds, 
   - Acceptance: `CHANGELOG.md` gets a `V4_REVIEW_01` section listing added items (`ADV-028`, `ADV-029` — new; `ADV-027` updated from excluded to approved, not "added"), changed (`ART-010` re-extraction, navigation fix, consolidation moves with hashes, retired `extract-v2-golap`, and the five committee corrections: `MSG-001` wording, `MSG-002` title, `ART-003` spellings, `Late Biswajit Sengupta` on `ART-004`/`ART-005`, print-only article justification), unchanged counts (47 items); `05_WEBSITE/DEPLOYMENT.md` unchanged except a note that `V4` uses the same pipeline; `README.md` section on the intake folder mentions the consolidation date. *(Corrects a drafting error in the 2026-09-15 plan, which listed the added items as "ADV-028/029/030" — there is no `ADV-030` in this sprint.)*
   - Files: `CHANGELOG.md`, `05_WEBSITE/README.md`
 
-- [x] Task 33: Build `V4_REVIEW_01` (P0) — **Complete, commit `ee2e9a2` (built at `b96f581`). All 30 gated steps passed; 47 items; 72-page PDF; PDF compare 0 unexplained; nav/v4-pages/justification evidence included; V0–V3 unchanged; no local secret in the output. Two background attempts were killed by the harness for low memory before completion (no output written); the third, foreground run succeeded. Task 34 then found a Decision E deviation (Task 39), so this release is superseded by `V4_REVIEW_02` (Task 40) and kept unchanged.**
+- [x] Task 33: Build `V4_REVIEW_01` (P0) — **Complete, commit `ee2e9a2` (built at `b96f581`). All 30 gated steps passed; 47 items; 72-page PDF; PDF compare 0 unexplained; nav/v4-pages/justification evidence included; V0–V3 unchanged; no local secret in the output. Two background attempts were killed by the harness for low memory before completion (no output written); the third, foreground run succeeded. Task 34 recorded presentation findings for the editor (sprints/v4/MANUAL_VERIFICATION.md); none changed this release.**
   - Acceptance: `npm run release:v4` completes every gated step (validate, typecheck, unit, build, site, integration, visual, PDF, cover, ad, nav, poem, committee-corrections, app E2E, secret and SQL gates, audit gate, PDF compare); `06_FINAL_OUTPUT/V4_REVIEW_01/` contains the site, PDF, QA evidence (nav screenshots, affected PDF page renders, justification screenshots), reports, `REPRODUCTION.md`, `release-manifest.json` with 47 items; V0–V3 folders byte-identical to `HEAD` (existing baseline check); committed.
   - Files: `06_FINAL_OUTPUT/V4_REVIEW_01/**`
 
-- [ ] Task 34: Manual browser and PDF verification evidence (P0)
+- [x] Task 34: Manual browser and PDF verification evidence (P0) — **Complete. Findings in `sprints/v4/MANUAL_VERIFICATION.md` (new file): all checks pass through the local registration gate at desktop and mobile (register → magazine, reload keeps access, PDF served, `/admin/` asks for login, no overflow) and on the release's PDF renders. Five findings recorded for editorial decision, not converted into code changes: (1) text-only ads show the sentence as heading and in the box — Decision E wording is ambiguous; (2) memorial heading repeats lines 1–2; (3) ART-004/005 Bengali author line unprefixed; (4) ART-009 U+000C glyph box (pre-existing); (5) sticky-header anchor offset (pre-existing). Browser screenshots in git-ignored `qa-output/v4-manual/`; PDF renders in `V4_REVIEW_01/qa-output/`.**
   - Acceptance: with the local dev-app or static server: nav at desktop/tablet/mobile, poem lines, two text pages, memorial page, `MSG-001` corrected wording, `MSG-002` title, `ART-003` corrected spellings, `Late Biswajit Sengupta` bylines, justified article prose with no overflow/clipping, registration → magazine, protected content after refresh, admin page unaffected; PDF pages for `ART-010`, the three new advertisement items, and every page touched by a committee correction rendered to PNG at 150 dpi via `pdftoppm` into `qa-output/v4-pages/`; findings recorded for the walkthrough; any defect becomes a new task before Task 35.
   - Files: `05_WEBSITE/qa-output/v4-pages/*.png`, `05_WEBSITE/qa-output/navigation/*.png`
 
-- [ ] Task 35: Preview deployment of `V4_REVIEW_01` for manual approval (P0, Decision N)
+- [ ] Task 35: Preview deployment of `V4_REVIEW_01` for manual approval (P0, Decision N) — **Not started: awaiting explicit user approval (outward-facing deployment plus writes to the preview database; INSTRUCTION.md §18). Also decide the Task 34 findings 1–2 first, since changing them requires a `V4_REVIEW_02` build before any preview.**
   - Acceptance: `vercel deploy` (no `--prod`) from `05_WEBSITE/` at the release commit; `npm run e2e:app -- --base-url <preview> --public-only` passes; test registrations created on the *preview* database are identified and removed; preview URL, commit and results recorded in `sprints/v4/PREVIEW_DEPLOYMENT.md`; nothing promoted; production untouched (verified by `vercel ls` target list).
   - Files: `sprints/v4/PREVIEW_DEPLOYMENT.md`
 
@@ -238,3 +238,33 @@ Defects in existing code found while executing Tasks 20–29 (a dry run of the `
   4. `qa-output/navigation/*.png` are git-ignored evidence; regenerate with `npm run test:e2e:nav` (Task 33/34 copies them into the release).
   5. `sprints/v4/v4changev2.md` intentionally left untracked for Task 21.
 - **Next task:** Task 21 (Committee-corrections intake and provenance, Stream E) — no code precondition; it commits `v4changev2.md` and creates the correction record. Consider the `test:e2e:cover` fix (issue 1) before Task 33.
+
+### 2026-09-16 — Tasks 21–34, 36, 37 and new Task 38 (Streams E, F, G)
+
+- **Completed task(s):**
+  - Stream E: Task 21 (committee-corrections intake), 22 (text-correction core), 23 (MSG-001 wording), 24 (MSG-002 title), 25 (ART-003 spellings), 26 (`display_name`, Late Biswajit Sengupta), 27 (print-only article justification), 28 (tracker updates), 29 (regression suite and full gate re-run).
+  - Stream F: Task 30 (`release:v4`), 31 (PDF comparison), 32 (CHANGELOG and documentation), 33 (`V4_REVIEW_01` build), 34 (manual verification), 36 (audit review), 37 (historical script headers).
+  - Stream G (new): Task 38 (release-gate fixes found by a dry run).
+  - **Not done:** Task 35 (preview deployment), which awaits approval.
+- **Commit(s):** `ae098d5`, `7d74827`, `2417deb`, `f8d1672`, `f1b2105`, `f825e59`, `88dcf8a`, `7ec5967`, `9e9aa0e`, `97993b0` (Task 38), `a670178`, `357aebf`, `d5350a0`, `a3fa4cc`, `b96f581`, `ee2e9a2` (release), `e253d28`, and the documentation commit that contains this entry. Range: `git log 4751640..HEAD`. No `Claude-Session:` trailer on any commit.
+- **Changed files:**
+  - Content and data: `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` (new), `MSG-001`, `MSG-002` and `ART-003` content files, `publication.yaml`.
+  - Tracker: `BECAA_2026_Content_Tracker.xlsx`, plus one snapshot.
+  - Templates and styles: `print.njk`, `print.css`, `eleventy.config.mjs`.
+  - New scripts: `text-correction-core`, `v4-corrections`, `apply-v4-committee-corrections`, `tracker-corrections-core`, `apply-v4-corrections-tracker-updates`, `pdf-compare-core`, `pdf-compare`, `v4-pages-core`, `render-v4-pages`.
+  - Modified scripts: `release-core`, `release`, `visual-qa`, `add-v2-manifest-items`, `add-v3-manifest-items`.
+  - Tests: five new files (unit `text-correction-core`, `eleventy-config`, `tracker-corrections-core`, `pdf-compare-core`, `v4-pages-core`); three new integration and E2E files; `release-core`, `print-cover-page` and `add-v2-manifest-items` updated.
+  - Other: `package.json`, `CHANGELOG.md`, `05_WEBSITE/README.md`, `05_WEBSITE/DEPLOYMENT.md`, `06_FINAL_OUTPUT/V4_REVIEW_01/**` (new, 319 files), `sprints/v4/v4changev2.md` (now committed), `sprints/v4/MANUAL_VERIFICATION.md` (new), `sprints/v4/TASKS.md`.
+  - Deviations from the declared file lists are noted on each task.
+- **Test results:**
+  - Task 29 gates: `validate` 47 items / 0 errors; `tracker:validate` 54 rows; typecheck; `test:unit` (26 files); `test:integration` (all 33 files as one green chain, including 8 DB-backed); `test:v4-committee-corrections`; `check:secrets`; `check:sql`.
+  - `release:v4`: all 30 gated steps passed, including `e2e:app` (24 steps), `test:e2e:nav`, `test:e2e:cover` (72 pages), `qa:pdf-compare` (0 unexplained) and the audit gate (3 allow-listed).
+  - After Task 37: `test:unit` and both historical-script integration tests pass.
+  - Semgrep clean on every file touched; `npm audit` unchanged.
+- **Unresolved issues:**
+  1. **Task 35 (preview deployment) not run.** It is outward-facing and writes test registrations to the preview database, so it needs explicit approval.
+  2. **Editorial decisions** from `sprints/v4/MANUAL_VERIFICATION.md`: whether text-only advertisements and the memorial should drop the heading that repeats their text (Decision E wording; changing it needs a `V4_REVIEW_02` build); ART-004/005 Bengali author line; ART-009 U+000C glyph box; sticky-header anchor offset.
+  3. **Unicode forms.** MSG-001 stores য় as U+09DF while other files use U+09AF U+09BC. The corrections kept each file's own form; normalising is not in scope.
+  4. **Memory kills.** Two background `release:v4` runs were stopped by the harness for low memory (no output written); the foreground run succeeded. Run long releases in the foreground on this host.
+  5. **Stale manifest note.** The ART-010 manifest `notes` still says "Exact approved source: Shubhra Basu.docx" (unchanged since before Task 6); left as is.
+- **Next task:** Task 35 (preview deployment of the approved release), only after the user approves it and decides findings 1–2. If the headings are to change, first add a task to render text-only and memorial pages without the repeated heading, update Tasks 10/15/16's tests, and build `V4_REVIEW_02`.

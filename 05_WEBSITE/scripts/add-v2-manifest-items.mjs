@@ -1,7 +1,7 @@
 // HISTORICAL (Sprint v2 Task 8): one-shot script that appended GAL-007, ART-010 and ART-011 to
 // publication.yaml. Already applied; kept for reproducibility and exercised by
 // tests/integration/add-v2-manifest-items.test.mjs. Paths reflect the Sprint v4 layout: the
-// former 02_INCOMING_CONTENT/v2-incoming/ files now live directly in 02_INCOMING_CONTENT/, and
+// files of the former Sprint v2 intake subfolder now live directly in 02_INCOMING_CONTENT/, and
 // ART-010's Sprint v2 source is read from its archive (it was superseded in Sprint v4).
 import fs from "node:fs";
 import path from "node:path";

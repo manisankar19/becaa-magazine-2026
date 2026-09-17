@@ -1,6 +1,6 @@
 # Sprint v4 — Tasks
 
-## Status: Tasks 1–34 and 36–38 complete; Stream H (Tasks 39–47, approved 2026-09-17) in progress
+## Status: Tasks 1–43 complete; Stream H Tasks 44–47 (release V4_REVIEW_02, preview, production, records) in progress
 
 Reference: `sprints/v4/PRD.md` (amended and re-approved 2026-09-16), `sprints/v4/Changev4.md`, `sprints/v4/v4changev2.md` (committee corrections addendum)
 **Task 1 is complete** — commit `fbe59d6`. It is recorded below for history only; do not repeat, revert or rewrite it. `/dev` resumes at Task 2, the next uncompleted task. All decisions, including O–U (PRD §7.1), are resolved and approved.
@@ -214,15 +214,15 @@ Defects in existing code found while executing Tasks 20–29 (a dry run of the `
 
 The owner approved five changes after the `V4_REVIEW_01` verification, a new review release `V4_REVIEW_02` (`V4_REVIEW_01` preserved unchanged), and deployment: Preview, then, if Preview passes, Production replacing the current production deployment (never deleting the Vercel project or the Neon databases). The approvals are recorded in the addendum of `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` (§§6–10). Task 35 is carried out as Task 45 with `V4_REVIEW_02`.
 
-- [ ] Task 39: `ADV-028` wording — "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate" (P0)
+- [x] Task 39: `ADV-028` wording — "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate" (P0) — **Complete, commit `c8241c6`. Manifest (title + text_lines) and tracker (title + approval remarks on ADV-027/028/029, rows 6, 7, 1; snapshot `…2026-09-17T00-48-35-575Z…`). The long title wraps in the PDF contents, so a `contentsEntries()` helper now re-joins wrapped entries for pdf-qa and v4-advertisements; `findPdfPageIndex` no longer builds a RegExp from a variable (semgrep).**
   - Acceptance: title and `text_lines[0]` changed in the manifest (count-guarded) and in the tracker row (snapshot first); `add-v4-manifest-items.mjs`/`tracker-v4-core.mjs`/`validate-tracker-core.mjs` constants follow; all tests asserting the old wording updated; `validate`, `tracker:validate` pass; website card, contents and PDF page show the new sentence; old sentence absent everywhere in the build.
-- [ ] Task 40: No repeated visible heading on text-only and memorial advertisement pages (P0)
+- [x] Task 40: No repeated visible heading on text-only and memorial advertisement pages (P0) — **Complete, commit `1ac9690`. `aria-label` = title on the card/page. Removing the heading moved the print sentence box and memorial to the top of the page; fixed with `grid-template-rows: auto 1fr` for heading-less ad pages and guarded by a centring assertion (fails on the old CSS). pdf-qa checks the approved lines once instead of a heading.**
   - Acceptance: `index.njk` and `print.njk` omit the `<h2>`/`<h1>` for `presentation: text` and `memorial`; the card/page keeps an accessible name (`aria-label` = title); the sentence appears exactly once in the visible page text of `ADV-027`/`ADV-028` (web + PDF) and the memorial's lines 1–2 once; artwork ads unchanged; render, browser, QA and PDF tests updated to the new structure.
-- [ ] Task 41: `ART-004`/`ART-005` Bengali author line → `প্রয়াত বিশ্বজিৎ সেনগুপ্ত` (P0)
+- [x] Task 41: `ART-004`/`ART-005` Bengali author line → `প্রয়াত বিশ্বজিৎ সেনগুপ্ত` (P0) — **Complete, commit `3142c6a`. প্রয়াত in NFC form; two rendered-text entries added to `V4_CORRECTIONS` so the PDF comparison classifies the pages as corrections.**
   - Acceptance: applied with `corrections:apply-v4` (one occurrence each, file otherwise byte-identical); present in website and PDF text for both items; bylines unchanged ("Late Biswajit Sengupta"); tracker remarks updated.
-- [ ] Task 42: `ART-009` U+000C removed; control-character gate (P0)
+- [x] Task 42: `ART-009` U+000C removed; control-character gate (P0) — **Complete, commit `8ca58c7`. New `content-encoding-core.mjs` gate in `validate.mjs`; `correctionState` fixed for deletions (it looped forever on an empty replacement). PDF page 32 box gone; wording intact.**
   - Acceptance: the only U+000C removed with wording unchanged ("in a meeting he scheduled" on website and in PDF text); `npm run validate` fails on any C0 control character (other than tab/LF/CR) in publication content; unit-tested.
-- [ ] Task 43: Sticky-header anchor obstruction fixed (P0)
+- [x] Task 43: Sticky-header anchor obstruction fixed (P0) — **Complete, commit `7eff309`. Header measured sticky at >780px: ≈110px up to 1200px, ≈68px from 1210px; `scroll-padding-top` 7.5rem (781–1299px) / 5rem (≥1300px). Nav E2E now at 390/820/1100/1440 px with a below-the-header assertion.**
   - Acceptance: CSS `scroll-padding-top` (sized to the sticky header at widths where it is sticky) so navigation and contents jumps land below the header; `test:e2e:nav` asserts the target top is at or below the header bottom and close to it at 390/820/1440 px (and another intermediate width); no JavaScript change.
 - [ ] Task 44: Build and verify `V4_REVIEW_02` (P0)
   - Acceptance: `npm run release:v4:02` passes every gated step; PDF compare vs `V3_REVIEW_02` has 0 unexplained pages; `V4_REVIEW_01` byte-identical; `release-assets/print/BECAA-2026-complete-review.pdf` replaced from `V4_REVIEW_02` (the deployed PDF); manual verification of the five changes recorded; committed.

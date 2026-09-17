@@ -1,10 +1,17 @@
-# Sprint v4 — Walkthrough (Tasks 1–20)
+# Sprint v4 — Walkthrough (Tasks 1–34, 36–38)
 
-Scope note: Sprint v4 has 37 planned tasks across six streams (A–F). This walkthrough covers **Tasks 1–20**: Stream A (intake/consolidation), Stream B (the poem), Stream C (the three new advertisements), and Stream D (navigation, Tasks 17–20, added 2026-09-16 at commit `6c1751a`). All are complete, on `main`, and verified. Streams E (committee corrections, Tasks 21–29) and F (build/release, Tasks 30–37) have not started; see **What's Next**.
+Scope note: Sprint v4 has 37 planned tasks across streams A–F, plus one task added during execution (Task 38, Stream G). This walkthrough covers everything completed so far, all on `main` and verified:
+
+- Stream A (intake/consolidation, Tasks 1–4), Stream B (the poem, Tasks 5–8), Stream C (the three new advertisements, Tasks 9–16), Stream D (navigation, Tasks 17–20; added to this document at `6c1751a`).
+- Stream E (committee corrections, Tasks 21–29) and Stream F (build and release, Tasks 30–34, 36, 37) plus Stream G (Task 38, pre-release gate fixes). These were added to this document on 2026-09-17, describing the state at commit `1f73a3a`.
+
+**Not done:** Task 35 (preview deployment) waits for explicit user approval, and five verification findings wait for editorial decisions; see **Known Limitations** and **What's Next**. The review release `06_FINAL_OUTPUT/V4_REVIEW_01/` is built and committed; nothing has been deployed.
 
 ## Summary
 
 This slice of Sprint v4 does three things to the BECAA Maharashtra Magazine 2026 site (an Eleventy static build that produces both a website and a print PDF from one hand-authored manifest): it merges a stray `v2-incoming/` subfolder back into the single `02_INCOMING_CONTENT/` intake location with full provenance; it re-extracts the poem "গোলাপ" (ART-010) from a corrected Markdown source so every line renders as its own line, on web and in print; and it adds three new advertisement pages — two text-only compliments ads and one memorial — by extending the advertisement system with a `presentation` concept (`artwork` | `text` | `memorial`) instead of assuming every advertisement is a piece of artwork. Finally, it fixes the website's top navigation, which printed one section label per *item* (51 links with the current manifest: "Articles" ×12, "Advertisements" ×25…; PRD §1.1 counted 48 before Stream C's three advertisements), so that it shows one link per *section* (8 links), each pointing to that section's first published item and derived from the manifest at build time. Nothing in the application layer (registration, authentication, admin, database) was touched, and the print/PDF, welcome and admin pages build byte-identically before and after the navigation change.
+
+The second half of the sprint applies five corrections the BECAA committee sent after planning. Two Bengali wording and spelling fixes (`MSG-001`, `ART-003`) and a title spelling fix (`MSG-002`) are made with a count-guarded, code-point-exact text-correction tool. A new `display_name` field shows "Late Biswajit Sengupta" in the bylines of `ART-004`/`ART-005` without changing the recorded contributor. A print-only CSS rule justifies article prose. None of it overwrites an original contributor document; a controlled correction record in `02_INCOMING_CONTENT/` is the source of truth. The release pipeline then gains a V4 step list (`npm run release:v4`) with a page-by-page PDF comparison against the Sprint v3 release and rendered PDF evidence. That pipeline produced `V4_REVIEW_01`: 47 items, a 72-page PDF, all 30 gated steps green and no unexplained PDF difference.
 
 ## Architecture Overview
 
@@ -82,9 +89,45 @@ Stream D (navigation) sits entirely inside the website's layout step:
                                         print uses print.njk — no nav)
 ```
 
+Streams E–G (committee corrections and release) add a correction layer in front of the manifest and a comparison and evidence layer after the PDF:
+
+```
+ sprints/v4/v4changev2.md ──▶ 02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md
+ (committee addendum)          (human-readable authority: old → new text per item ID)
+                                         │ mirrored, code-point exact, in
+                                         ▼
+                     scripts/v4-corrections.mjs
+                       V4_FILE_CORRECTIONS (file, find, replace, expectedCount)
+                       V4_CORRECTIONS      (how each change reads in rendered text)
+                         │                      │                           │
+      apply-v4-committee-corrections.mjs   apply-v4-corrections-         pdf-compare.mjs
+      └─ text-correction-core.mjs          tracker-updates.mjs           └─ pdf-compare-core.mjs
+         applyCorrection / correctionState └─ tracker-corrections-core
+         │                                    (snapshot first)
+         ▼                                    ▼
+ MSG-001 / MSG-002 / ART-003 content,     BECAA_2026_Content_Tracker.xlsx
+ publication.yaml (MSG-002 title+alt,     (rows 16, 17, 5, 6, 7)
+ ART-004/005 display_name)
+         │
+         ▼
+ Eleventy build ── byline filter prefers display_name ──▶ _site/index.html
+                └─ print.njk: print-page--{type} ──────▶ _site/print/index.html
+                   print.css: justify .print-page--article .prose p     │ compile-pdf
+                                                                         ▼
+                                                    BECAA-2026-complete-review.pdf
+                                                         │                 │
+                            qa:pdf-compare  ◀────────────┘                 └──▶ qa:v4-pages
+                            vs 06_FINAL_OUTPUT/V3_REVIEW_02                    (pdftoppm renders)
+                            (fails on any unexplained page)
+                                                         │
+                                  npm run release:v4 (V4 step list, release-core.mjs)
+                                                         ▼
+                                          06_FINAL_OUTPUT/V4_REVIEW_01/
+```
+
 ## Files Created/Modified
 
-Tasks 1–16: 77 files changed (+4,151 / −206 lines) across 15 commits plus 2 merge-conflict/doc-only commits. Tasks 17–20: 8 files changed (+350 / −18 lines) across 3 task commits and 1 documentation commit (`git diff 445a8ac..6c1751a`). Grouped by stream below; every new module gets its own subsection, mechanical/count-only edits to existing files are grouped into tables.
+Tasks 1–16: 77 files changed (+4,151 / −206 lines) across 15 commits plus 2 merge-conflict/doc-only commits. Tasks 17–20: 8 files changed (+350 / −18 lines) across 3 task commits and 1 documentation commit (`git diff 445a8ac..6c1751a`). Tasks 21–38: 18 commits (`git log 4751640..1f73a3a`); 41 source/documentation files changed (+2,249 / −44 lines), plus the 319-file release folder `06_FINAL_OUTPUT/V4_REVIEW_01/`. Grouped by stream below; every new module gets its own subsection, mechanical/count-only edits to existing files are grouped into tables.
 
 ### Stream A — Intake and consolidation (Tasks 2–4)
 
@@ -150,7 +193,7 @@ Had this not been caught, Task 6 would have thrown on the very first run against
 **How it works**: Verifies the source file's SHA-256 against a hardcoded expected value before doing anything (`0d068f30b846c0b7…`) — a defence against silently publishing from the wrong file if someone edits it later. Calls `readVerseSource(text, {expectedCount: 17})`, then re-joins the result as `title, author, "", ...17 lines each with <br> re-appended`. Note this is a deliberate normalization: even though the *source's* 17th line has no `<br>`, the *published* body gets one on every line — harmless (nothing follows the last line anyway) and simpler to reason about downstream. The manifest edit is the same "exact old line → exact new line, count-guarded, re-parsed" surgery pattern used throughout this sprint, not a full YAML rewrite. `extract-v2-golap.mjs` (the old DOCX-based extractor) is deleted in this same commit.
 
 #### CSS — `.prose p:has(br)` (Task 7)
-Added to both `site.css` (previously had `.prose` rules) and `print.css` (previously had *no* `.prose` block at all — one was created). The `:has()` selector targets any paragraph containing a hard break — i.e., verse — and forces `text-align: left; hyphens: none;` with a relaxed line-height, so it can never be justified or word-broken even by a future prose-justification rule elsewhere in the stylesheet (this matters directly for the not-yet-started Task 27).
+Added to both `site.css` (previously had `.prose` rules) and `print.css` (previously had *no* `.prose` block at all — one was created). The `:has()` selector targets any paragraph containing a hard break — i.e., verse — and forces `text-align: left; hyphens: none;` with a relaxed line-height, so it can never be justified or word-broken even by a future prose-justification rule elsewhere in the stylesheet (this is what keeps the poem left-aligned under Task 27's print justification).
 
 #### `tests/e2e/print-poem-page.test.mjs` (new, Task 8)
 Locates ART-010's page in the compiled PDF via `pdftotext -layout`, matching its kicker text (`· ART-010`) the same way the advertisement QA tooling locates ad pages, then asserts all 17 lines appear in source order, one per text line, with no split or merged line. Comparison strips whitespace to tolerate a real `pdftotext` Bengali-conjunct rendering quirk without masking an actual split/merge (verified against synthetic broken fixtures).
@@ -280,6 +323,303 @@ Screenshots: `qa-output/navigation/{mobile,tablet,desktop}.png` plus `desktop-fo
 #### Task 20 — gate and application re-run (verification only)
 No files changed. After a fresh `npm run build` and `npm run pdf`, every suite was run sequentially (results in **Test Coverage**). The DB-dependent suites ran this time: the project's local PostgreSQL cluster on `127.0.0.1:5433` had no other client connections, the suites use the separate `becaa_test` database, and the app servers bind ephemeral ports, so nothing belonging to another session was started, stopped or rebound. `git diff 445a8ac..HEAD` shows no change under `api/`, `lib/`, `middleware.ts`, `db/`, `src/welcome.njk`, `src/admin.njk`, `src/assets/`, `06_FINAL_OUTPUT/` or folders `01_`–`04_`. In a throwaway worktree at `445a8ac`, the built `_site/print/index.html`, `_site/welcome/index.html` and `_site/admin/index.html` were byte-identical to the new build, and both PDFs have 72 pages.
 
+### Stream E — Committee corrections (Tasks 21–29)
+
+The committee's addendum (`sprints/v4/v4changev2.md`) asked for five changes to already-approved content. The design choices follow PRD §7.1 (Decisions O–U):
+
+- Every text change is **exact and count-guarded**: it either replaces precisely the expected number of occurrences or stops.
+- The **original contributor documents are never edited**; a controlled correction record is the authority.
+- Each correction is **proved three ways**: in the working content or manifest, in the built website, and in the text extracted from the PDF.
+
+| Commit | Task | Content |
+|---|---|---|
+| `ae098d5` | 21 | Addendum and correction record committed |
+| `7d74827`, `2417deb` | 22 | `text-correction-core.mjs` + Unicode-mismatch hint |
+| `f8d1672` | 23 | `MSG-001` wording; corrections data module and apply script; regression test |
+| `f1b2105` | 24 | `MSG-002` title (and `alt`) |
+| `f825e59` | 25 | `ART-003` spellings |
+| `88dcf8a` | 26 | `display_name`; `ART-004`/`ART-005` bylines |
+| `7ec5967` | 27 | Print-only article justification |
+| `9e9aa0e` | 28 | Tracker updates |
+| — | 29 | Verification only (after Task 38) |
+
+#### `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` (new, Task 21)
+**Purpose**: The authoritative editorial record for the five corrections, since the committee supplied no revised contributor document.
+
+**How it works**: For each manifest ID it states the working file, the untouched original source file, the exact old and new text, the number of occurrences to change, and the committee's reason.
+- **`MSG-001`:** records the whole confirmed sentence (Decision O). It also says what must *not* change: the salutation `প্রিয় বেকান ও বেকানী বন্ধুরা,` and every `বেকানী`.
+- **`ART-004`/`ART-005`:** says the date and circumstances of death are not published.
+- **Encoding note (added in Task 23):** explains a finding made while applying the first correction. The Bengali letter য় can be stored as one code point (U+09DF) or two (U+09AF U+09BC), which render identically. `MSG-001-president-desk.md` uses the first form throughout and `ART-003-item.md` the second. The record's own text is Unicode NFC; each correction is applied in the target file's own form.
+
+#### `scripts/text-correction-core.mjs` (new, Task 22)
+**Purpose**: Pure, exact text replacement that can never drift silently.
+**Key functions**:
+- `applyCorrection(text, { find, replace, expectedCount, wholeWord = true })` — replaces exactly `expectedCount` occurrences or throws.
+- `countOccurrences(text, find, { wholeWord })` — counts matches.
+- `correctionState(text, correction)` — returns `"pending"` or `"applied"`, and throws on any mixed or missing state.
+
+**How it works**: JavaScript's `\b` only understands ASCII, so "whole word" is checked explicitly: the characters either side of a match must not be a Unicode letter, combining mark or digit. That is what separates `বেকান` from `বেকানী`, which is `বেকান` plus the vowel sign `ী` (a combining mark):
+
+```js
+const WORD_CHAR = /[\p{L}\p{M}\p{N}_]/u;
+if (wholeWord) {
+  const before = text.slice(0, i).at(-1) ?? "";
+  const after = text[i + find.length] ?? "";
+  if (WORD_CHAR.test(before) || WORD_CHAR.test(after)) continue;
+}
+```
+
+**Replacements that contain their own find string**: `Biswajit Sengupta` → `Late Biswajit Sengupta` is the awkward case. A match that lies inside an existing occurrence of the replacement counts as already corrected, so re-running a correction is a no-op rather than producing "Late Late". `correctionState` builds on this: exactly the expected number of uncorrected matches and no replacements is `pending`; none left and the replacement present the expected number of times is `applied`; anything else throws. That makes every apply script safe to re-run.
+
+**The Unicode hint (`2417deb`)**: the first real run found 0 occurrences of `বেকান পরিচয়` in `MSG-001`, because the typed text used the two-code-point form. Matching stays code-point exact (normalising would change the file's bytes around the edit), but the error now says why:
+
+```
+applyCorrection: expected 1 occurrence(s) of "বেকান পরিচয়", found 0 (1 after Unicode NFC normalisation — match the file's code points exactly)
+```
+
+The unit test (8 scenarios) includes a fixture reproducing `MSG-001`'s verified counts: 3 substring matches of `বেকান`, 2 standalone words, 1 `বেকানী`.
+
+#### `scripts/v4-corrections.mjs` (new, Task 23; extended in Tasks 24–26)
+**Purpose**: The correction record in machine-readable form, shared by the apply script, the regression test, the tracker update and the PDF comparison.
+**Exports**:
+- `V4_FILE_CORRECTIONS` — edits to working files.
+- `V4_CORRECTIONS` — how each change reads in rendered text.
+- `MSG001_SENTENCE` — the confirmed old and new sentence, plus the untouched salutation.
+
+**How it works**: Bengali strings that contain য় are written with `\u` escapes, so the code point is visible in source and cannot be normalised away by an editor. The file-edit list:
+
+```js
+{ id: "MSG-001", file: "src/content/messages/MSG-001-president-desk.md", find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF", expectedCount: 1 },
+{ id: "MSG-002", file: "src/_data/publication.yaml", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 2 }, // title and alt
+{ id: "MSG-002", file: "src/content/messages/MSG-002-vice-preseident-desk.md", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 1 },
+{ id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "ভাইবই", replace: "ভাবা\u09AF\u09BC", expectedCount: 1 },
+{ id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "পারিমা", replace: "পরিমা", expectedCount: 1 },
+{ id: "ART-004/ART-005", file: "src/_data/publication.yaml", find: "    contributor: Biswajit Sengupta\n", replace: "    contributor: Biswajit Sengupta\n    display_name: Late Biswajit Sengupta\n", expectedCount: 2 },
+```
+
+`MSG-002`'s manifest `alt` field repeated the misspelled title, which is why the manifest edit expects 2. `ART-004`/`ART-005` get their `display_name` line through the same guarded mechanism, so the manifest is only ever changed by recorded edits.
+
+#### `scripts/apply-v4-committee-corrections.mjs` (new, Task 23)
+**Purpose**: Applies `V4_FILE_CORRECTIONS` to the working files (`npm run corrections:apply-v4 [-- --only MSG-001,ART-003]`).
+**Key function**: `applyV4FileCorrections({ only, root, corrections })`.
+
+**How it works**: For each selected correction it:
+1. resolves the path and refuses anything outside `05_WEBSITE/`;
+2. asks `correctionState` whether the edit is pending or applied;
+3. writes only when pending, and reports `applied` or `already applied`.
+
+A partially edited file makes it stop. The content changes in Tasks 23–26 were made by this script, one ID at a time, never by hand.
+
+#### Content and manifest changes (Tasks 23–26)
+
+| File | Change | Diff |
+|---|---|---|
+| `src/content/messages/MSG-001-president-desk.md` | `বেকান` → `BECAA-র` in the confirmed sentence only | 1 word |
+| `src/content/messages/MSG-002-vice-preseident-desk.md` | front matter `title` → `Vice President Desk`; filename and the body's `Vice President’s Desk` line unchanged (Decision P) | 1 line |
+| `src/content/articles/ART-003-item.md` | `ভাইবই` → `ভাবায়`, `পারিমা` → `পরিমা` | 2 words |
+| `src/_data/publication.yaml` | `MSG-002` `title` and `alt`; `display_name: Late Biswajit Sengupta` added under `ART-004` and `ART-005` | 4 lines |
+
+The regression test proves each file equals its content at `ae098d5` (Task 21, before any correction) with exactly the recorded substitutions applied, and nothing else.
+
+#### `eleventy.config.mjs` — `byline` filter (modified, Task 26)
+**Purpose**: Builds the "Name, Branch, YYYY Batch — Designation" line used on website cards and print pages.
+**Change**: the primary name is now `display_name` when it is a non-blank string, otherwise `contributor`:
+
+```js
+const displayName = typeof item.display_name === "string" && item.display_name.trim() ? item.display_name : item.contributor;
+const details = [displayName];
+```
+
+`contributor` stays the provenance/audit identity; the manifest, tracker and correction record still say `Biswajit Sengupta`. The byline filter is shared by `index.njk` and `print.njk`, so the website and the PDF change together. The contents lists render titles only and are unaffected. `scripts/config.mjs` needed no change because no field allow-list is enforced there. New `tests/unit/eleventy-config.test.mjs` covers the filter:
+- existing bylines are unchanged;
+- `display_name` replaces only the name;
+- blank or `null` values fall back to `contributor`;
+- the input item is not mutated.
+
+#### `src/print.njk` and `src/assets/css/print.css` — print-only justification (modified, Task 27)
+**Purpose**: Justify ordinary article prose in the printed magazine only (Decision S).
+
+**How it works**: Every print page `<section>` now carries a type class, `print-page print-page--{{ item.type }}`. The existing `print-page--advertisement` class is unchanged for advertisements. One print-only rule then selects paragraphs inside article bodies:
+
+```css
+.print-page--article .prose p:not(:has(br)):not(li p):not(blockquote p) {
+  text-align: justify;
+}
+```
+
+The selector excludes by construction:
+- **verse** — any paragraph with a hard break, so the `ART-010` poem stays under Task 7's left-aligned rule;
+- **list items and quotations**;
+- everything **outside article bodies** — titles, bylines, kickers, messages, gallery, advertisements, memorial text and contents.
+
+`site.css` is untouched, so the website is not justified.
+
+**Visual inspection**: all 29 article pages (PDF pp. 11–39) were rendered and inspected. Pagination is identical to the PDF built just before the change: 72 pages, and every article starts and ends on the same page. Chromium's justification only widens spaces; it does not re-break lines. No clipping or overflow was found, Bengali conjuncts and mixed Bengali/English lines render correctly, and long URLs and e-mail addresses in `ART-006` wrap. One pre-existing defect was noticed: `ART-009` page 32 shows a missing-glyph box, traced to a U+000C form feed in the extracted content (also present in `V3_REVIEW_02`; recorded, not changed).
+
+#### `scripts/tracker-corrections-core.mjs` and `scripts/apply-v4-corrections-tracker-updates.mjs` (new, Task 28)
+**Purpose**: Record the corrections on the editorial tracker (`npm run tracker:apply-v4-corrections`).
+**Key exports**: `TRACKER_IDS` (manifest ID → tracker Item ID, taken from each item's manifest note "Tracker Item ID N"), `CORRECTION_DECISIONS`, `buildCorrectionTrackerRows(headers, rows)`.
+
+**How it works**: The core reuses Sprint v3's `applyTrackerFieldUpdates`, which appends a Remarks note once and preserves existing remarks. The notes are built from `V4_CORRECTIONS`, so the tracker quotes exactly the same old → new strings as the content:
+
+| Tracker row | Item | Change |
+|---|---|---|
+| 16 | `MSG-001` | Remark: wording correction; salutation and বেকানী unchanged |
+| 17 | `MSG-002` | `Title / Item` → `Vice President Desk` (addendum §2.2) + remark |
+| 5 | `ART-003` | Remark: both spellings |
+| 6, 7 | `ART-004`, `ART-005` | Remark: reader-facing name "Late Biswajit Sengupta" via `display_name`; `Contributor / Company` unchanged |
+
+The tracker has no display-name column, hence the remarks. No date of death is written. The wrapper follows Task 14's pattern: snapshot first (`TRACKER_SNAPSHOTS/BECAA_2026_Content_Tracker_2026-09-16T16-33-59-017Z_pre-v4-corrections-tracker-updates.xlsx`), then a style-preserving write, and a byte-identical no-op on re-run. The integration test checks that only those five rows changed, only in Remarks (and row 17's title), with 54 rows and 3 sheets intact, and that `tracker:validate` passes.
+
+#### `tests/integration/v4-committee-corrections.test.mjs` (new, Tasks 23–27)
+**Purpose**: The regression suite for all five corrections (`npm run test:v4-committee-corrections`; also in `test:integration`). It requires `npm run build && npm run pdf`.
+
+**How it works**: It reads four sources — the working files, `_site/index.html`, `_site/print/index.html`, and the PDF text from `pdftotext -layout` split into pages. An item's PDF text runs from the page whose kicker names its ID up to the next kicker. Website checks are code-point exact. PDF checks compare after NFC normalisation with all whitespace removed, because `pdftotext` splits some Bengali conjuncts with spaces (`বন্ধুরা` → `বন্ধু রা`). Per correction:
+- **`MSG-001`:** corrected sentence present and superseded sentence absent in content, website and PDF; salutation unchanged; exactly one standalone `বেকান` and one `বেকানী` left.
+- **`MSG-002`:**
+  - corrected title in the manifest, `alt`, front matter, website heading (once), website contents, print heading and PDF contents;
+  - superseded title absent from every built HTML/JSON file and the whole PDF;
+  - body line `Vice President’s Desk` and filename unchanged.
+- **`ART-003`:** each corrected spelling present once and each superseded one absent, on the website and in the PDF.
+- **`ART-004`/`ART-005`:**
+  - the exact byline appears on the website, the print page and a PDF line;
+  - `contributor` unchanged, and only these two items have `display_name`;
+  - no other `Late`-prefixed byline (the approved memorial line "Late Shri Bhakta Mohon Mitra" is excluded explicitly);
+  - no date or circumstances of death anywhere.
+- **Justification:** in Playwright with print media, every article prose paragraph computes `text-align: justify`. `ART-010` verse is `left`. Headings, kickers, bylines, list items, captions, ad text, memorial lines, contents, contact, thanks and message prose are not justified. With screen media, no element on the website is justified, and `site.css` equals its `ae098d5` content.
+- **Every corrected file** equals its `ae098d5` content with only the recorded substitutions, and re-running the apply script reports `already applied`.
+
+#### Task 29 — regression suite and full gate re-run (verification only)
+Run after Task 38, so `test:integration` could run as one green chain:
+- fresh `build` + `pdf` (72 pages);
+- `validate` (47 items, 0 errors) and `tracker:validate` (54 rows);
+- `typecheck`, `test:unit` (26 files at the time), `test:integration` (all 33 files, including the 8 database-backed ones);
+- `test:v4-committee-corrections`, `check:secrets`, `check:sql`.
+
+All passed. `git diff 4751640..HEAD` touched only Task 21–28 and Task 38 files. Nothing changed under `06_FINAL_OUTPUT/`, `01_REFERENCE_2025/`, `03_ADVERTISEMENTS/`, `api/`, `lib/`, `middleware.ts` or `db/`. `02_INCOMING_CONTENT/` only gained the correction record.
+
+### Stream G — Pre-release fixes (Task 38, added during `/dev`)
+
+Before Task 29, a dry run of the release step list at `HEAD` in a scratch worktree found three failing gates in existing code. None was caused by the corrections. All three would have blocked Task 29 or the release build. Per the `/dev` rule they were recorded as a new task (`97993b0`) rather than folded into an unrelated one.
+
+| File | Failure | Fix |
+|---|---|---|
+| `scripts/visual-qa.mjs` (`npm run qa`) | `desktop ADV-027 advertisement is broken or distorted.` — it checked every advertisement's image aspect ratio, but text-only ads have no image and the memorial photo is deliberately letterboxed | Branch on the card's kind: text-only needs a visible, non-empty `.ad-text` and no `<img>`; memorial needs a loaded image with `object-fit: contain`; artwork keeps the aspect-ratio check. A screenshot is still taken per ad (the whole card for text-only). |
+| `tests/e2e/print-cover-page.test.mjs` | `page count unchanged: 72 !== 69` — Sprint v3 length hard-coded | `EXPECTED_PAGES = 72` with the reason: 69 + one page each for `ADV-027/028/029`; the poem, corrections and justification add none |
+| `scripts/add-v2-manifest-items.mjs` + its test | `ENOENT … 02_INCOMING_CONTENT/Shubhra Basu.docx` at import, then an `ART-010` mismatch | The historical script hashes `ART-010`'s Sprint v2 source from its archive (`SUPERSEDED_SOURCES/2026-09-15/`); `detectLanguage` strips markup, since the poem's `<br>` made it look "mixed"; the test allows only `ART-010`'s Task-6-authorised `source_file`/`source_fingerprint` change |
+
+### Stream F — Build and release (Tasks 30–34, 36, 37)
+
+| Commit | Task | Content |
+|---|---|---|
+| `d5350a0` | 30 | V4 step list, reproduction text, `qa:v4-pages`, `release:v4` |
+| `357aebf` | 31 | PDF comparison (built by a delegated agent in an isolated worktree, reviewed and integrated) |
+| `a3fa4cc` | 32 | CHANGELOG, README, DEPLOYMENT note |
+| `ee2e9a2` | 33 | `06_FINAL_OUTPUT/V4_REVIEW_01/` (built at `b96f581`) |
+| `1f73a3a` | 34 | `sprints/v4/MANUAL_VERIFICATION.md` |
+| `e253d28` | 36, 37 | Audit review (verification); historical headers on add-v2/add-v3 scripts |
+
+#### `scripts/release-core.mjs` — V4 step list and reproduction (modified, Task 30)
+**Purpose**: The pure, unit-tested half of the release pipeline: which `npm run` steps a release version runs, in what order, and the generated `REPRODUCTION.md`.
+
+**How it works**: `stepsForVersion("V4_*")` returns a new `V4_STEPS` list: the V3 list plus `test:e2e:nav`, `test:e2e:poem`, `test:v4-advertisements`, `test:v4-committee-corrections`, `qa:pdf-compare` and `qa:v4-pages`. Two ordering constraints found during this work shape it, and the unit test asserts both:
+1. **`pdf` straight after `build`.** `build` starts by deleting `_site/`, and `test:integration` now includes suites that read the PDF. The V3 order, with `pdf` after `qa`, would fail on a clean build.
+2. **Evidence after `qa`.** `visual-qa.mjs` begins with `fs.rmSync("qa-output", { recursive: true })`, so every step that leaves evidence there must run after `qa`: the comparison, the page renders, navigation screenshots and `e2e:app`.
+
+```js
+const V4_STEPS = [
+  "tracker:validate", "validate", "typecheck", "test:unit", "build", "pdf", "test", "test:integration",
+  "qa", "qa:v2-items", "qa:pdf", "qa:pdf-compare", "test:e2e:cover", "test:e2e:poem", "qa:pdf:v2-items",
+  "qa:ad-backgrounds", "qa:art006", "qa:contact", "qa:v4-pages", "test:e2e:print-ads", "test:e2e:web-ads",
+  "test:e2e:nav", "test:v4-advertisements", "test:v4-committee-corrections", "test:e2e:welcome",
+  "test:e2e:admin", "e2e:app", "check:secrets", "check:sql", "audit",
+];
+```
+
+The V3 list is unchanged and asserted to be. `reproductionMarkdown` has a V4 branch: it names `npm run release:v4`, lists `unzip` and `poppler-utils` (`pdftotext`/`pdftoppm`) as prerequisites, mentions the `V3_REVIEW_02` comparison baseline, and lists the idempotent v4 content-migration commands (`V4_CONTENT_MIGRATION`: `extract:v4-golap` → `normalize:v4-memorial-image` → `manifest:apply-v4-updates` → `tracker:apply-v4-updates` → `corrections:apply-v4` → `tracker:apply-v4-corrections`). `package.json` gains `release:v4` (`RELEASE_VERSION=V4_REVIEW_01`). `scripts/release.mjs` itself only gained a comment; its packaging is version-independent and refuses to overwrite an existing folder.
+
+#### `scripts/v4-pages-core.mjs` and `scripts/render-v4-pages.mjs` (new, Task 30)
+**Purpose**: Put the PDF pages a reviewer needs into the release (`npm run qa:v4-pages`), so the Task 27 and Task 34 evidence survives the `qa` wipe.
+**Key functions**: `itemPageRanges(pageTexts)` → `Map(id → { first, last })`; `planV4PageRenders(pageTexts, { evidenceIds, articleIds })` → `{ contentsPages, evidence, justification }`.
+
+**How it works**: The core walks the page texts:
+- a first line ending `· ID` starts an item, and following pages without a kicker continue it;
+- a `… Contents` header, or an entry line straight after one, is a contents page;
+- "INFORMATION AND CONTACT" and "SPONSOR ACKNOWLEDGEMENTS" end any item, so the sponsor page is not counted as part of the memorial.
+
+The script derives the evidence IDs from data (`ART-010`, `ADV-027/028/029`, and every ID in `V4_CORRECTIONS`) and the article IDs from the manifest. It renders each page with `pdftoppm` (argument array, no shell):
+- contents and evidence pages at 150 dpi → `qa-output/v4-pages/pNN-ID.png`, plus `index.json`;
+- every article page at 100 dpi → `qa-output/v4-justification/pdf-page-NN-ID.png`.
+
+On the release PDF: 16 evidence renders (contents 2–3; `MSG-001` 5–6; `MSG-002` 7–8; `ART-003` 16; `ART-004` 17–18; `ART-005` 19–21; `ART-010` 33; `ADV-027/028/029` 69–71) and 29 article renders.
+
+#### `scripts/pdf-compare-core.mjs` and `scripts/pdf-compare.mjs` (new, Task 31)
+**Purpose**: Prove the new PDF differs from the Sprint v3 release (`06_FINAL_OUTPUT/V3_REVIEW_02`, 69 pages) only where authorised (Decision L). Run as `npm run qa:pdf-compare`; the build fails on any unexplained difference.
+**Key function**: `comparePdfPages(baselinePages, currentPages, { poemIds, newItemIds, corrections })` → `{ pages, removedBaselinePages, summary }`. Each current page is classed as `unchanged`, `shifted`, `contents`, `poem`, `new-item`, `correction`, `reflow` or `unexplained`, with the matched baseline page and a note. Baseline pages without a counterpart are reported too.
+
+**How it works — normalisation**: every string is NFC-normalised, the page-number footer is dropped, and the comparison key has all whitespace removed. Justification only changes spacing and `pdftotext` splits conjuncts, so whitespace carries no content here. The documented trade-off: an edit that only adds or removes a space is not detected.
+
+**How it works — matching**:
+- **Pages:** matched by key at the same index first (`unchanged`), then anywhere (`shifted`).
+- **Unmatched item pages:** judged per item, joining that item's pages.
+  - The poem ID is `poem`; an ID absent from the baseline and listed as new is `new-item`.
+  - A corrected ID is `correction` only if the baseline with every find → replace applied equals the current text exactly, each replacement is present, and no superseded form remains outside an occurrence of its replacement (again the `Late Biswajit Sengupta` case).
+  - An uncorrected item with identical text on different pages is `reflow`; anything else is `unexplained`.
+- **Contents:** judged as one block. Text outside the entries must be identical, the only extra entries may be the new IDs, the others keep their order, a title may change only by a recorded correction, and numbering must stay sequential.
+- **Failed corrections:** a failed check marks the item's first page `unexplained` even if that page is byte-identical, so an unapplied correction can never pass.
+
+The wrapper runs `pdftotext` via `execFileSync` (argument array), takes `V4_CORRECTIONS` from `v4-corrections.mjs`, checks every ID exists in the manifest, and writes `qa-output/pdf-compare/V3_REVIEW_02-vs-current.{json,md}` (the JSON records both PDFs' SHA-256 and page counts). It exits non-zero if anything is unexplained; `--baseline`, `--current` and `--no-corrections` exist for testing. The unit test (12 scenarios, hermetic) covers:
+- unchanged, shifted, contents, poem and new-item pages;
+- applied corrections with justification spacing and reflow;
+- missing, partial or doubled corrections;
+- contents tampering, removed pages and random edits;
+- a "new" ID that already existed;
+- both Unicode forms of য়.
+
+**Real result on the release PDF**:
+
+| Class | Pages |
+|---|---:|
+| unchanged | 60 |
+| shifted | 1 (sponsor page 72 = baseline 69) |
+| contents | 2 (3 new entries; corrected `MSG-002` title) |
+| poem | 1 (p. 33) |
+| new-item | 3 (pp. 69–71) |
+| correction | 5 (pp. 5, 7, 16, 17, 19) |
+| unexplained | 0 |
+
+Run with `--no-corrections` against the same build, it fails as it should: the five corrected items and the contents are unexplained.
+
+#### Documentation (Task 32)
+- **`CHANGELOG.md`:** the "Unreleased" block became a `V4_REVIEW_01` section:
+  - Added: `ADV-028`, `ADV-029`; `ADV-027` is recorded as *updated* from excluded, not added.
+  - Changed: `ART-010`, navigation, the consolidation moves with short hashes, the five corrections, tracker changes, count derivation.
+  - Removed: `extract-v2-golap`.
+  - Unchanged: the other 41 items and the application layer.
+  - Also the follow-up notes.
+- **`05_WEBSITE/README.md`:** a paragraph on the single intake folder (consolidated 2026-09-15), the correction-record convention and the superseded-source archive.
+- **`05_WEBSITE/DEPLOYMENT.md`:** one note that V4 uses the same deployment steps via `npm run release:v4` and the smoke test expects 47 items.
+
+#### `06_FINAL_OUTPUT/V4_REVIEW_01/` (new, Task 33)
+Built by `npm run release:v4` at `b96f581` and committed at `ee2e9a2` (319 files; assets identical to V3's are stored once by git). All 30 steps passed in order, and the audit gate reported 3 high advisories, all allow-listed (`playwright`, `sharp`, `xlsx`). Contents:
+- `website/` (the built site and 72-page PDF), `release-manifest.json` (47 item IDs and source fingerprints);
+- `BUILD_SUMMARY.md`, `REPRODUCTION.md`, validation and audit reports, `DEPLOYMENT.md`, `THREAT_CHECKS.md`;
+- `qa-output/` with `navigation/`, `v4-pages/`, `v4-justification/`, `pdf-compare/`, `advertisements/`, `app/` and the earlier QA sets.
+
+Before committing, every file was scanned for the local environment's secret values: 0 hits. No tracked V0–V3 file changed. Two earlier background runs of the pipeline were stopped by the Claude Code harness for low memory before packaging, so no partial folder was written; the third run, in the foreground, completed.
+
+#### `sprints/v4/MANUAL_VERIFICATION.md` (new, Task 34)
+**Purpose**: The manual verification record for the release.
+
+**How it works**:
+- **Browser:** a throwaway Playwright driver (not committed) served the built site through the local dev-app, including the registration gate, against `becaa_test` at 1440 px and 390 px. It registered a guest, reloaded, fetched the PDF, opened `/admin/` logged out and captured element screenshots, which were inspected by eye. Results: welcome page before registration; still on the magazine (47 items) after reload; PDF 200; `/admin/` shows the login form; no horizontal overflow. The two test registrations were deleted.
+- **PDF:** the release's `v4-pages` renders were inspected for the contents entries, `MSG-001` p. 5, `MSG-002` p. 7, `ART-004` p. 17 and the memorial p. 71.
+- **Every Sprint v4 change checked out on both surfaces.** Five findings were recorded for decision rather than changed (see **Known Limitations**).
+
+#### Tasks 36–37
+- **Task 36 (verification):** `package-lock.json` is unchanged since Sprint v3 (`dbc61cb`), the release audit gate is `ok`, and the allow-list is unchanged.
+- **Task 37:** no `v2-incoming` literal remained in `add-v2-manifest-items.mjs` or `add-v3-manifest-items.mjs` (removed in Task 4); both now open with a `HISTORICAL` header saying what they did and that paths reflect the Sprint v4 layout. No behaviour change.
+
 ## Data Flow
 
 **Consolidation**: `consolidate-incoming.mjs --plan` reads both folders → `planConsolidation()` (pure) decides safety → JSON+MD report written → human/CI checks `ok: true` → `--apply` performs 5 `git mv` + removes the empty folder → 14 downstream files (manifest, front matter, 10 scripts, 4 tests) get their path references repointed by hand in the same task.
@@ -290,15 +630,28 @@ No files changed. After a fresh `npm run build` and `npm run pdf`, every suite w
 
 **Navigation**: `publication.yaml` is loaded as Eleventy data → `base.njk` pipes `publication.items` through `whereWeb` (drop unpublished) → `byOrder` (sort by `order`) → `sectionNav(sponsor_acknowledgement_message)` → `sectionNavigation()` keeps the first item per section and adds the fixed links → the layout writes eight `<a href="#ID">Label</a>` elements → in the browser, clicking a link jumps to the element with that `id` (every item card in `index.njk` carries its manifest ID as its `id`). If an editor later adds an item with a lower `order` than a section's current first item, the link retargets automatically at the next build.
 
+**Committee corrections**: committee addendum → `BECAA Committee Corrections 2026-09-16.md` (human record) → `v4-corrections.mjs` (code-point-exact data), which feeds three paths:
+- **Content:** `corrections:apply-v4` checks `correctionState` per edit and applies `applyCorrection` only when pending → `MSG-001`, `MSG-002` and `ART-003` content files and `publication.yaml` (the `MSG-002` title/`alt` and the `ART-004/005` `display_name`) → Eleventy renders titles unchanged and bylines via `display_name` → `print.njk` tags each page `print-page--{type}` and `print.css` justifies article prose → `compile-pdf.mjs` produces the PDF.
+- **Tracker:** `tracker:apply-v4-corrections` → snapshot → remarks and row 17's title in the tracker.
+- **Proof:** `test:v4-committee-corrections` reads content, HTML and PDF text, and `qa:pdf-compare` checks every page against `V3_REVIEW_02` with the same find/replace pairs.
+
+**Release**: `npm run release:v4` → `release.mjs` asks `stepsForVersion("V4_REVIEW_01")` for the 30 steps and runs each as `node npm-cli.js run <step>` with no shell, stopping on the first failure → the validation gates, `build` and `pdf`, the site, integration, QA and browser suites, `qa:pdf-compare` and `qa:v4-pages`, the application E2E, the secret and SQL scans, then the audit gate → packaging copies `_site/`, `qa-output/` and the reports into `06_FINAL_OUTPUT/V4_REVIEW_01/` (refusing to overwrite), writes `release-manifest.json`, `BUILD_SUMMARY.md` and `REPRODUCTION.md` → the folder is committed. Deployment is a separate, approved step.
+
 ## Test Coverage
 
-Results below for Tasks 1–16 are as recorded at the time; the Tasks 17–20 results come from the Task 20 full re-run on 2026-09-16.
+Current state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files**, all passing. The final full run was the `release:v4` build of `V4_REVIEW_01` (30 gated steps, all green), plus `test:unit` and the two historical-script integration tests after Task 37. Per-stream history follows.
 
 - **Unit** (23 files in `test:unit` after Task 17, all passing in the Task 20 re-run): `navigation-core` added by Task 17 (6 scenarios). Earlier in the sprint: 2 new (`incoming-consolidation-core`, `tracker-v4-core`) and substantial additions to 2 existing files (`article-markdown-core` — 7 new `readVerseSource` cases; `ad-presentation-core` — 17 new presentation-kind cases alongside the 13 pre-existing ones, all still green).
 - **Integration** (31 files in `test:integration` after Task 18: 23 file-based + 8 database-backed). Task 20 ran each file individually: **30 of 31 passed**, including all 8 DB-backed files (`db-migrate`, `rate-limit`, `register`, `dev-app`, `admin-auth`, `admin-queries`, `export`, `threats`). The one failure is the pre-existing `add-v2-manifest-items` (see Known Limitations). `base-nav-render` added by Task 18. Earlier in the sprint: 8 new files (`consolidate-incoming`, `incoming-consolidation`, `extract-v4-golap` — replacing the deleted `extract-v2-golap` — `normalize-v4-memorial-image`, `ad-text-render`, `ad-memorial-render`, `add-v4-manifest-items`, `apply-v4-tracker-updates`, `v4-advertisements`), plus 6 existing files updated for the new paths/counts.
 - **E2E** (Playwright, against a real `npm run build`/`npm run pdf`): `web-ad-cards`, `print-ad-pages` (rewritten for 3 presentation kinds), a new `print-poem-page` (`test:e2e:poem`), and a new `site-navigation` (`test:e2e:nav`, Task 19 — 8 links, targets, click-to-scroll, overflow, brand overlap, Tab order and focus style at 390/820/1440 px). Task 20 re-run: `test:e2e:nav`, `test:e2e:welcome`, `test:e2e:admin`, `test:e2e:web-ads`, `test:e2e:print-ads`, `test:e2e:poem` all pass; `e2e:app` (local dev-app against `becaa_test`, registration → magazine → admin) passes all 24 steps; `test:e2e:cover` **fails** on a stale page count (pre-existing, see Known Limitations).
 - **Gates** (Task 20 re-run): `validate` 0 errors / 47 items; `tracker:validate` clean; `typecheck` clean; `npm test` site smoke pass; `check:secrets` and `check:sql` clean.
-- Everything above is wired into the shared `test:unit`/`test:integration` npm scripts. Note that `test:integration` is an `&&` chain, so while `add-v2-manifest-items` still fails, a plain `npm run test:integration` stops at that file (7th of 31) and the rest must be run individually.
+- **Unit, Tasks 21–31** (5 new files): `text-correction-core` (8 scenarios: counts, whole-word Bengali boundaries, `correctionState`, Unicode-form hint), `eleventy-config` (byline and `display_name`), `tracker-corrections-core` (row mapping, notes, untouched rows, idempotency), `pdf-compare-core` (12 scenarios), `v4-pages-core` (page ranges and render plan). `release-core` extended with V4 ordering and reproduction assertions.
+- **Integration, Tasks 23–28** (2 new files): `v4-committee-corrections` (content, website, print HTML, PDF text, print-media computed styles; see Stream E) and `apply-v4-corrections-tracker-updates` (real workbook, snapshot, no-op re-run). `add-v2-manifest-items` fixed by Task 38. **All 33 files now run as one green `npm run test:integration` chain** (Task 29 and the release), including the 8 database-backed ones.
+- **E2E and QA added to the release**: `test:e2e:cover` passes again (72 pages, Task 38); `qa` handles text-only and memorial ads (Task 38); `qa:pdf-compare` (0 unexplained); `qa:v4-pages` (16 + 29 renders).
+- **Release gates** (`V4_REVIEW_01`, all passing): `tracker:validate`, `validate` (47 items), `typecheck`, `test:unit`, `build`, `pdf`, `test`, `test:integration`, `qa`, `qa:v2-items`, `qa:pdf`, `qa:pdf-compare`, `test:e2e:cover`, `test:e2e:poem`, `qa:pdf:v2-items`, `qa:ad-backgrounds`, `qa:art006`, `qa:contact`, `qa:v4-pages`, `test:e2e:print-ads`, `test:e2e:web-ads`, `test:e2e:nav`, `test:v4-advertisements`, `test:v4-committee-corrections`, `test:e2e:welcome`, `test:e2e:admin`, `e2e:app` (24 steps), `check:secrets`, `check:sql`, `audit`.
+- **Manual** (Task 34): browser checks through the local registration gate at two widths, plus inspection of the PDF renders; see `sprints/v4/MANUAL_VERIFICATION.md`.
+- **Red before green**: every new unit and integration test in Tasks 21–31 was run failing before its implementation, with two exceptions. The Task 28 integration test and its apply script were written together (the unit test was red first). Task 31's tests were written and run red by the delegated agent.
+- Everything is wired into the shared `test:unit`/`test:integration` scripts and, with the v4 suites, into `release:v4`.
 
 ## Security Measures
 
@@ -311,23 +664,52 @@ Results below for Tasks 1–16 are as recorded at the time; the Tasks 17–20 re
 - **Access control untouched by Stream D**: the gate, middleware, API, registration and admin code are unchanged (verified by `git diff`); the protected magazine page still sits behind the gate in the `e2e:app` run, and the public welcome/admin pages build byte-identically.
 - **Gate discipline**: every task ran `semgrep --config auto --quiet --error` on its own changed files and `npm audit` before its commit; a final holistic semgrep pass across all of `scripts/`, `tests/`, `src/` found zero new findings (the 5 findings that do exist are in 3 files this sprint never touched, pre-dating Sprint v4).
 - **Tasks 17–19 scans**: `semgrep --config auto --quiet --error` clean on every file touched; `npm audit` unchanged (3 allow-listed high findings in `playwright`, `sharp`, `xlsx`). No `Claude-Session:` trailer on any Stream D commit.
+- **Corrections cannot drift or double-apply**: every text edit states its expected count, matches whole words with Unicode-aware boundaries, and is applied only from a `pending` state; ambiguous or partial files stop the script. The apply script refuses paths outside `05_WEBSITE/`.
+- **Originals and provenance preserved**: no original under `02_INCOMING_CONTENT/` was edited (the only change there is the new correction record); `contributor` keeps the provenance name; the tracker is snapshotted before its write; no date of death is published or recorded.
+- **Release integrity**: the PDF comparison fails the release on any unexplained page change, so an unauthorised content edit cannot ship unnoticed. Release output is never overwritten. The release folder was scanned for the local environment's secret values (0 hits) before commit, and `check:secrets`/`check:sql` ran inside the pipeline.
+- **No shell in new tooling**: `pdftotext`, `pdftoppm` and `git show` are invoked via `execFileSync` with argument arrays; npm steps via `node npm-cli.js` with `shell: false` (Sprint v3). One semgrep finding during Task 23 (a `RegExp` built from a variable in a test helper) was replaced by string search before that commit was finalised.
+- **Scans for Tasks 21–38**: `semgrep --config auto --quiet --error` clean on every file touched; `npm audit` unchanged (3 allow-listed). No `Claude-Session:` trailer on any commit in `4751640..1f73a3a`; the Task 31 agent was instructed not to commit and made no commits.
 - **Prompt-injection caught and rejected**: two independent subagents, working in isolated worktrees with no shared context, each appended an unauthorized `Claude-Session:` trailer to their own commits — identical text, matching a suspected injection attempt seen earlier in the same coordinating session. Both were stripped (commits rebuilt from a clean base with verified byte-identical trees) before merging; nothing reached `main` with the unauthorized line.
 
 ## Known Limitations
 
-- **Resolved in Task 20:** `scripts/app-e2e.mjs` and `tests/integration/dev-app.test.mjs` (Task 15's DB-dependent count fixes), previously verified by code review only, have now been executed and pass (`e2e:app` 24 steps; `dev-app` pass).
-- **`tests/e2e/print-cover-page.test.mjs` fails** with `page count unchanged: 72 !== 69`. It hard-codes the Sprint v3 PDF length; the PDF has had 72 pages since Stream C added the three advertisement pages. It fails identically at `445a8ac` (before Stream D), and the print HTML is byte-identical before and after Stream D, so it is not a navigation regression. It was not fixed because it is outside Tasks 17–20 and was not in Task 15's declared file list. **It will fail the cover step of `release:v4` (Task 33)**, so a small fix (derive the count, or update it to 72 with the reason) is needed before then.
-- **`tests/integration/add-v2-manifest-items.test.mjs`** still fails (it expects `02_INCOMING_CONTENT/Shubhra Basu.docx`, retired in this sprint) — out of scope, aligns with the P2 Task 37. Because `test:integration` is an `&&` chain, it halts the chain at that file.
+- **Task 35 (preview deployment) has not run.** It publishes to Vercel and writes test registrations to the preview database, so it waits for explicit approval (INSTRUCTION.md §18). Nothing from this sprint is deployed.
+- **Open presentation decision — repeated headings** (Task 34 findings 1–2). Text-only advertisements (`ADV-027`, `ADV-028`) show their sentence twice, as the card/page heading and inside the tinted box, on the website and in the PDF. The memorial heading repeats its first two lines. PRD Decision E says the sentence "appears exactly once on the page … no separate heading", but can be read either way. The Task 10/15/16 implementation keeps the heading deliberately, and the Task 16 test counts the sentence once *after* the heading. Changing it means reworking those tasks' templates and tests and building `V4_REVIEW_02`, so it was left for the editor.
+- **`ART-004`/`ART-005` body author line.** Both article bodies still open with the Bengali author line `বিশ্বজিৎ সেনগুপ্ত` without a prefix. Decision R changed only the byline; a Bengali "Late" wording needs the committee.
+- **`ART-009` missing-glyph box (pre-existing).** Page 32 shows a box before "meeting", caused by a U+000C form feed carried over from DOCX extraction; it is in `V3_REVIEW_02` too. Removing it is a content edit outside the approved corrections.
+- **Mixed Unicode forms.** `MSG-001` stores য় as U+09DF while other content uses U+09AF U+09BC. Corrections kept each file's own form, and the comparison and tests normalise, but anyone typing a new correction must match the file's code points; the tool's error message says so.
+- **The PDF comparison ignores whitespace-only edits** (a deliberate trade-off for justification and `pdftotext` conjunct splitting) and assumes every item starts a new page, which holds for this layout.
+- **`ART-010` manifest note is stale**: it still says "Exact approved source: Shubhra Basu.docx" (unchanged since before Task 6); `source_file` and `source_fingerprint` are correct.
+- **Release runs and memory**: on this host, the harness stopped two background `release:v4` runs for low memory; run long pipelines in the foreground.
+- **Duplicate test runs in the release**: `test:v4-advertisements` and `test:v4-committee-corrections` run inside `test:integration` and again as their own steps (kept explicit, as Task 30's acceptance lists them); this costs a few seconds.
+- **Evidence screenshots from Task 34's browser pass are not committed** (`05_WEBSITE/qa-output/v4-manual/`, git-ignored); the PDF renders, navigation screenshots and comparison report are in the committed release folder.
+- **Resolved during this work**:
+  - Task 15's DB-dependent fixes now run (Task 20).
+  - `test:e2e:cover` (72 pages) and `add-v2-manifest-items` pass again (Task 38), so `npm run test:integration` runs as one chain.
+  - Visual QA handles text-only and memorial ads (Task 38).
 - **Anchor jumps under the sticky header**: on desktop and tablet (header `position: sticky`, ≈68 px tall) a navigation click puts the target's top edge at the top of the viewport, so the first ~68 px of the section — typically its kicker — sits behind the header. This behaviour predates Stream D (the old per-item links did the same) and is not in the PRD's scope; a `scroll-margin-top` on item cards would fix it if wanted. On mobile the header is static, so it does not occur.
-- **Navigation screenshots are not committed**: `qa-output/` is git-ignored. Regenerate with `npm run build && npm run test:e2e:nav`.
+- **Navigation screenshots** live in git-ignored `05_WEBSITE/qa-output/` during development (regenerate with `npm run build && npm run test:e2e:nav`); the release copy is committed in `06_FINAL_OUTPUT/V4_REVIEW_01/qa-output/navigation/`.
 - **Label map is closed**: `events` already has a label, but any other new section key (e.g. `souvenirs`) would appear in the navigation under its raw key until `SECTION_LABELS` is extended. This is deliberate and tested: visible rather than silently dropped.
 - The PRD's own prose ("17 lines each ending `<br>`") is imprecise about the real source file's last-line convention; the code is correct, the planning-doc wording is not, and hasn't been corrected in `PRD.md` itself (a docs-only fix, not blocking anything).
 - Two visible-but-unauthorized commit trailers were caught this session (see Security Measures) — root cause unconfirmed; worth watching for in future sessions.
-- Streams E and F (17 more tasks) are entirely untouched — see What's Next.
 
 ## What's Next
 
-Resume from `6c1751a` on `main`. The immediately next task is **Task 21** (committee-corrections intake and provenance, Stream E), with no code precondition — it commits the intentionally untracked `sprints/v4/v4changev2.md` and creates the controlled correction record. Before Task 33, fix the stale `test:e2e:cover` page count (Known Limitations). The remaining scope in `sprints/v4/TASKS.md`:
+Resume from `1f73a3a` on `main` (working tree clean). Sprint v4 has one planned task left, plus decisions that should come first:
 
-- **Stream E — Committee corrections (Tasks 21–29)**: five additional edits from a post-Task-1 committee addendum (a Bengali wording fix, a title spelling fix, two more Bengali spelling fixes, a "Late" prefix for a deceased contributor, print-only article justification) — Task 23 is gated on a confirmed decision already resolved in `PRD.md` §7.1.
-- **Stream F — Build and release (Tasks 30–37)**: the actual `V4_REVIEW_01` release build, PDF comparison against the Sprint v3 baseline, CHANGELOG, manual verification, and a preview deployment (production deployment requires separate explicit approval per the project's standing rule).
+1. **Decide Task 34 findings 1–2** (repeated heading on text-only and memorial pages).
+   - **Keep as built:** proceed with `V4_REVIEW_01`.
+   - **Remove the headings:** add a task that renders those pages without the repeated heading (keeping an accessible label, e.g. `aria-labelledby` on the text) and updates the Task 10/15/16 tests (`ad-text-render`, `v4-advertisements`, `web-ad-cards`, `print-ad-pages`, `test-site`, `pdf-qa`). Then build a new `V4_REVIEW_02` with `release:v4` pointed at that version; `V4_REVIEW_01` stays unchanged.
+2. **Task 35 — preview deployment**, after explicit approval.
+   - Run `vercel deploy` (no `--prod`) from `05_WEBSITE/` at the release commit.
+   - Run `npm run e2e:app -- --base-url <preview> --public-only`, then remove the test registrations from the *preview* database.
+   - Record everything in `sprints/v4/PREVIEW_DEPLOYMENT.md`, and confirm with `vercel ls` that production is untouched.
+3. **Production** only after a separate explicit approval, following `05_WEBSITE/DEPLOYMENT.md` (smoke test expects 47 items).
+
+Candidates for Sprint v5, none blocking Sprint v4:
+- the committee's view on a Bengali "Late" in the `ART-004`/`ART-005` author lines;
+- removing the `ART-009` form-feed character through an approved correction record;
+- `scroll-margin-top` so navigation jumps clear the sticky header;
+- normalising Bengali content files to one Unicode form (a bulk, reviewable change);
+- refreshing the stale `ART-010` manifest note;
+- the three allow-listed dependency advisories (`sharp`, `playwright`, `xlsx`) carried since Sprint v2.

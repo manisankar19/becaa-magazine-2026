@@ -1,0 +1,6 @@
+﻿"name","email","category","batch_year","department","department_other","organisation","mobile","consent_at","registered_at","last_seen_at","visit_count"
+"E2E Alumni","e2e-alumni-1789607115660@example.org","alumni","1992","Civil Engineering","","","","2026-09-17 06:35 IST","2026-09-17 06:35 IST","2026-09-17 06:35 IST","1"
+"E2E Sponsor","e2e-sponsor-1789607115660@example.org","sponsor","","","","E2E Sponsor Ltd","9836063677","2026-09-17 06:35 IST","2026-09-17 06:35 IST","2026-09-17 06:35 IST","1"
+"E2E Alumni","e2e-alumni-1789607115660+m@example.org","alumni","1992","Civil Engineering","","","","2026-09-17 06:36 IST","2026-09-17 06:36 IST","2026-09-17 06:36 IST","1"
+"E2E Sponsor","e2e-sponsor-1789607115660+m@example.org","sponsor","","","","E2E Sponsor Ltd","9836063677","2026-09-17 06:36 IST","2026-09-17 06:36 IST","2026-09-17 06:36 IST","1"
+"E2E Guest","e2e-guest-1789607115660+m@example.org","guest","","","","","","2026-09-17 06:36 IST","2026-09-17 06:36 IST","2026-09-17 06:36 IST","1"

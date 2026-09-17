@@ -241,7 +241,16 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   const siteCss = read("src/assets/css/site.css");
   const task43 = siteCss.indexOf("\n/* Sprint v4 Task 43");
   assert.ok(task43 > 0, "site.css carries the Task 43 scroll-padding block");
-  assert.equal(siteCss.slice(0, task43), baseline("src/assets/css/site.css"), "website stylesheet otherwise unchanged since the corrections began");
+  // …and the 2026-09-17 front-page hero, which replaced the old cover badges (.cover__meta)
+  // with the tagline and link rules (.cover__tagline, .cover__links) in place.
+  const heroStart = siteCss.indexOf(".cover__tagline {");
+  const heroEnd = siteCss.indexOf("\n\n.contents,", heroStart);
+  const baselineCss = baseline("src/assets/css/site.css");
+  const metaStart = baselineCss.indexOf(".cover__meta {");
+  const metaEnd = baselineCss.indexOf("\n\n.contents,", metaStart);
+  assert.ok(heroStart > 0 && heroEnd > heroStart && metaStart > 0 && metaEnd > metaStart, "hero and old badge blocks located");
+  assert.ok(!/text-align/.test(siteCss.slice(heroStart, heroEnd)), "the hero block does not touch text alignment");
+  assert.equal(siteCss.slice(0, heroStart) + baselineCss.slice(metaStart, metaEnd) + siteCss.slice(heroEnd, task43), baselineCss, "website stylesheet otherwise unchanged since the corrections began");
   assert.ok(!/text-align/.test(siteCss.slice(task43)), "the Task 43 block does not touch text alignment");
 
   const browser = await chromium.launch();

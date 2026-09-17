@@ -33,10 +33,12 @@ title: একই শিকড় — BECAA Maharashtra Magazine 2026
 {% for item in items %}
   {% set adStyle = item | adPageStyle if item.type == "advertisement" else "" %}
   {% set kickerLabel = "Advertisements · In memoriam" if (item.type == "advertisement" and item.presentation == "memorial") else (item.section | sectionLabel) %}
-  <article class="publication-item publication-item--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="{{ item.id }}"{% if item.type == "advertisement" %} data-testid="ad-card-{{ item.id }}"{% endif %}{% if adStyle %} style="{{ adStyle }}"{% endif %}>
+  {# 2026-09-17 approval: text-only and memorial pages show their approved text once, so no heading repeats it; the card is named by aria-label instead. #}
+  {% set textShownOnce = item.type == "advertisement" and (item.presentation == "text" or item.presentation == "memorial") %}
+  <article class="publication-item publication-item--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="{{ item.id }}"{% if textShownOnce %} aria-label="{{ item.title }}"{% endif %}{% if item.type == "advertisement" %} data-testid="ad-card-{{ item.id }}"{% endif %}{% if adStyle %} style="{{ adStyle }}"{% endif %}>
     <header class="item-header">
       <p class="section-kicker">{{ kickerLabel }} · {{ item.id }}</p>
-      <h2>{{ item.title }}</h2>
+      {% if not textShownOnce %}<h2>{{ item.title }}</h2>{% endif %}
       {% if item.contributor and item.type != "advertisement" %}
         <p class="byline">{{ item | byline }}</p>
       {% endif %}

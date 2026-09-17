@@ -29,15 +29,15 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: 
       // Task 10: no .ad-frame, no <img> — the tinted card is .ad-text itself.
       const s = await card.evaluate((el) => {
         const adText = el.querySelector(".ad-text");
-        const h2 = el.querySelector("h2");
         const kicker = el.querySelector(".section-kicker");
         return {
+          headings: el.querySelectorAll("h1, h2, h3").length,
+          ariaLabel: el.getAttribute("aria-label"),
           hasImg: Boolean(el.querySelector("img")),
           adTextPresent: Boolean(adText),
           adTextContent: adText ? adText.textContent.trim() : null,
           adTextBg: adText ? getComputedStyle(adText).backgroundColor : null,
           adTextColor: adText ? getComputedStyle(adText).color : null,
-          h2Text: h2.textContent.trim(),
           kicker: getComputedStyle(kicker).color,
           bylines: el.querySelectorAll(".byline").length,
           cardText: el.textContent,
@@ -48,7 +48,9 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: 
       assert.equal(s.adTextContent, ad.text_lines[0], `${viewport.name} ${ad.id}: exact approved sentence, once`);
       assert.equal(s.adTextBg, hexToRgbCss(ad.page_background), `${viewport.name} ${ad.id}: .ad-text tinted with the manifest colour`);
       assert.equal(s.adTextColor, hexToRgbCss(ink.colour), `${viewport.name} ${ad.id}: .ad-text uses the resolved ink`);
-      assert.equal(s.h2Text, ad.title, `${viewport.name} ${ad.id}: heading equals the manifest title`);
+      assert.equal(s.headings, 0, `${viewport.name} ${ad.id}: no visible heading repeats the sentence (2026-09-17 approval)`);
+      assert.equal(s.ariaLabel, ad.title, `${viewport.name} ${ad.id}: card named by aria-label = manifest title`);
+      assert.equal(s.cardText.split(ad.text_lines[0]).length - 1, 1, `${viewport.name} ${ad.id}: sentence visible exactly once`);
       assert.equal(s.kicker, hexToRgbCss(ink.colour), `${viewport.name} ${ad.id}: kicker uses the resolved ink`);
       assert.equal(s.bylines, 0, `${viewport.name} ${ad.id}: no byline on advertisement cards`);
       assert.ok(!s.cardText.includes("With best compliments"), `${viewport.name} ${ad.id}: text-only card must not carry the artwork compliments wording`);
@@ -63,12 +65,18 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: 
       const kicker = el.querySelector(".section-kicker");
       const img = frame.querySelector("img");
       const r = img.getBoundingClientRect();
-      return { frameBg: getComputedStyle(frame).backgroundColor, h2: getComputedStyle(h2).color, kicker: getComputedStyle(kicker).color, h2Text: h2.textContent.trim(), bylines: el.querySelectorAll(".byline").length, imgW: r.width, imgH: r.height, natW: img.naturalWidth, natH: img.naturalHeight, objectFit: getComputedStyle(img).objectFit, imgSrc: img.getAttribute("src"), imgAlt: img.getAttribute("alt") };
+      return { headings: el.querySelectorAll("h1, h2, h3").length, ariaLabel: el.getAttribute("aria-label"), cardText: el.textContent, frameBg: getComputedStyle(frame).backgroundColor, h2: h2 ? getComputedStyle(h2).color : null, kicker: getComputedStyle(kicker).color, h2Text: h2 ? h2.textContent.trim() : null, bylines: el.querySelectorAll(".byline").length, imgW: r.width, imgH: r.height, natW: img.naturalWidth, natH: img.naturalHeight, objectFit: getComputedStyle(img).objectFit, imgSrc: img.getAttribute("src"), imgAlt: img.getAttribute("alt") };
     });
     assert.equal(s.frameBg, hexToRgbCss(ad.page_background), `${viewport.name} ${ad.id}: frame background is the manifest colour`);
-    assert.equal(s.h2, hexToRgbCss(ink.colour), `${viewport.name} ${ad.id}: heading uses the resolved ink`);
+    if (presentation === "memorial") {
+      assert.equal(s.headings, 0, `${viewport.name} ${ad.id}: memorial has no visible heading repeating lines 1–2 (2026-09-17 approval)`);
+      assert.equal(s.ariaLabel, ad.title, `${viewport.name} ${ad.id}: memorial card named by aria-label = manifest title`);
+      for (const line of ad.text_lines) assert.equal(s.cardText.split(line).length - 1, 1, `${viewport.name} ${ad.id}: "${line}" visible exactly once`);
+    } else {
+      assert.equal(s.h2, hexToRgbCss(ink.colour), `${viewport.name} ${ad.id}: heading uses the resolved ink`);
+      assert.equal(s.h2Text, ad.title);
+    }
     assert.equal(s.kicker, hexToRgbCss(ink.colour), `${viewport.name} ${ad.id}: kicker uses the resolved ink`);
-    assert.equal(s.h2Text, ad.title);
     assert.equal(s.bylines, 0, `${viewport.name} ${ad.id}: no byline on advertisement cards (company name is in the heading)`);
     assert.ok(s.natW > 0 && s.natH > 0, `${viewport.name} ${ad.id}: artwork image loaded (naturalWidth/naturalHeight > 0)`);
     if (presentation === "memorial") {

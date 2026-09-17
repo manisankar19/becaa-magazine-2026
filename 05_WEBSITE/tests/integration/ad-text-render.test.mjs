@@ -143,12 +143,16 @@ async function main() {
     ),
     "expected the exact approved sentence in a .ad-text paragraph with the id-scoped data-testid"
   );
+  // 2026-09-17 approval (Task 40): the sentence is shown once — no visible heading
+  // repeats it; the card keeps an accessible name via aria-label.
+  assert.ok(!/<h[1-6]\b/i.test(article), "text-only card renders no heading element");
+  assert.ok(article.includes(`aria-label="${item.title}"`), "text-only card is named by aria-label (the title)");
+  const visibleWeb = article.replace(/<[^>]*>/g, " ");
+  assert.equal(visibleWeb.split(item.text_lines[0]).length - 1, 1, "the approved sentence is visible exactly once on the card");
   // The content region (between the shared item-header and item-footer) is
   // the presentation-specific branch under test: it must contain the ad-text
   // paragraph and nothing else — no address, slogan, contact or other
-  // invented company text. (The item-header's <h2> legitimately repeats the
-  // same sentence too, since Task 9's validator requires title === text_lines[0]
-  // for presentation: "text" — that is a data invariant, not a duplication bug.)
+  // invented company text.
   const webContentRegion = article.split("</header>")[1].split("<footer")[0].trim();
   assert.equal(
     webContentRegion,
@@ -167,7 +171,10 @@ async function main() {
     ),
     "expected the exact approved sentence in the print page's .ad-text paragraph"
   );
-  const printContentRegion = printSection.split("</h1>")[1].split("</section>")[0].trim();
+  assert.ok(!/<h[1-6]\b/i.test(printSection), "text-only print page renders no heading element");
+  assert.ok(printSection.includes(`aria-label="${item.title}"`), "text-only print page is named by aria-label (the title)");
+  assert.equal(printSection.replace(/<[^>]*>/g, " ").split(item.text_lines[0]).length - 1, 1, "the approved sentence is visible exactly once on the print page");
+  const printContentRegion = printSection.split("· ADV-028</p>")[1].split("</section>")[0].trim();
   assert.equal(
     printContentRegion,
     '<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>',

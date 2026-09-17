@@ -97,6 +97,11 @@
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
+/* 2026-09-17 approval: text-only and memorial pages have no heading, so the content moves up
+   into the stretching row and stays centred exactly as before. */
+.print-page--advertisement:not(:has(> h1)) {
+  grid-template-rows: auto 1fr;
+}
 .print-page--advertisement .section-kicker,
 .print-page--advertisement h1,
 .print-page--advertisement figcaption { color: var(--ad-ink, #20201d); }

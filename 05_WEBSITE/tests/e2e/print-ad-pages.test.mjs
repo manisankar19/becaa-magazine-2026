@@ -32,23 +32,26 @@ for (const ad of ads) {
   if (presentation === "text") {
     const s = await section.evaluate((el) => {
       const style = getComputedStyle(el);
-      const h1 = el.querySelector("h1");
       const kicker = el.querySelector(".section-kicker");
       const adText = el.querySelector(".ad-text");
       return {
         bg: style.backgroundColor,
-        h1: getComputedStyle(h1).color,
+        headings: el.querySelectorAll("h1, h2, h3").length,
+        ariaLabel: el.getAttribute("aria-label"),
+        // Vertical position of the sentence box within the tinted page box (0.5 = centred).
+        centre: (() => { const b = el.getBoundingClientRect(); const t = adText.getBoundingClientRect(); return (t.top + t.height / 2 - b.top) / b.height; })(),
         kicker: getComputedStyle(kicker).color,
-        h1Text: h1.textContent.trim(),
         hasImg: Boolean(el.querySelector("img")),
         adTextContent: adText ? adText.textContent.trim() : null,
         sectionText: el.textContent,
       };
     });
     assert.equal(s.bg, hexToRgbCss(ad.page_background), `${ad.id}: section background is the manifest colour`);
-    assert.equal(s.h1, hexToRgbCss(ink.colour), `${ad.id}: heading uses the resolved ${ink.ink} ink`);
+    assert.equal(s.headings, 0, `${ad.id}: no heading repeats the sentence (2026-09-17 approval)`);
+    assert.ok(Math.abs(s.centre - 0.5) < 0.08, `${ad.id}: sentence box stays vertically centred without the heading (at ${s.centre.toFixed(2)})`);
+    assert.equal(s.ariaLabel, ad.title, `${ad.id}: print page named by aria-label = manifest title`);
+    assert.equal(s.sectionText.split(ad.text_lines[0]).length - 1, 1, `${ad.id}: sentence appears exactly once on the print page`);
     assert.equal(s.kicker, hexToRgbCss(ink.colour), `${ad.id}: kicker uses the resolved ink`);
-    assert.equal(s.h1Text, ad.title, `${ad.id}: heading text is the approved sentence`);
     assert.equal(s.hasImg, false, `${ad.id}: text-only advertisement print page must not render an <img>`);
     assert.equal(s.adTextContent, ad.text_lines[0], `${ad.id}: exact approved sentence, once`);
     assert.ok(!s.sectionText.includes("With best compliments"), `${ad.id}: text-only page must not carry the artwork compliments wording`);
@@ -63,12 +66,18 @@ for (const ad of ads) {
     const kicker = el.querySelector(".section-kicker");
     const img = el.querySelector("img.print-ad");
     const r = img.getBoundingClientRect();
-    return { bg: s.backgroundColor, h1: getComputedStyle(h1).color, kicker: getComputedStyle(kicker).color, h1Text: h1.textContent.trim(), imgW: r.width, imgH: r.height, natW: img.naturalWidth, natH: img.naturalHeight, objectFit: getComputedStyle(img).objectFit, display: s.display, imgSrc: img.getAttribute("src"), imgAlt: img.getAttribute("alt") };
+    return { headings: el.querySelectorAll("h1, h2, h3").length, ariaLabel: el.getAttribute("aria-label"), sectionText: el.textContent, bg: s.backgroundColor, h1: h1 ? getComputedStyle(h1).color : null, kicker: getComputedStyle(kicker).color, h1Text: h1 ? h1.textContent.trim() : null, imgW: r.width, imgH: r.height, natW: img.naturalWidth, natH: img.naturalHeight, objectFit: getComputedStyle(img).objectFit, display: s.display, imgSrc: img.getAttribute("src"), imgAlt: img.getAttribute("alt") };
   });
   assert.equal(styles.bg, hexToRgbCss(ad.page_background), `${ad.id}: section background is the manifest colour`);
-  assert.equal(styles.h1, hexToRgbCss(ink.colour), `${ad.id}: heading uses the resolved ${ink.ink} ink`);
+  if (presentation === "memorial") {
+    assert.equal(styles.headings, 0, `${ad.id}: memorial print page has no heading repeating lines 1–2 (2026-09-17 approval)`);
+    assert.equal(styles.ariaLabel, ad.title, `${ad.id}: memorial print page named by aria-label = manifest title`);
+    for (const line of ad.text_lines) assert.equal(styles.sectionText.split(line).length - 1, 1, `${ad.id}: "${line}" appears exactly once on the print page`);
+  } else {
+    assert.equal(styles.h1, hexToRgbCss(ink.colour), `${ad.id}: heading uses the resolved ${ink.ink} ink`);
+    assert.equal(styles.h1Text, ad.title, `${ad.id}: heading text is the compliments title`);
+  }
   assert.equal(styles.kicker, hexToRgbCss(ink.colour), `${ad.id}: kicker uses the resolved ink`);
-  assert.equal(styles.h1Text, ad.title, `${ad.id}: heading text is the compliments title`);
   assert.ok(styles.natW > 0 && styles.natH > 0, `${ad.id}: artwork image loaded (naturalWidth/naturalHeight > 0)`);
   if (presentation === "memorial") {
     assert.equal(styles.objectFit, "contain", `${ad.id}: memorial photograph uses object-fit: contain (uncropped, undistorted)`);

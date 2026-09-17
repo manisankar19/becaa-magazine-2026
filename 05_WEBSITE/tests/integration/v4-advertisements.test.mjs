@@ -80,11 +80,12 @@ async function run() {
 
   for (const [id, item] of Object.entries(items)) {
     const article = extractArticle(indexHtml, id);
-    const h2Match = article.match(/<h2>([^<]*)<\/h2>/);
-    assert.ok(h2Match, `${id}: expected an <h2> heading on the card`);
-    assert.equal(h2Match[1], item.title, `${id}: card heading equals the manifest title exactly`);
+    // 2026-09-17 approval (Task 40): no visible heading on text-only or memorial cards;
+    // the card's accessible name (aria-label) is the manifest title.
+    assert.ok(!/<h[1-6]\b/i.test(article), `${id}: card renders no visible heading`);
+    assert.ok(article.includes(`aria-label="${item.title}"`), `${id}: card aria-label equals the manifest title exactly`);
     assert.ok(!article.includes("With best compliments"), `${id}: card must not carry artwork "With best compliments" wording`);
-    assert.ok(!/Advertisement<\/h2>/.test(article), `${id}: card heading must not end with "Advertisement"`);
+    assert.ok(!/Advertisement"/.test(article), `${id}: card name must not end with "Advertisement"`);
 
     // Website contents entry (#contents .toc), distinct from the primary nav
     // (which — pending the separate navigation-correction task — still loops
@@ -98,17 +99,20 @@ async function run() {
   const adv027Article = extractArticle(indexHtml, "ADV-027");
   assert.ok(!/<img\b/i.test(adv027Article), "ADV-027: text-only card renders no <img>");
   assert.ok(adv027Article.includes('<p class="ad-text" data-testid="ad-text-ADV-027">Best Compliment from Sarc Epic</p>'), "ADV-027: exact sentence in .ad-text");
-  assert.equal(countOccurrences(adv027Article, "Best Compliment from Sarc Epic"), 2, "ADV-027: sentence appears exactly twice in the card HTML source (the h2 heading once, the .ad-text content once — a data invariant, not invented duplicate text)");
+  const visible = (html) => html.replace(/<[^>]*>/g, " ");
+  assert.equal(countOccurrences(visible(adv027Article), "Best Compliment from Sarc Epic"), 1, "ADV-027: sentence visible exactly once on the card");
 
   const adv028Article = extractArticle(indexHtml, "ADV-028");
   assert.ok(!/<img\b/i.test(adv028Article), "ADV-028: text-only card renders no <img>");
   assert.ok(adv028Article.includes('<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>'), "ADV-028: exact sentence in .ad-text");
+  assert.equal(countOccurrences(visible(adv028Article), "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate"), 1, "ADV-028: sentence visible exactly once on the card");
 
   const adv029Article = extractArticle(indexHtml, "ADV-029");
   assert.ok(adv029Article.includes("Advertisements · In memoriam · ADV-029"), "ADV-029: memorial kicker present");
   assert.ok(adv029Article.includes('<img src="assets/normalized/advertisements/web/ADV-029-late-shri-bhakta-mohon-mitra-web.jpg" alt="Portrait of Late Shri Bhakta Mohon Mitra"'), "ADV-029: portrait image present with the manifest alt text");
   for (const line of adv029.text_lines) {
     assert.ok(adv029Article.includes(`<p>${line}</p>`) || adv029Article.includes(`<p class="ad-memorial__name">${line}</p>`), `ADV-029: line "${line}" present in .ad-memorial`);
+    assert.equal(countOccurrences(visible(adv029Article), line), 1, `ADV-029: line "${line}" visible exactly once on the card`);
   }
 
   // --- 4. PDF page text (pdftotext -layout) ---
@@ -136,16 +140,16 @@ async function run() {
     assert.ok(!/\bAdvertisement\b/.test(pageText), `${id}: nothing on the page reads "... Advertisement" as a title suffix`);
   }
 
-  // ADV-027/028 (text-only): the approved sentence appears exactly once as
-  // page content (excluding the heading, which restates it once more).
+  // ADV-027/028 (text-only): the approved sentence appears exactly once on its PDF
+  // page — no heading restates it (2026-09-17 approval, Task 40).
   for (const item of [adv027, adv028]) {
     const pageIndex = findPdfPageIndex(pages, item.id);
     const pageText = pages[pageIndex].replace(/\s+/g, " ").trim();
-    const sentence = item.text_lines[0];
-    const headingIdx = pageText.indexOf(sentence);
-    assert.notEqual(headingIdx, -1, `${item.id}: sentence must appear on its PDF page (as the heading)`);
-    const afterHeading = pageText.slice(headingIdx + sentence.length);
-    assert.equal(countOccurrences(afterHeading, sentence), 1, `${item.id}: the approved sentence appears exactly once as page content beyond the heading`);
+    assert.equal(countOccurrences(pageText, item.text_lines[0]), 1, `${item.id}: the approved sentence appears exactly once on its PDF page`);
+  }
+  {
+    const pageText = pages[findPdfPageIndex(pages, "ADV-029")].replace(/\s+/g, " ").trim();
+    for (const line of adv029.text_lines) assert.equal(countOccurrences(pageText, line), 1, `ADV-029: line "${line}" appears exactly once on its PDF page`);
   }
 
   // ADV-029 (memorial): every line present on its PDF page, in order.

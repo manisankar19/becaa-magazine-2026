@@ -29,10 +29,19 @@ for (const ad of ads) {
   // Sprint v3 Task 15: heading text on the page + contents entry, and the tinted content box.
   const pageLines = pages[pageIndex].split("\n").map((l) => l.trim()).filter(Boolean);
   const kickerAt = pageLines.findIndex((l) => l.includes(`· ${ad.id}`));
+  const presentation = ad.presentation ?? "artwork";
+  const pageText = pageLines.join(" ").replace(/\s+/g, " ");
+  // Text-only and memorial pages have no heading (2026-09-17 approval): their approved text
+  // must appear once instead; only artwork pages carry the title as a heading.
+  if (presentation !== "artwork") {
+    for (const line of ad.text_lines) {
+      if (pageText.split(line).length - 1 !== 1) throw new Error(`${ad.id} PDF page ${pageIndex + 1}: "${line}" should appear exactly once.`);
+    }
+  }
   const heading = pageLines.slice(kickerAt + 1, kickerAt + 3).join(" ").replace(/\s+/g, " ").trim(); // headings may wrap to 2 lines
   const headingText = heading.startsWith(ad.title) ? ad.title : heading;
   const contentsTitle = pdfContentsEntries.get(ad.id)?.title ?? "";
-  renderedTitles[ad.id] = [headingText, contentsTitle];
+  renderedTitles[ad.id] = presentation === "artwork" ? [headingText, contentsTitle] : [contentsTitle];
 
   const { data } = await sharp(`${prefix}.png`).extract({ left: sample.x, top: sample.y, width: 1, height: 1 }).raw().toBuffer({ resolveWithObject: true });
   const rgb = [data[0], data[1], data[2]];

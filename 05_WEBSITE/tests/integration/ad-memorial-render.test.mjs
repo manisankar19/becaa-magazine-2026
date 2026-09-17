@@ -174,6 +174,13 @@ async function main() {
   // The seven text_lines, in order, exact text, name line emphasised.
   assertMemorialLinesInOrder(article, 'data-testid="ad-memorial-ADV-029"');
 
+  // 2026-09-17 approval (Task 40): no visible heading repeats lines 1–2; the card keeps
+  // an accessible name via aria-label, and the approved text is visible once.
+  assert.ok(!/<h[1-6]\b/i.test(article), "memorial card renders no heading element");
+  assert.ok(article.includes(`aria-label="${item.title}"`), "memorial card is named by aria-label (the title)");
+  const visibleWeb = article.replace(/<[^>]*>/g, " ");
+  for (const line of MEMORIAL_LINES) assert.equal(visibleWeb.split(line).length - 1, 1, `memorial line "${line}" visible exactly once`);
+
   assert.ok(!article.includes("With best compliments"), "memorial page must never carry the artwork-ad compliments wording");
 
   // --- Print (print.njk) ---
@@ -189,6 +196,9 @@ async function main() {
     "expected the memorial <img> on the print page with src/alt from the manifest"
   );
   assertMemorialLinesInOrder(printSection, 'data-testid="ad-memorial-ADV-029"');
+  assert.ok(!/<h[1-6]\b/i.test(printSection), "memorial print page renders no heading element");
+  assert.ok(printSection.includes(`aria-label="${item.title}"`), "memorial print page is named by aria-label (the title)");
+  for (const line of MEMORIAL_LINES) assert.equal(printSection.replace(/<[^>]*>/g, " ").split(line).length - 1, 1, `memorial line "${line}" visible exactly once on the print page`);
   assert.ok(!printSection.includes("With best compliments"), "print memorial page must never carry the artwork-ad compliments wording");
 
   // --- Escaping: {{ line }} must never be rendered with | safe. ---

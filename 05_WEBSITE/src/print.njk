@@ -24,9 +24,10 @@ permalink: /print/
   {% if item.print_include %}
   {% set adStyle = item | adPageStyle if item.type == "advertisement" else "" %}
   {% set kickerLabel = "Advertisements · In memoriam" if (item.type == "advertisement" and item.presentation == "memorial") else (item.section | sectionLabel) %}
-  <section class="print-page print-page--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="print-{{ item.id }}" data-testid="print-page-{{ item.id }}"{% if adStyle %} style="{{ adStyle }}"{% endif %}>
+  {% set textShownOnce = item.type == "advertisement" and (item.presentation == "text" or item.presentation == "memorial") %}
+  <section class="print-page print-page--{{ item.type }}{% if item.type == "advertisement" %} {{ item | adInkClass }}{% endif %}" id="print-{{ item.id }}"{% if textShownOnce %} aria-label="{{ item.title }}"{% endif %} data-testid="print-page-{{ item.id }}"{% if adStyle %} style="{{ adStyle }}"{% endif %}>
     <p class="section-kicker">{{ kickerLabel }} · {{ item.id }}</p>
-    <h1>{{ item.title }}</h1>
+    {% if not textShownOnce %}<h1>{{ item.title }}</h1>{% endif %}
     {% if item.contributor and item.type != "advertisement" %}<p class="byline">{{ item | byline }}</p>{% endif %}
     {% if item.type == "advertisement" and item.presentation == "text" %}
       <p class="ad-text" data-testid="ad-text-{{ item.id }}">{{ item.text_lines[0] }}</p>

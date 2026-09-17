@@ -64,7 +64,7 @@ export const ADV_027 = {
 export const ADV_028 = {
   id: "ADV-028",
   type: "advertisement",
-  title: "Best Compliment from M/s Balajee Infrate",
+  title: "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate",
   language: "en",
   contributor: "M/s Balajee Infrate",
   designation: "",
@@ -86,7 +86,7 @@ export const ADV_028 = {
   credit: "",
   alt: "",
   presentation: "text",
-  text_lines: ["Best Compliment from M/s Balajee Infrate"],
+  text_lines: ["We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate"],
   notes: "Text-only advertisement; no source artwork supplied. Source: Keya Mukhopadhya. Intended for magazine printing.",
   page_background: "#f3efe6",
   page_background_mode: "manual",

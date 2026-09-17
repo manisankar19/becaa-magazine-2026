@@ -1,11 +1,15 @@
 // Unit test for scripts/tracker-corrections-core.mjs — Sprint v4 Task 28 (PRD §4.7 item 7). Hermetic.
 import assert from "node:assert/strict";
-import { CORRECTION_DECISIONS, TRACKER_IDS, buildCorrectionTrackerRows } from "../../scripts/tracker-corrections-core.mjs";
+import { APPROVAL_DECISIONS, CORRECTION_DECISIONS, TRACKER_IDS, buildCorrectionTrackerRows } from "../../scripts/tracker-corrections-core.mjs";
 import { V4_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
 
 const headers = ["Item ID", "Title / Item", "Type", "Contributor / Company", "Notes", "Remarks"];
 const row = (id, title, contributor, remarks = "") => ({ "Item ID": id, "Title / Item": title, Type: "Article", "Contributor / Company": contributor, Notes: "", Remarks: remarks });
 const fixture = () => [
+  row("1", "Tokenomics: How Your CEO Learned That AI Isn't Actually Free", "Sudip Mazumder"),
+  row("ADV-027", "Best Compliment from Sarc Epic", "Sarc Epic", "Sprint v4: re-included as ADV-027."),
+  row("ADV-028", "Best Compliment from M/s Balajee Infrate", "M/s Balajee Infrate", "Sprint v4: new text-only advertisement, published as ADV-028"),
+  row("ADV-029", "In fond memory of Late Shri Bhakta Mohon Mitra", "Subrata Mitra (son), Soma Mitra (daughter)"),
   row("5", "স্মৃতির গলিতে", "বিশ্বজিৎ চক্রবর্তী"),
   row("6", "হাজতবাস থেকে খুব জোর বেঁচে গেছিলাম", "Biswajit Sengupta"),
   row("7", "A Reflection on Cancer, Ageing, and Helplessness in the Face of Science", "Biswajit Sengupta"),
@@ -53,7 +57,20 @@ for (const id of Object.values(TRACKER_IDS)) {
   assert.ok(!/September|passed away|died/i.test(remarks), `row ${id}: no date or circumstances of death`);
 }
 
-// Rows outside the five are untouched.
+// --- 2026-09-17 approvals ---------------------------------------------------------
+assert.equal(byId(after, "ADV-028")["Title / Item"], "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate", "ADV-028 tracker title follows the approved wording");
+assert.equal(byId(after, "ADV-028")["Contributor / Company"], "M/s Balajee Infrate", "ADV-028 company unchanged");
+assert.ok(byId(after, "ADV-028").Remarks.startsWith("Sprint v4: new text-only advertisement, published as ADV-028 "), "ADV-028 existing remark preserved");
+for (const id of ["ADV-027", "ADV-029"]) assert.match(byId(after, id).Remarks, /repeated visible heading was removed/);
+assert.equal(byId(after, "ADV-029")["Title / Item"], byId(before, "ADV-029")["Title / Item"], "memorial title unchanged (contents still list it)");
+for (const id of ["6", "7"]) {
+  assert.ok(byId(after, id).Remarks.includes(CORRECTION_DECISIONS[id].remarksNote) && byId(after, id).Remarks.includes(APPROVAL_DECISIONS[id].remarksNote), `row ${id}: both the byline and the author-line notes`);
+  assert.match(byId(after, id).Remarks, /প্রয়াত বিশ্বজিৎ সেনগুপ্ত/);
+}
+assert.match(byId(after, "1").Remarks, /U\+000C/, "ART-009 (tracker row 1) records the control-character cleanup");
+for (const id of Object.keys(APPROVAL_DECISIONS)) assert.ok(!/September|passed away|died/i.test(byId(after, id).Remarks.replace("2026-09-17", "")), `row ${id}: no date of death`);
+
+// Rows outside the corrected and approved ones are untouched.
 for (const id of ["18", "22"]) assert.deepEqual(byId(after, id), byId(before, id), `row ${id} untouched`);
 
 // --- idempotent ---------------------------------------------------------------
@@ -62,5 +79,6 @@ assert.deepEqual(buildCorrectionTrackerRows(headers, after), after, "second appl
 // --- unknown row → throws -------------------------------------------------------
 assert.throws(() => buildCorrectionTrackerRows(headers, fixture().filter((r) => r["Item ID"] !== "6")), /Item ID 6 not found/);
 assert.ok(Object.keys(CORRECTION_DECISIONS).length === 5);
+assert.ok(Object.keys(APPROVAL_DECISIONS).length === 6);
 
 console.log("tracker-corrections-core: all assertions passed");

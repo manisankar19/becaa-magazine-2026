@@ -15,7 +15,7 @@ export const COMPLIMENTS_PREFIX = "With best compliments from ";
 // approved wording rather than the compliments pattern.
 export const TEXT_ONLY_ADVERTISEMENT_TITLES = {
   "ADV-027": "Best Compliment from Sarc Epic",
-  "ADV-028": "Best Compliment from M/s Balajee Infrate",
+  "ADV-028": "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate",
 };
 export const MEMORIAL_ADVERTISEMENT_TITLES = {
   "ADV-029": "In fond memory of Late Shri Bhakta Mohon Mitra",

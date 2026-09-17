@@ -33,8 +33,23 @@ export const CORRECTION_DECISIONS = {
   },
 };
 
+// Approvals of 2026-09-17 (correction record addendum §§6–9). Applied after the corrections
+// above; applyTrackerFieldUpdates takes one note per row, hence a second decision set.
+const APPROVALS = "2026-09-17 approval (" + SOURCE + ", addendum)";
+export const APPROVAL_DECISIONS = {
+  "ADV-028": {
+    fields: { "Title / Item": "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate" },
+    remarksNote: `Sprint v4 ${APPROVALS}: wording changed from "Best Compliment from M/s Balajee Infrate"; shown once on the page.`,
+  },
+  "ADV-027": { remarksNote: `Sprint v4 ${APPROVALS}: the repeated visible heading was removed; the sentence is shown once on the page.` },
+  "ADV-029": { remarksNote: `Sprint v4 ${APPROVALS}: the repeated visible heading was removed; the approved memorial text is shown once.` },
+  [TRACKER_IDS["ART-004"]]: { remarksNote: `Sprint v4 ${APPROVALS}: Bengali author line in the article body changed to "প্রয়াত বিশ্বজিৎ সেনগুপ্ত".` },
+  [TRACKER_IDS["ART-005"]]: { remarksNote: `Sprint v4 ${APPROVALS}: Bengali author line in the article body changed to "প্রয়াত বিশ্বজিৎ সেনগুপ্ত".` },
+  1: { remarksNote: `Sprint v4 ${APPROVALS}: a stray page-break character (U+000C) removed from the extracted ART-009 text; wording unchanged.` },
+};
+
 // Idempotent: field overrides are no-ops once applied and a remark already present is not
 // appended again. `headers` is accepted for symmetry with tracker-v4-core; no rows are added.
 export function buildCorrectionTrackerRows(_headers, rows) {
-  return applyTrackerFieldUpdates(rows, CORRECTION_DECISIONS);
+  return applyTrackerFieldUpdates(applyTrackerFieldUpdates(rows, CORRECTION_DECISIONS), APPROVAL_DECISIONS);
 }

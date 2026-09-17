@@ -7,7 +7,7 @@ import fs from "node:fs";
 import { siteRoot } from "../../scripts/lib.mjs";
 import { openTracker, readSheetRows, SHEET_NAME, snapshotsDir, trackerPath } from "../../scripts/tracker-io.mjs";
 import { applyV4CorrectionsTrackerUpdates } from "../../scripts/apply-v4-corrections-tracker-updates.mjs";
-import { CORRECTION_DECISIONS, TRACKER_IDS } from "../../scripts/tracker-corrections-core.mjs";
+import { APPROVAL_DECISIONS, CORRECTION_DECISIONS, TRACKER_IDS } from "../../scripts/tracker-corrections-core.mjs";
 import { EXPECTED_ROW_COUNT } from "../../scripts/validate-tracker-core.mjs";
 
 const read = () => readSheetRows(openTracker(), SHEET_NAME);
@@ -16,7 +16,8 @@ const LABEL = "pre-v4-corrections-tracker-updates";
 const snapshots = () => fs.readdirSync(snapshotsDir).filter((f) => f.includes(LABEL));
 
 const before = read();
-const alreadyApplied = byId(before.rows, TRACKER_IDS["MSG-002"])["Title / Item"] === "Vice President Desk";
+const APPROVED_ADV_028 = "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate";
+const alreadyApplied = byId(before.rows, TRACKER_IDS["MSG-002"])["Title / Item"] === "Vice President Desk" && byId(before.rows, "ADV-028")["Title / Item"] === APPROVED_ADV_028;
 const snapshotsBefore = snapshots();
 
 if (!alreadyApplied) {
@@ -43,20 +44,24 @@ for (const [manifestId, trackerId] of Object.entries(TRACKER_IDS)) {
   assert.equal(remarks.split(note).length, 2, `${manifestId} (row ${trackerId}): correction note present exactly once`);
 }
 for (const id of ["6", "7"]) assert.equal(byId(after.rows, id)["Contributor / Company"], "Biswajit Sengupta", `row ${id}: contributor unchanged`);
+assert.equal(byId(after.rows, "ADV-028")["Title / Item"], APPROVED_ADV_028, "ADV-028 tracker title follows the 2026-09-17 approval");
+for (const [id, decision] of Object.entries(APPROVAL_DECISIONS)) {
+  assert.equal(byId(after.rows, String(id)).Remarks.split(decision.remarksNote).length, 2, `row ${id}: approval note present exactly once`);
+}
 
-// Only the five rows changed, and only in Title / Item (row 17) and Remarks.
+// Only the corrected/approved rows changed, and only in Title / Item (rows 17, ADV-028) and Remarks.
 if (!alreadyApplied) {
-  const changedIds = new Set(Object.values(TRACKER_IDS));
+  const changedIds = new Set([...Object.values(TRACKER_IDS), ...Object.keys(APPROVAL_DECISIONS).map(String)]);
   for (const [i, row] of after.rows.entries()) {
     const prev = before.rows[i];
     const id = String(row["Item ID"]).trim();
     if (!changedIds.has(id)) { assert.deepEqual(row, prev, `row ${id} untouched`); continue; }
     for (const column of after.headers) {
-      if (column === "Remarks" || (id === "17" && column === "Title / Item")) continue;
+      if (column === "Remarks" || ((id === "17" || id === "ADV-028") && column === "Title / Item")) continue;
       assert.equal(row[column], prev[column], `row ${id} ${column} unchanged`);
     }
   }
 }
 
 execFileSync("node", ["scripts/validate-tracker.mjs"], { cwd: siteRoot, encoding: "utf8" });
-console.log(`PASS: committee corrections recorded on tracker rows ${Object.values(TRACKER_IDS).join(", ")}; MSG-002 title corrected; tracker:validate clean.`);
+console.log(`PASS: committee corrections and 2026-09-17 approvals recorded on the tracker; MSG-002 and ADV-028 titles updated; tracker:validate clean.`);

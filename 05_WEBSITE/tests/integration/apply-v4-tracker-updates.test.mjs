@@ -64,7 +64,7 @@ async function run() {
   assert.equal(idx029, idx028 + 1, "ADV-029 appended directly after ADV-028");
 
   const adv028 = after.rows[idx028];
-  assert.equal(adv028["Title / Item"], "Best Compliment from M/s Balajee Infrate");
+  assert.equal(adv028["Title / Item"], "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate");
   assert.equal(adv028["Contributor / Company"], "M/s Balajee Infrate");
   assert.equal(adv028["Source File Name"], "—");
   assert.equal(adv028["Received Date"], "15.09.2026");
@@ -74,7 +74,7 @@ async function run() {
   assert.equal(adv028["Web Include"], "Yes");
   assert.equal(adv028["Print Include"], "Yes");
   assert.equal(adv028.Notes, "Text-only advertisement; no source artwork supplied. Source: Keya Mukhopadhya. Intended for magazine printing.");
-  assert.equal(adv028.Remarks, "Sprint v4: new text-only advertisement, published as ADV-028.");
+  assert.ok(adv028.Remarks.startsWith("Sprint v4: new text-only advertisement, published as ADV-028."), "ADV-028 Task 14 remark first (later approval notes may follow)");
 
   // --- ADV-029: new row (memorial) ---
   const adv029 = after.rows[idx029];
@@ -88,7 +88,7 @@ async function run() {
   assert.equal(adv029["Web Include"], "Yes");
   assert.equal(adv029["Print Include"], "Yes");
   assert.equal(adv029.Notes, "Memorial contribution sponsored by the son and daughter; not a company advertisement. Source: SUPRIO CHOUDHURY.");
-  assert.equal(adv029.Remarks, "Sprint v4: new memorial contribution, published as ADV-029.");
+  assert.ok(adv029.Remarks.startsWith("Sprint v4: new memorial contribution, published as ADV-029."), "ADV-029 Task 14 remark first (later approval notes may follow)");
 
   // --- row 22 (the poem, ART-010's tracker row) ---
   const row22 = after.rows.find((r) => String(r["Item ID"]).trim() === "22");

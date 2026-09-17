@@ -17,7 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { readManifest, siteRoot, projectRoot } from "../../scripts/lib.mjs";
-import { findPdfPageIndex } from "../../scripts/ad-qa-checks-core.mjs";
+import { findPdfPageIndex, contentsEntries } from "../../scripts/ad-qa-checks-core.mjs";
 import { openTracker, readSheetRows, SHEET_NAME } from "../../scripts/tracker-io.mjs";
 
 const NEW_ITEM_IDS = ["ADV-027", "ADV-028", "ADV-029"];
@@ -54,9 +54,9 @@ async function run() {
   assert.equal(adv027.title, "Best Compliment from Sarc Epic");
   assert.equal(adv027.contributor, "Sarc Epic");
   assert.deepEqual(adv027.text_lines, ["Best Compliment from Sarc Epic"]);
-  assert.equal(adv028.title, "Best Compliment from M/s Balajee Infrate");
+  assert.equal(adv028.title, "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate");
   assert.equal(adv028.contributor, "M/s Balajee Infrate");
-  assert.deepEqual(adv028.text_lines, ["Best Compliment from M/s Balajee Infrate"]);
+  assert.deepEqual(adv028.text_lines, ["We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate"]);
   assert.equal(adv029.title, "In fond memory of Late Shri Bhakta Mohon Mitra");
   assert.equal(adv029.contributor, "Subrata Mitra (son), Soma Mitra (daughter)", "memorial contributors exact");
   assert.deepEqual(adv029.text_lines, [
@@ -102,7 +102,7 @@ async function run() {
 
   const adv028Article = extractArticle(indexHtml, "ADV-028");
   assert.ok(!/<img\b/i.test(adv028Article), "ADV-028: text-only card renders no <img>");
-  assert.ok(adv028Article.includes('<p class="ad-text" data-testid="ad-text-ADV-028">Best Compliment from M/s Balajee Infrate</p>'), "ADV-028: exact sentence in .ad-text");
+  assert.ok(adv028Article.includes('<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>'), "ADV-028: exact sentence in .ad-text");
 
   const adv029Article = extractArticle(indexHtml, "ADV-029");
   assert.ok(adv029Article.includes("Advertisements · In memoriam · ADV-029"), "ADV-029: memorial kicker present");
@@ -117,12 +117,13 @@ async function run() {
   const pages = execFileSync("pdftotext", ["-layout", pdfPath, "-"], { encoding: "utf8", maxBuffer: 30_000_000 }).split("\f");
 
   // Contents pages: "45. Best Compliment from Sarc Epic ADV-027" etc.
+  // Long titles wrap, so entries are re-joined by contentsEntries (ad-qa-checks-core).
   const contentsLines = pages.filter((page) => !/·\s*(?:MSG|ART|GAL|ADV)-\d{3}\b/.test(page)).flatMap((page) => page.split("\n"));
+  const pdfContentsEntries = contentsEntries(contentsLines);
   for (const [id, item] of Object.entries(items)) {
-    const contentsEntry = contentsLines.map((l) => l.trim()).find((l) => new RegExp(`\\b${id}$`).test(l));
+    const contentsEntry = pdfContentsEntries.get(id);
     assert.ok(contentsEntry, `${id}: expected a PDF contents entry`);
-    const contentsTitle = contentsEntry.replace(/^\d+\.\s*/, "").replace(new RegExp(`\\s*${id}$`), "").trim();
-    assert.equal(contentsTitle, item.title, `${id}: PDF contents entry equals the manifest title exactly`);
+    assert.equal(contentsEntry.title, item.title, `${id}: PDF contents entry equals the manifest title exactly`);
   }
 
   for (const id of NEW_ITEM_IDS) {

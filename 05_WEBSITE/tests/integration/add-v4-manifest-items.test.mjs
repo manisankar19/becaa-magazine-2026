@@ -62,12 +62,12 @@ async function run() {
   const adv028 = after.items.find((i) => i.id === "ADV-028");
   assert.ok(adv028, "ADV-028 must be present");
   assert.deepEqual(adv028, ADV_028, "ADV-028 fields must match the approved entry exactly");
-  assert.equal(adv028.title, "Best Compliment from M/s Balajee Infrate");
+  assert.equal(adv028.title, "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate");
   assert.equal(adv028.title, adv028.text_lines[0]);
   assert.equal(adv028.contributor, "M/s Balajee Infrate");
   assert.equal(adv028.order, 780);
   assert.equal(adv028.presentation, "text");
-  assert.deepEqual(adv028.text_lines, ["Best Compliment from M/s Balajee Infrate"]);
+  assert.deepEqual(adv028.text_lines, ["We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate"]);
   assert.equal(adv028.page_background, "#f3efe6");
   assert.equal(adv028.page_background_mode, "manual");
   assert.equal(adv028.page_ink, "auto");

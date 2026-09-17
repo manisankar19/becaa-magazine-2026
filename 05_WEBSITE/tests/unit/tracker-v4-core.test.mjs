@@ -47,7 +47,7 @@ function runNewRowsAppended() {
   assert.equal(idx029, idx028 + 1, "ADV-029 appended directly after ADV-028");
 
   const adv028 = updated[idx028];
-  assert.equal(adv028["Title / Item"], "Best Compliment from M/s Balajee Infrate");
+  assert.equal(adv028["Title / Item"], "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate");
   assert.equal(adv028["Contributor / Company"], "M/s Balajee Infrate");
   assert.equal(adv028["Source File Name"], "—");
   assert.equal(adv028["Received Date"], "15.09.2026");

@@ -3,7 +3,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 import { readManifest, siteRoot, ensureDir } from "./lib.mjs";
-import { findBadAdvertisementTitles, findPdfPageIndex, pixelMatchesHex, contentBoxSamplePoint } from "./ad-qa-checks-core.mjs";
+import { findBadAdvertisementTitles, findPdfPageIndex, pixelMatchesHex, contentBoxSamplePoint, contentsEntries } from "./ad-qa-checks-core.mjs";
 
 const pdf = path.join(siteRoot, "_site", "print", "BECAA-2026-complete-review.pdf");
 if (!fs.existsSync(pdf)) throw new Error("Complete review PDF is missing.");
@@ -19,6 +19,7 @@ const renderedTitles = {};
 // Contents pages (page 2 onward, before the first item page): "N. <title> <ID>" lines.
 // The list spans more than one page, so gather every page that carries no item kicker.
 const contentsLines = pages.filter((page) => !/· (?:MSG|ART|GAL|ADV)-\d{3}\b/.test(page)).flatMap((page) => page.split("\n"));
+const pdfContentsEntries = contentsEntries(contentsLines); // long titles wrap onto the next line
 for (const ad of ads) {
   const pageIndex = findPdfPageIndex(pages, ad.id);
   if (pageIndex < 0) throw new Error(`${ad.id} is not present in PDF text.`);
@@ -30,8 +31,7 @@ for (const ad of ads) {
   const kickerAt = pageLines.findIndex((l) => l.includes(`· ${ad.id}`));
   const heading = pageLines.slice(kickerAt + 1, kickerAt + 3).join(" ").replace(/\s+/g, " ").trim(); // headings may wrap to 2 lines
   const headingText = heading.startsWith(ad.title) ? ad.title : heading;
-  const contentsEntry = contentsLines.map((l) => l.trim()).find((l) => new RegExp(`\\b${ad.id}$`).test(l)) ?? "";
-  const contentsTitle = contentsEntry.replace(/^\d+\.\s*/, "").replace(new RegExp(`\\s*${ad.id}$`), "").trim();
+  const contentsTitle = pdfContentsEntries.get(ad.id)?.title ?? "";
   renderedTitles[ad.id] = [headingText, contentsTitle];
 
   const { data } = await sharp(`${prefix}.png`).extract({ left: sample.x, top: sample.y, width: 1, height: 1 }).raw().toBuffer({ resolveWithObject: true });

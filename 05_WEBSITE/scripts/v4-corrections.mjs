@@ -15,6 +15,8 @@ export const V4_FILE_CORRECTIONS = [
   { id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "ভাইবই", replace: "ভাবা\u09AF\u09BC", expectedCount: 1 },
   { id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "পারিমা", replace: "পরিমা", expectedCount: 1 },
   // Decision R: reader-facing display_name added under both of Biswajit Sengupta's items; contributor unchanged.
+  // Approvals of 2026-09-17 (correction record addendum §§6, 8, 9).
+  { id: "ADV-028", file: "src/_data/publication.yaml", find: "Best Compliment from M/s Balajee Infrate", replace: "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate", expectedCount: 2 }, // title and text_lines[0]
   { id: "ART-004/ART-005", file: "src/_data/publication.yaml", find: "    contributor: Biswajit Sengupta\n", replace: "    contributor: Biswajit Sengupta\n    display_name: Late Biswajit Sengupta\n", expectedCount: 2 },
 ];
 
@@ -28,6 +30,11 @@ export const V4_CORRECTIONS = [
   { id: "ART-004", find: "Biswajit Sengupta", replace: "Late Biswajit Sengupta" },
   { id: "ART-005", find: "Biswajit Sengupta", replace: "Late Biswajit Sengupta" },
 ];
+
+// Approved 2026-09-17: ADV-028's new sentence (an item new in Sprint v4, so it is not a
+// change against the V3 baseline and is not in V4_CORRECTIONS).
+export const ADV_028_SENTENCE = "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate";
+export const ADV_028_SUPERSEDED = "Best Compliment from M/s Balajee Infrate";
 
 // The confirmed MSG-001 sentence (Decision O), exactly as recorded in the correction record.
 export const MSG001_SENTENCE = {

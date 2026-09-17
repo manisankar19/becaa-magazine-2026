@@ -27,7 +27,7 @@ function baseRows() {
   // all (Source File Name "—"), approved wording instead of the compliments
   // pattern. ADV-029 — the memorial: a real source photo, its own wording.
   rows.push({ "Item ID": "ADV-027", "Title / Item": "Best Compliment from Sarc Epic", "Contributor / Company": "Sarc Epic", "Source File Name": "—", Status: "Approved", "Web Include": "Yes", "Print Include": "Yes" });
-  rows.push({ "Item ID": "ADV-028", "Title / Item": "Best Compliment from M/s Balajee Infrate", "Contributor / Company": "M/s Balajee Infrate", "Source File Name": "—", Status: "Approved", "Web Include": "Yes", "Print Include": "Yes" });
+  rows.push({ "Item ID": "ADV-028", "Title / Item": "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate", "Contributor / Company": "M/s Balajee Infrate", "Source File Name": "—", Status: "Approved", "Web Include": "Yes", "Print Include": "Yes" });
   rows.push({ "Item ID": "ADV-029", "Title / Item": "In fond memory of Late Shri Bhakta Mohon Mitra", "Contributor / Company": "Subrata Mitra (son), Soma Mitra (daughter)", "Source File Name": "Supriyo.JPG", Status: "Approved", "Web Include": "Yes", "Print Include": "Yes" });
   assert.equal(rows.length, EXPECTED_ROW_COUNT, "fixture mirrors the live tracker's 54 rows");
   return rows;

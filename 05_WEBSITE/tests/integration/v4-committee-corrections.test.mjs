@@ -12,7 +12,7 @@ import path from "node:path";
 import { chromium } from "playwright";
 import { readManifest, siteRoot } from "../../scripts/lib.mjs";
 import { countOccurrences } from "../../scripts/text-correction-core.mjs";
-import { MSG001_SENTENCE, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
+import { ADV_028_SENTENCE, ADV_028_SUPERSEDED, MSG001_SENTENCE, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
 import { applyV4FileCorrections } from "../../scripts/apply-v4-committee-corrections.mjs";
 
 const read = (rel) => fs.readFileSync(path.join(siteRoot, rel), "utf8");
@@ -175,6 +175,18 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   for (const [where, text] of [["website", indexHtml], ["print", printHtml], ["PDF", pages.join("\f")]]) {
     assert.ok(!/9(?:th)?\s+September|September\s+9|passed away/i.test(text), `${where}: no date or circumstances of death`);
   }
+}
+
+// --- ADV-028: approved wording of 2026-09-17 (Task 39) ------------------------------
+{
+  const adv = item("ADV-028");
+  assert.equal(adv.title, ADV_028_SENTENCE, "ADV-028 manifest title is the approved sentence");
+  assert.deepEqual(adv.text_lines, [ADV_028_SENTENCE], "ADV-028 text line is the approved sentence");
+  assert.equal(adv.contributor, "M/s Balajee Infrate", "ADV-028 company unchanged");
+  assertOnlyRecordedSubstitutions("ADV-028");
+  assert.ok(!indexHtml.includes(ADV_028_SUPERSEDED) && !printHtml.includes(ADV_028_SUPERSEDED), "superseded ADV-028 wording absent from the website and print HTML");
+  assert.ok(!pages.some((p) => squash(p).includes(squash(ADV_028_SUPERSEDED))), "superseded ADV-028 wording absent from the PDF");
+  assert.ok(squash(pdfItemText("ADV-028")).includes(squash(ADV_028_SENTENCE)), "approved ADV-028 wording on its PDF page");
 }
 
 // --- Print-only justification of article prose (Task 27, Decision S) ---------------

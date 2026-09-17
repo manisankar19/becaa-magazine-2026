@@ -35,7 +35,7 @@ export const DECISIONS = {
 
 export const ADV_028_ROW = {
   "Item ID": "ADV-028",
-  "Title / Item": "Best Compliment from M/s Balajee Infrate",
+  "Title / Item": "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate",
   Type: "Advertisement",
   "Contributor / Company": "M/s Balajee Infrate",
   "Passing Year": "—",

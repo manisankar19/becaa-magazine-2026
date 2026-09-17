@@ -17,7 +17,7 @@ export function applyV4CorrectionsTrackerUpdates() {
   console.log(`Backup created: ${path.relative(projectRoot, snapshotPath)}`);
   writeSheetPreservingStyles(workbook, SHEET_NAME, headers, updatedRows);
   saveTracker(workbook);
-  console.log("Applied Sprint v4 committee corrections to tracker rows 16, 17, 5, 6, 7 (MSG-002 title corrected; remarks appended).");
+  console.log("Applied Sprint v4 committee corrections and 2026-09-17 approvals to the tracker (MSG-002 and ADV-028 titles; remarks appended).");
   return { changed: true, snapshotPath };
 }
 

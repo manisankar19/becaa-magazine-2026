@@ -85,10 +85,10 @@ function textAdFixture(overrides = {}) {
     id: "ADV-028",
     type: "advertisement",
     section: "advertisements",
-    title: "Best Compliment from M/s Balajee Infrate",
+    title: "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate",
     contributor: "M/s Balajee Infrate",
     presentation: "text",
-    text_lines: ["Best Compliment from M/s Balajee Infrate"],
+    text_lines: ["We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate"],
     web_asset: "",
     print_asset: "",
     alt: "",
@@ -139,7 +139,7 @@ async function main() {
   );
   assert.ok(
     article.includes(
-      '<p class="ad-text" data-testid="ad-text-ADV-028">Best Compliment from M/s Balajee Infrate</p>'
+      '<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>'
     ),
     "expected the exact approved sentence in a .ad-text paragraph with the id-scoped data-testid"
   );
@@ -152,7 +152,7 @@ async function main() {
   const webContentRegion = article.split("</header>")[1].split("<footer")[0].trim();
   assert.equal(
     webContentRegion,
-    '<p class="ad-text" data-testid="ad-text-ADV-028">Best Compliment from M/s Balajee Infrate</p>',
+    '<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>',
     "the card content region must contain only the ad-text paragraph, no other company text"
   );
   assert.ok(!article.includes("With best compliments"), "text pages must not carry the artwork-ad compliments wording");
@@ -163,14 +163,14 @@ async function main() {
   assert.ok(!/<img\b/i.test(printSection), "text-only advertisement print page must not render an <img> element");
   assert.ok(
     printSection.includes(
-      '<p class="ad-text" data-testid="ad-text-ADV-028">Best Compliment from M/s Balajee Infrate</p>'
+      '<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>'
     ),
     "expected the exact approved sentence in the print page's .ad-text paragraph"
   );
   const printContentRegion = printSection.split("</h1>")[1].split("</section>")[0].trim();
   assert.equal(
     printContentRegion,
-    '<p class="ad-text" data-testid="ad-text-ADV-028">Best Compliment from M/s Balajee Infrate</p>',
+    '<p class="ad-text" data-testid="ad-text-ADV-028">We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate</p>',
     "the print page content region must contain only the ad-text paragraph, no other company text"
   );
 

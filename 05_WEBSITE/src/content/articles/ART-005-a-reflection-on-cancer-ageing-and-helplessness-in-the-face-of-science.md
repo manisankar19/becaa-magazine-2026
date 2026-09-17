@@ -9,7 +9,7 @@ A Reflection on Cancer, Ageing, and Helplessness in the Face of Science
 
 #
 
-বিশ্বজিৎ সেনগুপ্ত
+প্রয়াত বিশ্বজিৎ সেনগুপ্ত
 
 Compared to earlier times, human beings today are living significantly longer. Although the human body’s mechanisms and metabolism have the potential to sustain life for 140 to 150 years, in ancient times—when we lived as hunter-gatherers—most people survived only 30 to 40 years. The primary cause of early death was not ageing itself, but the inability to survive illnesses caused by infections, as there was no medical technology to aid recovery. Today, the average human lifespan is around 65 to 70 years. However, with this extended longevity, certain age-related conditions have become more prominent—one of the most notable being the development of cancer cells in the human body.
 

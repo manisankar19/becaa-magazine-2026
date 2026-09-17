@@ -177,6 +177,28 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   }
 }
 
+// --- ART-004 / ART-005: Bengali author line in the body (Task 41, 2026-09-17) --------
+{
+  const OLD_LINE = "বিশ্বজিৎ সেনগুপ্ত";
+  const NEW_LINE = "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত"; // প্রয়াত in NFC form
+  for (const id of ["ART-004", "ART-005"]) {
+    const it = item(id);
+    const content = read(`src/content/${it.content_file}`);
+    const lines = content.split("\n");
+    assert.equal(lines.filter((l) => l === NEW_LINE).length, 1, `${id} content: author line is "${NEW_LINE}" exactly once`);
+    assert.equal(lines.filter((l) => l === OLD_LINE).length, 0, `${id} content: unprefixed author line absent`);
+    assert.equal(content.split(OLD_LINE).length - 1, 1, `${id} content: the name occurs only inside the new author line`);
+    assertOnlyRecordedSubstitutions(id);
+    const web = webArticle(id);
+    assert.ok(web.includes(`<p>${NEW_LINE}</p>`), `${id} website: author line paragraph`);
+    assert.ok(!web.includes(`<p>${OLD_LINE}</p>`), `${id} website: unprefixed author line absent`);
+    assert.ok(printSection(id).includes(`<p>${NEW_LINE}</p>`), `${id} print: author line paragraph`);
+    const pdf = squash(pdfItemText(id));
+    assert.ok(pdf.includes(squash(NEW_LINE)), `${id} PDF: author line present`);
+    assert.equal(pdf.split(squash(OLD_LINE)).length - 1, 1, `${id} PDF: the Bengali name appears once, prefixed`);
+  }
+}
+
 // --- ADV-028: approved wording of 2026-09-17 (Task 39) ------------------------------
 {
   const adv = item("ADV-028");

@@ -17,6 +17,8 @@ export const V4_FILE_CORRECTIONS = [
   // Decision R: reader-facing display_name added under both of Biswajit Sengupta's items; contributor unchanged.
   // Approvals of 2026-09-17 (correction record addendum §§6, 8, 9).
   { id: "ADV-028", file: "src/_data/publication.yaml", find: "Best Compliment from M/s Balajee Infrate", replace: "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate", expectedCount: 2 }, // title and text_lines[0]
+  { id: "ART-004", file: "src/content/articles/ART-004-item.md", find: "বিশ্বজিৎ সেনগুপ্ত", replace: "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত", expectedCount: 1 }, // প্রয়াত, NFC
+  { id: "ART-005", file: "src/content/articles/ART-005-a-reflection-on-cancer-ageing-and-helplessness-in-the-face-of-science.md", find: "বিশ্বজিৎ সেনগুপ্ত", replace: "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত", expectedCount: 1 },
   { id: "ART-004/ART-005", file: "src/_data/publication.yaml", find: "    contributor: Biswajit Sengupta\n", replace: "    contributor: Biswajit Sengupta\n    display_name: Late Biswajit Sengupta\n", expectedCount: 2 },
 ];
 
@@ -29,6 +31,8 @@ export const V4_CORRECTIONS = [
   { id: "ART-003", find: "পারিমা", replace: "পরিমা" },
   { id: "ART-004", find: "Biswajit Sengupta", replace: "Late Biswajit Sengupta" },
   { id: "ART-005", find: "Biswajit Sengupta", replace: "Late Biswajit Sengupta" },
+  { id: "ART-004", find: "বিশ্বজিৎ সেনগুপ্ত", replace: "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত" },
+  { id: "ART-005", find: "বিশ্বজিৎ সেনগুপ্ত", replace: "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত" },
 ];
 
 // Approved 2026-09-17: ADV-028's new sentence (an item new in Sprint v4, so it is not a

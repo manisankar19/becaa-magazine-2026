@@ -1,10 +1,24 @@
 # Sprint v4 — Preview and production deployment of `V4_REVIEW_02` (Tasks 45–46)
 
-Status: **Released to Production on 2026-09-17.**
+Status: **Released to Production on 2026-09-17**; front-page hero update deployed the same day (`79ae6d0`).
 
 - **Production URL:** `https://becaa-magazine-2026-portal.vercel.app`
 - **Owner approval:** 2026-09-17, in the Sprint v4 session: "deploy it to Preview. If Preview passes, deploy it to Production and replace the existing production deployment … Do not delete the Vercel project or Neon database."
 - **Source:** review release `06_FINAL_OUTPUT/V4_REVIEW_02/`, built at `ac05427`. The deployments were made from commit `d0cc14c`, whose `05_WEBSITE/` tree adds only the deployable PDF (`release-assets/print/`, byte-identical to the release PDF) to the build commit. Deployed with the Vercel CLI 59.11.7 from `05_WEBSITE/`, linked to `mani125slm/becaa-magazine-2026-portal`.
+
+## Update 2026-09-17 — front-page hero (commit `79ae6d0`)
+
+A front-page-only change on top of `V4_REVIEW_02`: tagline and two links replace the review lede and badges (see `CHANGELOG.md`). Both deployments were made from the clean tree at `79ae6d0`.
+
+| Field | Preview | Production |
+|---|---|---|
+| Deployment | `https://becaa-magazine-2026-portal-h7wk78c9q-mani125slm.vercel.app` (`dpl_3zL4yctMgBNprq1LASME5dB63ceB`), target preview | `https://becaa-magazine-2026-portal-3rbvgbgd5-mani125slm.vercel.app` (`dpl_BPjWb2z8xRfF16hjBzJXAZBK6Wuf`), aliased to `https://becaa-magazine-2026-portal.vercel.app`; previous `…-l8beok45l-…` kept for rollback |
+| Migrations | Applied 1, Pending none — no migration needed | Applied 1, Pending none — no migration needed |
+| Unauthenticated probes | All pass (same checks as the table below, including wrong-password 401) | All pass; the wrong-password probe was deliberately skipped so the owner's live admin login counter was not touched (verified on Preview with identical code) |
+| Public files vs the local build of `79ae6d0` | `site.css`, `print.css`, `site.js`, `/welcome/`, `/admin/` byte-identical | Same five files byte-identical |
+| Gated front page | One registration (`e2e-hero-*`): served `index.html` byte-identical to the local build; tagline exact; old lede and badges absent; "Explore the 2026 Edition" → `#MSG-001`, landing at 80 px below a 68 px header; "Watch BECAA 2026 ↗ (opens in a new tab)" → `https://youtube.com/@BecaaMaharashtra`, `target="_blank"`, `rel="noopener noreferrer"`; 47 items | Not opened (no registration created); it is the same commit and build, and the public files match that build |
+| PDF | Served PDF byte-identical to `release-assets/print/` and to `06_FINAL_OUTPUT/V4_REVIEW_02` | Same unchanged committed release asset |
+| Database | Test registration removed (1 visitor), plus this session's rate-limit rows (3); after: visitors 3, visits 3, admin_sessions 0, rate_limits 0 | No test records created: counts identical before and after verification (visitors 2, visits 2, admin_sessions 1, rate_limits 5 — the session and rate-limit rows are from normal use since the V4_REVIEW_02 release) |
 
 ## Production
 

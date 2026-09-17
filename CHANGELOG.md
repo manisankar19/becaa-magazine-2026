@@ -1,5 +1,14 @@
 # Changelog
 
+## Front-page hero update — 2026-09-17 (deployed on top of `V4_REVIEW_02`)
+
+Owner request; front page only, commit `79ae6d0`. No new review release folder was built.
+
+- **Changed:** the front-page hero's review lede and its three badges ("47 approved web items", "Website review", "Print scope controlled separately") are replaced by the tagline **Roots remembered. Stories celebrated. Bonds renewed.** and two small links: "Explore the 2026 Edition" (to the first magazine section, `#MSG-001`) and "Watch BECAA 2026 ↗" (`https://youtube.com/@BecaaMaharashtra`, new tab, `rel="noopener noreferrer"`, "opens in a new tab" for screen readers).
+- **Tests:** new `test:e2e:hero` (390/820/1440 px).
+- **Unchanged:** cover artwork and title, magazine content, the PDF (byte-identical to `V4_REVIEW_02`), print HTML, registration gate, admin page, navigation, database (no migration) and security headers. The built site differs from before only in `index.html` and `assets/css/site.css`.
+- **Deployed:** Preview `…-h7wk78c9q-…`, then Production `…-3rbvgbgd5-…` from the same commit (see `sprints/v4/PREVIEW_DEPLOYMENT.md`).
+
 ## V4_REVIEW_02 — 2026-09-17
 
 Local review build (`06_FINAL_OUTPUT/V4_REVIEW_02/`, built by `npm run release:v4:02` at `ac05427`, committed `d0cc14c`). It supersedes `V4_REVIEW_01`, which is kept unchanged and was never deployed. Deployment: see `sprints/v4/PREVIEW_DEPLOYMENT.md`. 47 publication items; the PDF has 72 pages; `qa:pdf-compare` against `V3_REVIEW_02` finds 0 unexplained differences. Owner approvals of 2026-09-17 are recorded in the addendum of `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md`.

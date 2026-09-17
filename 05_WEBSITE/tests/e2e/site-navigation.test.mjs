@@ -4,7 +4,7 @@
 // exactly eight links in order, valid in-page targets, first-published-item
 // destinations computed from the manifest, click-to-scroll, no horizontal overflow,
 // no overlap with the brand link, and keyboard reachability with a visible focus style.
-// Screenshots: qa-output/navigation/{mobile,tablet,desktop}.png
+// Screenshots: qa-output/navigation/{mobile,tablet,laptop,desktop}.png
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -35,7 +35,7 @@ fs.mkdirSync(screenshotDir, { recursive: true });
 const { server, baseUrl } = await startStaticServer(path.join(siteRoot, "_site"));
 const browser = await chromium.launch();
 try {
-  for (const viewport of [{ name: "mobile", width: 390, height: 844 }, { name: "tablet", width: 820, height: 1180 }, { name: "desktop", width: 1440, height: 900 }]) {
+  for (const viewport of [{ name: "mobile", width: 390, height: 844 }, { name: "tablet", width: 820, height: 1180 }, { name: "laptop", width: 1100, height: 800 }, { name: "desktop", width: 1440, height: 900 }]) {
     const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
@@ -107,10 +107,16 @@ try {
       await page.waitForFunction((h) => location.hash === h, href);
       const inView = await page.evaluate((h) => {
         const r = document.querySelector(h).getBoundingClientRect();
-        return { top: r.top, bottom: r.bottom, vh: window.innerHeight, atBottom: Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1 };
+        const header = document.querySelector(".site-header");
+        const sticky = getComputedStyle(header).position === "sticky";
+        return { top: r.top, bottom: r.bottom, vh: window.innerHeight, headerBottom: sticky ? header.getBoundingClientRect().bottom : 0, sticky, atBottom: Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1 };
       }, href);
       assert.ok(inView.top < inView.vh && inView.bottom > 0, tag(`${label}: ${href} is in the viewport after click (top ${Math.round(inView.top)}, bottom ${Math.round(inView.bottom)})`));
-      if (!inView.atBottom) assert.ok(inView.top <= 2, tag(`${label}: ${href} scrolled to the top of the viewport (top ${Math.round(inView.top)})`));
+      // 2026-09-17 (Task 43): the target starts below the sticky header, not behind it, and close to it.
+      if (!inView.atBottom) {
+        assert.ok(inView.top >= inView.headerBottom - 1, tag(`${label}: ${href} not hidden behind the ${inView.sticky ? "sticky" : "static"} header (target top ${Math.round(inView.top)}, header bottom ${Math.round(inView.headerBottom)})`));
+        assert.ok(inView.top <= inView.headerBottom + 64, tag(`${label}: ${href} lands just below the header (target top ${Math.round(inView.top)}, header bottom ${Math.round(inView.headerBottom)})`));
+      }
     }
     await page.close();
   }
@@ -119,4 +125,4 @@ try {
   server.close();
 }
 
-console.log(`site-navigation: 8 links verified at 390/820/1440 px; screenshots in ${path.relative(siteRoot, screenshotDir)}/`);
+console.log(`site-navigation: 8 links verified at 390/820/1100/1440 px; screenshots in ${path.relative(siteRoot, screenshotDir)}/`); // 390/820/1100/1440 px

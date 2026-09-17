@@ -237,7 +237,12 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
     assert.ok(open.startsWith(`<section class="print-page print-page--${it.type} `) || open.startsWith(`<section class="print-page print-page--${it.type}"`), `${it.id}: section carries print-page--${it.type}`);
   }
   assert.ok(!/text-align\s*:\s*justify/.test(read("src/assets/css/site.css")), "website stylesheet has no text justification");
-  assert.equal(read("src/assets/css/site.css"), baseline("src/assets/css/site.css"), "website stylesheet unchanged since the corrections began");
+  // The only website stylesheet change since the corrections began is Task 43's scroll offset.
+  const siteCss = read("src/assets/css/site.css");
+  const task43 = siteCss.indexOf("\n/* Sprint v4 Task 43");
+  assert.ok(task43 > 0, "site.css carries the Task 43 scroll-padding block");
+  assert.equal(siteCss.slice(0, task43), baseline("src/assets/css/site.css"), "website stylesheet otherwise unchanged since the corrections began");
+  assert.ok(!/text-align/.test(siteCss.slice(task43)), "the Task 43 block does not touch text alignment");
 
   const browser = await chromium.launch();
   try {

@@ -511,3 +511,13 @@ figcaption {
 .search-row input { flex: 1; font: inherit; padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; min-width: 0; }
 .pager { display: flex; align-items: center; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap; }
 .button[disabled] { opacity: 0.5; cursor: default; }
+
+/* Sprint v4 Task 43 (2026-09-17): in-page jumps (navigation, contents, skip link) land below the
+   sticky header instead of behind it. The header is sticky above 780px: two rows (≈110px) up to
+   about 1200px wide, one row (≈68px) beyond. Below 781px it is static, so no offset. */
+@media (min-width: 781px) {
+  html { scroll-padding-top: 7.5rem; }
+}
+@media (min-width: 1300px) {
+  html { scroll-padding-top: 5rem; }
+}

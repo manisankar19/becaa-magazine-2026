@@ -12,6 +12,7 @@ import path from "node:path";
 import { chromium } from "playwright";
 import { readManifest, siteRoot } from "../../scripts/lib.mjs";
 import { countOccurrences } from "../../scripts/text-correction-core.mjs";
+import { findControlCharacters } from "../../scripts/content-encoding-core.mjs";
 import { ADV_028_SENTENCE, ADV_028_SUPERSEDED, MSG001_SENTENCE, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
 import { applyV4FileCorrections } from "../../scripts/apply-v4-committee-corrections.mjs";
 
@@ -197,6 +198,22 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
     assert.ok(pdf.includes(squash(NEW_LINE)), `${id} PDF: author line present`);
     assert.equal(pdf.split(squash(OLD_LINE)).length - 1, 1, `${id} PDF: the Bengali name appears once, prefixed`);
   }
+}
+
+// --- ART-009: stray form feed removed, wording unchanged (Task 42, 2026-09-17) ---------
+{
+  const FF = String.fromCharCode(12);
+  const file = `src/content/${item("ART-009").content_file}`;
+  const content = read(file);
+  assert.ok(!content.includes(FF), "ART-009 content: no U+000C");
+  assert.deepEqual(findControlCharacters(content), [], "ART-009 content: no control characters at all");
+  assert.ok(content.includes("in a\nmeeting he scheduled specifically to demand it"), "ART-009 content: wording around the removed character unchanged");
+  assert.equal(content, baseline(file).split(FF).join(""), "ART-009 content: identical to ae098d5 apart from the removed character");
+  assertOnlyRecordedSubstitutions("ART-009");
+  const web = webArticle("ART-009");
+  assert.ok(!web.includes(FF) && /in a\s+meeting he scheduled/.test(web), "ART-009 website: \"in a meeting he scheduled\", no U+000C");
+  assert.ok(squash(pdfItemText("ART-009")).includes("inameetinghescheduledspecificallytodemandit"), "ART-009 PDF: wording intact");
+  assert.ok(!indexHtml.includes(FF) && !printHtml.includes(FF), "no U+000C anywhere in the built website or print HTML");
 }
 
 // --- ADV-028: approved wording of 2026-09-17 (Task 39) ------------------------------

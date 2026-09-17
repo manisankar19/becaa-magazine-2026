@@ -48,7 +48,7 @@ sound more confident" that it briefly achieved sentience, wept, and shut itself 
 And here is where the magic happens. The same executive who called AI "the electricity
 of our generation" now discovers that electricity, in fact, has a meter. Overnight, the guru
 becomes a prosecutor. "Why are we spending so much on this?" he demands, in a
-meeting he scheduled specifically to demand it. "Who approved unlimited usage?" You
+meeting he scheduled specifically to demand it. "Who approved unlimited usage?" You
 did. In the all-hands. There's a slide. It has a brain on it.
 
 The pivot is seamless and shameless. Yesterday's "AI-first company" is today's "we need

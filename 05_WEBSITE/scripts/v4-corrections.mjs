@@ -19,6 +19,7 @@ export const V4_FILE_CORRECTIONS = [
   { id: "ADV-028", file: "src/_data/publication.yaml", find: "Best Compliment from M/s Balajee Infrate", replace: "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate", expectedCount: 2 }, // title and text_lines[0]
   { id: "ART-004", file: "src/content/articles/ART-004-item.md", find: "বিশ্বজিৎ সেনগুপ্ত", replace: "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত", expectedCount: 1 }, // প্রয়াত, NFC
   { id: "ART-005", file: "src/content/articles/ART-005-a-reflection-on-cancer-ageing-and-helplessness-in-the-face-of-science.md", find: "বিশ্বজিৎ সেনগুপ্ত", replace: "প্র\u09AF\u09BCাত বিশ্বজিৎ সেনগুপ্ত", expectedCount: 1 },
+  { id: "ART-009", file: "src/content/articles/ART-009-tokenomics-how-your-ceo-learned-that-ai-isnt-actually-free.md", find: "\f", replace: "", expectedCount: 1, wholeWord: false }, // stray U+000C before "meeting"
   { id: "ART-004/ART-005", file: "src/_data/publication.yaml", find: "    contributor: Biswajit Sengupta\n", replace: "    contributor: Biswajit Sengupta\n    display_name: Late Biswajit Sengupta\n", expectedCount: 2 },
 ];
 

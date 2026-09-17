@@ -69,6 +69,12 @@ export function correctionState(text, { find, replace, expectedCount, wholeWord 
   checkArgs({ find, replace, expectedCount });
   const source = String(text);
   const pending = pendingIndices(source, find, replace, wholeWord).length;
+  // A deletion (empty replacement) leaves nothing to count, so "applied" means none left.
+  if (replace === "") {
+    if (pending === expectedCount) return "pending";
+    if (pending === 0) return "applied";
+    throw new Error(`correctionState: ambiguous — ${pending} "${find}" found, expected ${expectedCount} or 0`);
+  }
   const applied = matchIndices(source, replace, wholeWord).length;
   if (pending === expectedCount && applied === 0) return "pending";
   if (pending === 0 && applied === expectedCount) return "applied";

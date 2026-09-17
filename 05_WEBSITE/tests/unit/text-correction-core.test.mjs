@@ -92,4 +92,16 @@ import { applyCorrection, countOccurrences, correctionState } from "../../script
   assert.equal(fixed, "BECAA-র পরিচ\u09DF আমাদের", "the file's own code points are preserved");
 }
 
+// --- Scenario 9: deleting a character (empty replacement), e.g. a stray form feed ----
+{
+  const FF = String.fromCharCode(12);
+  const c = { find: FF, replace: "", expectedCount: 1, wholeWord: false };
+  const text = `in a${String.fromCharCode(10)}${FF}meeting he scheduled`;
+  assert.equal(correctionState(text, c), "pending");
+  const fixed = applyCorrection(text, c);
+  assert.equal(fixed, `in a${String.fromCharCode(10)}meeting he scheduled`);
+  assert.equal(correctionState(fixed, c), "applied", "no occurrence left → applied (an empty replacement cannot be counted)");
+  assert.throws(() => correctionState(`${FF}${FF}`, c), /ambiguous|expected/, "a different count is refused");
+}
+
 console.log("text-correction-core: all assertions passed");

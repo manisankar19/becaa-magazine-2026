@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { config } from "./config.mjs";
 import { siteRoot, readManifest, pathInsideSite } from "./lib.mjs";
 import { validateAdvertisementPresentation, resolveInk } from "./ad-presentation-core.mjs";
+import { findControlCharacters } from "./content-encoding-core.mjs";
 
 const report = { generated: new Date().toISOString(), errors: [], warnings: [], items: [] };
 const manifest = readManifest();
@@ -54,7 +55,12 @@ for (const item of manifest.items || []) {
     if (!pathInsideSite(rel)) err(`${item.id} content path escapes site: ${item.content_file}`);
     const abs = path.join(siteRoot, rel);
     if (!fs.existsSync(abs)) err(`${item.id} missing content file: ${item.content_file}`);
-    else if (/<!--\s*NEEDS VERIFICATION/i.test(fs.readFileSync(abs, "utf8"))) warn(`${item.id} content has extraction verification comment.`);
+    else {
+      const text = fs.readFileSync(abs, "utf8");
+      if (/<!--\s*NEEDS VERIFICATION/i.test(text)) warn(`${item.id} content has extraction verification comment.`);
+      // Sprint v4 Task 42: control characters print as missing-glyph boxes (release-blocking).
+      for (const c of findControlCharacters(text)) err(`${item.id} content has control character ${c.codePoint} at line ${c.line}, column ${c.column}: ${item.content_file}`);
+    }
   }
   for (const key of ["web_asset", "print_asset"]) {
     if (!item[key]) continue;

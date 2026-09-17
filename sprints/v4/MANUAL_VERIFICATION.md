@@ -35,3 +35,20 @@ Date: 2026-09-16 · Release inspected: `06_FINAL_OUTPUT/V4_REVIEW_01/` (built at
 5. **Sticky header covers the top of a section (pre-existing).** On desktop and tablet, the sticky header covers roughly the first 68 px of a section after a navigation jump.
 
 No regression was found in registration, the gate, protected content or the administrator page.
+
+---
+
+## Addendum — `V4_REVIEW_02` (2026-09-17)
+
+The owner approved changes for findings 1–5 above on 2026-09-17 (correction record addendum §§6–10). They were implemented in Tasks 39–43 and released as `06_FINAL_OUTPUT/V4_REVIEW_02/` (built at `ac05427`, committed `d0cc14c`). `V4_REVIEW_01` is kept unchanged.
+
+| Finding | Resolution in `V4_REVIEW_02` | Checked |
+|---|---|---|
+| 1. Text-only ads repeat the sentence as a heading | Heading removed (`aria-label` keeps an accessible name); `ADV-028` wording now "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate", shown once | Website card and PDF pp. 69–70: sentence once, box centred; automated in `web-ad-cards`, `print-ad-pages` (incl. vertical centring), `v4-advertisements`, `pdf-qa` |
+| 2. Memorial heading repeats lines 1–2 | Heading removed; the seven approved lines shown once below the uncropped photograph | Website card and PDF p. 71 |
+| 3. `ART-004`/`ART-005` Bengali author line | `প্রয়াত বিশ্বজিৎ সেনগুপ্ত` | PDF pp. 17 and 19 (renders inspected); website; `v4-committee-corrections` |
+| 4. `ART-009` missing-glyph box | Stray U+000C removed; `validate` now rejects control characters in content | PDF p. 32: "in a meeting he scheduled", no box |
+| 5. Sticky header covers jump targets | `scroll-padding-top` where the header is sticky | `test:e2e:nav` at 390/820/1100/1440 px: targets start below the header |
+
+The release pipeline passed all 30 steps. The PDF comparison against `V3_REVIEW_02` has 0 unexplained pages, and the PDF is still 72 pages. The deployed Preview and Production sites were verified against this release; see `sprints/v4/PREVIEW_DEPLOYMENT.md`.
+

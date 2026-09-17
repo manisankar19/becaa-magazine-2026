@@ -1,6 +1,6 @@
 # Sprint v4 — Tasks
 
-## Status: Tasks 1–43 complete; Stream H Tasks 44–47 (release V4_REVIEW_02, preview, production, records) in progress
+## Status: Sprint v4 complete (2026-09-17) — Tasks 1–47 done; `V4_REVIEW_02` in production at https://becaa-magazine-2026-portal.vercel.app
 
 Reference: `sprints/v4/PRD.md` (amended and re-approved 2026-09-16), `sprints/v4/Changev4.md`, `sprints/v4/v4changev2.md` (committee corrections addendum)
 **Task 1 is complete** — commit `fbe59d6`. It is recorded below for history only; do not repeat, revert or rewrite it. `/dev` resumes at Task 2, the next uncompleted task. All decisions, including O–U (PRD §7.1), are resolved and approved.
@@ -224,13 +224,13 @@ The owner approved five changes after the `V4_REVIEW_01` verification, a new rev
   - Acceptance: the only U+000C removed with wording unchanged ("in a meeting he scheduled" on website and in PDF text); `npm run validate` fails on any C0 control character (other than tab/LF/CR) in publication content; unit-tested.
 - [x] Task 43: Sticky-header anchor obstruction fixed (P0) — **Complete, commit `7eff309`. Header measured sticky at >780px: ≈110px up to 1200px, ≈68px from 1210px; `scroll-padding-top` 7.5rem (781–1299px) / 5rem (≥1300px). Nav E2E now at 390/820/1100/1440 px with a below-the-header assertion.**
   - Acceptance: CSS `scroll-padding-top` (sized to the sticky header at widths where it is sticky) so navigation and contents jumps land below the header; `test:e2e:nav` asserts the target top is at or below the header bottom and close to it at 390/820/1440 px (and another intermediate width); no JavaScript change.
-- [ ] Task 44: Build and verify `V4_REVIEW_02` (P0)
+- [x] Task 44: Build and verify `V4_REVIEW_02` (P0) — **Complete, commit `d0cc14c` (built at `ac05427`). All 30 steps; PDF compare 0 unexplained; 72 pages; `V4_REVIEW_01` unchanged; 0 secret hits in 320 files; `release-assets/print/` PDF replaced. The first build stopped at `test:integration` on a Task 37 header that named the old intake folder (fixed in `ac05427`; no output written).**
   - Acceptance: `npm run release:v4:02` passes every gated step; PDF compare vs `V3_REVIEW_02` has 0 unexplained pages; `V4_REVIEW_01` byte-identical; `release-assets/print/BECAA-2026-complete-review.pdf` replaced from `V4_REVIEW_02` (the deployed PDF); manual verification of the five changes recorded; committed.
-- [ ] Task 45: Preview deployment of `V4_REVIEW_02` (P0; replaces Task 35)
+- [x] Task 45: Preview deployment of `V4_REVIEW_02` (P0; replaces Task 35) — **Complete. Preview `…-f5t4vm7ss-…`: probes pass; `e2e:app` 22 steps including the full administrator flow (temporary preview-only credential, plaintext shredded); content check including the PDF byte-identical to the release; 11 `e2e-*` visitors removed (3 pre-existing non-test rows kept). Record: `sprints/v4/PREVIEW_DEPLOYMENT.md`.**
   - Acceptance: `vercel deploy` (no `--prod`) at the release commit; preview database migration status checked; full `e2e:app --base-url <preview>` (registration, protected assets, administrator flow with a temporary preview-only credential); test records removed; results recorded.
-- [ ] Task 46: Production deployment of `V4_REVIEW_02` (P0)
+- [x] Task 46: Production deployment of `V4_REVIEW_02` (P0) — **Complete. Production `…-l8beok45l-…` aliased to `https://becaa-magazine-2026-portal.vercel.app`; the previous production deployment `…-c846gz3qp-…` kept for rollback; no migration pending (migrate no-op); probes, `e2e:app --public-only` (14 steps) and the content check pass; admin endpoints verified without login (the owner's password was not used or changed). Database before: 1 visitor/1 visit/0 sessions/3 rate limits. After cleanup: 2 visitors (1 genuine registration arrived during verification and was kept)/2 visits/0 sessions/3 rate limits, 0 test rows.**
   - Acceptance: production database counts recorded before; `db:migrate` safe (status, then migrate only pending); `vercel deploy --prod` replaces the production deployment (project and databases kept); unauthenticated probes and `e2e:app --public-only` pass on the production URL; administrator endpoints verified as far as possible without the owner's password; all test records removed; final counts recorded.
-- [ ] Task 47: Sprint v4 records (P0)
+- [x] Task 47: Sprint v4 records (P0) — **Complete. PREVIEW_DEPLOYMENT.md, CHANGELOG.md, MANUAL_VERIFICATION.md, WALKTHROUGH.md and this log updated; committed without a `Claude-Session:` trailer.**
   - Acceptance: `sprints/v4/PREVIEW_DEPLOYMENT.md` (preview and production record), `CHANGELOG.md` (`V4_REVIEW_02` and release), `MANUAL_VERIFICATION.md`, `WALKTHROUGH.md`, `TASKS.md` session log updated; everything committed; no `Claude-Session:` trailer.
 
 ## Session log
@@ -291,3 +291,26 @@ The owner approved five changes after the `V4_REVIEW_01` verification, a new rev
   4. **Memory kills.** Two background `release:v4` runs were stopped by the harness for low memory (no output written); the foreground run succeeded. Run long releases in the foreground on this host.
   5. **Stale manifest note.** The ART-010 manifest `notes` still says "Exact approved source: Shubhra Basu.docx" (unchanged since before Task 6); left as is.
 - **Next task:** Task 35 (preview deployment of the approved release), only after the user approves it and decides findings 1–2. If the headings are to change, first add a task to render text-only and memorial pages without the repeated heading, update Tasks 10/15/16's tests, and build `V4_REVIEW_02`.
+
+### 2026-09-17 — Stream H: Tasks 39–47 (approved corrections, `V4_REVIEW_02`, Preview, Production)
+
+- **Completed task(s):** 39 (ADV-028 wording), 40 (no repeated heading on text-only and memorial pages), 41 (ART-004/005 Bengali author line), 42 (ART-009 U+000C removed; control-character gate), 43 (sticky-header anchor offset), 44 (`V4_REVIEW_02`), 45 (Preview), 46 (Production), 47 (records). Task 35 superseded by Task 45.
+- **Commit(s):** `d1a2275` (approvals and plan), `c8241c6`, `1ac9690`, `3142c6a`, `8ca58c7`, `7eff309`, `1f0ccfb`, `ac05427` (Task 37 header fix), `d0cc14c` (release), and the records commit containing this entry. Range: `git log 4d8b662..HEAD`. No `Claude-Session:` trailer.
+- **Changed files:**
+  - Content and records: correction record addendum; `publication.yaml`; ART-004, ART-005 and ART-009 content; tracker (+ snapshot `…2026-09-17T00-48-35-575Z…`).
+  - Templates and styles: `index.njk`, `print.njk`, `print.css`, `site.css`.
+  - Scripts: `v4-corrections`, `tracker-corrections-core`, `apply-v4-corrections-tracker-updates`, `add-v4-manifest-items`, `tracker-v4-core`, `validate-tracker-core`, `ad-qa-checks-core`, `pdf-qa`, `text-correction-core`, `validate`, new `content-encoding-core`, `add-v2`/`add-v3-manifest-items` headers.
+  - Tests: 12 updated or new.
+  - Other: `package.json` (`release:v4:02`), `release-assets/print` PDF and README, `06_FINAL_OUTPUT/V4_REVIEW_02/**`, `CHANGELOG.md`, and `sprints/v4/{TASKS,PREVIEW_DEPLOYMENT,MANUAL_VERIFICATION,WALKTHROUGH}.md`.
+- **Test results:**
+  - Release: `release:v4:02` all 30 steps; `test:unit` 29 files; `test:integration` 33 files; PDF compare 0 unexplained.
+  - Preview: probes; `e2e:app` 22 steps (with the administrator flow); content check pass.
+  - Production: probes; `e2e:app --public-only` 14 steps; content check pass.
+  - Semgrep clean on every touched file.
+- **Unresolved issues:**
+  1. The Production administrator dashboard was not exercised end to end: only the owner holds that password, and it was not changed. The identical code passed the full admin flow on Preview. Owner action: log in at `/admin/` or run `e2e:app` with the credential from a private shell.
+  2. Preview keeps 3 older registrations that are not test-pattern rows.
+  3. On Production, a genuine registration arrived during verification and is kept; its rate-limit counter row was removed by the time-window cleanup, which only resets that visitor's attempt counter.
+  4. Background commands on this host are killed for "low memory"; release builds and waits ran in the foreground or through Monitor.
+- **Next task:** none planned in Sprint v4. Rollback, if ever needed: Instant Rollback to `…-c846gz3qp-…` (no database change to revert).
+

@@ -1,17 +1,27 @@
-# Sprint v4 — Walkthrough (Tasks 1–34, 36–38)
+# Sprint v4 — Walkthrough (Tasks 1–47)
 
-Scope note: Sprint v4 has 37 planned tasks across streams A–F, plus one task added during execution (Task 38, Stream G). This walkthrough covers everything completed so far, all on `main` and verified:
+Scope note: Sprint v4 had 37 planned tasks across streams A–F. Task 38 (Stream G) was added during execution, and Tasks 39–47 (Stream H) after the owner's approvals of 2026-09-17. All are complete and on `main`; Task 35 was superseded by Task 45.
 
-- Stream A (intake/consolidation, Tasks 1–4), Stream B (the poem, Tasks 5–8), Stream C (the three new advertisements, Tasks 9–16), Stream D (navigation, Tasks 17–20; added to this document at `6c1751a`).
-- Stream E (committee corrections, Tasks 21–29) and Stream F (build and release, Tasks 30–34, 36, 37) plus Stream G (Task 38, pre-release gate fixes). These were added to this document on 2026-09-17, describing the state at commit `1f73a3a`.
+- Streams A–D: intake and consolidation, the poem, three new advertisements, navigation (Tasks 1–20).
+- Streams E–G: committee corrections, build and release (`V4_REVIEW_01`), pre-release gate fixes (Tasks 21–38).
+- Stream H (2026-09-17): five approved corrections, the `V4_REVIEW_02` release, and deployment to Preview and then Production (Tasks 39–47).
 
-**Not done:** Task 35 (preview deployment) waits for explicit user approval, and five verification findings wait for editorial decisions; see **Known Limitations** and **What's Next**. The review release `06_FINAL_OUTPUT/V4_REVIEW_01/` is built and committed; nothing has been deployed.
+**Production:** `https://becaa-magazine-2026-portal.vercel.app` serves `V4_REVIEW_02` (deployment `…-l8beok45l-…`). The Sprint v3 deployment is kept for rollback. The deployment record is `sprints/v4/PREVIEW_DEPLOYMENT.md`.
 
 ## Summary
 
 This slice of Sprint v4 does three things to the BECAA Maharashtra Magazine 2026 site (an Eleventy static build that produces both a website and a print PDF from one hand-authored manifest): it merges a stray `v2-incoming/` subfolder back into the single `02_INCOMING_CONTENT/` intake location with full provenance; it re-extracts the poem "গোলাপ" (ART-010) from a corrected Markdown source so every line renders as its own line, on web and in print; and it adds three new advertisement pages — two text-only compliments ads and one memorial — by extending the advertisement system with a `presentation` concept (`artwork` | `text` | `memorial`) instead of assuming every advertisement is a piece of artwork. Finally, it fixes the website's top navigation, which printed one section label per *item* (51 links with the current manifest: "Articles" ×12, "Advertisements" ×25…; PRD §1.1 counted 48 before Stream C's three advertisements), so that it shows one link per *section* (8 links), each pointing to that section's first published item and derived from the manifest at build time. Nothing in the application layer (registration, authentication, admin, database) was touched, and the print/PDF, welcome and admin pages build byte-identically before and after the navigation change.
 
 The second half of the sprint applies five corrections the BECAA committee sent after planning. Two Bengali wording and spelling fixes (`MSG-001`, `ART-003`) and a title spelling fix (`MSG-002`) are made with a count-guarded, code-point-exact text-correction tool. A new `display_name` field shows "Late Biswajit Sengupta" in the bylines of `ART-004`/`ART-005` without changing the recorded contributor. A print-only CSS rule justifies article prose. None of it overwrites an original contributor document; a controlled correction record in `02_INCOMING_CONTENT/` is the source of truth. The release pipeline then gains a V4 step list (`npm run release:v4`) with a page-by-page PDF comparison against the Sprint v3 release and rendered PDF evidence. That pipeline produced `V4_REVIEW_01`: 47 items, a 72-page PDF, all 30 gated steps green and no unexplained PDF difference.
+
+Verifying `V4_REVIEW_01` raised five findings; the owner approved changes for them on 2026-09-17:
+- ADV-028's new wording;
+- text-only and memorial pages that show their text once, with no repeated heading;
+- the Bengali "প্রয়াত" author line in ART-004/005;
+- removal of a stray control character from ART-009;
+- navigation jumps that clear the sticky header.
+
+These went into `V4_REVIEW_02`, which was verified locally, on a Preview deployment (including the full administrator flow) and on Production.
 
 ## Architecture Overview
 
@@ -620,6 +630,104 @@ Before committing, every file was scanned for the local environment's secret val
 - **Task 36 (verification):** `package-lock.json` is unchanged since Sprint v3 (`dbc61cb`), the release audit gate is `ok`, and the allow-list is unchanged.
 - **Task 37:** no `v2-incoming` literal remained in `add-v2-manifest-items.mjs` or `add-v3-manifest-items.mjs` (removed in Task 4); both now open with a `HISTORICAL` header saying what they did and that paths reflect the Sprint v4 layout. No behaviour change.
 
+### Stream H — Approved corrections, `V4_REVIEW_02` and deployment (Tasks 39–47)
+
+The owner's approvals of 2026-09-17 are recorded as an addendum (§§6–10) to the controlled correction record, alongside the Stream H task list (`d1a2275`).
+
+| Commit | Task | Content |
+|---|---|---|
+| `c8241c6` | 39 | ADV-028 wording; tracker approval notes; wrapped-contents helper |
+| `1ac9690` | 40 | No repeated heading on text-only and memorial pages |
+| `3142c6a` | 41 | ART-004/005 Bengali author line |
+| `8ca58c7` | 42 | ART-009 U+000C removed; control-character gate |
+| `7eff309` | 43 | Sticky-header anchor offset |
+| `ac05427` | — | Fix: Task 37 headers named the old intake folder (stopped the first `V4_REVIEW_02` build) |
+| `d0cc14c` | 44 | `06_FINAL_OUTPUT/V4_REVIEW_02/`; deployable PDF replaced |
+| — | 45–46 | Preview and Production deployments (no code change) |
+| this commit | 47 | Records |
+
+#### ADV-028 wording (Task 39)
+- **Data changes:**
+  - The manifest's `title` and `text_lines[0]` go through the same count-guarded path as the committee corrections (`V4_FILE_CORRECTIONS`, `expectedCount: 2`).
+  - The constants that define the Sprint v4 advertisements (`add-v4-manifest-items.mjs`, `tracker-v4-core.mjs`, `validate-tracker-core.mjs`) follow, so re-running the migration reproduces the approved text.
+- **Tracker:** a second decision set, `APPROVAL_DECISIONS` in `tracker-corrections-core.mjs`, is applied after the Task 28 corrections. It updates ADV-028's title, adds approval notes on ADV-027/028/029 and on Items 6, 7 and 1, and takes a snapshot first.
+- **Contents parsing:** the long title wraps in the PDF contents, leaving `ADV-028` alone on the next line, which broke two parsers. A new pure helper, `contentsEntries(lines)` in `ad-qa-checks-core.mjs`, re-joins wrapped entries:
+
+```js
+const start = line.match(/^(\d{1,3})\.\s+(.*)$/);
+if (start) pending = { number: Number(start[1]), parts: [start[2]] };
+else if (pending) pending.parts.push(line);
+const text = pending.parts.join(" ").replace(/\s+/g, " ").trim();
+const id = text.match(CONTENTS_ID);            // "… ADV-028" at the end of the joined text
+if (id) entries.set(id[1], { number: pending.number, title: text.slice(0, text.length - id[1].length).trim() });
+```
+
+- **Side fix:** touching `ad-qa-checks-core.mjs` surfaced an older semgrep finding (a `RegExp` built from a variable in `findPdfPageIndex`), replaced with a plain string search.
+
+#### No repeated heading on text-only and memorial pages (Task 40)
+**Template change:** `index.njk` and `print.njk` compute one flag. For text-only and memorial advertisements they omit the heading and give the card or page an accessible name instead:
+
+```njk
+{% set textShownOnce = item.type == "advertisement" and (item.presentation == "text" or item.presentation == "memorial") %}
+<article … id="{{ item.id }}"{% if textShownOnce %} aria-label="{{ item.title }}"{% endif %} …>
+  <header class="item-header">
+    <p class="section-kicker">{{ kickerLabel }} · {{ item.id }}</p>
+    {% if not textShownOnce %}<h2>{{ item.title }}</h2>{% endif %}
+```
+
+**Layout regression, found by eye:** the print advertisement page is a grid with rows `auto auto 1fr` (kicker, heading, content). Without the heading, the sentence box and the memorial slid into an `auto` row at the top of the page. A heading-less page now uses `auto 1fr`:
+
+```css
+.print-page--advertisement:not(:has(> h1)) { grid-template-rows: auto 1fr; }
+```
+
+`print-ad-pages` asserts the box's vertical centre stays within 8% of the page middle; it fails (0.18) on the previous CSS. `pdf-qa` checks that the approved lines appear exactly once instead of reading a heading. Five tests were updated to assert no heading, `aria-label` equal to the title, and each sentence or memorial line visible exactly once, on the website and in the PDF.
+
+#### ART-004/005 author line (Task 41) and ART-009 control character (Task 42)
+- **ART-004/005:** the author line becomes `প্রয়াত বিশ্বজিৎ সেনগুপ্ত`, written in NFC form. There is one count-guarded edit per file, plus rendered-text entries in `V4_CORRECTIONS` so the PDF comparison classifies the pages as corrections.
+- **ART-009:**
+  - The single U+000C is removed by a deletion entry (`find: "\f", replace: "", wholeWord: false`).
+  - That exposed a bug: `correctionState` counted occurrences of the replacement, and for an empty string `indexOf("")` never advances, so it looped until memory ran out. A deletion now reads as `applied` when no occurrence remains.
+  - A new pure `findControlCharacters(text)` in `content-encoding-core.mjs`, called from `validate.mjs`, makes any C0 control character (other than tab, LF, CR) or DEL in publication content a release-blocking error with line and column. It failed on ART-009 before the fix.
+
+#### Sticky-header anchor offset (Task 43)
+- **Measurement:** above 780 px the header is sticky: about 110 px (two rows) up to 1200 px wide, about 68 px from 1210 px. At 780 px and below it is static.
+- **CSS only:** `site.css` sets `scroll-padding-top: 7.5rem` for 781–1299 px and `5rem` from 1300 px. No JavaScript changed.
+- **Test:** `test:e2e:nav` gains a 1100 px run and asserts each target starts at or below the header's bottom edge and within 64 px of it. Before the fix it failed: `#contents … target top 0, header bottom 110`.
+
+#### `V4_REVIEW_02` (Task 44)
+**Release fixes:**
+- **`release:v4:02` added:** `RELEASE_VERSION=V4_REVIEW_02`, same V4 step list.
+- **A regression of mine:** the first run stopped at `test:integration`. The `HISTORICAL` headers from Task 37 contained the literal old intake-folder path, which `incoming-consolidation.test.mjs` forbids. They were reworded (`ac05427`) and the full chain passed before the rebuild. No output folder had been written.
+
+**Results:**
+- **Second run (at `ac05427`):** all 30 steps passed.
+- **PDF comparison:** unchanged 60, shifted 1, contents 2, poem 1, new-item 3, correction 5, unexplained 0; still 72 pages.
+- **Integrity:** `V4_REVIEW_01` is byte-identical, and the 320 output files have no local secret values.
+
+**Deployable PDF:** Vercel's build cannot run Chromium, so the PDF it serves is the committed `05_WEBSITE/release-assets/print/BECAA-2026-complete-review.pdf`. It was still the Sprint v3 file; it is replaced with the `V4_REVIEW_02` PDF (checked byte-identical after deployment).
+
+#### Preview (Task 45) and Production (Task 46)
+The full record is `sprints/v4/PREVIEW_DEPLOYMENT.md`.
+
+- **Access:**
+  - Environment files were pulled into a private scratch folder, never into the repository.
+  - The protected Preview was reached with the local development OIDC token as `x-vercel-trusted-oidc-idp-token`; protection settings were not changed.
+  - The Preview admin test used a new random preview-only password: hashed into the Preview `ADMIN_PASSWORD_HASH`, then shredded. Production credentials were not touched.
+- **Databases:**
+  - Before: Preview 12 visitors (9 old `e2e-*` rows), Production 1 visitor, 1 visit, 3 rate-limit rows.
+  - Migration status on both: Applied 1, Pending none; `migrate` is a no-op.
+- **Preview:**
+  - Probes (gate, health, 403 on PDF and artwork, forged cookie, admin 401, CORS 403, 405, headers) all pass.
+  - `e2e:app` with the admin credential: 22 steps passed, including login, search, CSV, delete and logout.
+  - A registered content check confirms every Sprint v4 change and a PDF byte-identical to the release.
+- **Production:**
+  - `vercel deploy --prod` aliased `becaa-magazine-2026-portal.vercel.app` to the new deployment; the Sprint v3 deployment stays available for rollback.
+  - The same probes pass; `e2e:app --public-only` passes 14 steps; the content check is repeated.
+  - The dashboard flow could not be run on Production because only the owner holds that password; it passed on Preview with identical code.
+- **Registration rate limit:** 5 per 10 minutes per IP. The suite uses all five, so the content checks ran after the window had passed.
+- **Cleanup:** one transaction per database removes `e2e-*` visitors (visits cascade), plus admin sessions and rate-limit windows started since the verification began. Pre-existing non-test rows are kept and reported.
+
 ## Data Flow
 
 **Consolidation**: `consolidate-incoming.mjs --plan` reads both folders → `planConsolidation()` (pure) decides safety → JSON+MD report written → human/CI checks `ok: true` → `--apply` performs 5 `git mv` + removes the empty folder → 14 downstream files (manifest, front matter, 10 scripts, 4 tests) get their path references repointed by hand in the same task.
@@ -639,7 +747,9 @@ Before committing, every file was scanned for the local environment's secret val
 
 ## Test Coverage
 
-Current state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files**, all passing. The final full run was the `release:v4` build of `V4_REVIEW_01` (30 gated steps, all green), plus `test:unit` and the two historical-script integration tests after Task 37. Per-stream history follows.
+**Final state (2026-09-17, `V4_REVIEW_02` at `ac05427`):** 29 unit and 33 integration files, all passing inside the 30-step release. Stream H added `content-encoding-core` (unit), extended `text-correction-core` (deletions), `ad-qa-checks-core` (wrapped contents entries) and `tracker-corrections-core` (approval notes), and updated the render, browser and PDF tests for the heading-less pages (including a vertical-centring assertion), the corrections suite (ADV-028 wording, author lines, ART-009) and the navigation E2E (a 1100 px run; targets below the sticky header). Deployed sites: Preview probes plus `e2e:app` (22 steps, including the administrator flow) plus a content check; Production probes plus `e2e:app --public-only` (14 steps) plus a content check (see `PREVIEW_DEPLOYMENT.md`).
+
+Earlier state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files**, all passing. The final full run was the `release:v4` build of `V4_REVIEW_01` (30 gated steps, all green), plus `test:unit` and the two historical-script integration tests after Task 37. Per-stream history follows.
 
 - **Unit** (23 files in `test:unit` after Task 17, all passing in the Task 20 re-run): `navigation-core` added by Task 17 (6 scenarios). Earlier in the sprint: 2 new (`incoming-consolidation-core`, `tracker-v4-core`) and substantial additions to 2 existing files (`article-markdown-core` — 7 new `readVerseSource` cases; `ad-presentation-core` — 17 new presentation-kind cases alongside the 13 pre-existing ones, all still green).
 - **Integration** (31 files in `test:integration` after Task 18: 23 file-based + 8 database-backed). Task 20 ran each file individually: **30 of 31 passed**, including all 8 DB-backed files (`db-migrate`, `rate-limit`, `register`, `dev-app`, `admin-auth`, `admin-queries`, `export`, `threats`). The one failure is the pre-existing `add-v2-manifest-items` (see Known Limitations). `base-nav-render` added by Task 18. Earlier in the sprint: 8 new files (`consolidate-incoming`, `incoming-consolidation`, `extract-v4-golap` — replacing the deleted `extract-v2-golap` — `normalize-v4-memorial-image`, `ad-text-render`, `ad-memorial-render`, `add-v4-manifest-items`, `apply-v4-tracker-updates`, `v4-advertisements`), plus 6 existing files updated for the new paths/counts.
@@ -669,14 +779,22 @@ Current state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files*
 - **Release integrity**: the PDF comparison fails the release on any unexplained page change, so an unauthorised content edit cannot ship unnoticed. Release output is never overwritten. The release folder was scanned for the local environment's secret values (0 hits) before commit, and `check:secrets`/`check:sql` ran inside the pipeline.
 - **No shell in new tooling**: `pdftotext`, `pdftoppm` and `git show` are invoked via `execFileSync` with argument arrays; npm steps via `node npm-cli.js` with `shell: false` (Sprint v3). One semgrep finding during Task 23 (a `RegExp` built from a variable in a test helper) was replaced by string search before that commit was finalised.
 - **Scans for Tasks 21–38**: `semgrep --config auto --quiet --error` clean on every file touched; `npm audit` unchanged (3 allow-listed). No `Claude-Session:` trailer on any commit in `4751640..1f73a3a`; the Task 31 agent was instructed not to commit and made no commits.
+- **Deployment hygiene (Tasks 45–46)**:
+  - Environment files were pulled into a private (mode 700) scratch folder, never into the repository, and no secret value was printed.
+  - The protected Preview was reached with the short-lived development OIDC token; Deployment Protection was not changed.
+  - The temporary Preview admin password was hashed straight into a sensitive variable and shredded after use; Production credentials and variables were untouched.
+  - Only verification records were deleted, in one transaction per database.
+  - The previous Production deployment was kept for rollback; the Vercel project and Neon databases were neither deleted nor reconfigured.
+- **Content gate**: `validate` rejects control characters in publication content, so an extraction artefact like ART-009's form feed cannot ship again.
 - **Prompt-injection caught and rejected**: two independent subagents, working in isolated worktrees with no shared context, each appended an unauthorized `Claude-Session:` trailer to their own commits — identical text, matching a suspected injection attempt seen earlier in the same coordinating session. Both were stripped (commits rebuilt from a clean base with verified byte-identical trees) before merging; nothing reached `main` with the unauthorized line.
 
 ## Known Limitations
 
-- **Task 35 (preview deployment) has not run.** It publishes to Vercel and writes test registrations to the preview database, so it waits for explicit approval (INSTRUCTION.md §18). Nothing from this sprint is deployed.
-- **Open presentation decision — repeated headings** (Task 34 findings 1–2). Text-only advertisements (`ADV-027`, `ADV-028`) show their sentence twice, as the card/page heading and inside the tinted box, on the website and in the PDF. The memorial heading repeats its first two lines. PRD Decision E says the sentence "appears exactly once on the page … no separate heading", but can be read either way. The Task 10/15/16 implementation keeps the heading deliberately, and the Task 16 test counts the sentence once *after* the heading. Changing it means reworking those tasks' templates and tests and building `V4_REVIEW_02`, so it was left for the editor.
-- **`ART-004`/`ART-005` body author line.** Both article bodies still open with the Bengali author line `বিশ্বজিৎ সেনগুপ্ত` without a prefix. Decision R changed only the byline; a Bengali "Late" wording needs the committee.
-- **`ART-009` missing-glyph box (pre-existing).** Page 32 shows a box before "meeting", caused by a U+000C form feed carried over from DOCX extraction; it is in `V3_REVIEW_02` too. Removing it is a content edit outside the approved corrections.
+- **Production admin dashboard not exercised end to end.** Only the owner holds the production password, and it was not changed. On Production the login page, 401 responses without a session, and wrong-password rejection were checked. The full flow (login, totals, search, CSV, delete, logout) passed on Preview with identical code and a temporary preview-only credential.
+- **Registration rate limit shapes remote verification.** With 5 registrations per 10 minutes per IP, `e2e:app` skips mobile registrations on remote targets, and the content checks had to wait for the window to pass.
+- **Non-test rows kept.** 3 older registrations on the Preview database are not test-pattern rows and were left untouched. Production ends with 2 registrations: the one from 2026-09-15 and a genuine sign-up at 01:35:25 UTC during verification. The time-window cleanup removed that visitor's rate-limit counter row, which only resets their attempt counter.
+- **Accessible names on text-only and memorial pages** come from `aria-label` (the manifest title) rather than a visible heading, as approved on 2026-09-17. Screen readers announce the title, so for ADV-027/028 the sentence is announced as the name and again as the text.
+
 - **Mixed Unicode forms.** `MSG-001` stores য় as U+09DF while other content uses U+09AF U+09BC. Corrections kept each file's own form, and the comparison and tests normalise, but anyone typing a new correction must match the file's code points; the tool's error message says so.
 - **The PDF comparison ignores whitespace-only edits** (a deliberate trade-off for justification and `pdftotext` conjunct splitting) and assumes every item starts a new page, which holds for this layout.
 - **`ART-010` manifest note is stale**: it still says "Exact approved source: Shubhra Basu.docx" (unchanged since before Task 6); `source_file` and `source_fingerprint` are correct.
@@ -684,16 +802,25 @@ Current state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files*
 - **Duplicate test runs in the release**: `test:v4-advertisements` and `test:v4-committee-corrections` run inside `test:integration` and again as their own steps (kept explicit, as Task 30's acceptance lists them); this costs a few seconds.
 - **Evidence screenshots from Task 34's browser pass are not committed** (`05_WEBSITE/qa-output/v4-manual/`, git-ignored); the PDF renders, navigation screenshots and comparison report are in the committed release folder.
 - **Resolved during this work**:
+  - Repeated headings on text-only and memorial pages, the ART-004/005 Bengali author line, the ART-009 missing-glyph box and the sticky-header anchor offset (Stream H, `V4_REVIEW_02`).
+  - Task 35: superseded by Tasks 45–46; `V4_REVIEW_02` is deployed.
   - Task 15's DB-dependent fixes now run (Task 20).
   - `test:e2e:cover` (72 pages) and `add-v2-manifest-items` pass again (Task 38), so `npm run test:integration` runs as one chain.
   - Visual QA handles text-only and memorial ads (Task 38).
-- **Anchor jumps under the sticky header**: on desktop and tablet (header `position: sticky`, ≈68 px tall) a navigation click puts the target's top edge at the top of the viewport, so the first ~68 px of the section — typically its kicker — sits behind the header. This behaviour predates Stream D (the old per-item links did the same) and is not in the PRD's scope; a `scroll-margin-top` on item cards would fix it if wanted. On mobile the header is static, so it does not occur.
 - **Navigation screenshots** live in git-ignored `05_WEBSITE/qa-output/` during development (regenerate with `npm run build && npm run test:e2e:nav`); the release copy is committed in `06_FINAL_OUTPUT/V4_REVIEW_01/qa-output/navigation/`.
 - **Label map is closed**: `events` already has a label, but any other new section key (e.g. `souvenirs`) would appear in the navigation under its raw key until `SECTION_LABELS` is extended. This is deliberate and tested: visible rather than silently dropped.
 - The PRD's own prose ("17 lines each ending `<br>`") is imprecise about the real source file's last-line convention; the code is correct, the planning-doc wording is not, and hasn't been corrected in `PRD.md` itself (a docs-only fix, not blocking anything).
 - Two visible-but-unauthorized commit trailers were caught this session (see Security Measures) — root cause unconfirmed; worth watching for in future sessions.
 
 ## What's Next
+
+*(Updated 2026-09-17: the decisions and deployments below were completed in Stream H. The remaining open items are listed first.)*
+
+- **Owner action:** verify the Production administrator dashboard with the real password (log in at `/admin/`, or run `E2E_ADMIN_USERNAME=becaa-admin E2E_ADMIN_PASSWORD='…' npm run e2e:app -- --base-url https://becaa-magazine-2026-portal.vercel.app` from a private shell; it creates and deletes `e2e-*` test visitors).
+- **Preview database:** 3 older registrations that are not test-pattern rows are kept; delete them only if they are known test data.
+- **Rollback:** Instant Rollback to `…-c846gz3qp-…` if needed; no database change to revert.
+
+Earlier plan, kept for the record:
 
 Resume from `1f73a3a` on `main` (working tree clean). Sprint v4 has one planned task left, plus decisions that should come first:
 

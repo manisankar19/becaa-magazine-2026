@@ -1,8 +1,31 @@
 # Changelog
 
-## V4_REVIEW_01 — 2026-09-16
+## V4_REVIEW_02 — 2026-09-17
 
-Local review build (`06_FINAL_OUTPUT/V4_REVIEW_01/`, built by `npm run release:v4`; the exact commit is in that folder's `release-manifest.json`). Not deployed: a preview deployment needs separate approval, and production needs explicit approval after that. 47 publication items (44 + 3). The PDF has 72 pages (69 + 3). `qa:pdf-compare` explains every page difference against `V3_REVIEW_02`.
+Local review build (`06_FINAL_OUTPUT/V4_REVIEW_02/`, built by `npm run release:v4:02` at `ac05427`, committed `d0cc14c`). It supersedes `V4_REVIEW_01`, which is kept unchanged and was never deployed. Deployment: see `sprints/v4/PREVIEW_DEPLOYMENT.md`. 47 publication items; the PDF has 72 pages; `qa:pdf-compare` against `V3_REVIEW_02` finds 0 unexplained differences. Owner approvals of 2026-09-17 are recorded in the addendum of `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md`.
+
+### Changed
+
+- `ADV-028` (M/s Balajee Infrate): wording is now "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate" (manifest, tracker, website, contents, PDF).
+- Text-only advertisements (`ADV-027`, `ADV-028`) and the memorial (`ADV-029`) no longer repeat their text as a visible heading, on the website or in the PDF. Each page shows its approved text once; the card or page is named for assistive technology by `aria-label`, and the print layout keeps the content centred.
+- `ART-004`, `ART-005`: the Bengali author line in the article body reads `প্রয়াত বিশ্বজিৎ সেনগুপ্ত`; the bylines still read "Late Biswajit Sengupta".
+- `ART-009`: a stray form-feed character (U+000C) from DOCX extraction is removed, so page 32 no longer shows a missing-glyph box. The wording is unchanged.
+- Website: navigation, contents and skip-link jumps land below the sticky header (`scroll-padding-top` at widths where the header is sticky).
+- Tracker: `ADV-028` title and approval remarks on `ADV-027`, `ADV-028`, `ADV-029` and Items 6, 7 and 1 (snapshot first).
+- Deployed PDF (`05_WEBSITE/release-assets/print/`): replaced with the `V4_REVIEW_02` PDF.
+
+### Added
+
+- Validation gate: `npm run validate` fails on control characters (other than tab, LF, CR) in publication content.
+- `release:v4:02`; the navigation E2E runs at a fourth width (1100 px) and checks that jumps clear the header; a helper re-joins wrapped PDF contents entries for the QA checks.
+
+### Fixed
+
+- `correctionState` no longer loops on a deletion (empty replacement).
+- The historical headers added to `add-v2`/`add-v3-manifest-items.mjs` no longer name the old intake folder, which the consolidation test forbids.
+
+
+Local review build (`06_FINAL_OUTPUT/V4_REVIEW_01/`, built by `npm run release:v4` at `b96f581`). Superseded by `V4_REVIEW_02` and never deployed. 47 publication items (44 + 3). The PDF has 72 pages (69 + 3). `qa:pdf-compare` explains every page difference against `V3_REVIEW_02`.
 
 ### Added
 
@@ -37,9 +60,7 @@ Local review build (`06_FINAL_OUTPUT/V4_REVIEW_01/`, built by `npm run release:v
 
 ### Noted for follow-up (not blocking this release)
 
-- `ART-004`/`ART-005` bodies still open with the Bengali author line `বিশ্বজিৎ সেনগুপ্ত`, unprefixed. Decision R changed only the byline; a Bengali "Late" wording would need the committee's approval.
-- `ART-009` shows a missing-glyph box before "meeting" on its second page, caused by a stray form-feed character (U+000C) in the extracted content. It is present in `V3_REVIEW_02` too and has not been changed.
-- On desktop and tablet, the sticky header covers the top of a section after a navigation jump; this was already the case before this sprint.
+- Resolved in `V4_REVIEW_02`: the `ART-004`/`ART-005` Bengali author line, the `ART-009` missing-glyph box, and the sticky header covering jump targets.
 
 ## V3_REVIEW_02 — 2026-09-14
 

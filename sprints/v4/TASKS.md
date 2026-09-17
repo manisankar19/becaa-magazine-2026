@@ -1,6 +1,6 @@
 # Sprint v4 — Tasks
 
-## Status: Tasks 1–34 and 36–38 complete (2026-09-16); Task 35 (preview deployment) awaits explicit approval
+## Status: Tasks 1–34 and 36–38 complete; Stream H (Tasks 39–47, approved 2026-09-17) in progress
 
 Reference: `sprints/v4/PRD.md` (amended and re-approved 2026-09-16), `sprints/v4/Changev4.md`, `sprints/v4/v4changev2.md` (committee corrections addendum)
 **Task 1 is complete** — commit `fbe59d6`. It is recorded below for history only; do not repeat, revert or rewrite it. `/dev` resumes at Task 2, the next uncompleted task. All decisions, including O–U (PRD §7.1), are resolved and approved.
@@ -190,7 +190,7 @@ Five corrections to already-approved content, received after Task 1. None adds, 
   - Acceptance: with the local dev-app or static server: nav at desktop/tablet/mobile, poem lines, two text pages, memorial page, `MSG-001` corrected wording, `MSG-002` title, `ART-003` corrected spellings, `Late Biswajit Sengupta` bylines, justified article prose with no overflow/clipping, registration → magazine, protected content after refresh, admin page unaffected; PDF pages for `ART-010`, the three new advertisement items, and every page touched by a committee correction rendered to PNG at 150 dpi via `pdftoppm` into `qa-output/v4-pages/`; findings recorded for the walkthrough; any defect becomes a new task before Task 35.
   - Files: `05_WEBSITE/qa-output/v4-pages/*.png`, `05_WEBSITE/qa-output/navigation/*.png`
 
-- [ ] Task 35: Preview deployment of `V4_REVIEW_01` for manual approval (P0, Decision N) — **Not started: awaiting explicit user approval (outward-facing deployment plus writes to the preview database; INSTRUCTION.md §18). Also decide the Task 34 findings 1–2 first, since changing them requires a `V4_REVIEW_02` build before any preview.**
+- [x] Task 35: Preview deployment of `V4_REVIEW_01` for manual approval (P0, Decision N) — **Superseded by Task 45 (2026-09-17): the owner approved further corrections, so the preview deploys `V4_REVIEW_02` instead; `V4_REVIEW_01` was never deployed.**
   - Acceptance: `vercel deploy` (no `--prod`) from `05_WEBSITE/` at the release commit; `npm run e2e:app -- --base-url <preview> --public-only` passes; test registrations created on the *preview* database are identified and removed; preview URL, commit and results recorded in `sprints/v4/PREVIEW_DEPLOYMENT.md`; nothing promoted; production untouched (verified by `vercel ls` target list).
   - Files: `sprints/v4/PREVIEW_DEPLOYMENT.md`
 
@@ -209,6 +209,29 @@ Defects in existing code found while executing Tasks 20–29 (a dry run of the `
 - [x] Task 38: Make the release gates reflect the approved Sprint v4 state (P0) — **Complete, commit `97993b0`.**
   - Acceptance: (a) `scripts/visual-qa.mjs` (`npm run qa`) no longer fails on `ADV-027` "broken or distorted": text-only advertisements are checked for a visible, non-empty `.ad-text` and no image; the memorial photograph is checked as loaded with `object-fit: contain`; artwork keeps the aspect-ratio check; a screenshot is still written per advertisement. (b) `tests/e2e/print-cover-page.test.mjs` expects 72 pages (69 + the three Sprint v4 advertisement pages), with the reason in a comment. (c) `tests/integration/add-v2-manifest-items.test.mjs` passes: the historical Sprint v2 script hashes ART-010's superseded source from its archive (`SUPERSEDED_SOURCES/2026-09-15/Shubhra Basu.docx`) instead of the removed `02_INCOMING_CONTENT` path, ignores markup when detecting language (the poem's `<br>` made it "mixed"), and the test allows only ART-010's Task-6-authorised `source_file`/`source_fingerprint` change. No manifest or content change.
   - Files: `05_WEBSITE/scripts/visual-qa.mjs`, `05_WEBSITE/tests/e2e/print-cover-page.test.mjs`, `05_WEBSITE/scripts/add-v2-manifest-items.mjs`, `05_WEBSITE/tests/integration/add-v2-manifest-items.test.mjs`
+
+## Stream H — Final corrections and deployment (added 2026-09-17, owner approval)
+
+The owner approved five changes after the `V4_REVIEW_01` verification, a new review release `V4_REVIEW_02` (`V4_REVIEW_01` preserved unchanged), and deployment: Preview, then, if Preview passes, Production replacing the current production deployment (never deleting the Vercel project or the Neon databases). The approvals are recorded in the addendum of `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md` (§§6–10). Task 35 is carried out as Task 45 with `V4_REVIEW_02`.
+
+- [ ] Task 39: `ADV-028` wording — "We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate" (P0)
+  - Acceptance: title and `text_lines[0]` changed in the manifest (count-guarded) and in the tracker row (snapshot first); `add-v4-manifest-items.mjs`/`tracker-v4-core.mjs`/`validate-tracker-core.mjs` constants follow; all tests asserting the old wording updated; `validate`, `tracker:validate` pass; website card, contents and PDF page show the new sentence; old sentence absent everywhere in the build.
+- [ ] Task 40: No repeated visible heading on text-only and memorial advertisement pages (P0)
+  - Acceptance: `index.njk` and `print.njk` omit the `<h2>`/`<h1>` for `presentation: text` and `memorial`; the card/page keeps an accessible name (`aria-label` = title); the sentence appears exactly once in the visible page text of `ADV-027`/`ADV-028` (web + PDF) and the memorial's lines 1–2 once; artwork ads unchanged; render, browser, QA and PDF tests updated to the new structure.
+- [ ] Task 41: `ART-004`/`ART-005` Bengali author line → `প্রয়াত বিশ্বজিৎ সেনগুপ্ত` (P0)
+  - Acceptance: applied with `corrections:apply-v4` (one occurrence each, file otherwise byte-identical); present in website and PDF text for both items; bylines unchanged ("Late Biswajit Sengupta"); tracker remarks updated.
+- [ ] Task 42: `ART-009` U+000C removed; control-character gate (P0)
+  - Acceptance: the only U+000C removed with wording unchanged ("in a meeting he scheduled" on website and in PDF text); `npm run validate` fails on any C0 control character (other than tab/LF/CR) in publication content; unit-tested.
+- [ ] Task 43: Sticky-header anchor obstruction fixed (P0)
+  - Acceptance: CSS `scroll-padding-top` (sized to the sticky header at widths where it is sticky) so navigation and contents jumps land below the header; `test:e2e:nav` asserts the target top is at or below the header bottom and close to it at 390/820/1440 px (and another intermediate width); no JavaScript change.
+- [ ] Task 44: Build and verify `V4_REVIEW_02` (P0)
+  - Acceptance: `npm run release:v4:02` passes every gated step; PDF compare vs `V3_REVIEW_02` has 0 unexplained pages; `V4_REVIEW_01` byte-identical; `release-assets/print/BECAA-2026-complete-review.pdf` replaced from `V4_REVIEW_02` (the deployed PDF); manual verification of the five changes recorded; committed.
+- [ ] Task 45: Preview deployment of `V4_REVIEW_02` (P0; replaces Task 35)
+  - Acceptance: `vercel deploy` (no `--prod`) at the release commit; preview database migration status checked; full `e2e:app --base-url <preview>` (registration, protected assets, administrator flow with a temporary preview-only credential); test records removed; results recorded.
+- [ ] Task 46: Production deployment of `V4_REVIEW_02` (P0)
+  - Acceptance: production database counts recorded before; `db:migrate` safe (status, then migrate only pending); `vercel deploy --prod` replaces the production deployment (project and databases kept); unauthenticated probes and `e2e:app --public-only` pass on the production URL; administrator endpoints verified as far as possible without the owner's password; all test records removed; final counts recorded.
+- [ ] Task 47: Sprint v4 records (P0)
+  - Acceptance: `sprints/v4/PREVIEW_DEPLOYMENT.md` (preview and production record), `CHANGELOG.md` (`V4_REVIEW_02` and release), `MANUAL_VERIFICATION.md`, `WALKTHROUGH.md`, `TASKS.md` session log updated; everything committed; no `Claude-Session:` trailer.
 
 ## Session log
 

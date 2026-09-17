@@ -84,3 +84,44 @@ Every other character, punctuation mark, paragraph break and mixed-language expr
 Not a text correction; recorded here for completeness. Article body prose paragraphs are justified in the print/PDF stylesheet only (Decision S). Titles, bylines, headings, verse, lists, captions, quotations, messages, gallery, advertisements, memorial text and contents are excluded, and the website is not justified. No content file changes.
 
 **Reason (committee):** justified article text requested for the printed magazine.
+
+---
+
+## Addendum — approvals of 2026-09-17
+
+Recorded from the project owner's written approval in the Sprint v4 session on 2026-09-17, after the `V4_REVIEW_01` verification (`sprints/v4/MANUAL_VERIFICATION.md`). The same rules apply: exact text, stated occurrence counts, and no original contributor document modified.
+
+### 6. `ADV-028` — M/s Balajee Infrate advertisement wording
+
+| Field | Old (exact) | New (exact) |
+|---|---|---|
+| Title and the single text line (`text_lines[0]`) | `Best Compliment from M/s Balajee Infrate` | `We support BECAA Maharashtra for their noble causes. With warm wishes M/s Balajee Infrate` |
+
+The sentence is shown **once** on the advertisement page (website card and PDF page). `contributor` stays `M/s Balajee Infrate`. The contents lists keep showing the title, as for every item.
+
+### 7. Text-only advertisements and the memorial — no repeated heading
+
+The visible heading that repeated the page text is removed on the website and in the PDF:
+
+- **Text-only advertisements** (`ADV-027`, `ADV-028`): the heading repeated the sentence.
+- **Memorial** (`ADV-029`): the heading "In fond memory of Late Shri Bhakta Mohon Mitra" repeated text lines 1–2.
+
+On each page the approved text appears once. The section kicker and the contents entries are unchanged. This resolves `MANUAL_VERIFICATION.md` findings 1–2.
+
+### 8. `ART-004` and `ART-005` — Bengali author line in the article body
+
+| File | Old (exact) | New (exact) | Occurrences |
+|---|---|---|---|
+| `05_WEBSITE/src/content/articles/ART-004-item.md` | `বিশ্বজিৎ সেনগুপ্ত` | `প্রয়াত বিশ্বজিৎ সেনগুপ্ত` | 1 |
+| `05_WEBSITE/src/content/articles/ART-005-…-science.md` | `বিশ্বজিৎ সেনগুপ্ত` | `প্রয়াত বিশ্বজিৎ সেনগুপ্ত` | 1 |
+
+The new `প্রয়াত` uses the Unicode NFC form of য় (U+09AF U+09BC). No other character of either article changes.
+
+### 9. `ART-009` — remove the stray page-break character
+
+`05_WEBSITE/src/content/articles/ART-009-tokenomics-how-your-ceo-learned-that-ai-isnt-actually-free.md` contains one U+000C (form feed), a page-break code carried over from DOCX extraction, just before the word "meeting". It printed as a missing-glyph box. It is removed; the wording is unchanged ("…in a meeting he scheduled…").
+
+### 10. Website navigation — anchor jumps clear the sticky header
+
+This is a presentation fix, not a text change: after a navigation or contents jump, the target's top is no longer hidden behind the sticky site header.
+

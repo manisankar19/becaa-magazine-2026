@@ -1,12 +1,13 @@
-# Sprint v4 — Walkthrough (Tasks 1–47)
+# Sprint v4 — Walkthrough (Tasks 1–47 and the front-page hero update)
 
 Scope note: Sprint v4 had 37 planned tasks across streams A–F. Task 38 (Stream G) was added during execution, and Tasks 39–47 (Stream H) after the owner's approvals of 2026-09-17. All are complete and on `main`; Task 35 was superseded by Task 45.
 
 - Streams A–D: intake and consolidation, the poem, three new advertisements, navigation (Tasks 1–20).
 - Streams E–G: committee corrections, build and release (`V4_REVIEW_01`), pre-release gate fixes (Tasks 21–38).
 - Stream H (2026-09-17): five approved corrections, the `V4_REVIEW_02` release, and deployment to Preview and then Production (Tasks 39–47).
+- Front-page hero update (2026-09-17, after Stream H; owner request, no task number): a tagline and two links replace the hero's review sentence and badges. Committed as `79ae6d0` and deployed to Preview and then Production from that commit.
 
-**Production:** `https://becaa-magazine-2026-portal.vercel.app` serves `V4_REVIEW_02` (deployment `…-l8beok45l-…`). The Sprint v3 deployment is kept for rollback. The deployment record is `sprints/v4/PREVIEW_DEPLOYMENT.md`.
+**Production:** `https://becaa-magazine-2026-portal.vercel.app` serves `V4_REVIEW_02` plus the front-page hero update (deployment `…-3rbvgbgd5-…`). The two earlier production deployments (`…-l8beok45l-…` for `V4_REVIEW_02`, `…-c846gz3qp-…` for Sprint v3) are kept for rollback. The deployment record is `sprints/v4/PREVIEW_DEPLOYMENT.md`.
 
 ## Summary
 
@@ -22,6 +23,8 @@ Verifying `V4_REVIEW_01` raised five findings; the owner approved changes for th
 - navigation jumps that clear the sticky header.
 
 These went into `V4_REVIEW_02`, which was verified locally, on a Preview deployment (including the full administrator flow) and on Production.
+
+A last, front-page-only change followed: the hero's review sentence ("A traceable review edition …") and its three badges were replaced by the tagline **Roots remembered. Stories celebrated. Bonds renewed.** and two small links, "Explore the 2026 Edition" and "Watch BECAA 2026 ↗". Everything else was left as it was: cover, magazine content, PDF, gate, admin page, database, navigation and security.
 
 ## Architecture Overview
 
@@ -728,6 +731,92 @@ The full record is `sprints/v4/PREVIEW_DEPLOYMENT.md`.
 - **Registration rate limit:** 5 per 10 minutes per IP. The suite uses all five, so the content checks ran after the window had passed.
 - **Cleanup:** one transaction per database removes `e2e-*` visitors (visits cascade), plus admin sessions and rate-limit windows started since the verification began. Pre-existing non-test rows are kept and reported.
 
+### Front-page hero update (2026-09-17, after Stream H)
+
+An owner request after the `V4_REVIEW_02` release, limited to the front page. It has no task number and no new review release folder: it was committed, tested, and deployed to Preview and then Production from one commit.
+
+| Commit | Content |
+|---|---|
+| `79ae6d0` | Hero markup and CSS, new `test:e2e:hero`, corrections-test allowance for the CSS block |
+| `62b8559` | `CHANGELOG.md` entry and a section in `sprints/v4/PREVIEW_DEPLOYMENT.md` |
+
+#### `src/index.njk` — hero (modified)
+**Purpose**: The magazine front page. The hero is the cover section at the top (`<section class="cover" id="top">`); the page itself is only served behind the registration gate.
+
+**Change**: The review sentence and the three badges (`{{ items | length }} approved web items`, `Website review`, `Print scope controlled separately`) are replaced by a tagline and a paragraph with two links. The cover artwork, eyebrow, Bengali title and edition line are untouched:
+
+```njk
+<p class="lede cover__tagline">Roots remembered. Stories celebrated. Bonds renewed.</p>
+<p class="cover__links">
+  <a href="#{{ items[0].id }}">Explore the 2026 Edition</a>
+  <a href="https://youtube.com/@BecaaMaharashtra" target="_blank" rel="noopener noreferrer">Watch BECAA 2026<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+</p>
+```
+
+**How it works:**
+- **Explore link:** `items` is the published list sorted by `order` (already set at the top of the template), so `items[0].id` is the first magazine item. Today that is `MSG-001`, the start of Messages, the same target as the navigation's Messages link. If an editor gives another item a lower `order`, the link follows at the next build.
+- **Why the Watch link is safe:**
+  - `target="_blank"` opens a new tab.
+  - `rel="noopener noreferrer"` stops YouTube's page from reaching back to this page through `window.opener` and sends no referrer.
+  - The decorative arrow is `aria-hidden`, and the site's existing `.visually-hidden` class adds "(opens in a new tab)" for screen readers, so the accessible name is "Watch BECAA 2026 (opens in a new tab)".
+- **CSP:** navigating to an external site is not a fetch, so the site's CSP (`default-src 'self'`) does not affect the link.
+
+#### `src/assets/css/site.css` — hero rules (modified)
+**Purpose**: The website stylesheet (also loaded by the print page, which does not use these classes).
+
+**Change**: The now-unused `.cover__meta` badge rules are replaced, in the same place, by:
+
+```css
+.cover__tagline { font-weight: 700; }
+.cover__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin: 1.6rem 0 0; font-size: 0.98rem; }
+.cover__links a { display: inline-block; padding: 0.3rem 0; color: #fffaf0; font-weight: 700; text-decoration: underline; text-underline-offset: 0.2em; }
+.cover__links a:hover { color: #ffd891; }
+.cover__links a:focus-visible { outline: 2px solid #ffd891; outline-offset: 3px; border-radius: 2px; }
+```
+
+The tagline keeps the existing `.lede` size and spacing, now bold. The links are small, underlined, and use the cover's existing cream and gold colours on its dark gradient. `flex-wrap` lets them sit side by side on desktop and tablet and stack on a 390 px phone. The vertical padding gives each link a touch target over 24 px tall.
+
+#### `tests/e2e/front-page-hero.test.mjs` (new) and `package.json`
+**Purpose**: Browser proof of the hero on the built site (`npm run test:e2e:hero`; requires `npm run build`).
+
+**How it works**:
+- **Static check:** `_site/index.html` no longer contains the old sentence, badge texts or `cover__meta`, and the public welcome page does not contain the hero.
+- **Browser check:** the site is served with the existing static server and opened at 390, 820 and 1440 px. At each width the test checks:
+  - the tagline text is exact and bold; the cover title and artwork are still present;
+  - there are exactly two links, found by accessible name ("Explore the 2026 Edition"; "Watch BECAA 2026 (opens in a new tab)");
+  - Explore points at `#` plus the first published item (computed from the manifest) and has no `target`;
+  - Watch has the exact YouTube URL, `target="_blank"`, `rel` containing both `noopener` and `noreferrer`, and the arrow is `aria-hidden`;
+  - no horizontal overflow; both links inside the viewport, below the tagline, not overlapping, and at least 24 px tall;
+  - keyboard focus changes each link's style (the `:focus-visible` outline);
+  - clicking Explore lands the first section at or just below the sticky header (Task 43's offset).
+- **Screenshots:** `qa-output/front-page/{mobile,tablet,desktop}.png`, git-ignored.
+- **Red first:** the test was run before the template change and failed on the old sentence.
+
+#### `tests/integration/v4-committee-corrections.test.mjs` (modified)
+The Task 27 and Task 43 assertions pin `site.css` to its content at `ae098d5` plus the Task 43 scroll-offset block. The hero change replaced `.cover__meta` in place, so the assertion now also swaps that one block back in and still requires everything else to match byte for byte. It also checks the hero block contains no `text-align` rule, so the website still has no justified text.
+
+#### Verification and deployment
+**Local:**
+- **Built output:** comparing SHA-256 of every file in `_site/` before and after, only `index.html` and `assets/css/site.css` changed, and the print HTML is identical to `V4_REVIEW_02`'s.
+- **PDF:** a locally regenerated PDF differs from the release PDF only in its embedded creation date: identical text, and pages 1, 5, 33, 70 and 71 identical pixel for pixel. The file the site actually serves is the committed `release-assets/print/` PDF, which did not change.
+- **Suites:** validate, `test:unit`, the site smoke test, `test:e2e:{hero,nav,welcome,web-ads,admin}`, v4-advertisements, v4-committee-corrections, base-nav-render, the local `e2e:app` (24 steps against `becaa_test`) and the secret scan all passed; semgrep clean.
+- **Visual check:** desktop, tablet and mobile screenshots inspected.
+
+**Preview `…-h7wk78c9q-…`:**
+- Both databases show migration 1 applied and nothing pending, so no migration is needed.
+- All unauthenticated probes pass, and five public files (`site.css`, `print.css`, `site.js`, `/welcome/`, `/admin/`) are byte-identical to the local build.
+- The hero is only visible behind the gate, so **one** registration (`e2e-hero-*`) was made. It showed:
+  - the served front page byte-identical to the build;
+  - the tagline and both links with the right attributes;
+  - the Explore jump landing at 80 px below a 68 px header;
+  - the served PDF byte-identical to `V4_REVIEW_02`.
+- That registration and the rate-limit rows the checks created were then deleted.
+
+**Production `…-3rbvgbgd5-…`** (same commit, aliased to the production domain, previous deployment kept):
+- The same probes pass, except the wrong-password login probe, skipped deliberately so the owner's live admin login counter was not touched.
+- The same five public files are byte-identical to the build.
+- No registration was created, and database counts are identical before and after verification.
+
 ## Data Flow
 
 **Consolidation**: `consolidate-incoming.mjs --plan` reads both folders → `planConsolidation()` (pure) decides safety → JSON+MD report written → human/CI checks `ok: true` → `--apply` performs 5 `git mv` + removes the empty folder → 14 downstream files (manifest, front matter, 10 scripts, 4 tests) get their path references repointed by hand in the same task.
@@ -743,9 +832,13 @@ The full record is `sprints/v4/PREVIEW_DEPLOYMENT.md`.
 - **Tracker:** `tracker:apply-v4-corrections` → snapshot → remarks and row 17's title in the tracker.
 - **Proof:** `test:v4-committee-corrections` reads content, HTML and PDF text, and `qa:pdf-compare` checks every page against `V3_REVIEW_02` with the same find/replace pairs.
 
+**Front-page hero**: the ordered published items (`publication.items | whereWeb | byOrder`) → `index.njk` takes the first item's `id` for the Explore link, and the YouTube link is a literal → Eleventy writes `_site/index.html` → Vercel serves it only behind the registration gate. After registering, a reader sees the tagline and links; Explore jumps in-page to `#MSG-001` (landing below the sticky header thanks to Task 43's `scroll-padding-top`), and Watch opens the channel in a new tab with no opener or referrer.
+
 **Release**: `npm run release:v4` → `release.mjs` asks `stepsForVersion("V4_REVIEW_01")` for the 30 steps and runs each as `node npm-cli.js run <step>` with no shell, stopping on the first failure → the validation gates, `build` and `pdf`, the site, integration, QA and browser suites, `qa:pdf-compare` and `qa:v4-pages`, the application E2E, the secret and SQL scans, then the audit gate → packaging copies `_site/`, `qa-output/` and the reports into `06_FINAL_OUTPUT/V4_REVIEW_01/` (refusing to overwrite), writes `release-manifest.json`, `BUILD_SUMMARY.md` and `REPRODUCTION.md` → the folder is committed. Deployment is a separate, approved step.
 
 ## Test Coverage
+
+**Front-page hero update (`79ae6d0`):** new `test:e2e:hero` (browser, three widths: text, link attributes and accessible names, layout, focus, the Explore jump) and a narrow allowance in `v4-committee-corrections` for the replaced CSS block. It was run with the affected suites listed in that section; it is not yet a step in the V4 release list (see Known Limitations).
 
 **Final state (2026-09-17, `V4_REVIEW_02` at `ac05427`):** 29 unit and 33 integration files, all passing inside the 30-step release. Stream H added `content-encoding-core` (unit), extended `text-correction-core` (deletions), `ad-qa-checks-core` (wrapped contents entries) and `tracker-corrections-core` (approval notes), and updated the render, browser and PDF tests for the heading-less pages (including a vertical-centring assertion), the corrections suite (ADV-028 wording, author lines, ART-009) and the navigation E2E (a 1100 px run; targets below the sticky header). Deployed sites: Preview probes plus `e2e:app` (22 steps, including the administrator flow) plus a content check; Production probes plus `e2e:app --public-only` (14 steps) plus a content check (see `PREVIEW_DEPLOYMENT.md`).
 
@@ -785,6 +878,7 @@ Earlier state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files*
   - The temporary Preview admin password was hashed straight into a sensitive variable and shredded after use; Production credentials and variables were untouched.
   - Only verification records were deleted, in one transaction per database.
   - The previous Production deployment was kept for rollback; the Vercel project and Neon databases were neither deleted nor reconfigured.
+- **External link (front-page hero)**: the YouTube link opens in a new tab with `rel="noopener noreferrer"`, so the opened page gets no `window.opener` handle and no referrer, and the new-tab behaviour is announced to screen-reader users. No script or `| safe` output was added, so the CSP and escaping are unchanged. The verification created a single Preview registration, which was deleted, and none on Production. The Production wrong-password probe was skipped so a live administrator's login counter was not affected.
 - **Content gate**: `validate` rejects control characters in publication content, so an extraction artefact like ART-009's form feed cannot ship again.
 - **Prompt-injection caught and rejected**: two independent subagents, working in isolated worktrees with no shared context, each appended an unauthorized `Claude-Session:` trailer to their own commits — identical text, matching a suspected injection attempt seen earlier in the same coordinating session. Both were stripped (commits rebuilt from a clean base with verified byte-identical trees) before merging; nothing reached `main` with the unauthorized line.
 
@@ -801,6 +895,10 @@ Earlier state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files*
 - **Release runs and memory**: on this host, the harness stopped two background `release:v4` runs for low memory; run long pipelines in the foreground.
 - **Duplicate test runs in the release**: `test:v4-advertisements` and `test:v4-committee-corrections` run inside `test:integration` and again as their own steps (kept explicit, as Task 30's acceptance lists them); this costs a few seconds.
 - **Evidence screenshots from Task 34's browser pass are not committed** (`05_WEBSITE/qa-output/v4-manual/`, git-ignored); the PDF renders, navigation screenshots and comparison report are in the committed release folder.
+- **Front-page hero, gated front page not opened on Production.** No registration was made there. Evidence that Production serves the new hero is indirect but strong: the deployment is the same commit as Preview, where the gated page was checked byte for byte, and Production's public `site.css` (which contains the new hero rules) is byte-identical to that build.
+- **`test:e2e:hero` is not in the release step list.** `release-core.mjs` was left unchanged to keep the change minimal, so `npm run release:v4:02` would not run it; add it to `V4_STEPS` (and the release-core unit test) before the next release.
+- **No review release folder for the hero update.** `06_FINAL_OUTPUT/V4_REVIEW_02/website/index.html` still has the old hero; Production is `V4_REVIEW_02` plus commit `79ae6d0`. The next review release would capture it.
+- **Other review-era wording on the front page is unchanged**, as the request was hero-text only: the eyebrow "Version 1 local review", the "Prototype Contents" heading and the footer "Local review only. Not the final 2026 magazine." remain.
 - **Resolved during this work**:
   - Repeated headings on text-only and memorial pages, the ART-004/005 Bengali author line, the ART-009 missing-glyph box and the sticky-header anchor offset (Stream H, `V4_REVIEW_02`).
   - Task 35: superseded by Tasks 45–46; `V4_REVIEW_02` is deployed.
@@ -814,11 +912,16 @@ Earlier state (2026-09-17, `1f73a3a`): **28 unit files and 33 integration files*
 
 ## What's Next
 
-*(Updated 2026-09-17: the decisions and deployments below were completed in Stream H. The remaining open items are listed first.)*
+*(Updated 2026-09-17: the decisions and deployments below were completed in Stream H, and the front-page hero update is live. The remaining open items are listed first.)*
+
+- **Front-page follow-ups (owner decisions):**
+  - whether to replace the remaining review-era wording (eyebrow "Version 1 local review", "Prototype Contents", the "Local review only" footer);
+  - adding `test:e2e:hero` to the release step list;
+  - building a `V4_REVIEW_03` folder so the release archive matches Production.
 
 - **Owner action:** verify the Production administrator dashboard with the real password (log in at `/admin/`, or run `E2E_ADMIN_USERNAME=becaa-admin E2E_ADMIN_PASSWORD='…' npm run e2e:app -- --base-url https://becaa-magazine-2026-portal.vercel.app` from a private shell; it creates and deletes `e2e-*` test visitors).
 - **Preview database:** 3 older registrations that are not test-pattern rows are kept; delete them only if they are known test data.
-- **Rollback:** Instant Rollback to `…-c846gz3qp-…` if needed; no database change to revert.
+- **Rollback:** Instant Rollback to `…-l8beok45l-…` (`V4_REVIEW_02` without the hero change) or `…-c846gz3qp-…` (Sprint v3) if needed; no database change to revert.
 
 Earlier plan, kept for the record:
 

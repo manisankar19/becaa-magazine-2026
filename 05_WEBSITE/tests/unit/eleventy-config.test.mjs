@@ -6,7 +6,7 @@ import { readManifest } from "../../scripts/lib.mjs";
 
 const filters = {};
 eleventyConfig({ addDataExtension() {}, addPassthroughCopy() {}, setLibrary() {}, addFilter(name, fn) { filters[name] = fn; } });
-const { byline } = filters;
+const { byline, markdown, adPageStyle, adInkClass } = filters;
 assert.equal(typeof byline, "function", "byline filter registered");
 
 // --- Without display_name: unchanged Sprint v1–v3 behaviour ------------------
@@ -34,5 +34,20 @@ assert.equal(byline({ contributor: "Biswajit Sengupta", display_name: null }), "
   const art011 = readManifest().items.find((i) => i.id === "ART-011");
   assert.equal(byline(art011), "Palash Biswas, Mechanical, 2006 Batch", "ART-011 branch corrected Civil → Mechanical");
 }
+
+// --- Sprint v5 Task 25 (PRD §11): no inline styles from Markdown tables (the CSP refuses them) ----
+{
+  const html = markdown("| Item | Qty | Mid |\n|:-----|----:|:---:|\n| a | 1 | x |\n");
+  assert.ok(!/\sstyle=/.test(html), `table alignment must not be an inline style: ${html}`);
+  assert.match(html, /<th class="align-left">Item<\/th>/);
+  assert.match(html, /<th class="align-right">Qty<\/th>/);
+  assert.match(html, /<td class="align-center">x<\/td>/);
+  assert.match(markdown("| A | B |\n|---|---|\n| 1 | 2 |\n"), /<th>A<\/th>/, "unaligned cells stay bare");
+}
+// The print template still uses the inline tint filters (the PDF is compiled without the CSP);
+// their output is unchanged.
+assert.equal(adPageStyle({ page_background: "#b6e2f2", page_background_mode: "auto", page_ink: "auto" }).startsWith("--ad-bg: #b6e2f2; --ad-ink: #"), true);
+assert.equal(adPageStyle({ page_background: "#b6e2f2", page_background_mode: "none" }), "");
+assert.match(adInkClass({ page_background: "#b6e2f2", page_background_mode: "auto", page_ink: "auto" }), /^ad-ink--(dark|light)$/);
 
 console.log("eleventy-config (byline): all assertions passed");

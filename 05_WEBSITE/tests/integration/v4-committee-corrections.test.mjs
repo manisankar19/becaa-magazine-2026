@@ -270,7 +270,16 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   assert.ok(heroStart > 0 && heroEnd > heroStart && metaStart > 0 && metaEnd > metaStart, "hero and old badge blocks located");
   assert.ok(!/text-align/.test(siteCss.slice(heroStart, heroEnd)), "the hero block does not touch text alignment");
   assert.equal(siteCss.slice(0, heroStart) + baselineCss.slice(metaStart, metaEnd) + siteCss.slice(heroEnd, task43), baselineCss, "website stylesheet otherwise unchanged since the corrections began");
-  assert.ok(!/text-align/.test(siteCss.slice(task43)), "the Task 43 block does not touch text alignment");
+  // Sprint v5 Task 25 appended the table-alignment classes after the Task 43 block: they may set
+  // text-align (left/center/right on .prose th/td.align-*), but never justify.
+  const task25 = siteCss.indexOf("\n/* Sprint v5 Task 25", task43);
+  const task43End = task25 > 0 ? task25 : siteCss.length;
+  assert.ok(!/text-align/.test(siteCss.slice(task43, task43End)), "the Task 43 block does not touch text alignment");
+  if (task25 > 0) {
+    const block = siteCss.slice(task25);
+    assert.ok(!/justify/.test(block), "the Task 25 alignment block never justifies");
+    for (const rule of block.split("\n").filter((l) => l.includes("{"))) assert.match(rule, /^\.prose th\.align-(left|center|right), \.prose td\.align-\1 \{ text-align: \1; \}$/, `Task 25 rule is a table-alignment class only: ${rule}`);
+  }
 
   const browser = await chromium.launch();
   try {

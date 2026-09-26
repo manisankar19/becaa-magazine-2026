@@ -530,3 +530,9 @@ figcaption {
 @media (min-width: 1300px) {
   html { scroll-padding-top: 5rem; }
 }
+
+/* Sprint v5 Task 25 (PRD §11): Markdown table-column alignment arrives as a class (the CSP
+   refuses markdown-it's inline style="text-align:…"). */
+.prose th.align-left, .prose td.align-left { text-align: left; }
+.prose th.align-center, .prose td.align-center { text-align: center; }
+.prose th.align-right, .prose td.align-right { text-align: right; }

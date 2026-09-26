@@ -45,6 +45,10 @@
 .print-page thead { display: table-header-group; }
 .print-page tr { break-inside: avoid; }
 .print-page th, .print-page td { border: 0.25mm solid #9b9489; padding: 1.5mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+/* Sprint v5 Task 25: Markdown column alignment as classes (was an inline style; same result). */
+.print-page th.align-left, .print-page td.align-left { text-align: left; }
+.print-page th.align-center, .print-page td.align-center { text-align: center; }
+.print-page th.align-right, .print-page td.align-right { text-align: right; }
 .print-page th:first-child, .print-page td:first-child { width: 8%; }
 .print-page th:nth-child(2), .print-page td:nth-child(2) { width: 48%; }
 .print-page th:nth-child(3), .print-page td:nth-child(3) { width: 44%; }

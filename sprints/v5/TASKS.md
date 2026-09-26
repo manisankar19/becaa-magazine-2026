@@ -163,9 +163,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `sprints/v5/MANUAL_VERIFICATION.md`
   - Completed: 2026-09-26 — `MANUAL_VERIFICATION.md` addendum. Throwaway driver through the local dev-app gate at 1440/390 px, each as a normal browser (CSP enforced) and with all 13,078 EasyList generic hide rules injected. 4/4 runs pass: 30/30 images visible in every run; ADV-001 tint `rgb(182, 226, 242)` from `ad-tints.css`; ART-006 column right-aligned; 0 CSP errors; no `.ad-frame`/`.ad-link`. Screenshots inspected; 4 test registrations deleted; driver not committed. No findings.
 
-- [ ] Task 29: Preview deployment of `V5_REVIEW_02` — **requires the owner's explicit go-ahead** (P1)
+- [x] Task 29: Preview deployment of `V5_REVIEW_02` — **requires the owner's explicit go-ahead** (P1)
   - Acceptance: as Task 20, plus on Preview: images visible, tints computed from the stylesheet, no CSP violations, and images still visible with the blocker rules injected; test records removed; recorded in `PREVIEW_DEPLOYMENT.md`.
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
+  - Completed: 2026-09-26 — Preview `…-k5q4b6721-…` (`dpl_E5F59cTnDPMG7mSk6nPKwgWJ1cxx`) from `76b39df`; migrations Applied 1 / Pending none. Probes 12/12. 6 public files byte-identical (incl. `ad-tints.css`). Content check under the deployed CSP: page and PDF byte-identical to `V5_REVIEW_02`, 30/30 images visible, 25/25 tints, ART-006 alignment, 0 CSP errors, and 30/30 images with all EasyList generic rules injected. `e2e:app --public-only` 14 steps. 4 test visitors and 3 rate-limit windows removed; DB back to 3/3/0/0. Recorded in `PREVIEW_DEPLOYMENT.md`.
 
 - [ ] Task 30: Production deployment of `V5_REVIEW_02` — **requires a further explicit go-ahead** (P1)
   - Acceptance: as Task 21 (checks that leave nothing behind unless Production reads are permitted), plus `ad-tints.css` and `site.css` served byte-identical to the build; previous deployment kept for rollback; recorded; walkthrough updated.

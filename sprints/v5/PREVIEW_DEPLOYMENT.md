@@ -61,6 +61,38 @@ The owner chose the verification scope on 2026-09-26. The first Production step 
 
 Vercel → project `becaa-magazine-2026-portal` → Deployments → `…-3rbvgbgd5-…` → Instant Rollback (or `vercel rollback`). No database change needs reverting, because no migration was applied.
 
+## Addendum — `V5_REVIEW_02` (Tasks 29–30)
+
+**Why:** `V5_REVIEW_01` in Production hid every gallery and advertisement image from visitors using an ad blocker, and never showed the card tints (PRD §11). `V5_REVIEW_02` fixes both. Approval: the owner's `/dev task 29 to 30`, 2026-09-26.
+
+**Source:** release `06_FINAL_OUTPUT/V5_REVIEW_02/`, built at `fa83b7d`. Deployed from the clean tree at `76b39df`, whose `05_WEBSITE/` equals the build commit plus the deployable PDF (byte-identical to the release PDF, `d274c154…`).
+
+### Preview (Task 29)
+
+| Field | Value |
+|---|---|
+| Deployment | `https://becaa-magazine-2026-portal-k5q4b6721-mani125slm.vercel.app` (`dpl_E5F59cTnDPMG7mSk6nPKwgWJ1cxx`), target preview, 2026-09-26 15:26 UTC. Vercel's build wrote 5 files (the new `ad-tints.css` included) |
+| Migrations | Applied 1, Pending none — nothing run |
+| Database before (15:26 UTC) | visitors 3, visits 3, admin_sessions 0, rate_limits 0, test-pattern visitors 0 |
+| Unauthenticated probes | 12/12, as in the table above (wrong-password login included) |
+| Public files vs the `V5_REVIEW_02` build | `site.css`, **`ad-tints.css`**, `print.css`, `site.js`, `/welcome/`, `/admin/`: byte-identical |
+| Content check (one registration, Chromium, deployed CSP enforced) | See below |
+| Browser suite | `e2e:app --public-only`: **PASS, 14 steps**, run after the registration window had cleared (15:39 UTC) |
+| Administrator flow | Not run on Preview (as in Task 20: it would need a Preview credential change, and the admin code is unchanged) |
+| Test records removed | `e2e-*` visitors 4, rate-limit windows 3, admin sessions 0; no genuine registration arrived meanwhile |
+| Database after | visitors 3, visits 3, admin_sessions 0, rate_limits 0 — identical to before |
+
+**Content check**, one registered guest session at 1440 px under the deployed CSP. Every item passed:
+- the served front page is byte-identical to `V5_REVIEW_02`'s `index.html`, with 47 items;
+- **all 30 publication images loaded and visible**;
+- **all 25 advertisement cards show their manifest tint**, now from `ad-tints.css`;
+- the ART-006 numeric column is right-aligned;
+- **0 CSP errors**; no `.ad-frame`/`.ad-link` element;
+- the PDF is byte-identical to `V5_REVIEW_02` (`d274c154…`);
+- **the same session at 390 px with all 13,078 EasyList generic hide rules injected: 30/30 images still visible.**
+
+The rendered ADV-001 card (tint and Skylark artwork) was inspected by eye.
+
 ## Unauthenticated probe results
 
 | Check | Preview | Production |

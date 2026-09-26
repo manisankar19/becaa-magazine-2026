@@ -115,9 +115,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `sprints/v5/MANUAL_VERIFICATION.md`
   - Completed: 2026-09-26 — `sprints/v5/MANUAL_VERIFICATION.md`. `_site/` confirmed byte-identical to the release. A throwaway Playwright driver (not committed, as in v4) went through the local dev-app gate against `becaa_test` at 1440 and 390 px: 16/16 checks pass (welcome before registering; 47 items after register + reload; MSG-001 title, byline, heading line, 4 visible bullets, 3-line signature `CE ’87`, no old text; ART-011 byline; hero; no overflow; PDF byte-identical to `V5_REVIEW_01`; PDF 403 and admin login form without a session). Element screenshots inspected by eye. The 2 test registrations were deleted. No defects; two known points recorded (wording as supplied; heading line under the title).
 
-- [ ] Task 20: Preview deployment — **requires separate explicit approval** [Decision M] (P1)
+- [x] Task 20: Preview deployment — **requires separate explicit approval** [Decision M] (P1)
   - Acceptance: `vercel deploy` (no `--prod`) at the release commit; probes, `e2e:app`, registered content check (new `MSG-001`, `ART-011` byline, PDF byte-identical to release); test rows cleaned up; recorded in `sprints/v5/PREVIEW_DEPLOYMENT.md`; Production untouched.
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
+  - Completed: 2026-09-26 — Preview `…-1wxfioxpc-…` (`dpl_8SUCuYZZUSfU7XA6pHrxveh2QnKP`) from `c7c9643`; migrations Applied 1 / Pending none. 12/12 unauthenticated probes pass. 5 public files byte-identical to the build. Content check with one registration: served index.html and PDF byte-identical to `V5_REVIEW_01`, new MSG-001, ART-011 byline, hero. `e2e:app --public-only` PASS 14 steps. Admin flow not run on Preview: it would need a Preview credential change, and the admin code is unchanged since v4 and passed locally. Cleanup: 4 `e2e-*` visitors and 3 rate-limit windows removed; the database is back to its starting counts (3/3/0/0). Production untouched. Recorded in `sprints/v5/PREVIEW_DEPLOYMENT.md`.
 
 - [ ] Task 21: Production deployment — **requires a further explicit approval** [Decision M] (P1)
   - Acceptance: `vercel deploy --prod` per `DEPLOYMENT.md`; probes and `e2e:app --public-only` pass; previous deployment kept for rollback; recorded in `PREVIEW_DEPLOYMENT.md`.

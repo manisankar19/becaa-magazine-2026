@@ -82,19 +82,20 @@ assert.equal(art.replace, art.find.replace("    branch: Civil\n", "    branch: M
   assert.ok(after.includes("    contributor: Palash Biswas\n    designation: ''\n    passing_year: '2006'\n    branch: Mechanical\n"));
 }
 
-// --- the real manifest (read-only): the ART-011 find is unique and belongs to ART-011 ----
+// --- the real manifest (read-only): the ART-011 edit is anchored on ART-011 alone ----------
+// Before Task 10 the find is present once; after it, the replacement is. Either way exactly one
+// of the two occurs, only inside the ART-011 block, and the state is never ambiguous.
 {
   const manifest = readFileSync(join(websiteDir, art.file), "utf8");
-  assert.equal(countOccurrences(manifest, art.find, { wholeWord: art.wholeWord ?? true }), 1, "ART-011 find occurs exactly once in publication.yaml");
-  assert.equal(countOccurrences(manifest, art.find, { wholeWord: false }), 1, "also exactly once as a plain substring");
-  // It lies inside the ART-011 item block and no other.
+  const state = correctionState(manifest, opts(art));
+  assert.ok(["pending", "applied"].includes(state));
+  const present = state === "pending" ? art.find : art.replace;
+  assert.equal(countOccurrences(manifest, present, { wholeWord: false }), 1, `ART-011 ${state} form occurs exactly once in publication.yaml`);
   const blocks = manifest.split(/\n(?=  - id: )/);
-  const hits = blocks.filter((b) => b.includes(art.find.trimEnd()));
+  const hits = blocks.filter((b) => b.includes(present.trimEnd()));
   assert.equal(hits.length, 1);
   assert.match(hits[0], /^ {2}- id: ART-011\n/, "the matching block is ART-011");
   assert.ok(countOccurrences(manifest, "branch: Civil") > 1, "a bare `branch: Civil` would not be unique — hence the anchored find");
-  // State against the real file: pending before Task 10, applied after; never ambiguous.
-  assert.ok(["pending", "applied"].includes(correctionState(manifest, opts(art))));
 }
 
 // --- rendered-text view (V5_CORRECTIONS) matches the record -----------------------

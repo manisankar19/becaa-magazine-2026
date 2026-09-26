@@ -59,9 +59,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 
 ## Stream C — `ART-011` (P0)
 
-- [ ] Task 10: Apply the `ART-011` branch correction [Decision J] (P0)
+- [x] Task 10: Apply the `ART-011` branch correction [Decision J] (P0)
   - Acceptance: `npm run corrections:apply-v5 -- --only ART-011` changes exactly `branch: Civil` → `branch: Mechanical` under `ART-011`; `ART-011-item.md` untouched; `eleventy-config` unit test (or a render test) shows the byline `Palash Biswas, Mechanical, 2006 Batch`; `validate` passes.
   - Files: `05_WEBSITE/src/_data/publication.yaml`, `05_WEBSITE/tests/unit/eleventy-config.test.mjs`
+  - Completed: 2026-09-26 — `npm run corrections:apply-v5` applied ART-011 (`branch: Civil` → `Mechanical`, one anchored count-guarded edit); re-run `already applied`; `ART-011-item.md` untouched. `eleventy-config` unit test gains the real-manifest byline check (red: `Palash Biswas, Civil, 2006 Batch`, then green). The Task 5 unit test assumed the pending state only and failed after the edit; it now accepts pending or applied (exactly one form, only in ART-011's block).
 
 ## Stream D — Tracker (P0)
 

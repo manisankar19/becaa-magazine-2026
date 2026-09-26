@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { chromium } from "playwright";
+import { startStaticServer } from "../tests/e2e/static-server.mjs";
 import { readManifest, siteRoot, ensureDir } from "./lib.mjs";
 import { resolveInk } from "./ad-presentation-core.mjs";
 import { buildReviewMarkdown, contactSheetLayout, swatchSvg } from "./ad-review-core.mjs";
@@ -21,9 +22,13 @@ const ads = readManifest().items.filter((i) => i.type === "advertisement" && (i.
 const pdfReport = JSON.parse(fs.readFileSync(path.join(qaRoot, "pdf-advertisement-qa.json"), "utf8")).advertisements;
 
 // Desktop web-card renders (header + frame as one tinted card).
+// Sprint v5 Task 24 (PRD §11): served over http with the production headers from vercel.json
+// (CSP included), not file://, so results match what visitors' browsers enforce.
+const siteServer = await startStaticServer(path.join(siteRoot, "_site"));
+siteServer.server.unref();
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
-await page.goto(`file://${path.join(siteRoot, "_site", "index.html").replaceAll("\\", "/")}`, { waitUntil: "networkidle" });
+await page.goto(`${siteServer.baseUrl}/`, { waitUntil: "networkidle" });
 const entries = [];
 for (const ad of ads) {
   const card = page.locator(`[data-testid="ad-card-${ad.id}"]`);

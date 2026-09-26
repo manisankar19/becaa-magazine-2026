@@ -32,7 +32,9 @@ try {
     const tag = (m) => `${viewport.name} (${viewport.width}px): ${m}`;
     const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
     await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
-    await page.addStyleTag({ content: "html { scroll-behavior: auto !important; }" });
+    // Instant jumps for stable measurements. Set through the CSSOM: the production CSP (served
+    // since Sprint v5 Task 24) refuses an injected <style> element, but not script-set styles.
+    await page.evaluate(() => document.documentElement.style.setProperty("scroll-behavior", "auto", "important"));
 
     const hero = page.locator("#top");
     const tagline = hero.locator(".cover__tagline");

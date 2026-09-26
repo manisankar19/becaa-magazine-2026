@@ -6,6 +6,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import { chromium } from "playwright";
+import { startStaticServer } from "./static-server.mjs";
 import { readManifest, siteRoot } from "../../scripts/lib.mjs";
 import { resolveInk } from "../../scripts/ad-presentation-core.mjs";
 
@@ -15,10 +16,14 @@ const adsWithArtwork = ads.filter((ad) => ad.web_asset); // artwork + memorial (
 assert.equal(ads.length, 25, "25 published advertisements (22 artwork + 2 text-only + 1 memorial)");
 assert.equal(adsWithArtwork.length, 23, "23 advertisements with artwork to load (22 artwork + 1 memorial)");
 
+// Sprint v5 Task 24 (PRD §11): served over http with the production headers from vercel.json
+// (CSP included), not file://, so results match what visitors' browsers enforce.
+const siteServer = await startStaticServer(path.join(siteRoot, "_site"));
+siteServer.server.unref();
 const browser = await chromium.launch();
 for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: "mobile", width: 390, height: 1200 }]) {
   const page = await browser.newPage({ viewport });
-  await page.goto(`file://${path.join(siteRoot, "_site", "index.html").replaceAll("\\", "/")}`, { waitUntil: "networkidle" });
+  await page.goto(`${siteServer.baseUrl}/`, { waitUntil: "networkidle" });
   for (const ad of ads) {
     const card = page.locator(`[data-testid="ad-card-${ad.id}"]`);
     assert.equal(await card.count(), 1, `${viewport.name} ${ad.id}: advertisement article has data-testid`);

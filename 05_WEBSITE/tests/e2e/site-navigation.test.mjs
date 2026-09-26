@@ -40,7 +40,9 @@ try {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
     // Smooth scrolling (site.css) would make the scroll-into-view check timing-dependent.
-    await page.addStyleTag({ content: "html { scroll-behavior: auto !important; }" });
+    // Instant jumps for stable measurements. Set through the CSSOM: the production CSP (served
+    // since Sprint v5 Task 24) refuses an injected <style> element, but not script-set styles.
+    await page.evaluate(() => document.documentElement.style.setProperty("scroll-behavior", "auto", "important"));
     const tag = (msg) => `${viewport.name} (${viewport.width}px): ${msg}`;
 
     const nav = page.getByTestId("primary-nav");

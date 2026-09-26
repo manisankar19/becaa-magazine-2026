@@ -1,12 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
+import { startStaticServer } from "../tests/e2e/static-server.mjs";
 import { ensureDir, siteRoot } from "./lib.mjs";
 
 const outDir = path.join(siteRoot, "qa-output");
 fs.rmSync(outDir, { recursive: true, force: true });
 ensureDir(outDir);
 
+// Sprint v5 Task 24 (PRD §11): served over http with the production headers from vercel.json
+// (CSP included), not file://, so results match what visitors' browsers enforce.
+const siteServer = await startStaticServer(path.join(siteRoot, "_site"));
+siteServer.server.unref();
 const browser = await chromium.launch();
 const adOutDir = path.join(outDir, "advertisements");
 ensureDir(adOutDir);
@@ -15,7 +20,7 @@ for (const viewport of [
   { name: "mobile", width: 390, height: 1200 }
 ]) {
   const page = await browser.newPage({ viewport });
-  await page.goto(`file://${path.join(siteRoot, "_site", "index.html").replaceAll("\\", "/")}`, { waitUntil: "networkidle" });
+  await page.goto(`${siteServer.baseUrl}/`, { waitUntil: "networkidle" });
   await page.evaluate(async () => {
     await Promise.all([...document.images].map((img) => {
       if (img.complete && img.naturalWidth > 0) return Promise.resolve();

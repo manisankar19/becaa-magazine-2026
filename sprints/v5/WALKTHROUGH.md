@@ -1,13 +1,14 @@
-# Sprint v5 — Walkthrough (Tasks 1–21)
+# Sprint v5 — Walkthrough (Tasks 1–30)
 
-Scope note: Sprint v5 had 21 planned tasks, and all are complete. This walkthrough covers:
+Scope note: Sprint v5 had 21 planned tasks plus a 9-task addendum (PRD §11), and all 30 are complete. This walkthrough covers:
 - **Tasks 1–14:** intake, the `MSG-001` replacement, the `ART-011` branch correction, the tracker, and verification (`a823182..8b8164b`).
 - **Tasks 15–18:** the V5 release list, the PDF comparison against `V4_REVIEW_02`, CHANGELOG, and the `V5_REVIEW_01` review build (`a70d2da..21c1201`, plus one follow-up fix, `af3386b`).
 - **Tasks 19–21:** manual verification, then Preview and Production deployment (`c7c9643..46cd606`, documentation only).
+- **Tasks 22–30 (addendum):** after `V5_REVIEW_01` went live, the owner reported that no gallery or advertisement image appeared on the website. The fix covers ad-blocker-proof class names, card tints and table alignment without inline styles, guards against both defect classes, `V5_REVIEW_02`, and Preview and Production (`a8bb51a..48b9530`, plus this update). Leaving aside the 294-file release folder, the addendum changed 32 files (+13,707 / −62 lines), of which 13,083 lines are the committed EasyList selector snapshot.
 
 Everything is on `main`. Leaving aside the 286-file release folder, the sprint changed 51 files (+2,378 / −92 lines).
 
-**Production:** `https://becaa-magazine-2026-portal.vercel.app` serves `V5_REVIEW_01` (deployment `…-efkqodur5-…`, 2026-09-26 14:21 UTC). The previous Production deployment, `…-3rbvgbgd5-…` (`V4_REVIEW_02` + front-page hero), is kept for Instant Rollback. The deployment record is `sprints/v5/PREVIEW_DEPLOYMENT.md`.
+**Production:** `https://becaa-magazine-2026-portal.vercel.app` serves `V5_REVIEW_02` (deployment `…-acdyrs0h7-…`, 2026-09-26 15:41 UTC). The earlier Production deployments are kept for Instant Rollback: `…-efkqodur5-…` (`V5_REVIEW_01`) and `…-3rbvgbgd5-…` (`V4_REVIEW_02` + front-page hero). The deployment record is `sprints/v5/PREVIEW_DEPLOYMENT.md`.
 
 ## Summary
 
@@ -28,6 +29,19 @@ Tasks 19–21 verified the release and shipped it:
 - **Task 19:** a browser pass through the local registration gate at 1440 and 390 px (16/16 checks).
 - **Task 20:** a Preview deployment, checked end to end. Its security probes pass, its served page and PDF are byte-identical to the release, and the public browser suite passes. Its database is left exactly as it was found.
 - **Task 21:** Production. The session's permission policy blocked reading Production's environment and database, so the owner chose checks that leave nothing behind: probes and public-file identity only, no registration.
+
+**The addendum (Tasks 22–30).** The owner's screenshot of Production showed each gallery and advertisement card as a title followed directly by its status pills, with no image. The server was fine: the Production request log showed every image served with 200. Two website defects were found:
+- **Images hidden by ad blockers.** Every image sat in `<figure class="ad-frame">` inside `<a class="ad-link">`. EasyList, the base list of uBlock Origin, AdBlock Plus, Brave and others, hides both names on every site, so visitors with a blocker saw no images. This had been true since the first commit, which is why V4 "looked fine" to a browser without a blocker.
+- **Card tints refused by the security policy.** The tints were inline `style` attributes, which the site's CSP (`default-src 'self'`) refuses, so the live site never showed them. The same applied to the right-aligned columns of the ART-006 table. Both date from Sprint v3. The tests never caught it because they opened the pages as local files, with no CSP.
+
+**What changed:**
+- the two names are now `artwork-frame` / `artwork-link`;
+- tints come from a generated stylesheet, `assets/css/ad-tints.css`;
+- table alignment is set by classes;
+- the page tests now run under the production headers;
+- three new release gates — `qa:blocklist`, `test:e2e:csp` and `test:e2e:blocker` — make both defect classes fail the release.
+
+`V5_REVIEW_02` passed all 35 steps. Its PDF is pixel-identical to `V5_REVIEW_01`. It was verified locally, deployed to Preview (30/30 images, 25/25 tints, 0 CSP errors, images intact under all EasyList generic rules), and then to Production with the same no-trace checks.
 
 ## Architecture Overview
 
@@ -582,6 +596,120 @@ The first run failed on the driver itself, not the site: it expected a redirect 
   The content itself was proven on Preview from the identical tree, and Production's public files match that build.
 - **Cleanup:** the scratch folder with the pulled Preview and development environment files was shredded and removed.
 
+### Stream H — Addendum: ad-blocker-proof images, tints without inline styles (Tasks 22–30)
+
+| Commit | Task | Content |
+|---|---|---|
+| `a8bb51a` | — | PRD §11 and Tasks 22–30 (owner-approved) |
+| `ec5a3c1` | 22 | `blocklist-guard-core`, EasyList snapshot, `qa:blocklist` |
+| `f516bb9` | 23 | `ad-frame`/`ad-link` → `artwork-frame`/`artwork-link` |
+| `84f9cf8` | 24 | Tests served with the production headers; `test:e2e:csp` |
+| `20f5bbf` | 25 | `ad-tints.css`; table alignment classes |
+| `cbcaa0b` | 26 | `test:e2e:blocker`; full gate |
+| `fa83b7d`, `1d10015` | 27 | V5 release list + `release:v5:02` + CHANGELOG; `V5_REVIEW_02` |
+| `76b39df` | 28 | Manual verification addendum |
+| `fe49e0e`, `48b9530` | 29, 30 | Preview and Production records |
+
+#### How the cause was found
+Four observations narrowed it down:
+1. **The markup was intact.** The card HTML was identical in V4 and V5, and the template always renders the frame for artwork.
+2. **The server worked.** On Preview, a registered Chromium session loaded all 30 images. Production's request log (`vercel logs`, paths and status codes only) showed a newly registered visitor receiving all 30 images with 200, and another browser revalidating 17 cached ones (304), with no refusals.
+3. **The browser hid the elements.** When images are forced to fail (403), the frame and alt text still show. The owner's view had no frame at all, so the elements themselves were hidden.
+4. **The names matched EasyList.** It has the site-wide rules `##.ad-frame` (line 6348) and `##.ad-link` (line 6487). Injecting exactly those two rules on Preview reproduced the owner's screenshot.
+
+Along the way the console showed the CSP refusing the cards' inline styles; the computed header background was transparent instead of the manifest tint.
+
+#### `05_WEBSITE/scripts/blocklist-guard-core.mjs`, `qa-blocklist.mjs`, `refresh-blocklist-snapshot.mjs`, `scripts/data/easylist-generic-hide-selectors.txt` (new, Task 22)
+**Purpose**: Keep the site's own class and id names clear of the rules ad blockers apply on every site.
+
+**How it works**: `extractGenericHideSelectors(text)` keeps only site-wide single-name rules and ignores domain rules, exceptions, element-qualified, compound and attribute selectors. `findBlockedTokens(html, selectors)` compares every class and id in the HTML by exact name, so `ad-frame` never matches `ad-frame-container`.
+
+```js
+const GENERIC_CLASS = /^##\.(-?[_a-zA-Z][\w-]*)$/;
+const GENERIC_ID = /^###(-?[_a-zA-Z][\w-]*)$/;
+```
+
+- **The snapshot:** 13,078 selector names (8,841 classes, 4,237 ids) from EasyList version 202609261449, with a header giving the source, date and licence (GPLv3 / CC BY-SA 3.0). It is regenerated by `refresh-blocklist-snapshot.mjs`, which refuses to write a suspiciously small list.
+- **`npm run qa:blocklist`:** checks the magazine, print, welcome and admin pages. It was red on the pre-fix build (`.ad-frame`, `.ad-link`) and is green now.
+
+#### Class rename (Task 23)
+`ad-frame` → `artwork-frame`, `ad-frame--memorial` → `artwork-frame--memorial` and `ad-link` → `artwork-link`, in `index.njk`, `print.njk`, `site.css`, `print.css`, `visual-qa.mjs` and `web-ad-cards`. Checks:
+- **No visual change:** 6 web cards and 4 PDF pages rendered before and after the rename are pixel-identical.
+- **Test:** `web-ad-cards` now also asserts that no `.ad-frame`/`.ad-link` element exists and that every publication image sits in an `.artwork-frame`.
+- **Old pin:** `v4-committee-corrections` pins `site.css` byte for byte against an old commit. It now maps the new names back, so exactly this rename is the only difference tolerated.
+
+Other `ad-*` names (`ad-text`, `ad-memorial`, `ad-ink--*`) match no generic rule and are watched by the guard.
+
+#### `tests/e2e/static-server.mjs` and `tests/e2e/csp.test.mjs` (Task 24)
+**Purpose**: Make the page tests see what production browsers enforce.
+
+**How it works**: The test server reads `vercel.json` and applies its header rules by path prefix (`/(.*)`, `/admin/(.*)`); an unsupported source form throws. The first version used a dynamic `RegExp` and `Object.assign`, which semgrep flagged, so it is plain prefix matching:
+
+```js
+export function productionHeaders(urlPath) {
+  const out = {};
+  for (const rule of HEADER_RULES) {
+    if (!urlPath.startsWith(rule.prefix)) continue;
+    for (const { key, value } of rule.headers) out[key.toLowerCase()] = value;
+  }
+  return out;
+}
+```
+
+`test:e2e:csp` opens `/`, `/welcome/` and `/admin/`, and records every `securitypolicyviolation` event and CSP console error. It was red first (no CSP header), then red for the real reason: 46 refused inline styles on `/` (25 advertisement tints and 21 ART-006 table cells).
+
+`web-ad-cards`, `ad-backgrounds-qa` and `visual-qa` moved from `file://` to this server. `web-ad-cards` then failed exactly as production behaves ("frame background is the manifest colour"). It and `test:e2e:csp` were deliberately red until Task 25.
+
+The hero and navigation tests had injected a `<style>` tag to turn off smooth scrolling. The policy refuses that too, so they now set `scroll-behavior` through the CSSOM (`element.style.setProperty`), which the CSP allows.
+
+#### `05_WEBSITE/scripts/ad-tints-core.mjs`, `src/ad-tints.11ty.js` (new), `eleventy.config.mjs`, `index.njk`, `base.njk`, `site.css`, `print.css` (Task 25)
+**Purpose**: Show the tints and the table alignment without loosening the CSP. There is no `'unsafe-inline'`.
+
+**How it works**:
+- **Tints.** `adTint(item)` keeps the tint resolution the old filters used, but only hex colours can reach CSS. `adTintsStylesheet(items)` writes one rule per web-published advertisement, and an id that isn't `AAA-000` throws, so a hostile manifest value cannot inject CSS.
+- **The stylesheet.** `src/ad-tints.11ty.js` renders it to `assets/css/ad-tints.css`, which `base.njk` links. `index.njk` no longer has any `style=` attribute.
+- **Print.** `print.njk` keeps its inline tint through the same helper, because the PDF is compiled without the CSP.
+
+```css
+#ADV-001 { --ad-bg: #b6e2f2; --ad-ink: #20201d; }
+```
+
+- **Table alignment.** markdown-it's `th_open`/`td_open` renderer rules turn `style="text-align:…"` into an `align-left|center|right` class, styled in `site.css` (appended) and `print.css`.
+- **Old pin.** The `site.css` guard in `v4-committee-corrections` now accepts only those three table-alignment rules after the Task 43 block, and never justification.
+
+**Results:**
+- 0 inline styles on `/`;
+- `test:e2e:csp` reports 0 violations on the three pages;
+- `web-ad-cards` finds 25 tinted cards under the production CSP;
+- all 72 PDF pages are pixel-identical to `V5_REVIEW_01` (60 dpi), with identical text.
+
+#### `tests/e2e/ad-blocker.test.mjs` (new, Task 26)
+**Purpose**: Prove the images survive a real ad blocker.
+
+**How it works**: It serves the site with the production headers and injects **all** 13,078 generic hide rules as one stylesheet, as a blocker applies them. That needs a CSP-bypassing test context, used only to inject the rules. It then asserts, at 1440 and 390 px, that the 30 publication images are loaded and have a non-zero rendered box.
+
+To prove it can fail, it was run against a copy of the build with the old names restored (`AD_BLOCKER_SITE`): the images were hidden by `.ad-frame .ad-link`. On the new build: 30/30 at both widths. The full gate after a fresh build passed 34 steps.
+
+#### Release `V5_REVIEW_02` (Task 27)
+- **Release list:** `V5_STEPS` gains `qa:blocklist` after `qa:v5-pages`, and `test:e2e:csp`, `test:e2e:blocker` after the hero test, for 35 steps.
+- **Test gotcha:** the release-core unit test was red first. My first check misread an earlier success line in the output; the real exit code was 1.
+- **Build:** `release:v5:02` at `fa83b7d`, detached with an exit-code waiter. All 35 steps passed:
+  - the comparison is unchanged (69 unchanged, 1 correction, 2 replaced-item, 0 unexplained);
+  - the guard, CSP and blocker checks all pass.
+- **Output:** 294 files, 47 items, 0 local secret values, earlier release folders unchanged.
+- **PDF:** text and all 72 pages are identical to `V5_REVIEW_01`, and only the embedded creation date differs, so the deployable PDF was replaced with the V5_REVIEW_02 file (`d274c154…`).
+- **CHANGELOG:** a `V5_REVIEW_02` section.
+
+#### Verification and deployment (Tasks 28–30)
+- **Task 28 — local gate.** 1440/390 px, each as a normal browser (dev-app CSP enforced) and with all EasyList generic rules injected. All 4 runs passed: 30/30 images, ADV-001 tint `rgb(182, 226, 242)`, ART-006 right-aligned, 0 CSP errors. The test registrations were deleted.
+- **Task 29 — Preview `…-k5q4b6721-…`.**
+  - probes 12/12; 6 public files (incl. `ad-tints.css`) byte-identical;
+  - one registered session under Vercel's own CSP: page and PDF byte-identical to the release, 30/30 images visible, 25/25 tints, 0 CSP errors, and 30/30 images with all generic rules injected (390 px);
+  - `e2e:app --public-only` passed 14 steps after the registration window cleared;
+  - the Preview database returned to 3/3/0/0.
+- **Task 30 — Production `…-acdyrs0h7-…`.** The same no-trace scope as Task 21: probes 11/11 (wrong password skipped), 6 public files byte-identical. No environment or database access, no registration.
+- **Incident.** Two untracked throwaway scripts sat in `05_WEBSITE/` during the deploys, and `.vercelignore` does not exclude them, so they were uploaded with the deployment source. They contain no secrets, return 404, are not part of the built site, and were deleted. The follow-up is recorded.
+
 ## Data Flow
 
 1. **Intake.** The owner drops the new DOCX. Task 1 archives the old one from git, and Task 2 removes it from the intake folder in the same commit that adds the new one.
@@ -608,8 +736,19 @@ The first run failed on the driver itself, not the site: it expected a redirect 
    - the committed PDF from `release-assets/print/`.
 
    A visitor at `/` gets the welcome page. Registering sets the `becaa_v` session cookie, after which `/` is the magazine with the new `MSG-001` and the corrected `ART-011` byline, and `/print/…pdf` is the V5 PDF.
+10. **Tints and images in the browser (addendum).** The page links `site.css` and the generated `ad-tints.css`, whose `#ADV-…` rules set `--ad-bg`/`--ad-ink`, and `site.css` paints each card header and frame with them. No inline style is needed, so the CSP (`default-src 'self'`) refuses nothing. Images sit in `.artwork-frame`/`.artwork-link`, names no generic ad-blocker rule hides. At release time, `qa:blocklist`, `test:e2e:csp` and `test:e2e:blocker` fail the build if either property is lost.
 
 ## Test Coverage
+
+**Addendum (Tasks 22–30):**
+- **New unit tests:** `blocklist-guard-core` (generic vs domain rules, tokens, exact matching) and `ad-tints-core` (tint resolution, hex-only, hostile id refused). `eleventy-config` gains table-alignment and inline-filter cases, and `release-core` gains the 35-step V5 order.
+- **New browser tests:** `test:e2e:csp` (0 violations on `/`, `/welcome/`, `/admin/`) and `test:e2e:blocker` (30/30 images under 13,078 rules at 1440 and 390 px).
+- **Now under the production CSP:** `web-ad-cards`, `ad-backgrounds-qa`, `visual-qa`, the hero, navigation and welcome tests.
+- **QA gate:** `qa:blocklist`.
+- **Release:** `V5_REVIEW_02` passed 35/35 steps.
+- **Deployments:** Preview content check (30/30 images, 25/25 tints, 0 CSP errors, blocker-proof) and `e2e:app --public-only` 14 steps; Production probes 11/11 with public files byte-identical.
+
+Each new test was run red first. Two were proven red by reproducing the original defect: `test:e2e:blocker` against the old names, and `web-ad-cards` under the CSP before Task 25. `test:e2e:csp` and `web-ad-cards` were knowingly red between the Task 24 and Task 25 commits.
 
 **Deployment verification (Tasks 19–21):**
 - **Local gate:** 16/16 browser checks at 1440 and 390 px.
@@ -670,11 +809,18 @@ Each was run red before green. Task 17 is documentation only, with no test.
   - Preview test records were removed in one transaction, leaving the database exactly as found;
   - the Production checks were limited to requests that cannot write to the database;
   - the previous Production deployment was kept for rollback.
+- **Security policy kept strict (addendum):** the tint fix did not add `'unsafe-inline'` to the CSP. Tints are served from a same-origin stylesheet built only from validated hex colours and item ids, so manifest data cannot inject CSS. The CSP is now enforced in the page tests, so a future inline style fails `test:e2e:csp`.
+- **Ad-blocker resilience:** a committed EasyList snapshot drives both a static name check (`qa:blocklist`) and a browser simulation (`test:e2e:blocker`), and both gate every V5 release.
+- **Investigation with minimal access:** the Production request log (paths and status codes) was read to locate the fault; no Production environment or database was read, and no Production record was created.
 - **Permission boundary respected:** when Production environment/database reads were denied, the work stopped and the owner chose the scope, rather than reaching the same data another way.
 - **Scans:** `semgrep --config auto --quiet --error` is clean on every changed file. `npm audit` shows the same 3 allow-listed highs (`playwright`, `sharp`, `xlsx`), and there were no dependency changes.
 
 ## Known Limitations
 
+- **Throwaway scripts uploaded with two deployments.** Untracked verification drivers were in `05_WEBSITE/` during the Task 29/30 deploys, and `.vercelignore` does not exclude them. There were no secrets and they return 404, but they are in the deployment source listing. Fix in Sprint v6: add `.*.mjs` to `.vercelignore`, or keep drivers outside `05_WEBSITE/`.
+- **The web copy of `/print/` is still untinted.** `print.njk` keeps inline tints for the PDF, and the CSP refuses them on the website. Visitors use the PDF, which is unaffected.
+- **Image paths containing "advertisement" were not renamed** (Decision R): no generic EasyList rule matches them, but stricter lists might. This is a Sprint v6 candidate.
+- **The EasyList snapshot ages.** It is dated 2026-09-26; refresh it with `node scripts/refresh-blocklist-snapshot.mjs` before future releases.
 - **Production content behind the gate was not opened.** No registration was made on Production (owner-chosen scope). The evidence is indirect but strong: the Production deployment is the identical `05_WEBSITE/` tree whose Preview served the release's exact page and PDF, and Production's public files match the build. The owner can confirm by registering; that creates a real record.
 - **No migration or database check on Production.** It was blocked by the permission policy; safe because nothing in `db/`, `api/`, `lib/` or `middleware.ts` changed since Sprint v4.
 - **Administrator flow not exercised on either deployment.** It passed locally with the same code. On Production only the owner holds the password, and on Preview it would need a new temporary credential.
@@ -696,12 +842,17 @@ Each was run red before green. Task 17 is documentation only, with no test.
 
 ## What's Next
 
-Sprint v5 is complete. Suggested priorities for a Sprint v6, owner decisions first:
+Sprint v5 is complete, with `V5_REVIEW_02` in Production. Suggested priorities for a Sprint v6, owner decisions first:
 1. **Wording slips in the President's message.** Decide which, if any, of the §3 items in `BECAA Owner Corrections 2026-09-26.md` to correct. Each approved fix is one count-guarded entry in the correction record and `v5-corrections.mjs`, plus a new review build.
 2. **Front-page review-era wording.** The eyebrow "Version 1 local review", "Prototype Contents" and the "Local review only" footer are still there, carried since Sprint v4.
 3. **Production verification access.** Decide whether future deployments may read the Production environment and database (a permission rule). With it, the full v4 procedure — migration check, content check, cleanup — can run on Production again.
 4. **Owner check on Production.** Register once, confirm the new message and ART-011 byline, and optionally log in to `/admin/` with the real password to confirm the dashboard.
-5. **Carried technical items:**
+5. **Addendum follow-ups:**
+   - exclude throwaway scripts from uploads (`.*.mjs` in `.vercelignore`);
+   - decide on renaming the "advertisement" image paths;
+   - refresh the EasyList snapshot before each release;
+   - optionally tint the web copy of `/print/` from the stylesheet as well.
+6. **Carried technical items:**
    - normalise Bengali content to one Unicode form;
    - refresh the stale `ART-010` note;
    - the three allow-listed dependency advisories (`playwright`, `sharp`, `xlsx`);

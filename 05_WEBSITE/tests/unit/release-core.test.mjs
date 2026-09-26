@@ -121,6 +121,9 @@ assert.deepEqual(inv.args.slice(1), ["run", "build"]);
   for (const s of v5.filter((x) => x !== "audit")) assert.ok(md5.includes(`npm run ${s}`), `V5 step ${s} listed`);
   assert.ok(md5.includes("V4_REVIEW_02"), "V5 reproduction names the comparison baseline");
   assert.ok(md5.includes("unzip") && md5.includes("pdftotext") && md5.includes("pdftoppm"));
+  // Every V5 step is a real npm script (qa:pdf-compare:v5 and qa:v5-pages arrive in Task 16).
+  const scripts = JSON.parse(fs.readFileSync(new URL("../../package.json", import.meta.url), "utf8")).scripts;
+  for (const s of v5.filter((x) => x !== "audit")) assert.ok(scripts[s], `V5 step ${s} is defined in package.json`);
   const mig = ["extract:v5-president-desk", "corrections:apply-v5", "tracker:apply-v5"];
   for (const s of mig) assert.ok(md5.includes(`npm run ${s}`), `V5 content migration ${s} listed`);
   assert.ok(md5.indexOf("npm run extract:v5-president-desk") < md5.indexOf("npm run corrections:apply-v5"), "corrections re-applied after re-extraction");

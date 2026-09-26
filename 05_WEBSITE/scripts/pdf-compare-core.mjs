@@ -9,8 +9,15 @@
 // differs only in whitespace is `unchanged`/`shifted` (the note says so), and an item whose
 // text is identical but redistributed across pages is `reflow`. The cost: an edit that only
 // inserts or removes a space is not detected.
+//
+// Replaced items (Sprint v5 Task 16). An item whose whole text was replaced by a new approved
+// source (MSG-001, the President's new message) cannot be explained by find/replace pairs. The
+// caller passes `replacedItems: [{ id, expectedText }]`; the item's pages are `replaced-item`
+// only when the item exists in both PDFs, its text differs from the baseline, and its current
+// text equals `expectedText` compared case-insensitively (the PDF kicker is uppercased by CSS)
+// and without whitespace. Anything else is `unexplained`.
 
-export const PAGE_CLASSES = ["unchanged", "shifted", "contents", "poem", "new-item", "correction", "reflow", "unexplained"];
+export const PAGE_CLASSES = ["unchanged", "shifted", "contents", "poem", "new-item", "correction", "replaced-item", "reflow", "unexplained"];
 
 const ITEM_ID = String.raw`[A-Z]{2,5}-\d{3}`;
 const KICKER = new RegExp(String.raw`·\s*(${ITEM_ID})$`);
@@ -151,6 +158,16 @@ function checkCorrectedItem(baseSpan, curSpan, list) {
   return { ok: problems.length === 0, problems };
 }
 
+function checkReplacedItem(baseSpan, curSpan, expectedKey) {
+  if (!baseSpan) return { ok: false, class: "unexplained", note: "item not in the baseline; only an existing item can be replaced" };
+  if (!curSpan) return { ok: false, class: "unexplained", note: "item missing from the current PDF" };
+  const before = baseSpan.map((p) => p.key).join("").toLowerCase();
+  const after = curSpan.map((p) => p.key).join("").toLowerCase();
+  if (after === before) return { ok: false, class: "unexplained", note: "item declared replaced but its text is unchanged (not replaced)" };
+  if (after !== expectedKey) return { ok: false, class: "unexplained", note: `replacement text differs from the expected text: ${firstDifference(expectedKey, after)}` };
+  return { ok: true, class: "replaced-item", note: "authorised replacement; text equals the expected text" };
+}
+
 function explainContents(baseBlock, curBlock, correctionsById, newIds) {
   const problems = [];
   const baseIds = new Set(baseBlock.entries.map((e) => e.id));
@@ -189,18 +206,20 @@ function explainContents(baseBlock, curBlock, correctionsById, newIds) {
  * Classify every current page against the baseline.
  * @param {string[]} baselinePages page texts of the baseline PDF
  * @param {string[]} currentPages page texts of the current PDF
- * @param {{ poemIds?: string[], newItemIds?: string[], corrections?: {id: string, find: string, replace: string}[] }} options
+ * @param {{ poemIds?: string[], newItemIds?: string[], corrections?: {id: string, find: string, replace: string}[],
+ *   replacedItems?: {id: string, expectedText: string}[] }} options
  * @returns {{ pages: {page: number, class: string, itemIds: string[], baselinePage: number|null, note: string}[],
  *   removedBaselinePages: {baselinePage: number, class: string, itemIds: string[], note: string}[],
  *   summary: {baselinePageCount: number, currentPageCount: number, counts: Record<string, number>,
  *   unexplained: number, removedUnexplained: number, ok: boolean} }}
  */
-export function comparePdfPages(baselinePages, currentPages, { poemIds = [], newItemIds = [], corrections = [] } = {}) {
+export function comparePdfPages(baselinePages, currentPages, { poemIds = [], newItemIds = [], corrections = [], replacedItems = [] } = {}) {
   const base = describePages(baselinePages);
   const cur = describePages(currentPages);
   const poems = new Set(poemIds);
   const newIds = new Set(newItemIds);
   const correctionsById = groupCorrections(corrections);
+  const replaced = new Map(replacedItems.map((r) => [r.id, keyOf(r.expectedText).toLowerCase()]));
   const baseSpans = itemSpans(base);
   const curSpans = itemSpans(cur);
 
@@ -228,7 +247,8 @@ export function comparePdfPages(baselinePages, currentPages, { poemIds = [], new
       const b = baseSpans.get(id);
       const c = curSpans.get(id);
       let result;
-      if (poems.has(id)) result = { ok: true, class: "poem", note: "authorised poem re-extraction" };
+      if (replaced.has(id)) result = checkReplacedItem(b, c, replaced.get(id));
+      else if (poems.has(id)) result = { ok: true, class: "poem", note: "authorised poem re-extraction" };
       else if (newIds.has(id) && !b) result = { ok: true, class: "new-item", note: "authorised new item" };
       else if (correctionsById.has(id)) {
         const check = checkCorrectedItem(b, c, correctionsById.get(id));
@@ -278,7 +298,8 @@ export function comparePdfPages(baselinePages, currentPages, { poemIds = [], new
     }
     // A failed correction check overrides an exact match on the item's first page, so an
     // unapplied correction is reported even when nothing on the page changed.
-    const failedCorrection = p.itemId && correctionsById.has(p.itemId) && !itemCheck(p.itemId).ok;
+    // The same holds for a declared replacement that is missing or wrong.
+    const failedCorrection = p.itemId && (correctionsById.has(p.itemId) || replaced.has(p.itemId)) && !itemCheck(p.itemId).ok;
     // The poem re-extraction mostly adds line breaks, i.e. whitespace, so a poem page whose
     // spacing differs is still reported as `poem` rather than hidden as unchanged.
     const poemSpacing = matched !== null && poems.has(p.itemId) && base[matched].layout !== p.layout;

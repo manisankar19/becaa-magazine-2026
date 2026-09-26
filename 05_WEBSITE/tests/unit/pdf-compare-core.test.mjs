@@ -301,4 +301,68 @@ function correctedPages() {
   assert.equal(pageOf(r2, 4).class, "correction");
 }
 
+// --- Sprint v5 Task 16: replaced items (MSG-001 replaced by a new message) -------------------
+// A replaced item is explained only when its current text equals the expected text the caller
+// supplies (case-insensitive, whitespace-free: the PDF kicker is uppercased by CSS). Pages after
+// it may shift; its baseline pages may disappear if the replacement is shorter.
+{
+  const NEW_MSG = ["From the President’s Desk", "BECAA (Bengal Engineering College Alumni Association) an unique word.", "• Extending Donation", "Manik Barman", "CE ’87"];
+  const expectedText = ["Messages · MSG-001", "President Desk", ...NEW_MSG].join("\n");
+  const replacedMsgPage = (n) => page([kicker("MESSAGES", "MSG-001"), "", "President Desk", ...NEW_MSG], n);
+  const base = baselinePages();
+
+  // 1. Same length replacement: only the MSG-001 page is replaced; everything else unchanged.
+  const cur1 = base.map((p, i) => (i === 3 ? replacedMsgPage(4) : p));
+  const r1 = comparePdfPages(base, cur1, { replacedItems: [{ id: "MSG-001", expectedText }] });
+  assert.equal(r1.summary.ok, true, "a replacement matching the expected text is explained");
+  assert.equal(pageOf(r1, 4).class, "replaced-item");
+  assert.equal(pageOf(r1, 4).baselinePage, 4);
+  assert.equal(r1.summary.counts["replaced-item"], 1);
+  assert.equal(r1.summary.counts.unchanged, base.length - 1);
+
+  // 2. Longer replacement (two pages): later pages shift and are still explained.
+  const second = page(["Continuation of the new message.", "President, BECAA Maharashtra"], 5);
+  const cur2 = [...base.slice(0, 3), replacedMsgPage(4), second, ...base.slice(4)];
+  const r2 = comparePdfPages(base, cur2, { replacedItems: [{ id: "MSG-001", expectedText: `${expectedText}\nContinuation of the new message.\nPresident, BECAA Maharashtra` }] });
+  assert.equal(r2.summary.ok, true, "a longer replacement shifts later pages without unexplained differences");
+  assert.deepEqual([pageOf(r2, 4).class, pageOf(r2, 5).class], ["replaced-item", "replaced-item"]);
+  assert.equal(pageOf(r2, 6).class, "shifted");
+
+  // 3. Wrong text in the replacement: unexplained.
+  const cur3 = base.map((p, i) => (i === 3 ? page([kicker("MESSAGES", "MSG-001"), "", "President Desk", ...NEW_MSG, "An unapproved extra sentence."], 4) : p));
+  const r3 = comparePdfPages(base, cur3, { replacedItems: [{ id: "MSG-001", expectedText }] });
+  assert.equal(r3.summary.ok, false);
+  assert.equal(pageOf(r3, 4).class, "unexplained");
+  assert.match(pageOf(r3, 4).note, /replacement text differs from the expected text/);
+
+  // 4. Not actually replaced (current = baseline): the replacement is missing → unexplained.
+  const r4 = comparePdfPages(base, base, { replacedItems: [{ id: "MSG-001", expectedText }] });
+  assert.equal(r4.summary.ok, false, "an item declared replaced must differ from the baseline");
+  assert.equal(pageOf(r4, 4).class, "unexplained");
+  assert.match(pageOf(r4, 4).note, /not replaced/);
+
+  // 5. A replaced id that the baseline does not have is not a replacement.
+  const r5 = comparePdfPages(base, cur1, { replacedItems: [{ id: "MSG-001", expectedText }, { id: "ART-099", expectedText: "x" }] });
+  assert.equal(r5.summary.ok, true, "a declared id absent from both PDFs adds no page");
+  const withNew = [...cur1.slice(0, 12), page([kicker("ADVERTISEMENTS", "ADV-099"), "", "x"], 13), ...cur1.slice(12)];
+  const r5b = comparePdfPages(base, withNew, { replacedItems: [{ id: "MSG-001", expectedText }, { id: "ADV-099", expectedText: "Advertisements · ADV-099\nx" }] });
+  assert.equal(pageOf(r5b, 13).class, "unexplained", "an item missing from the baseline cannot be 'replaced'");
+
+  // 6. Replaced items take precedence over a correction list for the same id, and other
+  // corrections are still checked in the same run.
+  const art011Fixed = base.map((p, i) => (i === 3 ? replacedMsgPage(4) : i === 9 ? p.replace("The quick brown fox", "The quick red fox") : p));
+  const r6 = comparePdfPages(base, art011Fixed, {
+    replacedItems: [{ id: "MSG-001", expectedText }],
+    corrections: [{ id: "MSG-001", find: "CE  87", replace: "CE ’87" }, { id: "ART-011", find: "brown fox", replace: "red fox" }],
+  });
+  assert.equal(r6.summary.ok, true);
+  assert.equal(pageOf(r6, 4).class, "replaced-item");
+  assert.equal(pageOf(r6, 10).class, "correction");
+  const r6b = comparePdfPages(base, cur1, { replacedItems: [{ id: "MSG-001", expectedText }], corrections: [{ id: "ART-011", find: "brown fox", replace: "red fox" }] });
+  assert.equal(pageOf(r6b, 10).class, "unexplained", "an unapplied correction still fails alongside a replaced item");
+
+  // 7. The V4 behaviour is unchanged when no replaced items are declared.
+  assert.equal(comparePdfPages(base, cur1).summary.ok, false, "without the declaration the new message is unexplained");
+}
+
 console.log("pdf-compare-core: all assertions passed");

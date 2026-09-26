@@ -1,0 +1,688 @@
+{
+  "generated": "2026-09-26T09:40:07.140Z",
+  "baseline": {
+    "path": "06_FINAL_OUTPUT/V4_REVIEW_02/website/print/BECAA-2026-complete-review.pdf",
+    "sha256": "cd1197db1bf1cce01c0fef9b576cea7a79e5f868b95a396378d489749a886be8",
+    "pages": 72
+  },
+  "current": {
+    "path": "05_WEBSITE/_site/print/BECAA-2026-complete-review.pdf",
+    "sha256": "d982f11e6b7c45f83b7f08b797324a24cea306dc2a82b34505cde84800cde118",
+    "pages": 72
+  },
+  "options": {
+    "profile": "v5",
+    "poemIds": [],
+    "newItemIds": [],
+    "replacedIds": [
+      "MSG-001"
+    ],
+    "corrections": [
+      {
+        "id": "ART-011",
+        "find": "Palash Biswas, Civil, 2006 Batch",
+        "replace": "Palash Biswas, Mechanical, 2006 Batch"
+      }
+    ],
+    "correctionsApplied": true
+  },
+  "pages": [
+    {
+      "page": 1,
+      "class": "unchanged",
+      "itemIds": [],
+      "baselinePage": 1,
+      "note": ""
+    },
+    {
+      "page": 2,
+      "class": "unchanged",
+      "itemIds": [],
+      "baselinePage": 2,
+      "note": ""
+    },
+    {
+      "page": 3,
+      "class": "unchanged",
+      "itemIds": [],
+      "baselinePage": 3,
+      "note": ""
+    },
+    {
+      "page": 4,
+      "class": "unchanged",
+      "itemIds": [],
+      "baselinePage": 4,
+      "note": ""
+    },
+    {
+      "page": 5,
+      "class": "replaced-item",
+      "itemIds": [
+        "MSG-001"
+      ],
+      "baselinePage": 5,
+      "note": "authorised replacement; text equals the expected text"
+    },
+    {
+      "page": 6,
+      "class": "replaced-item",
+      "itemIds": [
+        "MSG-001"
+      ],
+      "baselinePage": 6,
+      "note": "authorised replacement; text equals the expected text"
+    },
+    {
+      "page": 7,
+      "class": "unchanged",
+      "itemIds": [
+        "MSG-002"
+      ],
+      "baselinePage": 7,
+      "note": ""
+    },
+    {
+      "page": 8,
+      "class": "unchanged",
+      "itemIds": [
+        "MSG-002"
+      ],
+      "baselinePage": 8,
+      "note": ""
+    },
+    {
+      "page": 9,
+      "class": "unchanged",
+      "itemIds": [
+        "MSG-003"
+      ],
+      "baselinePage": 9,
+      "note": ""
+    },
+    {
+      "page": 10,
+      "class": "unchanged",
+      "itemIds": [
+        "MSG-003"
+      ],
+      "baselinePage": 10,
+      "note": ""
+    },
+    {
+      "page": 11,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-001"
+      ],
+      "baselinePage": 11,
+      "note": ""
+    },
+    {
+      "page": 12,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-001"
+      ],
+      "baselinePage": 12,
+      "note": ""
+    },
+    {
+      "page": 13,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-002"
+      ],
+      "baselinePage": 13,
+      "note": ""
+    },
+    {
+      "page": 14,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-002"
+      ],
+      "baselinePage": 14,
+      "note": ""
+    },
+    {
+      "page": 15,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-002"
+      ],
+      "baselinePage": 15,
+      "note": ""
+    },
+    {
+      "page": 16,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-003"
+      ],
+      "baselinePage": 16,
+      "note": ""
+    },
+    {
+      "page": 17,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-004"
+      ],
+      "baselinePage": 17,
+      "note": ""
+    },
+    {
+      "page": 18,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-004"
+      ],
+      "baselinePage": 18,
+      "note": ""
+    },
+    {
+      "page": 19,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-005"
+      ],
+      "baselinePage": 19,
+      "note": ""
+    },
+    {
+      "page": 20,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-005"
+      ],
+      "baselinePage": 20,
+      "note": ""
+    },
+    {
+      "page": 21,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-005"
+      ],
+      "baselinePage": 21,
+      "note": ""
+    },
+    {
+      "page": 22,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-006"
+      ],
+      "baselinePage": 22,
+      "note": ""
+    },
+    {
+      "page": 23,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-006"
+      ],
+      "baselinePage": 23,
+      "note": ""
+    },
+    {
+      "page": 24,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-006"
+      ],
+      "baselinePage": 24,
+      "note": ""
+    },
+    {
+      "page": 25,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-006"
+      ],
+      "baselinePage": 25,
+      "note": ""
+    },
+    {
+      "page": 26,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-006"
+      ],
+      "baselinePage": 26,
+      "note": ""
+    },
+    {
+      "page": 27,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-007"
+      ],
+      "baselinePage": 27,
+      "note": ""
+    },
+    {
+      "page": 28,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-007"
+      ],
+      "baselinePage": 28,
+      "note": ""
+    },
+    {
+      "page": 29,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-007"
+      ],
+      "baselinePage": 29,
+      "note": ""
+    },
+    {
+      "page": 30,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-008"
+      ],
+      "baselinePage": 30,
+      "note": ""
+    },
+    {
+      "page": 31,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-009"
+      ],
+      "baselinePage": 31,
+      "note": ""
+    },
+    {
+      "page": 32,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-009"
+      ],
+      "baselinePage": 32,
+      "note": ""
+    },
+    {
+      "page": 33,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-010"
+      ],
+      "baselinePage": 33,
+      "note": ""
+    },
+    {
+      "page": 34,
+      "class": "correction",
+      "itemIds": [
+        "ART-011"
+      ],
+      "baselinePage": 34,
+      "note": "committee correction \"Palash Biswas, Civil, 2006 Batch\" → \"Palash Biswas, Mechanical, 2006 Batch\""
+    },
+    {
+      "page": 35,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-011"
+      ],
+      "baselinePage": 35,
+      "note": ""
+    },
+    {
+      "page": 36,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-011"
+      ],
+      "baselinePage": 36,
+      "note": ""
+    },
+    {
+      "page": 37,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-011"
+      ],
+      "baselinePage": 37,
+      "note": ""
+    },
+    {
+      "page": 38,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-012"
+      ],
+      "baselinePage": 38,
+      "note": ""
+    },
+    {
+      "page": 39,
+      "class": "unchanged",
+      "itemIds": [
+        "ART-012"
+      ],
+      "baselinePage": 39,
+      "note": ""
+    },
+    {
+      "page": 40,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-001"
+      ],
+      "baselinePage": 40,
+      "note": ""
+    },
+    {
+      "page": 41,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-002"
+      ],
+      "baselinePage": 41,
+      "note": ""
+    },
+    {
+      "page": 42,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-003"
+      ],
+      "baselinePage": 42,
+      "note": ""
+    },
+    {
+      "page": 43,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-004"
+      ],
+      "baselinePage": 43,
+      "note": ""
+    },
+    {
+      "page": 44,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-005"
+      ],
+      "baselinePage": 44,
+      "note": ""
+    },
+    {
+      "page": 45,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-006"
+      ],
+      "baselinePage": 45,
+      "note": ""
+    },
+    {
+      "page": 46,
+      "class": "unchanged",
+      "itemIds": [
+        "GAL-007"
+      ],
+      "baselinePage": 46,
+      "note": ""
+    },
+    {
+      "page": 47,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-001"
+      ],
+      "baselinePage": 47,
+      "note": ""
+    },
+    {
+      "page": 48,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-002"
+      ],
+      "baselinePage": 48,
+      "note": ""
+    },
+    {
+      "page": 49,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-003"
+      ],
+      "baselinePage": 49,
+      "note": ""
+    },
+    {
+      "page": 50,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-004"
+      ],
+      "baselinePage": 50,
+      "note": ""
+    },
+    {
+      "page": 51,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-005"
+      ],
+      "baselinePage": 51,
+      "note": ""
+    },
+    {
+      "page": 52,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-006"
+      ],
+      "baselinePage": 52,
+      "note": ""
+    },
+    {
+      "page": 53,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-007"
+      ],
+      "baselinePage": 53,
+      "note": ""
+    },
+    {
+      "page": 54,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-008"
+      ],
+      "baselinePage": 54,
+      "note": ""
+    },
+    {
+      "page": 55,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-010"
+      ],
+      "baselinePage": 55,
+      "note": ""
+    },
+    {
+      "page": 56,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-011"
+      ],
+      "baselinePage": 56,
+      "note": ""
+    },
+    {
+      "page": 57,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-012"
+      ],
+      "baselinePage": 57,
+      "note": ""
+    },
+    {
+      "page": 58,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-013"
+      ],
+      "baselinePage": 58,
+      "note": ""
+    },
+    {
+      "page": 59,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-014"
+      ],
+      "baselinePage": 59,
+      "note": ""
+    },
+    {
+      "page": 60,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-015"
+      ],
+      "baselinePage": 60,
+      "note": ""
+    },
+    {
+      "page": 61,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-017"
+      ],
+      "baselinePage": 61,
+      "note": ""
+    },
+    {
+      "page": 62,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-018"
+      ],
+      "baselinePage": 62,
+      "note": ""
+    },
+    {
+      "page": 63,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-019"
+      ],
+      "baselinePage": 63,
+      "note": ""
+    },
+    {
+      "page": 64,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-020"
+      ],
+      "baselinePage": 64,
+      "note": ""
+    },
+    {
+      "page": 65,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-021"
+      ],
+      "baselinePage": 65,
+      "note": ""
+    },
+    {
+      "page": 66,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-022"
+      ],
+      "baselinePage": 66,
+      "note": ""
+    },
+    {
+      "page": 67,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-023"
+      ],
+      "baselinePage": 67,
+      "note": ""
+    },
+    {
+      "page": 68,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-026"
+      ],
+      "baselinePage": 68,
+      "note": ""
+    },
+    {
+      "page": 69,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-027"
+      ],
+      "baselinePage": 69,
+      "note": ""
+    },
+    {
+      "page": 70,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-028"
+      ],
+      "baselinePage": 70,
+      "note": ""
+    },
+    {
+      "page": 71,
+      "class": "unchanged",
+      "itemIds": [
+        "ADV-029"
+      ],
+      "baselinePage": 71,
+      "note": ""
+    },
+    {
+      "page": 72,
+      "class": "unchanged",
+      "itemIds": [],
+      "baselinePage": 72,
+      "note": ""
+    }
+  ],
+  "removedBaselinePages": [],
+  "summary": {
+    "baselinePageCount": 72,
+    "currentPageCount": 72,
+    "counts": {
+      "unchanged": 69,
+      "shifted": 0,
+      "contents": 0,
+      "poem": 0,
+      "new-item": 0,
+      "correction": 1,
+      "replaced-item": 2,
+      "reflow": 0,
+      "unexplained": 0
+    },
+    "unexplained": 0,
+    "removedUnexplained": 0,
+    "ok": true
+  }
+}

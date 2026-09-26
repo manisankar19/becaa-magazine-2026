@@ -1,0 +1,532 @@
+:root {
+  --paper: #fbfaf7;
+  --ink: #20201d;
+  --muted: #626057;
+  --line: #d8d0c3;
+  --maroon: #7b1e2d;
+  --saffron: #c8862f;
+  --green: #2f6652;
+  --panel: #fffdf8;
+  --shadow: 0 18px 50px rgba(32, 32, 29, 0.08);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; } /* the hidden attribute must win over display rules (Sprint v3 forms) */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Nirmala UI", "Segoe UI", "Noto Sans Bengali", Arial, sans-serif;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+a {
+  color: inherit;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  background: var(--ink);
+  color: white;
+  padding: 0.65rem 0.85rem;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem clamp(1rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--line);
+  background: rgba(251, 250, 247, 0.94);
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  font-weight: 800;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+nav a {
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+nav a:focus,
+nav a:hover {
+  background: #efe7db;
+  color: var(--ink);
+  outline: none;
+}
+
+.cover {
+  min-height: 72vh;
+  display: grid;
+  align-items: end;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
+  background:
+    linear-gradient(135deg, rgba(123, 30, 45, 0.9), rgba(47, 102, 82, 0.74)),
+    linear-gradient(45deg, #7b1e2d, #d6a04d);
+  color: #fffaf0;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1.2fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+}
+
+.cover__art {
+  display: block;
+  width: min(38vw, 460px);
+  max-height: 82vh;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+  box-shadow: var(--shadow);
+}
+
+.cover__summary { align-self: end; }
+.cover__edition { font-size: 1.15rem; }
+
+.cover__inner {
+  max-width: 880px;
+}
+
+.eyebrow,
+.section-kicker {
+  margin: 0 0 0.6rem;
+  color: var(--saffron);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cover .eyebrow {
+  color: #ffd891;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.cover h1 {
+  max-width: 11ch;
+  font-size: clamp(3rem, 11vw, 7rem);
+}
+
+.lede {
+  max-width: 650px;
+  margin: 1.2rem 0 0;
+  font-size: clamp(1.08rem, 2.3vw, 1.45rem);
+}
+
+.cover__tagline { font-weight: 700; }
+
+.cover__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.4rem;
+  margin: 1.6rem 0 0;
+  font-size: 0.98rem;
+}
+
+.cover__links a {
+  display: inline-block;
+  padding: 0.3rem 0;
+  color: #fffaf0;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.cover__links a:hover { color: #ffd891; }
+.cover__links a:focus-visible { outline: 2px solid #ffd891; outline-offset: 3px; border-radius: 2px; }
+
+.contents,
+.acknowledgements,
+.links-section,
+.publication-item {
+  width: min(1080px, calc(100% - 2rem));
+  margin: clamp(2rem, 6vw, 5rem) auto;
+}
+
+.official-link-list { display: grid; gap: 0.8rem; padding: 0; list-style: none; }
+.official-link-list li { display: grid; gap: 0.15rem; padding: 0.8rem; border: 1px solid var(--line); border-radius: 8px; }
+.official-link-list a { color: var(--green); font-weight: 700; overflow-wrap: anywhere; }
+.official-link-list span { color: var(--muted); overflow-wrap: anywhere; }
+
+.contents h2,
+.item-header h2 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+}
+
+.toc {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.toc a {
+  min-height: 9rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+}
+
+.toc span {
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.toc strong {
+  font-size: 1.1rem;
+}
+
+.publication-item {
+  padding-top: 1rem;
+  border-top: 3px solid var(--maroon);
+}
+
+.item-header {
+  max-width: 830px;
+}
+
+.byline {
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+
+.prose {
+  max-width: 790px;
+  margin-top: 1.3rem;
+  font-size: 1.08rem;
+}
+
+.prose p {
+  margin: 0 0 1rem;
+  overflow-wrap: break-word;
+}
+
+/* Sprint v4 Task 7 (sprints/v4/PRD.md §4.2): a paragraph containing a hard
+   break is verse (e.g. ART-010, "গোলাপ") — force left alignment, a relaxed
+   line-height and no hyphenation so it never gets justified or broken
+   mid-word, regardless of any future prose-justification rule elsewhere. */
+.prose p:has(br) {
+  text-align: left;
+  line-height: 1.7;
+  hyphens: none;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.96rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.6rem;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.prose th { background: #efe7db; }
+
+@media (max-width: 780px) {
+  .cover { grid-template-columns: 1fr; align-items: center; }
+  .cover__art { width: min(88vw, 440px); max-height: none; }
+  .prose { overflow-x: auto; }
+  .prose table { min-width: 42rem; }
+}
+
+.prose--bengali {
+  font-family: "Nirmala UI", "Noto Serif Bengali", "Noto Sans Bengali", sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.85;
+}
+
+.ad-frame {
+  margin: 1.5rem 0 0;
+  width: min(740px, 100%);
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.ad-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ad-link {
+  display: block;
+}
+
+/* Sprint v3 §4.4 — advertisement cards take the same per-advertisement tint as
+   the print page (--ad-bg / --ad-ink from the manifest via the adPageStyle filter).
+   Only the frame and the card's own heading/kicker change; the artwork is untouched
+   and gallery cards keep the plain white frame. */
+.publication-item--advertisement .ad-frame {
+  background: var(--ad-bg, #ffffff);
+}
+.publication-item--advertisement .section-kicker,
+.publication-item--advertisement .item-header h2,
+.publication-item--advertisement figcaption {
+  color: var(--ad-ink, var(--ink));
+}
+.publication-item--advertisement .item-header {
+  width: min(740px, 100%);          /* same width as .ad-frame so header + frame read as one tinted card */
+  box-sizing: border-box;
+  padding: 0.9rem 1rem 0.2rem;
+  border-radius: 8px 8px 0 0;
+  background: var(--ad-bg, transparent);
+}
+.publication-item--advertisement .ad-frame {
+  margin-top: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Sprint v4 §4.3, Task 10 (Decisions F, G) — text-only advertisement pages have
+   no artwork: the approved sentence itself replaces .ad-frame as the tinted
+   card's lower half, so it keeps the same width/rounding pairing with
+   .item-header and reuses --ad-bg/--ad-ink from the manifest via adPageStyle. */
+.ad-text {
+  width: min(740px, 100%);
+  max-width: 20ch;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 8vw, 5rem) clamp(1rem, 3vw, 2rem);
+  border-radius: 0 0 8px 8px;
+  background: var(--ad-bg, #ffffff);
+  color: var(--ad-ink, var(--ink));
+  box-shadow: var(--shadow);
+  text-align: center;
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  line-height: 1.3;
+  font-weight: 700;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Sprint v4 §4.4, Task 11 (Decisions F, G, J) — memorial page: the uncropped
+   photograph (contained, bounded height, no crop) sits between the shared
+   .item-header and the seven centred text_lines; the two pieces share one
+   tinted card the same way .item-header + .ad-frame do for artwork ads. */
+.publication-item--advertisement .ad-frame--memorial {
+  border-radius: 0;
+}
+.ad-frame--memorial img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 26rem;
+  object-fit: contain;
+  margin: 0 auto;
+}
+.ad-memorial {
+  width: min(740px, 100%);
+  margin: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 0 0 8px 8px;
+  background: var(--ad-bg, #ffffff);
+  color: var(--ad-ink, var(--ink));
+  text-align: center;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 1.15rem;
+  line-height: 1.55;
+}
+.ad-memorial p {
+  margin: 0;
+}
+.ad-memorial__name {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.ad-placeholder {
+  min-height: 22rem;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  text-align: center;
+}
+
+figcaption {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.item-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.item-footer span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+}
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 2rem clamp(1rem, 4vw, 3rem);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.acknowledgement-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.acknowledgement-list li {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  background: var(--panel);
+}
+
+@media (max-width: 780px) {
+  .site-header {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  nav {
+    justify-content: flex-start;
+  }
+
+  .toc {
+    grid-template-columns: 1fr;
+  }
+
+  .cover {
+    min-height: 66vh;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Sprint v3 — public welcome page and registration form (Task 25)
+   --------------------------------------------------------------------------- */
+.public-page .cover--welcome { margin-bottom: 0; }
+.register { padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 4rem; max-width: 760px; }
+.privacy-notice { margin: 1rem 0 1.5rem; padding: 1rem 1.25rem; border: 1px solid var(--line); border-left: 4px solid var(--green); border-radius: 8px; background: var(--panel); font-size: 0.98rem; line-height: 1.55; }
+.privacy-notice h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--green); }
+.privacy-notice p { margin: 0; }
+.form-notice { margin: 0 0 1rem; padding: 0.85rem 1rem; border-radius: 8px; background: #fff3e6; border: 1px solid var(--saffron); color: var(--ink); }
+.register-form { display: grid; gap: 1.1rem; }
+.register-form .field { display: grid; gap: 0.35rem; }
+.register-form label { font-weight: 600; }
+.register-form input[type="text"], .register-form input[type="email"], .register-form input[type="tel"], .register-form input[type="password"], .register-form input[type="search"], .register-form select {
+  font: inherit; padding: 0.65rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); width: 100%; max-width: 100%; box-sizing: border-box;
+}
+.register-form input:focus-visible, .register-form select:focus-visible, .register-form button:focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
+.register-form [aria-invalid="true"] { border-color: var(--maroon); }
+.register-form fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem 1rem 1rem; margin: 0; display: grid; gap: 0.8rem; min-width: 0; }
+.register-form legend { font-weight: 700; color: var(--maroon); padding: 0 0.3rem; }
+.field--radios label, .field--consent label { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 500; line-height: 1.45; }
+.field--radios input, .field--consent input { margin-top: 0.3rem; flex: none; }
+.field-error { margin: 0; color: var(--maroon); font-size: 0.92rem; }
+.hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.button { font: inherit; font-weight: 700; padding: 0.85rem 1.4rem; border: 0; border-radius: 8px; background: var(--maroon); color: #fff; cursor: pointer; justify-self: start; }
+.button:hover { filter: brightness(1.08); }
+.button[disabled] { opacity: 0.6; cursor: wait; }
+.public-page .site-footer a { color: inherit; }
+
+/* ---------------------------------------------------------------------------
+   Sprint v3 — administrator dashboard (Task 31)
+   --------------------------------------------------------------------------- */
+.admin { padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 4rem; max-width: 1200px; }
+.admin-login { max-width: 420px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.button--secondary { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+.button--danger { background: #fff; color: var(--maroon); border: 1px solid var(--maroon); padding: 0.4rem 0.7rem; font-size: 0.9rem; }
+.dashboard { display: grid; gap: 2rem; }
+.dashboard > section, .dashboard__grid > section { min-width: 0; } /* grid items must shrink so .table-scroll can scroll instead of widening the page */
+.dashboard h2 { font-size: 1.25rem; margin: 0 0 0.6rem; }
+.dashboard__toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.8rem; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem 1rem; display: grid; gap: 0.2rem; }
+.tile__label { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.tile__value { font-size: 2rem; color: var(--maroon); }
+.dashboard__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; }
+.data-table th, .data-table td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.data-table thead th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.bar-table td:last-child { width: 40%; }
+.bar { height: 0.7rem; border-radius: 4px; background: var(--saffron); min-width: 2px; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; position: relative; } /* positioned: keeps absolutely-positioned .visually-hidden headers inside the scroll box */
+.table-scroll .data-table { min-width: 960px; }        /* scroll sideways on narrow screens instead of crushing cells */
+.data-table thead th, .data-table td:last-child { white-space: nowrap; }
+.bar-table th[scope="row"] { overflow-wrap: anywhere; }
+.bar-table td:nth-child(2) { white-space: nowrap; }
+.search-form { display: grid; gap: 0.35rem; margin: 0 0 0.8rem; max-width: 560px; }
+.search-form label { font-weight: 600; }
+.search-row { display: flex; gap: 0.5rem; }
+.search-row input { flex: 1; font: inherit; padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; min-width: 0; }
+.pager { display: flex; align-items: center; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap; }
+.button[disabled] { opacity: 0.5; cursor: default; }
+
+/* Sprint v4 Task 43 (2026-09-17): in-page jumps (navigation, contents, skip link) land below the
+   sticky header instead of behind it. The header is sticky above 780px: two rows (≈110px) up to
+   about 1200px wide, one row (≈68px) beyond. Below 781px it is static, so no offset. */
+@media (min-width: 781px) {
+  html { scroll-padding-top: 7.5rem; }
+}
+@media (min-width: 1300px) {
+  html { scroll-padding-top: 5rem; }
+}

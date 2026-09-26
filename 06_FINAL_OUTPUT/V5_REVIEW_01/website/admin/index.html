@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administrator — BECAA Maharashtra Magazine 2026 · একই শিকড়</title>
+  <meta name="description" content="Administrator dashboard for the BECAA Maharashtra 2026 magazine registrations.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body class="public-page">
+  <main>
+    
+<section class="admin" aria-labelledby="admin-title">
+  <header class="item-header">
+    <p class="section-kicker">BECAA Maharashtra</p>
+    <h1 id="admin-title">Magazine 2026 — Administrator</h1>
+  </header>
+
+  <div class="form-notice" data-testid="admin-notice" role="status" hidden></div>
+
+  <form class="register-form admin-login" data-testid="login-form" autocomplete="off" hidden>
+    <div class="field">
+      <label for="admin-username">Administrator username</label>
+      <input type="text" id="admin-username" name="username" data-testid="username" required maxlength="64" autocomplete="username">
+    </div>
+    <div class="field">
+      <label for="admin-password">Password</label>
+      <input type="password" id="admin-password" name="password" data-testid="password" required maxlength="256" autocomplete="current-password">
+    </div>
+    <p class="field-error" data-testid="login-error" role="alert" hidden></p>
+    <button type="submit" class="button" data-testid="login-submit">Sign in</button>
+  </form>
+
+  <div class="dashboard" data-testid="dashboard" hidden>
+    <div class="dashboard__toolbar">
+      <a class="button button--secondary" data-testid="download-csv" href="/api/admin/export.csv">Download CSV</a>
+      <button type="button" class="button button--secondary" data-testid="refresh">Refresh</button>
+      <button type="button" class="button button--secondary" data-testid="logout">Log out</button>
+    </div>
+
+    <section aria-labelledby="totals-title">
+      <h2 id="totals-title">Totals</h2>
+      <div class="tiles">
+        <div class="tile"><span class="tile__label">Registered viewers</span><strong class="tile__value" data-testid="stat-visitors">–</strong></div>
+        <div class="tile"><span class="tile__label">Visits</span><strong class="tile__value" data-testid="stat-visits">–</strong></div>
+        <div class="tile"><span class="tile__label">Alumni</span><strong class="tile__value" data-testid="stat-alumni">–</strong></div>
+        <div class="tile"><span class="tile__label">Sponsors</span><strong class="tile__value" data-testid="stat-sponsor">–</strong></div>
+        <div class="tile"><span class="tile__label">Other guests</span><strong class="tile__value" data-testid="stat-guest">–</strong></div>
+      </div>
+    </section>
+
+    <div class="dashboard__grid">
+      <section aria-labelledby="batch-title">
+        <h2 id="batch-title">Alumni by batch</h2>
+        <table class="data-table bar-table" data-testid="batch-table"><thead><tr><th scope="col">Batch</th><th scope="col">Viewers</th><th scope="col"><span class="visually-hidden">Share</span></th></tr></thead><tbody></tbody></table>
+      </section>
+      <section aria-labelledby="department-title">
+        <h2 id="department-title">Alumni by department</h2>
+        <table class="data-table bar-table" data-testid="department-table"><thead><tr><th scope="col">Department</th><th scope="col">Viewers</th><th scope="col"><span class="visually-hidden">Share</span></th></tr></thead><tbody></tbody></table>
+      </section>
+    </div>
+
+    <section aria-labelledby="registrations-title">
+      <h2 id="registrations-title">Registrations</h2>
+      <form class="search-form" data-testid="search-form">
+        <label for="admin-search">Search name, email or organisation</label>
+        <div class="search-row">
+          <input type="search" id="admin-search" name="q" data-testid="search" maxlength="120" autocomplete="off">
+          <button type="submit" class="button button--secondary" data-testid="search-button">Search</button>
+        </div>
+      </form>
+      <div class="table-scroll">
+        <table class="data-table" data-testid="visitors-table">
+          <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Category</th><th scope="col">Batch</th><th scope="col">Department</th><th scope="col">Organisation</th><th scope="col">Mobile</th><th scope="col">Registered (IST)</th><th scope="col">Visits</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <button type="button" class="button button--secondary" data-testid="page-prev">Previous</button>
+        <span data-testid="page-info"></span>
+        <button type="button" class="button button--secondary" data-testid="page-next">Next</button>
+      </div>
+    </section>
+  </div>
+</section>
+
+  </main>
+  <footer class="site-footer">
+    <p>Bengal Engineering College Alumni Association, Maharashtra Chapter · <a href="mailto:becaa.maharashtra@gmail.com">becaa.maharashtra@gmail.com</a></p>
+  </footer>
+  <script src="/assets/js/admin.js" defer></script>
+</body>
+</html>

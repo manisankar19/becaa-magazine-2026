@@ -1,0 +1,46 @@
+{
+  "generated": "2026-09-26T09:40:30.090Z",
+  "pdfPages": 72,
+  "evidenceIds": [
+    "MSG-001",
+    "ART-011"
+  ],
+  "contentsPages": [
+    2,
+    3
+  ],
+  "evidence": [
+    {
+      "page": 2,
+      "id": "contents"
+    },
+    {
+      "page": 3,
+      "id": "contents"
+    },
+    {
+      "page": 5,
+      "id": "MSG-001"
+    },
+    {
+      "page": 6,
+      "id": "MSG-001"
+    },
+    {
+      "page": 34,
+      "id": "ART-011"
+    },
+    {
+      "page": 35,
+      "id": "ART-011"
+    },
+    {
+      "page": 36,
+      "id": "ART-011"
+    },
+    {
+      "page": 37,
+      "id": "ART-011"
+    }
+  ]
+}

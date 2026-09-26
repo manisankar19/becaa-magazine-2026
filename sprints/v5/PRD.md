@@ -180,3 +180,40 @@ Sprint v4 complete (`75688c9`, in Production); Node 22, `mammoth`, `unzip`, `pdf
 **Stream D — tracker (P0):** rows 16 and 23, snapshot first, + test.
 **Stream E — verification (P0):** `v5-updates` suite, page-count derivation, full gate re-run.
 **Stream F — build and release (P0/P1):** `V5_STEPS` + `release:v5`, PDF comparison vs `V4_REVIEW_02`, evidence renders, CHANGELOG, `V5_REVIEW_01`, deployable PDF; then Preview and Production, each separately approved.
+
+---
+
+## 11. Addendum (2026-09-26) — web images hidden by ad blockers; card tints blocked by the CSP
+
+Status: **Approved** by the owner on 2026-09-26 ("I agree to the Proposed fix, as a short v5 addendum"). Items 1, 2 and 4 of the proposal are in scope. Item 3 (renaming image paths) is deferred (Decision R).
+
+### 11.1 Verified findings
+
+| Topic | Finding |
+|---|---|
+| Owner report | On Production (`V5_REVIEW_01`), the gallery and advertisement images do not appear on the website. The PDF shows them. The screenshot shows each card's title followed directly by its status pills, with no image frame at all. |
+| Server | Serving works. The Production request log after the deploy shows 30 image responses with 200 to a newly registered visitor, and 17 with 304 to another; none refused. On Preview, a registered Chromium session loads and renders all 30 images. The template renders the frame for every artwork item, and the page markup equals `V4_REVIEW_02`'s. |
+| Cause | Every web image sits in `<figure class="ad-frame">` inside `<a class="ad-link">`, gallery included. EasyList, the base list of uBlock Origin, AdBlock Plus, Brave and others, has the generic cosmetic rules `##.ad-frame` and `##.ad-link`, which hide those elements on every site. Injecting exactly those two rules on Preview reproduces the owner's screenshot. No other class or id on the page matches an EasyList generic hide rule (checked 2026-09-26). |
+| Why "V4 was fine" | The same class names were already in V4 (and since the first commit), on the same 30 images. The difference is on the viewer's side: a blocker installed, updated or enabled. Nothing in Sprint v5 changed the markup. |
+| Tints | The advertisement card tints are inline `style="--ad-bg: …; --ad-ink: …"` attributes (filter `adPageStyle`). The site's CSP (`default-src 'self'`, `vercel.json`) forbids inline styles, so browsers drop them. Every card falls back to no tint, and the console reports "Refused to apply inline style". This has been the case since Sprint v3. |
+| Test gap | `tests/e2e/web-ad-cards.test.mjs` and the other page tests serve `_site/` with `tests/e2e/static-server.mjs`, which sends no CSP, so tint assertions pass locally. No test checks for CSP violations, and none checks class names against blocker lists. |
+| PDF | The PDF is compiled from `print.njk` without the site CSP, and it has no blocker. Both defects are website-only. |
+
+### 11.2 Decisions (approved as recommended)
+
+- **O. Neutral names.** Rename `ad-frame` → `artwork-frame`, `ad-frame--memorial` → `artwork-frame--memorial`, and `ad-link` → `artwork-link` everywhere: templates, CSS, QA scripts, tests. In `print.njk`/`print.css` too, so the served `/print/` page is not hidden either. The class rename does not change rendering. Other `ad-*` names (`ad-text`, `ad-memorial`, `ad-ink--*`) match no EasyList generic rule and are left alone, but the guard (Decision Q) watches them.
+- **P. Tints through a stylesheet, CSP unchanged.** Eleventy generates `assets/css/ad-tints.css` from the manifest, with one rule per advertisement (`#ADV-001 { --ad-bg: …; --ad-ink: … }`), reusing the `adPageStyle` logic. `index.njk` drops the inline `style` attribute, and `base.njk` links the new stylesheet. The CSP is **not** loosened (no `'unsafe-inline'`). `print.njk` keeps its inline style, because the PDF is compiled without the CSP and must stay unchanged. The web copy of `/print/` stays untinted, which is recorded as a limitation.
+- **Q. Guards so this cannot come back.**
+  - A pure `blocklist-guard-core.mjs`, with unit tests, extracts generic class and id hide selectors from filter-list text and reports any class or id in built HTML that matches.
+  - `npm run qa:blocklist` checks `_site/index.html`, `_site/print/index.html` and `/welcome/` against a committed snapshot of EasyList's generic class/id hide selectors (selector names only, with source URL, date and licence note). It fails on any match.
+  - The page tests serve `_site/` with the production CSP taken from `vercel.json`, assert that the tints compute to the manifest colours, and fail on any CSP violation in the console.
+- **R. Image paths deferred.** Folder and file names containing "advertisement" match only domain-specific EasyList URL rules, not generic ones. Renaming them would touch the manifest, tracker, release comparison and the PDF, so it is recorded as a Sprint v6 candidate.
+- **S. Release and deployment.** Build `V5_REVIEW_02` with `release:v5:02`, adding the `V5_STEPS` list plus `qa:blocklist`. The PDF must still pass `qa:pdf-compare:v5` with the same result as `V5_REVIEW_01`. Deploy to Preview and then Production, each with the owner's explicit go-ahead. Production uses the owner-chosen "checks that leave nothing behind" scope unless Production reads are permitted.
+
+### 11.3 Validation criteria for `V5_REVIEW_02`
+
+- No `ad-frame`/`ad-link` in any built page. `qa:blocklist` passes; it fails on a deliberately re-introduced `ad-frame`.
+- Under the production CSP: every advertisement card's computed `--ad-bg`/background equals its manifest tint; zero CSP violations on `/`, `/welcome/` and `/admin/`; all 30 images load and are visible (non-zero rendered box).
+- With EasyList's generic `##.` rules for the page's own names injected: the images stay visible.
+- The PDF comparison against `V4_REVIEW_02` gives the same classes as `V5_REVIEW_01` (unchanged 69, correction 1, replaced-item 2, unexplained 0), and the PDF text is identical to `V5_REVIEW_01`'s.
+- Full release gate green; earlier release folders unchanged.

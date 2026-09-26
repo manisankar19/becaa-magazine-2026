@@ -1,6 +1,6 @@
 # Sprint v5 — Tasks
 
-## Status: Sprint v5 complete (2026-09-26) — Tasks 1–21 done; `V5_REVIEW_01` in production at https://becaa-magazine-2026-portal.vercel.app
+## Status: Addendum in progress (2026-09-26) — Tasks 1–21 done, `V5_REVIEW_01` in production; addendum Tasks 22–30 (PRD §11) approved, not started
 
 Reference: `sprints/v5/PRD.md`, `sprints/v5/Changev5.md`.
 **Decisions:** A–N approved as recommended (2026-09-26). Tasks that depend on a specific decision name it as `[Decision X]`.
@@ -124,6 +124,45 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Acceptance: `vercel deploy --prod` per `DEPLOYMENT.md`; probes and `e2e:app --public-only` pass; previous deployment kept for rollback; recorded in `PREVIEW_DEPLOYMENT.md`.
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
   - Completed: 2026-09-26 — Production `…-efkqodur5-…` (`dpl_3rDCrfTKqGFLinh4BYpEE6bw5imR`) from `c7c9643`'s `05_WEBSITE/` tree, aliased to `becaa-magazine-2026-portal.vercel.app`; previous `…-3rbvgbgd5-…` kept for rollback. Owner-chosen scope ("checks that leave nothing behind"), because Production environment/database reads were blocked by the session permission policy. 11/11 unauthenticated probes pass (wrong-password login skipped) and 5 public files are byte-identical to `V5_REVIEW_01`. No Production env pull, no database access or migration check (no schema/app change since v4), no registration, no browser suite; the verification wrote nothing. Content behind the gate was verified on Preview with the identical tree. Recorded in `sprints/v5/PREVIEW_DEPLOYMENT.md`.
+
+
+## Stream H — Addendum: images hidden by ad blockers, tints blocked by the CSP (PRD §11, approved 2026-09-26)
+
+- [ ] Task 22: `blocklist-guard-core` + EasyList selector snapshot + `qa:blocklist` [Decision Q] (P0)
+  - Acceptance: pure `extractGenericHideSelectors(filterText)` (lines `##.name` / `###name` only; exceptions and domain-specific rules ignored) and `findBlockedTokens(html, selectors)` (every class and id token in the HTML); unit tests first, with fixtures (generic vs domain rules, multi-class attributes, ids). Committed `scripts/data/easylist-generic-hide-selectors.txt`: selector names only, with header comment giving source URL, fetch date and licence (EasyList, GPLv3/CC BY-SA 3.0), and `scripts/refresh-blocklist-snapshot.mjs` to regenerate it. `npm run qa:blocklist` checks `_site/index.html`, `_site/print/index.html`, `_site/welcome/index.html`, `_site/admin/index.html` and fails today on `ad-frame`/`ad-link` (red recorded).
+  - Files: `05_WEBSITE/scripts/blocklist-guard-core.mjs`, `scripts/qa-blocklist.mjs`, `scripts/refresh-blocklist-snapshot.mjs`, `scripts/data/easylist-generic-hide-selectors.txt`, `tests/unit/blocklist-guard-core.test.mjs`, `package.json`
+
+- [ ] Task 23: Rename `ad-frame`/`ad-link` to `artwork-frame`/`artwork-link` [Decision O] (P0)
+  - Acceptance: no `ad-frame`, `ad-frame--memorial` or `ad-link` left in `src/`, `scripts/` or `tests/` (except as history in comments); `index.njk`, `print.njk`, `site.css`, `print.css`, `visual-qa.mjs`, `web-ad-cards` and any other test updated; rendering unchanged (web screenshot and PDF page renders compared before and after); `qa:blocklist` passes; the affected suites pass.
+  - Files: `src/index.njk`, `src/print.njk`, `src/assets/css/site.css`, `src/assets/css/print.css`, `scripts/visual-qa.mjs`, `tests/e2e/web-ad-cards.test.mjs` and others as found
+
+- [ ] Task 24: Serve tests under the production CSP; CSP-violation check [Decision Q] (P0)
+  - Acceptance: `tests/e2e/static-server.mjs` sends the headers from `vercel.json` (read at start, not copied by hand), so every page test runs under the real CSP. New `test:e2e:csp` opens `/` (registered view via the static `_site/index.html`), `/welcome/` and `/admin/` at 1440 px and fails on any `securitypolicyviolation` event or CSP console error. Red first: it reports the inline-style violations on the current build.
+  - Files: `tests/e2e/static-server.mjs`, `tests/e2e/csp.test.mjs`, `package.json`
+
+- [ ] Task 25: Advertisement tints from a generated stylesheet [Decision P] (P0)
+  - Acceptance: an Eleventy template writes `assets/css/ad-tints.css`, one rule per advertisement with a tint, using the same resolution as `adPageStyle`/`adInkClass` (shared helper, unit-tested); `index.njk` has no `style=` attribute; `base.njk` links `ad-tints.css`; `print.njk` unchanged. Under the production CSP, `web-ad-cards` asserts each card header's computed background equals its manifest `page_background` and the ink class is unchanged; `test:e2e:csp` goes green.
+  - Files: `src/ad-tints.css.njk` (or `.11ty.js`), `src/index.njk`, `src/_includes/layouts/base.njk`, `eleventy.config.mjs`, `tests/e2e/web-ad-cards.test.mjs`, `tests/unit/eleventy-config.test.mjs`
+
+- [ ] Task 26: Ad-blocker simulation test and gate re-run (P0)
+  - Acceptance: new `test:e2e:blocker` loads the page and injects the snapshot's generic hide rules for every class and id the page uses (via CSS in a CSP-bypassed test context); asserts all 30 publication images are still visible (non-zero rendered box) at 1440 and 390 px, with screenshots. Red on the old class names (checked against the pre-Task-23 build), then green. Full gate re-run (`validate`, `test:unit`, `test:integration`, all browser, PDF and QA suites, `e2e:app`, `check:secrets`, `check:sql`) green; the PDF text is identical to `V5_REVIEW_01`'s.
+  - Files: `tests/e2e/ad-blocker.test.mjs`, `package.json`
+
+- [ ] Task 27: `release:v5:02` and `V5_REVIEW_02` [Decision S] (P0)
+  - Acceptance: `V5_STEPS` gains `qa:blocklist`, `test:e2e:csp` and `test:e2e:blocker` (release-core unit test updated first); `release:v5:02` → `V5_REVIEW_02`; `CHANGELOG.md` section; built in the foreground or detached with an exit-code waiter; all steps green; `qa:pdf-compare:v5` classes equal `V5_REVIEW_01`'s; `V5_REVIEW_01` and earlier folders unchanged; no local secret values in the output; `release-assets/print/` PDF replaced only if its bytes differ.
+  - Files: `scripts/release-core.mjs`, `tests/unit/release-core.test.mjs`, `package.json`, `CHANGELOG.md`, `06_FINAL_OUTPUT/V5_REVIEW_02/**`
+
+- [ ] Task 28: Manual verification addendum (P1)
+  - Acceptance: `sprints/v5/MANUAL_VERIFICATION.md` addendum: local gate at 1440/390 px with and without the injected blocker rules (images visible, tints shown, no CSP errors); screenshots inspected.
+  - Files: `sprints/v5/MANUAL_VERIFICATION.md`
+
+- [ ] Task 29: Preview deployment of `V5_REVIEW_02` — **requires the owner's explicit go-ahead** (P1)
+  - Acceptance: as Task 20, plus on Preview: images visible, tints computed from the stylesheet, no CSP violations, and images still visible with the blocker rules injected; test records removed; recorded in `PREVIEW_DEPLOYMENT.md`.
+  - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
+
+- [ ] Task 30: Production deployment of `V5_REVIEW_02` — **requires a further explicit go-ahead** (P1)
+  - Acceptance: as Task 21 (checks that leave nothing behind unless Production reads are permitted), plus `ad-tints.css` and `site.css` served byte-identical to the build; previous deployment kept for rollback; recorded; walkthrough updated.
+  - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`, `sprints/v5/WALKTHROUGH.md`
 
 ## Session log
 

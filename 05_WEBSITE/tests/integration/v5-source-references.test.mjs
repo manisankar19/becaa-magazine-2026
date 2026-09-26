@@ -25,6 +25,10 @@ const ARCHIVE_SHA256 = "c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce
 const ALLOW_BARE_NAME = new Map([
   ["tests/integration/v5-source-references.test.mjs", "this test"],
   ["tests/integration/superseded-sources.test.mjs", "asserts the archived copy: path.join(archive26, <name>) under SUPERSEDED_SOURCES/2026-09-26"],
+  // Sprint v5 Tasks 7 and 11 (added when merging): record the old name, never read the file.
+  ["scripts/tracker-v5-core.mjs", "the row-16 Remarks note says the old source was archived (text written to the tracker)"],
+  ["tests/unit/tracker-v5-core.test.mjs", "fixture row 16 holds the tracker's pre-v5 Source File Name value"],
+  ["tests/integration/v5-manifest-msg001.test.mjs", "asserts publication.yaml no longer contains the old name"],
 ]);
 
 const SCANNED_DIRS = ["scripts", "src", "tests"];

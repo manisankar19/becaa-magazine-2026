@@ -1,30 +1,35 @@
 ---
 id: MSG-001
 title: "President Desk"
-source_file: "02_INCOMING_CONTENT/President Desk.docx"
-source_fingerprint: "c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb"
-verification: "verified"
+source_file: "02_INCOMING_CONTENT/Souvenir President message 05-09-2026.docx"
+source_fingerprint: 67d8a418d781e5bdad16985ceca4f64c6a40bd40d10a3cf075c9bd18dc9f3bf7
+verification: verified
 ---
-President’s Desk
+From the President's Desk
 
-সভাপতির কলম থেকে
+BECAA (Bengal Engineering College Alumni Association)  an unique word that energies all the former students of the BE College, BESU and IIEST irrespective of their ages and their social status. We all alumni in Maharashtra largely in Mumbai and Thane district of Maharashtra are no exception. Hence, we all the alumnus here embraced ourselves under the umbrella of BECAA Maharashtra.
 
-প্রিয় বেকান ও বেকানী বন্ধুরা,
+Indian Institute of Engineering Science & Technology (IIEST), Shibpur is a premier institute for research and education in the field of Engineering & Science. The institute was established way behind in 1856 is located on the west bank of River Hooghly and just on opposite bank of the city of joy Kolkata. The campus having a well connected transport network with city centre, is the first choice of educational place for the students, researchers and even the faculties.
 
-BECAA Maharashtra-এর সভাপতি হিসেবে ২০২৬ সালের স্মরণিকার মাধ্যমে তোমাদের কাছে কিছু কথা বলার সুযোগ পেয়ে আমি অত্যন্ত আনন্দিত। Bengal Engineering College আমাদের কাছে শুধু একটি শিক্ষাপ্রতিষ্ঠান নয়। এটি আমাদের জীবনের এক অবিচ্ছেদ্য অংশ। কলেজের শ্রেণিকক্ষ, হস্টেল, মাঠ, আড্ডা এবং বন্ধুদের সঙ্গে কাটানো অসংখ্য মুহূর্ত আজও আমাদের মনে সমানভাবে উজ্জ্বল। কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, BECAA-র পরিচয় আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।
+The institute since its inception had passed several phases of face lift with upgradation by the Government. Its inauguration was made on 24th November 1856 in the historical Writers Building with an objective to prepare technically competent officials for Public Works Departments (PWD). Later it changed its location in number of places like Kolkata University, Bishop College which is known as IIEST campus now. In every occasion the name changes were obvious. The original Civil Engineering (CE) College has got transformed to BE College, BE College deemed university, BESU and now upgraded to a status of institutes of national importance, run by Central Government at per with llTs & IISc.
 
-আমার দীর্ঘ কর্মজীবন কেটেছে Nuclear Power Corporation of India Limited-এ। আনুষ্ঠানিকভাবে অবসর নেওয়ার পরেও ভিন্ন দায়িত্ব নিয়ে আবার NPCIL-এর সঙ্গে যুক্ত থাকার সুযোগ হয়েছে। কাজের পরিধি ও দায়িত্ব বদলেছে, কিন্তু নতুন কিছু শেখার, মানুষের সঙ্গে কাজ করার এবং নিজের অভিজ্ঞতা ভাগ করে নেওয়ার আগ্রহ আজও একই রকম রয়েছে। BECAA Maharashtra এবং Deonar Bongiya Parishad-এর বিভিন্ন কর্মকাণ্ডের সঙ্গে যুক্ত থাকাও আমাকে সক্রিয় ও আনন্দময় রাখে।
+BECAA Maharashtra was formed four decade ago by the aspirant alumnus of BE college residing in Mumbai and Thane district of Maharashtra. The intention being revisiting the alma matter and staying connected through the roots of our Gurukul. It's a nonprofit charitable organization.
 
-সাংস্কৃতিক অনুষ্ঠান আমার বিশেষ প্রিয়। একটি সুন্দর অনুষ্ঠান মঞ্চে যত সহজ ও স্বতঃস্ফূর্ত বলে মনে হয়, তার পিছনে ততটাই পরিকল্পনা, পরিশ্রম এবং দলগত সহযোগিতা থাকে। অনুষ্ঠানের প্রস্তুতির সময়ে সকাল থেকে গভীর রাত পর্যন্ত কাজ করতে আমার ভালো লাগে। কখনও সেই কাজ দীর্ঘ ও ক্লান্তিকর হয়ে ওঠে, কিন্তু অনুষ্ঠান সফল হলে এবং সবার মুখে আনন্দ দেখলে সমস্ত ক্লান্তি দূর হয়ে যায়।
+Over the time the members started increasing and the people of present generation had elevated the status through digitization and social media  connectivity. Subsequently, the global body of the alumni association GAABESU was formed by our alumnus staying abroad and also in India. BECAA units in different Indian cities mostly aligned them with GAABESU as regional chapters. GAABESU Maharashtra also partially aligned its activities with GABESSU by participating in several welfare activities of Gaabesu. But self-identity of BECAA Maharashtra was not compromised as the organization is functioning under Maharashtra Charity Trust Act with definitive objectives and missions.
 
-গত এক বছরে BECAA Maharashtra-এর নানা আয়োজন আমাদের পারস্পরিক সম্পর্ককে আরও দৃঢ় করেছে। Swar Setu সাংস্কৃতিক অনুষ্ঠানে সংগীত, বন্ধুত্ব এবং একটি মহৎ উদ্দেশ্য একসঙ্গে মিলিত হয়েছিল। Madhubanti Bagchi ও Jazim Sharma-এর পরিবেশনা অনুষ্ঠানটিকে স্মরণীয় করে তুলেছিল। আমাদের Bijoya Sammilani এবং বার্ষিক বনভোজনেও তোমরা পরিবারের সবাইকে নিয়ে একত্রিত হওয়ার, পুরনো বন্ধুদের সঙ্গে দেখা করার এবং নতুন প্রজন্মকে BECAA পরিবারের সঙ্গে পরিচিত করানোর সুন্দর সুযোগ পেয়েছ।
+Through different activities like Bijaya Sanmilani, Annual Outdoor Excursion (Picnic) along with social activity, Annual Cultural Event, Technical Seminars, Industrial visits, Sports & Games etc. our families remain well connected socially & culturally, stay connected with Industries and the society specially with under privileged people & students.
 
-তবে আমাদের সংগঠনের দায়িত্ব শুধু সাংস্কৃতিক অনুষ্ঠান ও মিলনমেলার মধ্যেই সীমাবদ্ধ নয়। শিক্ষা সহায়তা, চিকিৎসার প্রয়োজনে পাশে দাঁড়ানো এবং সমাজের কল্যাণে যথাসাধ্য অবদান রাখা BECAA-এর গুরুত্বপূর্ণ লক্ষ্য। আগামী দিনে শিক্ষামূলক ও প্রযুক্তিগত আলোচনা, সমাজসেবামূলক উদ্যোগ এবং নবীন প্রজন্মের সক্রিয় অংশগ্রহণ আরও বাড়ানো প্রয়োজন। প্রবীণ সদস্যদের অভিজ্ঞতা ও নবীনদের উদ্যম একসঙ্গে মিললেই আমাদের সংগঠন আরও শক্তিশালী হবে।
+Our missions and visions are tried to be achieved every year through different events and occasions. Few to mention about those charity programs that our organization undertakes are:
 
-BECAA-এর প্রতিটি সাফল্যের পিছনে রয়েছে আমাদের সদস্য, কার্যকরী সমিতি, স্বেচ্ছাসেবক, শুভানুধ্যায়ী, পৃষ্ঠপোষক এবং তাদের পরিবার। তোমরা সময়, শ্রম, পরামর্শ ও সহযোগিতা দিয়ে প্রতিটি উদ্যোগকে সফল করে তোলো। তোমাদের সকলের প্রতি আমার আন্তরিক কৃতজ্ঞতা।
+- Extending Donation to spiritual Charitable organizations like Sharada Math Bharat Sevasram Sangha
+- Extending Charity Contribution in the Chief Minister Relief Fund Maharashtra and in the major events of National Disasters
+- Extending Educational assistance to the needy Engineering students in Maharashtra and in our Alma Matter.
+- Extending Medical aids to the members and their immediate families in emergency situation.
 
-এসো, আমরা কলেজজীবনের বন্ধুত্ব, মূল্যবোধ এবং ঐতিহ্যকে সঙ্গে নিয়ে আরও বেশি করে একে অপরের পাশে দাঁড়াই। আনন্দের অনুষ্ঠানে যেমন মিলিত হব, তেমনই প্রয়োজনের সময়েও সহযোগিতার হাত বাড়িয়ে দেব। আমাদের সম্মিলিত প্রচেষ্টায় BECAA Maharashtra যেন আগামী দিনেও প্রাক্তনীদের একটি প্রাণবন্ত, সেবামূলক ও আন্তরিক মিলনক্ষেত্র হয়ে থাকে।
+In our journey so far, I felt all our members and their families were deeply involved in its activities without which accomplishing the objectives continuously year after year would have not been possible. The active support from our Advisory Board members have sailed us safe in many difficult events. Our junior members have shown their vibrant presence when it is a fun filled event. Their merits and achievements make us proud many a times. The nostalgia of yester years brings the members closer and closer irrespective of their ages and social status.
 
-তোমাদের সকলের সুস্বাস্থ্য, সাফল্য ও আনন্দ কামনা করি।
+On behalf of my entire Managing Committee and its members I sincerely thank you all.
 
-Manik BarmanCE ’87President, BECAA Maharashtra
+Manik Barman  
+CE  87  
+President, BECAA Maharashtra

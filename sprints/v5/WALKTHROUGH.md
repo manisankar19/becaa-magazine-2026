@@ -1,8 +1,12 @@
-# Sprint v5 — Walkthrough (Tasks 1–14)
+# Sprint v5 — Walkthrough (Tasks 1–18)
 
-Scope note: Sprint v5 has 21 planned tasks. This walkthrough covers Tasks 1–14: intake, the `MSG-001` replacement, the `ART-011` branch correction, the tracker, and verification. Everything is on `main`, commits `a823182..8b8164b`: 15 commits; 40 files changed, +1,626 / −69 lines.
+Scope note: Sprint v5 has 21 planned tasks. This walkthrough covers Tasks 1–18:
+- **Tasks 1–14:** intake, the `MSG-001` replacement, the `ART-011` branch correction, the tracker, and verification (`a823182..8b8164b`).
+- **Tasks 15–18:** the V5 release list, the PDF comparison against `V4_REVIEW_02`, CHANGELOG, and the `V5_REVIEW_01` review build (`a70d2da..21c1201`, plus one follow-up fix, `af3386b`).
 
-Not done yet: Tasks 15–21 (the V5 release list, the PDF comparison against `V4_REVIEW_02`, CHANGELOG, the `V5_REVIEW_01` build, manual verification, Preview and Production deployments). Nothing has been released or deployed. Production still serves `V4_REVIEW_02` plus the front-page hero change.
+Everything is on `main`. Leaving aside the 286-file release folder, the sprint changed 51 files (+2,378 / −92 lines).
+
+Not done yet: Task 19 (manual verification record) and Tasks 20–21 (Preview and Production deployments, each needing its own approval). `V5_REVIEW_01` is built but not deployed; Production still serves `V4_REVIEW_02` plus the front-page hero change.
 
 ## Summary
 
@@ -15,10 +19,9 @@ The old Bengali source, `President Desk.docx`, was archived byte for byte and re
 
 `ART-011`'s byline now reads **Palash Biswas, Mechanical, 2006 Batch**. The tracker records both changes.
 
-The manifest still has 47 items, the PDF is still 72 pages, and the website, print HTML and PDF differ from the Sprint v4 build only in those two items. The full gate is green:
-- 32 unit files and 39 integration files, including 8 database-backed;
-- 20 browser, PDF and QA suites;
-- the 24-step application end-to-end run (`e2e:app`).
+The manifest still has 47 items, the PDF is still 72 pages, and the website, print HTML and PDF differ from the Sprint v4 build only in those two items.
+
+Tasks 15–18 turned this into a review release, `06_FINAL_OUTPUT/V5_REVIEW_01/`, built by `npm run release:v5` with all 32 gated steps green. The new PDF comparison against `V4_REVIEW_02` finds 69 pages unchanged, the `ART-011` byline page as a recorded `correction`, the two `MSG-001` pages as a verified `replaced-item`, and nothing unexplained. The front-page hero test now gates releases, and the deployable PDF is the V5 one.
 
 ## Architecture Overview
 
@@ -177,7 +180,7 @@ It also notes two more found while quoting: the double space in `social media  c
 - `V5_CORRECTIONS` — how each change reads in rendered text; used by the Task 12 test and, later, the PDF comparison.
 
 ```js
-{ id: "MSG-001", file: "src/content/messages/MSG-001-president-desk.md", find: "CE  87", replace: "CE ’87", expectedCount: 1 },
+{ id: "MSG-001", file: "src/content/messages/MSG-001-president-desk.md", find: "CE  87", replace: "CE \u201987", expectedCount: 1 },
 { id: "ART-011", file: "src/_data/publication.yaml",
   find: "    contributor: Palash Biswas\n    designation: ''\n    passing_year: '2006'\n    branch: Civil\n",
   replace: "    contributor: Palash Biswas\n    designation: ''\n    passing_year: '2006'\n    branch: Mechanical\n",
@@ -314,6 +317,174 @@ The new message is about 57% longer than the old one but still fits on PDF pp. 5
 #### Task 14 — full gate (no code change)
 The run is described under **Test Coverage**.
 
+### Stream F — Build and release (Tasks 15–18)
+
+| Commit | Task | Content |
+|---|---|---|
+| `a70d2da` | 15 | `V5_STEPS`, `release:v5`, V5 reproduction text |
+| `8ae16b9` | 16 | `replaced-item` class; `pdf-compare` profiles; `qa:pdf-compare:v5`; `qa:v5-pages` |
+| `b7ab7d1` | 17 | CHANGELOG `V5_REVIEW_01` section; DEPLOYMENT note |
+| `21c1201` | 18 | `06_FINAL_OUTPUT/V5_REVIEW_01/` (built at `b7ab7d1`); deployable PDF replaced |
+| `af3386b` | — | Follow-up: `v5-corrections.mjs` writes the apostrophe as a `\u2019` escape |
+
+#### `05_WEBSITE/scripts/release-core.mjs` — V5 step list and reproduction (Task 15)
+**Purpose**: The pure half of the release pipeline: which `npm run` steps a version runs, in what order, and the generated `REPRODUCTION.md`.
+
+**Key additions**:
+- `V5_STEPS`, returned by `stepsForVersion("V5_*")`;
+- `V5_CONTENT_MIGRATION`;
+- `reproductionMarkdownV5()`.
+
+**How it works**: `V5_STEPS` is derived from `V4_STEPS` rather than copied, so the two can't drift apart:
+
+```js
+const V5_RENAMED = { "qa:pdf-compare": "qa:pdf-compare:v5", "qa:v4-pages": "qa:v5-pages" };
+const V5_STEPS = V4_STEPS.flatMap((step) => {
+  if (step === "test:e2e:nav") return [step, "test:e2e:hero"];
+  if (step === "test:v4-committee-corrections") return [step, "test:v5-updates"];
+  return [V5_RENAMED[step] ?? step];
+});
+```
+
+Three decisions are built into this:
+- **The hero test gates releases.** `test:e2e:hero` joins the list. The v4 walkthrough flagged it as missing.
+- **The V5 checks get new names.** The comparison and page renders use `qa:pdf-compare:v5` and `qa:v5-pages`, and `V4_STEPS` is left untouched. The closed V4 releases (`release:v4`, `release:v4:02`) therefore stay reproducible as they were.
+- **The v4 ordering constraints are inherited.** `pdf` runs right after `build`, and every evidence step runs after `qa`, which wipes `qa-output/`.
+
+The unit test asserts all of this. It also asserts that every V5 step exists as an npm script; that check was added in Task 16, once the two new scripts existed.
+
+The V5 reproduction text names:
+- `release:v5`;
+- the `V4_REVIEW_02` baseline;
+- a foreground-run note;
+- the content migration in order: `extract:v5-president-desk` → `corrections:apply-v5` → `tracker:apply-v5`. The corrections must follow the extraction, or the signature fix is lost.
+
+`package.json` gains `release:v5` (`RELEASE_VERSION=V5_REVIEW_01`). `release.mjs` only gained a header comment.
+
+#### `05_WEBSITE/scripts/pdf-compare-core.mjs` — `replaced-item` (Task 16)
+**Purpose**: Classify every page of the new PDF against a baseline release and fail on anything unexplained.
+
+**The problem**: Sprint v4's comparison could explain an edit only as a find → replace pair on the baseline text. A whole new message can't be described that way. Simply exempting `MSG-001` would let any text through.
+
+**How it works**: The caller declares `replacedItems: [{ id, expectedText }]`. An item's pages become `replaced-item` only if all of these hold:
+- the item exists in both PDFs;
+- its text differs from the baseline;
+- its text equals the expected text.
+
+Anything else is `unexplained`. The comparison ignores letter case, because CSS uppercases the kicker (`MESSAGES · MSG-001` in the PDF, `Messages · MSG-001` in the HTML). It also ignores whitespace, as the v4 design did for justification and pdftotext spacing.
+
+```js
+function checkReplacedItem(baseSpan, curSpan, expectedKey) {
+  if (!baseSpan) return { ok: false, class: "unexplained", note: "item not in the baseline; only an existing item can be replaced" };
+  if (!curSpan) return { ok: false, class: "unexplained", note: "item missing from the current PDF" };
+  const before = baseSpan.map((p) => p.key).join("").toLowerCase();
+  const after = curSpan.map((p) => p.key).join("").toLowerCase();
+  if (after === before) return { ok: false, class: "unexplained", note: "item declared replaced but its text is unchanged (not replaced)" };
+  if (after !== expectedKey) return { ok: false, class: "unexplained", note: `replacement text differs from the expected text: …` };
+  return { ok: true, class: "replaced-item", note: "authorised replacement; text equals the expected text" };
+}
+```
+
+A declared replacement is checked before any correction list for the same ID. As with a failed correction, a failed replacement overrides an exact page match on the item's first page, so an item that was never replaced cannot pass by looking unchanged.
+
+`PAGE_CLASSES` gains `replaced-item`, so V4-profile reports now show a zero row for it; nothing else changes for V4.
+
+Seven new hermetic scenarios cover:
+- a same-length replacement;
+- a longer replacement that shifts later pages;
+- wrong text;
+- an item that was not replaced;
+- an ID absent from the baseline;
+- precedence over corrections, including an unapplied correction failing alongside a replacement;
+- unchanged V4 behaviour without a declaration.
+
+#### `05_WEBSITE/scripts/pdf-compare.mjs` — profiles (Task 16)
+**Purpose**: The CLI around the core. It runs `pdftotext` (argument array, no shell) and writes `qa-output/pdf-compare/<baseline>-vs-current.{json,md}`.
+
+**How it works**: There are two profiles:
+- **`v4`** is the default, so `npm run qa:pdf-compare` behaves exactly as before: V3 baseline, the v4 poem, new items and corrections.
+- **`v5`** is `npm run qa:pdf-compare:v5`:
+  - the baseline is `06_FINAL_OUTPUT/V4_REVIEW_02`'s PDF;
+  - there are no poem or new items;
+  - the corrections are `V5_CORRECTIONS` without `MSG-001`, leaving ART-011's byline;
+  - `MSG-001` is a replaced item.
+
+`MSG-001`'s signature correction is relative to the extraction, not to the baseline, so the replacement check covers it instead.
+
+The expected text for `MSG-001` is its `<section>` in the built print HTML, which is what the PDF is printed from. That alone would let a wrong build define its own "truth", so the text is first anchored to the approved content: every line of `MSG-001-president-desk.md` must appear in it, in order. The line's `- ` list prefix is dropped and `'` becomes `’`, the typographer's form. If the anchor fails, the script throws with "rebuild the site".
+
+**Real result**:
+
+| Class | Pages |
+|---|---:|
+| unchanged | 69 |
+| correction | 1 (p. 34, `ART-011` byline) |
+| replaced-item | 2 (pp. 5–6, `MSG-001`) |
+| unexplained | 0 |
+
+**Negative checks, run by hand, all as expected:**
+- `--no-corrections` makes `ART-011` unexplained;
+- using the current PDF as the baseline makes `MSG-001` "not replaced";
+- editing one list item in the built print HTML makes the anchor throw;
+- the V4 profile still reports exactly the three pages it did before.
+
+#### `05_WEBSITE/scripts/render-v5-pages.mjs` (new, Task 16)
+**Purpose**: `npm run qa:v5-pages` — PNG evidence of the pages this sprint changed, kept in the release.
+
+**How it works**: It reuses Sprint v4's `planV4PageRenders`, which was already generic, with evidence IDs `MSG-001` plus every `V5_CORRECTIONS` ID. It renders each page with `pdftoppm` at 150 dpi into `qa-output/v5-pages/pNN-<ID>.png` and writes `index.json`. On the release PDF that is 8 renders:
+- contents, pp. 2–3;
+- `MSG-001`, pp. 5–6;
+- `ART-011`, pp. 34–37 (the whole article, as v4 rendered whole items).
+
+The new integration test `render-v5-pages` runs the script and checks:
+- the rendered set is exactly the contents pages plus the page ranges of the two items;
+- each file is a real PNG over 10 KB;
+- the page count in `index.json` is correct.
+
+It was red first (module missing) and is part of `test:integration`.
+
+#### `CHANGELOG.md` and `05_WEBSITE/DEPLOYMENT.md` (Task 17)
+- **CHANGELOG:** a new `V5_REVIEW_01` section:
+  - Changed: `MSG-001`, `ART-011`, the tracker, the retired v4 correction, the release list and the deployable PDF.
+  - Added: the v5 scripts, `qa:pdf-compare:v5` with `replaced-item`, `qa:v5-pages` and the tests.
+  - Removed: `President Desk.docx` from the intake folder, archived.
+  - Unchanged: the other 45 items and the application layer.
+- **DEPLOYMENT.md:** a Sprint v5 note. Use `release:v5` in the foreground; the smoke test still expects 47 items; after registering, check the new message and the ART-011 byline.
+- **No test:** this is documentation only, and no test pins either file's text. `release.mjs` copies `DEPLOYMENT.md` into the release.
+
+#### `06_FINAL_OUTPUT/V5_REVIEW_01/` and the deployable PDF (Task 18)
+**Build**: `npm run release:v5` at `b7ab7d1` with Node 22.23.2. All 32 steps ran in order and passed, in about 3 minutes; the pipeline stops at the first failure.
+
+**Output**: 286 files, 152 MB:
+- `website/`, containing the site and the 72-page PDF (SHA-256 `d982f11e…`);
+- `release-manifest.json` (47 item IDs and source fingerprints);
+- `BUILD_SUMMARY.md`, `REPRODUCTION.md`, the validation and audit reports, `DEPLOYMENT.md`, `THREAT_CHECKS.md`;
+- `qa-output/`, including `pdf-compare/V4_REVIEW_02-vs-current.*`, `v5-pages/` and `front-page/`.
+
+The release now also contains the front-page hero change, so the archive matches what a V5 deployment would serve.
+
+**Checks after the build:**
+- no tracked file in the V0–V4 release folders changed;
+- all 286 files were scanned for the literal values of the five local secrets (`DATABASE_URL`, `DATABASE_URL_TEST`, `SESSION_SECRET`, `IP_HASH_SALT`, `VERCEL_OIDC_TOKEN`), with 0 hits;
+- the `MSG-001` evidence render (p. 5) was inspected.
+
+**Deployable PDF**: Vercel's build cannot run Chromium, so the site serves the committed `05_WEBSITE/release-assets/print/BECAA-2026-complete-review.pdf`. It was replaced with the V5 PDF (it was `cd1197db…`), and the copy was checked byte-identical.
+
+**How it was run**: a foreground call in this environment is capped at 10 minutes, and a harness-managed background run was stopped for low memory in Sprint v4. So the pipeline ran as a detached process, logging to the session scratchpad. A waiter reported its exit code, and the log was checked while it ran.
+
+#### Follow-up fix: `v5-corrections.mjs` (`af3386b`)
+While writing this walkthrough I found that the correction data held a literal `’`. Its header comment, which was meant to explain the `\u2019` escape, had itself been turned into the character. The code now uses the escape, as intended and as Sprint v4 did for Bengali. The string value is identical: the tests pass, and `corrections:apply-v5` reports both entries `already applied`. `V5_REVIEW_01`, built one commit earlier, is unaffected.
+
+#### An environment incident during Task 15
+Partway through Task 15 the host lost its Node 22. `~/.local/bin/node` was a link into `~/.hermes/node/`, and the whole `~/.hermes` directory had been deleted by something outside this session. `node` then resolved to the system Node 18: `session.test` segfaulted, `gate.test` failed, and `npm`/`npx` stopped working.
+
+The Task 15 commit was first written claiming `test:unit` was green, which had not been verified. It was amended before any push to say what had actually run. With the owner's approval, Node v22.23.2 was reinstalled user-locally:
+- the official tarball, checked against nodejs.org's `SHASUMS256.txt`;
+- unpacked to `~/.local/node-v22`;
+- `~/.local/bin/{node,npm,npx}` repointed there.
+
+`test:unit` then passed in full, and everything after that ran on Node 22.23.2. With the new npm, `npx semgrep` no longer resolves, so semgrep is called directly (the same installed tool).
+
 ## Data Flow
 
 1. **Intake.** The owner drops the new DOCX. Task 1 archives the old one from git, and Task 2 removes it from the intake folder in the same commit that adds the new one.
@@ -329,10 +500,29 @@ The run is described under **Test Coverage**.
 5. **Tracker.** `tracker:apply-v5` takes a snapshot, then updates rows 16 and 23.
 6. **Build.** Eleventy renders `MSG-001` (Markdown `- ` lines become `<ul><li>`, two-space line ends become `<br>`) and each item's byline (`contributor, branch, year Batch`). `compile-pdf` prints the print HTML to the 72-page PDF.
 7. **Proof.** `test:v5-updates` checks all three surfaces against the expected text, the archived old message, and the `V4_REVIEW_02` bylines. The v4 suite skips the retired `MSG-001` correction and still checks every other v4 correction.
+8. **Release.** `npm run release:v5` → `release.mjs` gets `stepsForVersion("V5_REVIEW_01")` and runs the 32 steps with no shell, stopping at the first failure. Along the way:
+   - `qa:pdf-compare:v5` reads the new PDF, `V4_REVIEW_02`'s PDF, the built print HTML and the `MSG-001` content file, then classifies every page;
+   - `qa:v5-pages` renders the evidence.
+
+   Packaging copies `_site/`, `qa-output/` and the reports into `06_FINAL_OUTPUT/V5_REVIEW_01/` (refusing to overwrite) and writes `release-manifest.json`, `BUILD_SUMMARY.md` and `REPRODUCTION.md`. The PDF is then copied to `release-assets/print/`, which is the file a deployment serves.
 
 ## Test Coverage
 
-Every task's tests were run red before green, except Task 12. That test was written after its implementation, so its failing mode was proven by mutation (see above). The final state on `main` at `8b8164b`, with a fresh `build` + `pdf`, run sequentially in the foreground:
+**Final state (Tasks 15–18):** the `V5_REVIEW_01` release at `b7ab7d1` ran all 32 gated steps and passed each:
+- `tracker:validate`, `validate`, `typecheck`, `test:unit` (32 files), `build`, `pdf`, `test`, `test:integration` (40 files, now including `render-v5-pages`);
+- `qa`, `qa:v2-items`, `qa:pdf`, `qa:pdf-compare:v5`;
+- `test:e2e:cover`, `test:e2e:poem`, `qa:pdf:v2-items`, `qa:ad-backgrounds`, `qa:art006`, `qa:contact`, `qa:v5-pages`;
+- `test:e2e:{print-ads,web-ads,nav,hero}`, `test:v4-advertisements`, `test:v4-committee-corrections`, `test:v5-updates`, `test:e2e:{welcome,admin}`;
+- `e2e:app`, `check:secrets` (253 files), `check:sql`, and the `audit` gate.
+
+What Tasks 15–16 added or changed in the tests:
+- `release-core`: V5 order, V4 unchanged, reproduction text, every V5 step an npm script;
+- `pdf-compare-core`: 7 replaced-item scenarios;
+- the new `render-v5-pages` integration test.
+
+Each was run red before green. Task 17 is documentation only, with no test.
+
+**Tasks 1–14.** Every task's tests were run red before green, except Task 12. That test was written after its implementation, so its failing mode was proven by mutation (see above). The state on `main` at `8b8164b`, with a fresh `build` + `pdf`, run sequentially in the foreground:
 
 - **Gates:** `validate` (47 items, 0 errors, the 7 long-standing low-resolution print warnings), `tracker:validate` (54 rows, 3 sheets), `typecheck`, `check:secrets`, `check:sql` — pass.
 - **Unit:** `test:unit`, 32 files, passes.
@@ -346,12 +536,12 @@ Every task's tests were run red before green, except Task 12. That test was writ
   - `test:e2e:{cover,poem,print-ads,web-ads,nav,hero,welcome,admin}`;
   - `test:v4-advertisements`, `test:v4-committee-corrections`, `test:v5-updates`.
 - **Application:** `e2e:app`, 24 steps (registration gate → magazine → admin), passes.
-- **Expected failure:** `qa:pdf-compare`, still wired to the Sprint v3 baseline, reports exactly three unexplained pages: `MSG-001` pp. 5–6 and `ART-011` p. 34. That is precisely the intended change set; Task 16 moves V5 to a `V4_REVIEW_02` baseline that knows about them.
+- **Expected failure at the time:** `qa:pdf-compare`, wired to the Sprint v3 baseline, reported exactly three unexplained pages: `MSG-001` pp. 5–6 and `ART-011` p. 34. That was precisely the intended change set. Task 16 gave V5 its own comparison against `V4_REVIEW_02`, which explains them; the V4 profile still reports the same three pages, which is correct for a closed V4 release.
 
 ## Security Measures
 
 - **Source fingerprint gate:** the extractor refuses any DOCX whose SHA-256 is not `67d8a418…`, so a different or re-saved file can't be published silently.
-- **Count-guarded, code-point-exact edits only:** both corrections and the four `MSG-001` manifest fields went through `text-correction-core`. The ART-011 edit is anchored on four lines, because a bare `branch: Civil` would match ten items. The apostrophe is written as `’` in source.
+- **Count-guarded, code-point-exact edits only:** both corrections and the four `MSG-001` manifest fields went through `text-correction-core`. The ART-011 edit is anchored on four lines, because a bare `branch: Civil` would match ten items. The apostrophe is written as the `\u2019` escape in source (since `af3386b`; before that it was a literal `’`).
 - **No silent overwrite:** the Task 4 test no longer writes to the real content file. A future re-extraction must be followed by `corrections:apply-v5`, which is re-run safe.
 - **Provenance preserved:**
   - the old source is archived byte-exact from git before removal;
@@ -360,12 +550,19 @@ Every task's tests were run red before green, except Task 12. That test was writ
   - the tracker is snapshotted before its write.
 - **Scope:** `git diff 75688c9..HEAD` touches only Sprint v5 files. Nothing changed under `06_FINAL_OUTPUT/`, `01_REFERENCE_2025/`, `03_ADVERTISEMENTS/`, `api/`, `lib/`, `middleware.ts`, `db/`, `src/assets/`, the welcome and admin templates, or `release-assets/`. The application layer and databases are untouched; `e2e:app` used only the local test database.
 - **Output escaping:** the list and signature reach the page through markdown-it and the existing templates. No template, `| safe` or script changed, so the CSP is unaffected.
+- **Release comparison cannot be satisfied by the build itself:** a replaced item must equal text anchored to the approved content file, so a stale or tampered build fails `qa:pdf-compare:v5` instead of defining its own expected text. An item declared replaced but unchanged also fails.
+- **Release output checked:** no local secret value appears in the 286 release files, and `check:secrets` and `check:sql` ran inside the pipeline. Release folders are never overwritten, and the earlier ones are unchanged.
+- **No shell in the new tooling:** `pdftotext` and `pdftoppm` run via `execFileSync` with argument arrays. The release runs steps through `node npm-cli.js` with `shell: false`.
+- **Runtime provenance:** the reinstalled Node was checked against nodejs.org's published SHA-256 before use.
 - **Scans:** `semgrep --config auto --quiet --error` is clean on every changed file. `npm audit` shows the same 3 allow-listed highs (`playwright`, `sharp`, `xlsx`), and there were no dependency changes.
 
 ## Known Limitations
 
-- **Not released or deployed.** `06_FINAL_OUTPUT/` has no V5 folder. The deployable PDF (`release-assets/print/`) is still `V4_REVIEW_02`'s, and Production still shows the old message and the old ART-011 byline.
-- **`qa:pdf-compare` is red** until Task 16 (V3 baseline, see Test Coverage). Running `release:v4` or `release:v4:02` now would stop at that step. That is correct: those releases are closed.
+- **Built, not deployed.** `V5_REVIEW_01` exists and the deployable PDF is updated, but no Preview or Production deployment has been made; Production still shows the old message and the old ART-011 byline. Deploying needs the owner's explicit approval (Tasks 20–21).
+- **Task 19 (manual verification record) is not done.** The evidence render of `MSG-001` p. 5 was inspected, but there is no browser pass through the local registration gate for V5 yet.
+- **The V4 release lists no longer pass on today's tree.** Running `release:v4`/`release:v4:02` would stop at the V3-baseline comparison (the three intended pages). That is correct, because those releases are closed; V5 uses `release:v5`.
+- **The release ran detached, not in the foreground.** A single tool call is capped at 10 minutes. The pipeline's own exit code and log are the record: the log is in the session scratchpad and not committed, but the release folder holds the reports.
+- **The host's Node is now user-installed** in `~/.local/node-v22`. Whatever removed `~/.hermes` is unknown. If that tool comes back, it may relink `~/.local/bin/node`.
 - **The author's wording is published as supplied** (Decision C). Nine suspected slips, plus two double spaces and `Gaabesu`, are listed in the owner correction record §3 for review; any approved fix goes there first.
 - **Double space after `Association)` and in `social media  connectivity`.** They survive in the Markdown. Browsers collapse them on the website; `pdftotext` shows single spaces in the PDF.
 - **The `24th` superscript is flattened** by mammoth to plain "24th".
@@ -380,13 +577,9 @@ Every task's tests were run red before green, except Task 12. That test was writ
 
 ## What's Next
 
-Tasks 15–21 of this sprint, in order:
-1. **Task 15:** `V5_STEPS` (the V4 list + `test:e2e:hero` + `test:v5-updates`) and `release:v5`.
-2. **Task 16:** the PDF comparison against `V4_REVIEW_02`, with a `replaced-item` class for `MSG-001` and `ART-011` as a recorded correction; evidence renders.
-3. **Task 17:** CHANGELOG and DEPLOYMENT notes.
-4. **Task 18:** build `V5_REVIEW_01` in the foreground and replace the deployable PDF.
-5. **Task 19:** manual verification record.
-6. **Tasks 20–21:** Preview, then Production — each needs its own explicit approval.
+The rest of this sprint:
+1. **Task 19:** manual verification of `V5_REVIEW_01` through the local registration gate at 1440 and 390 px (the new message card, the ART-011 byline, the PDF renders), recorded in `sprints/v5/MANUAL_VERIFICATION.md`.
+2. **Tasks 20–21:** Preview, then Production, from the release commit, each only after its own explicit approval. After deploying, check the served PDF byte for byte against `V5_REVIEW_01` (SHA-256 `d982f11e…`).
 
 Owner decisions that can come at any time:
 - which, if any, of the §3 wording slips to correct;

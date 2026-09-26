@@ -139,3 +139,11 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 - **Test results:** `validate`, `tracker:validate`, `typecheck`, `test:unit` (32 files), `test:integration` (39 files, 8 DB-backed), 20 build/PDF/browser suites, `e2e:app` (24 steps), `check:secrets`, `check:sql` — all pass. `qa:pdf-compare` (V3 baseline) fails as expected on MSG-001 pp. 5–6 and ART-011 p. 34 only.
 - **Unresolved issues:** Decision K recorded as `language: en` (the manifest's code), PRD aligned; PRD "11 paragraphs" corrected to 8; the author's wording slips await owner review (owner correction record §3).
 - **Next task:** Task 15 (`V5_STEPS` and `release:v5`), then 16 before any release build.
+
+### 2026-09-26 — Tasks 15–18
+- **Completed task(s):** 15 (`V5_STEPS`, `release:v5`), 16 (PDF comparison against `V4_REVIEW_02`, `qa:v5-pages`), 17 (CHANGELOG, DEPLOYMENT), 18 (`V5_REVIEW_01`, deployable PDF).
+- **Commits:** `a70d2da` (15), `8ae16b9` (16), `b7ab7d1` (17), `21c1201` (18), `af3386b` (follow-up: `’` escape in `v5-corrections.mjs`), then the walkthrough update.
+- **Changed files:** as declared, plus `tests/integration/render-v5-pages.test.mjs` (Task 16) and the follow-up fix.
+- **Test results:** release pipeline 32/32 steps green at `b7ab7d1`; `qa:pdf-compare:v5` unchanged 69, correction 1, replaced-item 2, unexplained 0; `test:unit` 32 files and `test:integration` 40 files green on Node 22.23.2; semgrep clean; `npm audit` 3 allow-listed.
+- **Unresolved issues:** the host's Node 22 (`~/.hermes/node`) vanished during Task 15. The Task 15 commit was first written with an unverified "test:unit green" claim; it was amended before any push. With the owner's approval Node v22.23.2 was reinstalled to `~/.local/node-v22` (SHA-256 verified). The release ran as a detached process because foreground calls are capped at 10 minutes. Preview/Production not run, as instructed.
+- **Next task:** Task 19 (manual verification record); Tasks 20–21 need explicit deployment approval.

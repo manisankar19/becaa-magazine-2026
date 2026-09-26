@@ -13,7 +13,7 @@ import { chromium } from "playwright";
 import { readManifest, siteRoot } from "../../scripts/lib.mjs";
 import { countOccurrences } from "../../scripts/text-correction-core.mjs";
 import { findControlCharacters } from "../../scripts/content-encoding-core.mjs";
-import { ADV_028_SENTENCE, ADV_028_SUPERSEDED, MSG001_SENTENCE, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
+import { activeCorrections, ADV_028_SENTENCE, ADV_028_SUPERSEDED, isSuperseded, MSG001_SUPERSEDED, V4_CORRECTIONS, V4_FILE_CORRECTIONS } from "../../scripts/v4-corrections.mjs";
 import { applyV4FileCorrections } from "../../scripts/apply-v4-committee-corrections.mjs";
 
 const read = (rel) => fs.readFileSync(path.join(siteRoot, rel), "utf8");
@@ -22,15 +22,32 @@ const decode = (s) => s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&g
 
 // Content as it was before the committee corrections (Task 21's commit): every corrected
 // file must equal its baseline with exactly the recorded substitutions applied.
+// Sprint v5 (Decision H): the superseded MSG-001 correction is left out — its file now holds
+// the new President's message — and the manifest items Sprint v5 changes on purpose (MSG-001
+// replaced, ART-011 branch; both checked by v5-updates.test.mjs) are masked on both sides.
 const BASELINE_COMMIT = "ae098d5";
+const V5_CHANGED_MANIFEST_ITEMS = ["MSG-001", "ART-011"];
 const baseline = (rel) => execFileSync("git", ["show", `${BASELINE_COMMIT}:05_WEBSITE/${rel}`], { cwd: siteRoot, encoding: "utf8", maxBuffer: 30_000_000 });
+function maskManifestItems(text, ids) {
+  let out = text;
+  for (const id of ids) {
+    const start = out.indexOf(`\n  - id: ${id}\n`);
+    assert.ok(start !== -1, `manifest item ${id} found for masking`);
+    const rest = out.slice(start + 1).search(/\n(?: {2}- id: |\S)/);
+    assert.ok(rest !== -1, `manifest item ${id}: end of block found`);
+    out = `${out.slice(0, start)}\n  - id: ${id} (masked: changed in Sprint v5)${out.slice(start + 1 + rest)}`;
+  }
+  return out;
+}
+const V4_ACTIVE_FILE_CORRECTIONS = activeCorrections(V4_FILE_CORRECTIONS);
 function assertOnlyRecordedSubstitutions(id) {
-  const files = [...new Set(V4_FILE_CORRECTIONS.filter((c) => c.id === id).map((c) => c.file))];
+  const files = [...new Set(V4_ACTIVE_FILE_CORRECTIONS.filter((c) => c.id === id).map((c) => c.file))];
   assert.ok(files.length > 0, `${id}: has file corrections`);
   for (const file of files) {
     let expected = baseline(file);
-    for (const c of V4_FILE_CORRECTIONS.filter((x) => x.file === file)) expected = expected.split(c.find).join(c.replace);
-    assert.equal(read(file), expected, `${file}: identical to ${BASELINE_COMMIT} apart from the recorded corrections`);
+    for (const c of V4_ACTIVE_FILE_CORRECTIONS.filter((x) => x.file === file)) expected = expected.split(c.find).join(c.replace);
+    const mask = file === "src/_data/publication.yaml" ? (t) => maskManifestItems(t, V5_CHANGED_MANIFEST_ITEMS) : (t) => t;
+    assert.equal(mask(read(file)), mask(expected), `${file}: identical to ${BASELINE_COMMIT} apart from the recorded corrections`);
   }
   // Re-running the correction script is a no-op once applied.
   assert.ok(applyV4FileCorrections({ only: [id] }).every((r) => r.action === "already applied"), `${id}: corrections already applied, re-run is a no-op`);
@@ -70,26 +87,24 @@ function pdfItemText(id) {
 }
 const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
 
-// --- MSG-001: page-5 Bengali wording (Task 23, Decision O) -------------------
+// --- MSG-001: Task 23's correction retired (Sprint v5 Task 8, Decision H) -------------
+// MSG-001 now holds the President's new message (checked by v5-updates.test.mjs). The v4
+// correction stays in the data as history, marked superseded, and the apply script skips it
+// without reading the file; the content file is left exactly as it is.
 {
-  const content = read("src/content/messages/MSG-001-president-desk.md");
-  assert.ok(content.includes(MSG001_SENTENCE.new), "MSG-001 content: corrected sentence present verbatim");
-  assert.ok(!content.includes(MSG001_SENTENCE.old), "MSG-001 content: superseded sentence absent");
-  assert.ok(content.includes(MSG001_SENTENCE.untouched), "MSG-001 content: salutation unchanged");
-  assert.equal(countOccurrences(content, "বেকান"), 1, "MSG-001 content: one standalone বেকান left (the salutation)");
-  assert.equal(countOccurrences(content, "বেকানী"), 1, "MSG-001 content: বেকানী unchanged");
-  assert.equal(countOccurrences(content, "BECAA-র"), 1, "MSG-001 content: exactly one BECAA-র");
-  assertOnlyRecordedSubstitutions("MSG-001");
-
-  const web = webArticle("MSG-001");
-  assert.ok(web.includes(MSG001_SENTENCE.new), "MSG-001 website: corrected sentence present");
-  assert.ok(!web.includes(MSG001_SENTENCE.old), "MSG-001 website: superseded sentence absent");
-  assert.ok(web.includes(MSG001_SENTENCE.untouched), "MSG-001 website: salutation unchanged");
-
-  const pdf = squash(pdfItemText("MSG-001"));
-  assert.ok(pdf.includes(squash(MSG001_SENTENCE.new)), "MSG-001 PDF: corrected sentence present");
-  assert.ok(!pdf.includes(squash(MSG001_SENTENCE.old)), "MSG-001 PDF: superseded sentence absent");
-  assert.ok(pdf.includes(squash(MSG001_SENTENCE.untouched)), "MSG-001 PDF: salutation unchanged");
+  const entries = V4_FILE_CORRECTIONS.filter((c) => c.id === "MSG-001");
+  assert.equal(entries.length, 1, "MSG-001: v4 file correction kept as history");
+  assert.deepEqual(entries[0].superseded, MSG001_SUPERSEDED, "MSG-001: marked superseded with date and reason");
+  assert.deepEqual(V4_FILE_CORRECTIONS.filter(isSuperseded).map((c) => c.id), ["MSG-001"], "only MSG-001 is superseded");
+  const file = "src/content/messages/MSG-001-president-desk.md";
+  const before = read(file);
+  const results = applyV4FileCorrections({ only: ["MSG-001"] });
+  assert.deepEqual(results.map((r) => r.action), ["skipped (superseded)"], "apply script skips the superseded MSG-001 correction");
+  assert.match(results[0].reason, /^2026-09-26: .*Decision H/, "skip states the date and reason");
+  assert.equal(read(file), before, "MSG-001 content untouched by the apply script");
+  // A full run skips MSG-001 and verifies every other correction as already applied.
+  const all = applyV4FileCorrections();
+  assert.ok(all.every((r) => (r.id === "MSG-001" ? r.action === "skipped (superseded)" : r.action === "already applied")), "full re-run: MSG-001 skipped, all others already applied");
 }
 
 // --- MSG-002: title spelling (Task 24, Decision P) ------------------------------

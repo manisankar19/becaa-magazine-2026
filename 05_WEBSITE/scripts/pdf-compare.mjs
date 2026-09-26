@@ -81,6 +81,8 @@ function markdownReport({ opts, baselinePages, currentPages, corrections, result
 }
 
 const opts = parseArgs(process.argv.slice(2));
+// All V4 corrections, including the superseded MSG-001 one (Sprint v5 Decision H): this
+// comparison is against the historical V3_REVIEW_02 baseline, and the V4 PDFs contain it.
 const corrections = opts.noCorrections ? [] : V4_CORRECTIONS;
 const manifestIds = new Map(readManifest().items.map((item) => [item.id, item.title]));
 const unknown = [...POEM_IDS, ...NEW_ITEM_IDS, ...V4_CORRECTIONS.map((c) => c.id)].filter((id) => !manifestIds.has(id));

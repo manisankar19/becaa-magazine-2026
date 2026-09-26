@@ -42,6 +42,14 @@ for (const [trackerId, manifestId] of [["16", "MSG-001"], ["5", "ART-003"]]) {
   assert.equal(byId(after, trackerId)["Title / Item"], byId(before, trackerId)["Title / Item"], `${manifestId}: title unchanged`);
 }
 assert.match(byId(after, "16").Remarks, /salutation/, "MSG-001 remark states the salutation is unchanged");
+// Sprint v5 Task 8 (Decision H): the MSG-001 correction is superseded, but its row-16 remark was
+// written to the real tracker in Sprint v4. The note must stay byte-identical so a re-run of
+// tracker:apply-v4-corrections is still a no-op (a changed note would be appended a second time).
+assert.equal(
+  CORRECTION_DECISIONS["16"].remarksNote,
+  "Sprint v4 committee correction (02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md): published wording \"বেকান পরিচয়\" → \"BECAA-র পরিচয়\" in MSG-001; the salutation and বেকানী unchanged; original source file unchanged.",
+  "MSG-001 v4 remark frozen as written in Sprint v4",
+);
 
 // ART-004 / ART-005: Late display name recorded; contributor field unchanged.
 for (const id of ["6", "7"]) {

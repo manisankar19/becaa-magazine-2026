@@ -12,6 +12,9 @@ const SOURCE = "02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md";
 // Manifest ID → tracker Item ID (from each item's manifest note "Tracker Item ID N").
 export const TRACKER_IDS = { "MSG-001": "16", "MSG-002": "17", "ART-003": "5", "ART-004": "6", "ART-005": "7" };
 
+// Deliberately includes superseded entries (MSG-001, Sprint v5 Decision H): the row-16 remark
+// was written in Sprint v4 and is history; it must stay byte-identical so a re-run is a no-op.
+// The v5 tracker update records the replacement in a separate, appended note.
 const substitutions = (id) => V4_CORRECTIONS.filter((c) => c.id === id).map((c) => `"${c.find}" → "${c.replace}"`).join(" and ");
 
 export const CORRECTION_DECISIONS = {

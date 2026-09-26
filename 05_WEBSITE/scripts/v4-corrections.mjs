@@ -5,11 +5,24 @@
 // Strings are code-point exact for the file they target: MSG-001 stores the letter ya-nukta
 // as U+09DF, ART-003 stores it as U+09AF U+09BC. \u escapes keep that visible and stop an
 // editor from normalising it away.
+//
+// Sprint v5 Task 8 (PRD §4.3, Decision H): MSG-001 was replaced by the President's new English
+// message on 2026-09-26, so the MSG-001 correction targets text that no longer exists. Its
+// entries are kept here as history and marked `superseded`; consumers decide what that means:
+//   - apply-v4-committee-corrections skips them (with the reason) and applies all others;
+//   - tracker-corrections-core still builds the row-16 remark from them, because that remark
+//     was written to the tracker in Sprint v4 and must stay byte-identical (re-run = no-op);
+//   - pdf-compare (V3_REVIEW_02 baseline, historical) keeps them: the V4 PDFs contain the
+//     correction, so a V4-vs-V3 comparison still explains the MSG-001 page;
+//   - render-v4-pages keeps MSG-001 as an evidence item (the item, now the new message, still exists).
+export const MSG001_SUPERSEDED = Object.freeze({ date: "2026-09-26", reason: "MSG-001 replaced by the new President's message (Sprint v5, Decision H)" });
+export const isSuperseded = (correction) => Boolean(correction?.superseded);
+export const activeCorrections = (corrections) => corrections.filter((c) => !isSuperseded(c));
 
 // Text edits applied to working content (scripts/apply-v4-committee-corrections.mjs).
 // `file` is relative to 05_WEBSITE/.
 export const V4_FILE_CORRECTIONS = [
-  { id: "MSG-001", file: "src/content/messages/MSG-001-president-desk.md", find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF", expectedCount: 1 },
+  { id: "MSG-001", file: "src/content/messages/MSG-001-president-desk.md", find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF", expectedCount: 1, superseded: MSG001_SUPERSEDED },
   { id: "MSG-002", file: "src/_data/publication.yaml", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 2 }, // title and alt
   { id: "MSG-002", file: "src/content/messages/MSG-002-vice-preseident-desk.md", find: "Vice Preseident Desk", replace: "Vice President Desk", expectedCount: 1 },
   { id: "ART-003", file: "src/content/articles/ART-003-item.md", find: "ভাইবই", replace: "ভাবা\u09AF\u09BC", expectedCount: 1 },
@@ -26,7 +39,7 @@ export const V4_FILE_CORRECTIONS = [
 // How each correction shows up in rendered text (website, PDF); used by the regression
 // test and the PDF comparison. ART-004/ART-005 change through `display_name`, not a text edit.
 export const V4_CORRECTIONS = [
-  { id: "MSG-001", find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF" },
+  { id: "MSG-001", find: "বেকান পরিচ\u09DF", replace: "BECAA-র পরিচ\u09DF", superseded: MSG001_SUPERSEDED },
   { id: "MSG-002", find: "Vice Preseident Desk", replace: "Vice President Desk" },
   { id: "ART-003", find: "ভাইবই", replace: "ভাবা\u09AF\u09BC" },
   { id: "ART-003", find: "পারিমা", replace: "পরিমা" },
@@ -42,6 +55,8 @@ export const ADV_028_SENTENCE = "We support BECAA Maharashtra for their noble ca
 export const ADV_028_SUPERSEDED = "Best Compliment from M/s Balajee Infrate";
 
 // The confirmed MSG-001 sentence (Decision O), exactly as recorded in the correction record.
+// Historical since Sprint v5 (Decision H): it belonged to the superseded message and no longer
+// appears in MSG-001, so no test checks the live content against it any more.
 export const MSG001_SENTENCE = {
   old: "কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, বেকান পরিচ\u09DF আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।",
   new: "কর্মজীবনে আমরা যে যেখানেই পৌঁছে থাকি না কেন, BECAA-র পরিচ\u09DF আমাদের সবাইকে একই বন্ধনে বেঁধে রাখে।",

@@ -125,3 +125,13 @@ The new `প্রয়াত` uses the Unicode NFC form of য় (U+09AF U+09
 
 This is a presentation fix, not a text change: after a navigation or contents jump, the target's top is no longer hidden behind the sticky site header.
 
+---
+
+## 11. Addendum 2026-09-26 — MSG-001 correction superseded
+
+Recorded in Sprint v5 (`sprints/v5/PRD.md` §4.3, Decision H). Sections 1–10 above are unchanged and remain the record of what was approved and applied in Sprint v4.
+
+- The corrected sentence of §1 (`বেকান পরিচয়` → `BECAA-র পরিচয়`) belonged to the President's earlier Bengali message. On 2026-09-26 the President supplied a new message in English (`02_INCOMING_CONTENT/Souvenir President message 05-09-2026.docx`), which replaces `MSG-001` in full and does not contain that sentence.
+- The superseded source, `President Desk.docx`, is archived byte for byte at `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-26/` (SHA-256 `c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb`) and was removed from `02_INCOMING_CONTENT/` (Decision G).
+- The §1 correction is therefore **retired, not reversed**: it is kept in `05_WEBSITE/scripts/v4-corrections.mjs` as history, marked `superseded` (date 2026-09-26, reason: `MSG-001` replaced by the new President's message, Sprint v5 Decision H). The correction script skips it and says why; the Sprint v4 regression test no longer checks `MSG-001` for it. The tracker remark written for it in Sprint v4 (Item ID 16) is kept.
+- The corrections in §§2–9 (`MSG-002`, `ART-003`, `ART-004`, `ART-005`, `ADV-028`, `ART-009`) and the presentation changes in §§5, 7 and 10 are not affected and stay in force.

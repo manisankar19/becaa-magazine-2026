@@ -2,24 +2,32 @@
 // to working content and the manifest. Each correction is exact and count-guarded
 // (text-correction-core); already-applied corrections are skipped and any partial or
 // ambiguous state stops the run, so it is safe to re-run.
-//   node scripts/apply-v4-committee-corrections.mjs [--only MSG-001,ART-003]
+// Sprint v5 Task 8 (Decision H): corrections marked `superseded` (MSG-001, whose message was
+// replaced) are skipped with their date and reason — not an error — and their target file is
+// not read; every other correction is still applied or verified as already applied.
+//   node scripts/apply-v4-committee-corrections.mjs [--only MSG-002,ART-003]
 import fs from "node:fs";
 import path from "node:path";
 import { siteRoot } from "./lib.mjs";
 import { applyCorrection, correctionState } from "./text-correction-core.mjs";
-import { V4_FILE_CORRECTIONS } from "./v4-corrections.mjs";
+import { isSuperseded, V4_FILE_CORRECTIONS } from "./v4-corrections.mjs";
 
 export function applyV4FileCorrections({ only = null, root = siteRoot, corrections = V4_FILE_CORRECTIONS } = {}) {
   const selected = only ? corrections.filter((c) => only.includes(c.id)) : corrections;
   if (only && selected.length === 0) throw new Error(`No corrections for: ${only.join(", ")}`);
   const results = [];
   for (const correction of selected) {
+    const base = { id: correction.id, file: correction.file, find: correction.find, replace: correction.replace };
+    if (isSuperseded(correction)) {
+      results.push({ ...base, action: "skipped (superseded)", reason: `${correction.superseded.date}: ${correction.superseded.reason}` });
+      continue;
+    }
     const file = path.resolve(root, correction.file);
     if (!file.startsWith(path.resolve(root) + path.sep)) throw new Error(`Correction path escapes the site root: ${correction.file}`);
     const text = fs.readFileSync(file, "utf8");
     const state = correctionState(text, correction);
     if (state === "pending") fs.writeFileSync(file, applyCorrection(text, correction), "utf8");
-    results.push({ id: correction.id, file: correction.file, find: correction.find, replace: correction.replace, action: state === "pending" ? "applied" : "already applied" });
+    results.push({ ...base, action: state === "pending" ? "applied" : "already applied" });
   }
   return results;
 }
@@ -27,5 +35,7 @@ export function applyV4FileCorrections({ only = null, root = siteRoot, correctio
 if (import.meta.url === `file://${process.argv[1]}`) {
   const onlyIndex = process.argv.indexOf("--only");
   const only = onlyIndex > -1 ? String(process.argv[onlyIndex + 1] ?? "").split(",").filter(Boolean) : null;
-  for (const r of applyV4FileCorrections({ only })) console.log(`${r.id}  ${r.action}  ${r.file}: "${r.find}" → "${r.replace}"`);
+  for (const r of applyV4FileCorrections({ only })) {
+    console.log(`${r.id}  ${r.action}  ${r.file}: "${r.find}" → "${r.replace}"${r.reason ? ` — ${r.reason}` : ""}`);
+  }
 }

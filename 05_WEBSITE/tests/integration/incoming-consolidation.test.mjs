@@ -62,8 +62,12 @@ async function run() {
   const inventoried = [...report.inventory.parent, ...report.inventory.sub];
   assert.equal(inventoried.length, 26, "26 inventoried files (21 + 5)");
 
+  // Sprint v5 Task 2 (authorised, Decision G) removed President Desk.docx from the intake folder
+  // after archiving it byte-exact; for that one file the archive copy is what must survive.
+  const REMOVED_LATER = { "President Desk.docx": path.join(projectRoot, "04_MAGAZINE_WORKING", "SUPERSEDED_SOURCES", "2026-09-26") };
   for (const file of inventoried) {
-    const finalPath = path.join(parentDir, file.name); // every file — parent or ex-sub — now lives directly under 02_INCOMING_CONTENT
+    const finalPath = path.join(REMOVED_LATER[file.name] ?? parentDir, file.name); // every other file — parent or ex-sub — now lives directly under 02_INCOMING_CONTENT
+    if (REMOVED_LATER[file.name]) assert.ok(!fs.existsSync(path.join(parentDir, file.name)), `${file.name} was removed from 02_INCOMING_CONTENT in Sprint v5`);
     assert.ok(fs.existsSync(finalPath), `inventoried file must exist at its final path: ${finalPath}`);
     const stat = fs.statSync(finalPath);
     assert.equal(stat.size, file.bytes, `byte count must be unchanged for ${file.name}`);

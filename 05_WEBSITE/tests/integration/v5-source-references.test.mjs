@@ -29,6 +29,8 @@ const ALLOW_BARE_NAME = new Map([
   ["scripts/tracker-v5-core.mjs", "the row-16 Remarks note says the old source was archived (text written to the tracker)"],
   ["tests/unit/tracker-v5-core.test.mjs", "fixture row 16 holds the tracker's pre-v5 Source File Name value"],
   ["tests/integration/v5-manifest-msg001.test.mjs", "asserts publication.yaml no longer contains the old name"],
+  ["tests/integration/incoming-consolidation.test.mjs", "Sprint v4 inventory check: verifies the removed file's archive copy under SUPERSEDED_SOURCES/2026-09-26 and its absence from the intake folder"],
+  ["tests/integration/v5-updates.test.mjs", "reads the archived copy: path.join(…, SUPERSEDED_SOURCES, 2026-09-26, <name>) to prove the old text is absent"],
 ]);
 
 const SCANNED_DIRS = ["scripts", "src", "tests"];

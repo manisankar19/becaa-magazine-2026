@@ -105,7 +105,12 @@ assert.deepEqual(inv.args.slice(1), ["run", "build"]);
   assert.equal(v5[v5.length - 1], "audit", "V5: dependency audit gate runs last");
   // V5 = V4 with the comparison and page renders moved to their V5 forms, plus the hero and v5 suites.
   const V5_RENAMED = { "qa:pdf-compare": "qa:pdf-compare:v5", "qa:v4-pages": "qa:v5-pages" };
-  assert.deepEqual(v5.filter((s) => !["test:e2e:hero", "test:v5-updates"].includes(s)), v4.map((s) => V5_RENAMED[s] ?? s), "V5 keeps the V4 order otherwise");
+  const V5_ADDED = ["test:e2e:hero", "test:v5-updates", "test:e2e:csp", "test:e2e:blocker", "qa:blocklist"];
+  assert.deepEqual(v5.filter((s) => !V5_ADDED.includes(s)), v4.map((s) => V5_RENAMED[s] ?? s), "V5 keeps the V4 order otherwise");
+  // Sprint v5 addendum (Task 27, PRD §11): the ad-blocker and CSP guards gate every V5 release.
+  assert.deepEqual(v5.slice(at("test:e2e:nav") + 1, at("test:e2e:nav") + 4), ["test:e2e:hero", "test:e2e:csp", "test:e2e:blocker"], "V5: CSP and ad-blocker tests follow the hero test");
+  assert.equal(at("qa:blocklist"), at("qa:v5-pages") + 1, "V5: qa:blocklist follows the v5 page renders");
+  for (const s of ["test:e2e:csp", "test:e2e:blocker", "qa:blocklist"]) assert.ok(at("build") < at(s) && at("qa") < at(s), `V5: ${s} after build and after the qa-output wipe`);
   assert.ok(!v5.includes("qa:pdf-compare") && !v5.includes("qa:v4-pages"), "V5 does not run the V3-baseline comparison or the V4 renders");
   assert.ok(at("build") < at("pdf") && at("pdf") < at("test:integration"), "V5: pdf before the integration suite");
   for (const s of ["qa:pdf-compare:v5", "qa:v5-pages", "test:e2e:hero", "test:e2e:nav", "e2e:app"]) assert.ok(at("qa") < at(s), `V5: ${s} after qa (qa-output wipe)`);

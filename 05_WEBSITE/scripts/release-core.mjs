@@ -78,7 +78,9 @@ const V4_STEPS = [
 // left alone so the closed V4 releases stay reproducible.
 const V5_RENAMED = { "qa:pdf-compare": "qa:pdf-compare:v5", "qa:v4-pages": "qa:v5-pages" };
 const V5_STEPS = V4_STEPS.flatMap((step) => {
-  if (step === "test:e2e:nav") return [step, "test:e2e:hero"];
+  // Sprint v5 addendum (Task 27, PRD §11): the CSP and ad-blocker guards gate every V5 release.
+  if (step === "test:e2e:nav") return [step, "test:e2e:hero", "test:e2e:csp", "test:e2e:blocker"];
+  if (step === "qa:v4-pages") return ["qa:v5-pages", "qa:blocklist"];
   if (step === "test:v4-committee-corrections") return [step, "test:v5-updates"];
   return [V5_RENAMED[step] ?? step];
 });

@@ -1,12 +1,13 @@
-# Sprint v5 — Walkthrough (Tasks 1–18)
+# Sprint v5 — Walkthrough (Tasks 1–21)
 
-Scope note: Sprint v5 has 21 planned tasks. This walkthrough covers Tasks 1–18:
+Scope note: Sprint v5 had 21 planned tasks, and all are complete. This walkthrough covers:
 - **Tasks 1–14:** intake, the `MSG-001` replacement, the `ART-011` branch correction, the tracker, and verification (`a823182..8b8164b`).
 - **Tasks 15–18:** the V5 release list, the PDF comparison against `V4_REVIEW_02`, CHANGELOG, and the `V5_REVIEW_01` review build (`a70d2da..21c1201`, plus one follow-up fix, `af3386b`).
+- **Tasks 19–21:** manual verification, then Preview and Production deployment (`c7c9643..46cd606`, documentation only).
 
 Everything is on `main`. Leaving aside the 286-file release folder, the sprint changed 51 files (+2,378 / −92 lines).
 
-Not done yet: Task 19 (manual verification record) and Tasks 20–21 (Preview and Production deployments, each needing its own approval). `V5_REVIEW_01` is built but not deployed; Production still serves `V4_REVIEW_02` plus the front-page hero change.
+**Production:** `https://becaa-magazine-2026-portal.vercel.app` serves `V5_REVIEW_01` (deployment `…-efkqodur5-…`, 2026-09-26 14:21 UTC). The previous Production deployment, `…-3rbvgbgd5-…` (`V4_REVIEW_02` + front-page hero), is kept for Instant Rollback. The deployment record is `sprints/v5/PREVIEW_DEPLOYMENT.md`.
 
 ## Summary
 
@@ -22,6 +23,11 @@ The old Bengali source, `President Desk.docx`, was archived byte for byte and re
 The manifest still has 47 items, the PDF is still 72 pages, and the website, print HTML and PDF differ from the Sprint v4 build only in those two items.
 
 Tasks 15–18 turned this into a review release, `06_FINAL_OUTPUT/V5_REVIEW_01/`, built by `npm run release:v5` with all 32 gated steps green. The new PDF comparison against `V4_REVIEW_02` finds 69 pages unchanged, the `ART-011` byline page as a recorded `correction`, the two `MSG-001` pages as a verified `replaced-item`, and nothing unexplained. The front-page hero test now gates releases, and the deployable PDF is the V5 one.
+
+Tasks 19–21 verified the release and shipped it:
+- **Task 19:** a browser pass through the local registration gate at 1440 and 390 px (16/16 checks).
+- **Task 20:** a Preview deployment, checked end to end. Its security probes pass, its served page and PDF are byte-identical to the release, and the public browser suite passes. Its database is left exactly as it was found.
+- **Task 21:** Production. The session's permission policy blocked reading Production's environment and database, so the owner chose checks that leave nothing behind: probes and public-file identity only, no registration.
 
 ## Architecture Overview
 
@@ -485,6 +491,97 @@ The Task 15 commit was first written claiming `test:unit` was green, which had n
 
 `test:unit` then passed in full, and everything after that ran on Node 22.23.2. With the new npm, `npx semgrep` no longer resolves, so semgrep is called directly (the same installed tool).
 
+### Stream G — Verification and deployment (Tasks 19–21)
+
+| Commit | Task | Content |
+|---|---|---|
+| `c7c9643` | 19 | `sprints/v5/MANUAL_VERIFICATION.md` |
+| `0ff7e60` | 20 | `sprints/v5/PREVIEW_DEPLOYMENT.md` (Preview) |
+| `46cd606` | 21 | Production section, rollback, Sprint v5 marked complete |
+
+These tasks changed no code; their output is records. The Playwright, probe and cleanup drivers were throwaway scripts kept outside the repository, as in Sprint v4, so this section describes what they did.
+
+#### `sprints/v5/MANUAL_VERIFICATION.md` (new, Task 19)
+**Purpose**: The manual verification record for `V5_REVIEW_01`.
+
+**How it works**:
+1. **Same bytes as the release.** `diff -rq 05_WEBSITE/_site 06_FINAL_OUTPUT/V5_REVIEW_01/website` reported no differences, so the pages served locally were exactly the release's.
+2. **Local server.** A throwaway driver started the local dev-app (`scripts/dev-app.mjs`, the same gate code as `middleware.ts`) against the local test database `becaa_test`.
+3. **Browser pass**, at 1440 and 390 px:
+   - `/` without a session shows the registration form and no magazine;
+   - register a guest, then reload: 47 items;
+   - the `MSG-001` card: title "President Desk", unchanged byline, first body line "From the President’s Desk", exactly four `ul > li` with a visible `disc` marker, and a last paragraph that `innerText` splits into `Manik Barman` / `CE ’87` / `President, BECAA Maharashtra`, with no Bengali text of the old message;
+   - the `ART-011` byline;
+   - the hero tagline;
+   - no horizontal overflow;
+   - the PDF served with a session, SHA-256 equal to the release PDF;
+   - without a session, the PDF is refused (403) and `/admin/` shows its login form.
+4. **Evidence.** Element screenshots, inspected by eye, are in git-ignored `qa-output/v5-manual/`. The 2 test registrations were deleted from `becaa_test`.
+
+The first run failed on the driver itself, not the site: it expected a redirect to `/welcome/`, but the gate serves the welcome page at `/` directly. The check was corrected to look for the registration form. **Result:** 16/16 checks pass, and no defects were found. Two known points are recorded for the editor: the wording published as supplied, and the source heading shown as the first body line (Decisions A–C).
+
+#### `sprints/v5/PREVIEW_DEPLOYMENT.md` — Preview (new, Task 20)
+**Purpose**: The deployment record for Tasks 20–21, in the Sprint v4 format.
+
+**How it was done**:
+- **Access, without exposing anything:**
+  - The Preview environment and a fresh development OIDC token were pulled into a mode-700 scratch folder outside the repository. Only key names were ever listed, and the files were shredded at the end.
+  - The protected Preview was reached by sending the token as `x-vercel-trusted-oidc-idp-token`. The header was added only for `*-mani125slm.vercel.app` deployment URLs.
+- **Before deploying:**
+  - The Preview database was at 3 visitors, 3 visits, 0 admin sessions and 0 rate-limit rows. The verification start time was recorded for cleanup.
+  - Migrations: Applied 1, Pending none.
+  - A false alarm was ruled out. The pulled environment listed `VERCEL_GIT_*` keys, but they were empty placeholders, and `vercel ls` showed no deployment since Sprint v4. The pushes to GitHub had not triggered anything.
+- **Deploy:** `vercel deploy` (no `--prod`) from the clean tree at `c7c9643` produced `…-1wxfioxpc-…` (`dpl_8SUCuYZZUSfU7XA6pHrxveh2QnKP`).
+- **Probes:** 12 unauthenticated checks, all as expected:
+  - welcome at `/` and `/print/`;
+  - health `{"ok":true,"db":true}`;
+  - PDF and artwork 403;
+  - a forged cookie treated as no session;
+  - admin stats 401, wrong-password login 401;
+  - cross-origin register 403, `GET /api/register` 405;
+  - `/admin/` with `X-Frame-Options: DENY` and `no-store`;
+  - CSP, `nosniff`, referrer policy and HSTS on `/welcome/`.
+
+  Five public files (`site.css`, `print.css`, `site.js`, `/welcome/`, `/admin/`) were compared by SHA-256 with the build: identical.
+- **Content check:** one registered guest. The served `index.html` and the PDF were byte-identical to `V5_REVIEW_01`, and the new message, the ART-011 byline and the hero were all correct.
+- **Browser suite:** `e2e:app --public-only` passed 14 steps. Registration is limited to 5 per IP per 10 minutes and the suite needs all five, so it ran only after the content check's window had cleared; a background timer waited until 14:16:40 UTC.
+- **Admin flow on Preview:** not run. It would have needed a new temporary Preview `ADMIN_PASSWORD_HASH`, a configuration change, and nobody holds the current one. Running it was also unnecessary: `git diff 75688c9..HEAD` on `api/`, `lib/`, `middleware.ts`, `db/` and `vercel.json` is empty, and the full admin flow passed locally in the release's `e2e:app`.
+- **Cleanup, in one transaction:**
+  - 4 `e2e-*` visitors (their visits cascade);
+  - 3 rate-limit windows started since the recorded start time;
+  - 0 admin sessions.
+
+  No genuine registration arrived meanwhile. The database was left at 3/3/0/0, exactly as found.
+
+#### `sprints/v5/PREVIEW_DEPLOYMENT.md` — Production (Task 21)
+**What happened**: The first step of the v4 Production procedure was pulling the Production environment to check migrations and database counts. The session's permission policy denied it ("Production Reads"). That was not worked around. The owner was offered three options and chose **"Deploy with checks that leave nothing behind"**.
+
+**How it was done**:
+- **Deploy.** First confirmed:
+  - the tree was clean;
+  - `git diff c7c9643 HEAD -- 05_WEBSITE` was empty, so Production got exactly the Preview-verified files.
+
+  Then `vercel deploy --prod` produced `…-efkqodur5-…` (`dpl_3rDCrfTKqGFLinh4BYpEE6bw5imR`), aliased to `becaa-magazine-2026-portal.vercel.app`. `…-3rbvgbgd5-…` stays in the list for rollback.
+- **Checks, with no environment file and no token:**
+  - the same probes minus the wrong-password login, which was skipped so the owner's live login counter was not touched: 11/11;
+  - the five public files: byte-identical to the build.
+- **Nothing written.** The checks wrote nothing to Production, by construction:
+
+  ```
+  // api/register.ts — order of checks (each one stops the request without touching the database unless noted):
+  //   method → REGISTRATION_ENABLED → same-origin → body size/shape → honeypot (silent 200)
+  //   → minimum form-fill time → per-IP rate limit (one upsert) → validation → upsert visitor …
+  ```
+
+  The two register probes stop at "method" (405) and "same-origin" (403), before the rate-limit upsert. `/api/health` only runs `select 1`, and `/api/admin/stats` refuses without a session.
+- **Not done on Production:**
+  - no migration check (it needs the database URL); safe because Sprint v5 changed no schema or application code;
+  - no registration or content check behind the gate;
+  - no browser suite.
+
+  The content itself was proven on Preview from the identical tree, and Production's public files match that build.
+- **Cleanup:** the scratch folder with the pulled Preview and development environment files was shredded and removed.
+
 ## Data Flow
 
 1. **Intake.** The owner drops the new DOCX. Task 1 archives the old one from git, and Task 2 removes it from the intake folder in the same commit that adds the new one.
@@ -505,10 +602,22 @@ The Task 15 commit was first written claiming `test:unit` was green, which had n
    - `qa:v5-pages` renders the evidence.
 
    Packaging copies `_site/`, `qa-output/` and the reports into `06_FINAL_OUTPUT/V5_REVIEW_01/` (refusing to overwrite) and writes `release-manifest.json`, `BUILD_SUMMARY.md` and `REPRODUCTION.md`. The PDF is then copied to `release-assets/print/`, which is the file a deployment serves.
+9. **Deployment.** `vercel deploy` uploads `05_WEBSITE/` minus `.vercelignore` entries (`.env*`, `_site`, `qa-output`, `node_modules`, reports). Vercel builds the site with `npm run build` and serves:
+   - the static pages behind `middleware.ts`, the registration gate;
+   - the `api/` functions, backed by the environment's Neon database;
+   - the committed PDF from `release-assets/print/`.
+
+   A visitor at `/` gets the welcome page. Registering sets the `becaa_v` session cookie, after which `/` is the magazine with the new `MSG-001` and the corrected `ART-011` byline, and `/print/…pdf` is the V5 PDF.
 
 ## Test Coverage
 
-**Final state (Tasks 15–18):** the `V5_REVIEW_01` release at `b7ab7d1` ran all 32 gated steps and passed each:
+**Deployment verification (Tasks 19–21):**
+- **Local gate:** 16/16 browser checks at 1440 and 390 px.
+- **Preview:** 12/12 probes; 5 public files byte-identical; a registered content check with the page and PDF byte-identical to the release; `e2e:app --public-only` 14 steps.
+- **Production:** 11/11 probes (wrong-password login skipped); 5 public files byte-identical. No registration, so no content check there.
+- **Admin flow:** not run on either deployment; it passed locally in the release's `e2e:app` (24 steps) and `test:e2e:admin`.
+
+**Release (Tasks 15–18):** the `V5_REVIEW_01` release at `b7ab7d1` ran all 32 gated steps and passed each:
 - `tracker:validate`, `validate`, `typecheck`, `test:unit` (32 files), `build`, `pdf`, `test`, `test:integration` (40 files, now including `render-v5-pages`);
 - `qa`, `qa:v2-items`, `qa:pdf`, `qa:pdf-compare:v5`;
 - `test:e2e:cover`, `test:e2e:poem`, `qa:pdf:v2-items`, `qa:ad-backgrounds`, `qa:art006`, `qa:contact`, `qa:v5-pages`;
@@ -554,12 +663,22 @@ Each was run red before green. Task 17 is documentation only, with no test.
 - **Release output checked:** no local secret value appears in the 286 release files, and `check:secrets` and `check:sql` ran inside the pipeline. Release folders are never overwritten, and the earlier ones are unchanged.
 - **No shell in the new tooling:** `pdftotext` and `pdftoppm` run via `execFileSync` with argument arrays. The release runs steps through `node npm-cli.js` with `shell: false`.
 - **Runtime provenance:** the reinstalled Node was checked against nodejs.org's published SHA-256 before use.
+- **Deployment hygiene (Tasks 20–21):**
+  - environment files lived only in a mode-700 scratch folder and were shredded afterwards; no value was printed;
+  - the protected Preview was reached with the short-lived development OIDC token, sent only to deployment URLs;
+  - no environment variable, credential, protection setting, project or database was changed or deleted;
+  - Preview test records were removed in one transaction, leaving the database exactly as found;
+  - the Production checks were limited to requests that cannot write to the database;
+  - the previous Production deployment was kept for rollback.
+- **Permission boundary respected:** when Production environment/database reads were denied, the work stopped and the owner chose the scope, rather than reaching the same data another way.
 - **Scans:** `semgrep --config auto --quiet --error` is clean on every changed file. `npm audit` shows the same 3 allow-listed highs (`playwright`, `sharp`, `xlsx`), and there were no dependency changes.
 
 ## Known Limitations
 
-- **Built, not deployed.** `V5_REVIEW_01` exists and the deployable PDF is updated, but no Preview or Production deployment has been made; Production still shows the old message and the old ART-011 byline. Deploying needs the owner's explicit approval (Tasks 20–21).
-- **Task 19 (manual verification record) is not done.** The evidence render of `MSG-001` p. 5 was inspected, but there is no browser pass through the local registration gate for V5 yet.
+- **Production content behind the gate was not opened.** No registration was made on Production (owner-chosen scope). The evidence is indirect but strong: the Production deployment is the identical `05_WEBSITE/` tree whose Preview served the release's exact page and PDF, and Production's public files match the build. The owner can confirm by registering; that creates a real record.
+- **No migration or database check on Production.** It was blocked by the permission policy; safe because nothing in `db/`, `api/`, `lib/` or `middleware.ts` changed since Sprint v4.
+- **Administrator flow not exercised on either deployment.** It passed locally with the same code. On Production only the owner holds the password, and on Preview it would need a new temporary credential.
+- **Deployment records are committed locally.** The Task 19–21 commits and this walkthrough update are not pushed yet.
 - **The V4 release lists no longer pass on today's tree.** Running `release:v4`/`release:v4:02` would stop at the V3-baseline comparison (the three intended pages). That is correct, because those releases are closed; V5 uses `release:v5`.
 - **The release ran detached, not in the foreground.** A single tool call is capped at 10 minutes. The pipeline's own exit code and log are the record: the log is in the session scratchpad and not committed, but the release folder holds the reports.
 - **The host's Node is now user-installed** in `~/.local/node-v22`. Whatever removed `~/.hermes` is unknown. If that tool comes back, it may relink `~/.local/bin/node`.
@@ -577,10 +696,13 @@ Each was run red before green. Task 17 is documentation only, with no test.
 
 ## What's Next
 
-The rest of this sprint:
-1. **Task 19:** manual verification of `V5_REVIEW_01` through the local registration gate at 1440 and 390 px (the new message card, the ART-011 byline, the PDF renders), recorded in `sprints/v5/MANUAL_VERIFICATION.md`.
-2. **Tasks 20–21:** Preview, then Production, from the release commit, each only after its own explicit approval. After deploying, check the served PDF byte for byte against `V5_REVIEW_01` (SHA-256 `d982f11e…`).
-
-Owner decisions that can come at any time:
-- which, if any, of the §3 wording slips to correct;
-- the remaining front-page review-era wording.
+Sprint v5 is complete. Suggested priorities for a Sprint v6, owner decisions first:
+1. **Wording slips in the President's message.** Decide which, if any, of the §3 items in `BECAA Owner Corrections 2026-09-26.md` to correct. Each approved fix is one count-guarded entry in the correction record and `v5-corrections.mjs`, plus a new review build.
+2. **Front-page review-era wording.** The eyebrow "Version 1 local review", "Prototype Contents" and the "Local review only" footer are still there, carried since Sprint v4.
+3. **Production verification access.** Decide whether future deployments may read the Production environment and database (a permission rule). With it, the full v4 procedure — migration check, content check, cleanup — can run on Production again.
+4. **Owner check on Production.** Register once, confirm the new message and ART-011 byline, and optionally log in to `/admin/` with the real password to confirm the dashboard.
+5. **Carried technical items:**
+   - normalise Bengali content to one Unicode form;
+   - refresh the stale `ART-010` note;
+   - the three allow-listed dependency advisories (`playwright`, `sharp`, `xlsx`);
+   - find out what removed `~/.hermes`, so the host's Node setup stays stable.

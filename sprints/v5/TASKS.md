@@ -1,6 +1,6 @@
 # Sprint v5 — Tasks
 
-## Status: In progress — PRD decisions A–N approved as recommended (2026-09-26)
+## Status: Sprint v5 complete (2026-09-26) — Tasks 1–21 done; `V5_REVIEW_01` in production at https://becaa-magazine-2026-portal.vercel.app
 
 Reference: `sprints/v5/PRD.md`, `sprints/v5/Changev5.md`.
 **Decisions:** A–N approved as recommended (2026-09-26). Tasks that depend on a specific decision name it as `[Decision X]`.
@@ -120,9 +120,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
   - Completed: 2026-09-26 — Preview `…-1wxfioxpc-…` (`dpl_8SUCuYZZUSfU7XA6pHrxveh2QnKP`) from `c7c9643`; migrations Applied 1 / Pending none. 12/12 unauthenticated probes pass. 5 public files byte-identical to the build. Content check with one registration: served index.html and PDF byte-identical to `V5_REVIEW_01`, new MSG-001, ART-011 byline, hero. `e2e:app --public-only` PASS 14 steps. Admin flow not run on Preview: it would need a Preview credential change, and the admin code is unchanged since v4 and passed locally. Cleanup: 4 `e2e-*` visitors and 3 rate-limit windows removed; the database is back to its starting counts (3/3/0/0). Production untouched. Recorded in `sprints/v5/PREVIEW_DEPLOYMENT.md`.
 
-- [ ] Task 21: Production deployment — **requires a further explicit approval** [Decision M] (P1)
+- [x] Task 21: Production deployment — **requires a further explicit approval** [Decision M] (P1)
   - Acceptance: `vercel deploy --prod` per `DEPLOYMENT.md`; probes and `e2e:app --public-only` pass; previous deployment kept for rollback; recorded in `PREVIEW_DEPLOYMENT.md`.
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
+  - Completed: 2026-09-26 — Production `…-efkqodur5-…` (`dpl_3rDCrfTKqGFLinh4BYpEE6bw5imR`) from `c7c9643`'s `05_WEBSITE/` tree, aliased to `becaa-magazine-2026-portal.vercel.app`; previous `…-3rbvgbgd5-…` kept for rollback. Owner-chosen scope ("checks that leave nothing behind"), because Production environment/database reads were blocked by the session permission policy. 11/11 unauthenticated probes pass (wrong-password login skipped) and 5 public files are byte-identical to `V5_REVIEW_01`. No Production env pull, no database access or migration check (no schema/app change since v4), no registration, no browser suite; the verification wrote nothing. Content behind the gate was verified on Preview with the identical tree. Recorded in `sprints/v5/PREVIEW_DEPLOYMENT.md`.
 
 ## Session log
 
@@ -149,3 +150,17 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 - **Test results:** release pipeline 32/32 steps green at `b7ab7d1`; `qa:pdf-compare:v5` unchanged 69, correction 1, replaced-item 2, unexplained 0; `test:unit` 32 files and `test:integration` 40 files green on Node 22.23.2; semgrep clean; `npm audit` 3 allow-listed.
 - **Unresolved issues:** the host's Node 22 (`~/.hermes/node`) vanished during Task 15. The Task 15 commit was first written with an unverified "test:unit green" claim; it was amended before any push. With the owner's approval Node v22.23.2 was reinstalled to `~/.local/node-v22` (SHA-256 verified). The release ran as a detached process because foreground calls are capped at 10 minutes. Preview/Production not run, as instructed.
 - **Next task:** Task 19 (manual verification record); Tasks 20–21 need explicit deployment approval.
+
+### 2026-09-26 — Tasks 19–21
+- **Completed task(s):** 19 (manual verification), 20 (Preview), 21 (Production).
+- **Commits:** `c7c9643` (19), `0ff7e60` (20), then the Task 21 record.
+- **Changed files:** `sprints/v5/MANUAL_VERIFICATION.md`, `sprints/v5/PREVIEW_DEPLOYMENT.md`, `sprints/v5/TASKS.md`. The throwaway Playwright/probe/cleanup drivers were kept out of the repository, as in v4.
+- **Test results:**
+  - local gate: 16/16 checks at 1440 and 390 px;
+  - Preview: probes 12/12, public files byte-identical, content check passed, `e2e:app --public-only` 14 steps;
+  - Production: probes 11/11 (wrong password skipped), public files byte-identical.
+- **Unresolved issues:**
+  - Production reads (environment pull, database) were blocked by the session permission policy, so the owner chose deploy-with-no-trace checks. Production content behind the gate was not opened, and the migration status was not read there (no schema change).
+  - The admin flow was not run on either deployment; it passed locally.
+  - Deployment records are committed locally; push when wanted.
+- **Next task:** none in Sprint v5. Open owner decisions: the wording slips (owner correction record §3) and the review-era front-page wording.

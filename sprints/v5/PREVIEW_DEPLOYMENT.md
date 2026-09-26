@@ -1,5 +1,7 @@
 # Sprint v5 — Preview and Production deployment of `V5_REVIEW_01` (Tasks 20–21)
 
+Status: **Released to Production on 2026-09-26** (14:21 UTC). Production URL: `https://becaa-magazine-2026-portal.vercel.app`.
+
 - **Owner approval:** 2026-09-26, `/dev task 19 to 21` in the Sprint v5 session (Tasks 20 and 21 in `sprints/v5/TASKS.md`: Preview, then Production).
 - **Source:** review release `06_FINAL_OUTPUT/V5_REVIEW_01/`, built at `b7ab7d1`. The deployments were made from commit `c7c9643`. Its `05_WEBSITE/` tree is the build commit's, plus two changes:
   - the deployable PDF (`release-assets/print/`, byte-identical to the release PDF);
@@ -37,21 +39,43 @@
 - the front-page hero tagline is present;
 - the PDF is served with a session and is byte-identical to the release PDF (SHA-256 `d982f11e6b7c…`).
 
+## Production (Task 21)
+
+The owner chose the verification scope on 2026-09-26. The first Production step of the Sprint v4 procedure, pulling the Production environment to read the Production database, was blocked by the session's permission policy ("Production Reads"). The owner then chose **"Deploy with checks that leave nothing behind"**. So there was no Production environment pull, no Production database access and no test registration.
+
+| Field | Value |
+|---|---|
+| Deployment | `https://becaa-magazine-2026-portal-efkqodur5-mani125slm.vercel.app` (`dpl_3rDCrfTKqGFLinh4BYpEE6bw5imR`), target `production`, `vercel deploy --prod` from `c7c9643`'s `05_WEBSITE/` tree (clean tree at `0ff7e60`, whose only later changes are sprint documents), 2026-09-26 14:21 UTC; aliased to `https://becaa-magazine-2026-portal.vercel.app` |
+| Replaced | `…-3rbvgbgd5-…` (`V4_REVIEW_02` + front-page hero, commit `79ae6d0`). **Not deleted**: still in the deployment list and available for Instant Rollback. The Vercel project and Neon resources were not deleted or reconfigured |
+| Environment variables | Not read and not changed |
+| Migrations | Not checked on Production (that needs the Production database URL). Safe without it, because Sprint v5 changes no schema or database code: `git diff 75688c9..HEAD` on `db/`, `api/`, `lib/`, `middleware.ts` and `vercel.json` is empty. The Preview database of the same project reports Applied 1, Pending none |
+| Unauthenticated probes | 11/11 as expected: the Preview table above, except the wrong-password login, which was deliberately skipped so the owner's live admin login counter was not touched (it passed on Preview with the same code) |
+| Public files vs the `V5_REVIEW_01` build | `site.css`, `print.css`, `site.js`, `/welcome/`, `/admin/`: byte-identical |
+| Content behind the gate | Not opened on Production (no registration). The evidence that Production serves the new message is indirect but strong. Production is the same `05_WEBSITE/` tree as the Preview deployment, where the served front page and PDF were byte-identical to `V5_REVIEW_01` and every content check passed. The five public files served by Production are byte-identical to that build |
+| Database writes by the verification | None. The probes that reach the API return before any database access (405 for `GET /api/register`, 403 for the cross-origin POST, per the order documented in `api/register.ts`); `/api/health` runs only `select 1`; `/api/admin/stats` refuses with 401 without a session |
+| Browser suite | Not run on Production: it creates registrations, which could not be removed without database access |
+
+**Owner follow-up (optional):** open `https://becaa-magazine-2026-portal.vercel.app` and register (or use an existing session). Check that the President Desk shows the new English message with the four bullet points, and that ART-011 reads "Palash Biswas, Mechanical, 2006 Batch". Any registration you make is a real record in the Production database.
+
+## Rollback
+
+Vercel → project `becaa-magazine-2026-portal` → Deployments → `…-3rbvgbgd5-…` → Instant Rollback (or `vercel rollback`). No database change needs reverting, because no migration was applied.
+
 ## Unauthenticated probe results
 
-| Check | Preview |
-|---|---|
-| `/` | 200, the welcome page (no magazine markup) |
-| `/api/health` | 200 `{"ok":true,"db":true}` |
-| PDF and artwork without a session | 403, 403 |
-| `/print/` without a session | welcome page |
-| Forged session cookie | treated as no session (welcome page) |
-| `/api/admin/stats` without login | 401 |
-| Administrator login with a wrong password | 401 |
-| Cross-origin `POST /api/register` | 403 |
-| `GET /api/register` | 405 |
-| `/admin/` | 200 login form, `X-Frame-Options: DENY`, `Cache-Control: no-store` |
-| Security headers on `/welcome/` | Content-Security-Policy, `nosniff`, `strict-origin-when-cross-origin`, HSTS |
+| Check | Preview | Production |
+|---|---|---|
+| `/` | 200, the welcome page (no magazine markup) | same |
+| `/api/health` | 200 `{"ok":true,"db":true}` | same |
+| PDF and artwork without a session | 403, 403 | same |
+| `/print/` without a session | welcome page | same |
+| Forged session cookie | treated as no session (welcome page) | same |
+| `/api/admin/stats` without login | 401 | same |
+| Administrator login with a wrong password | 401 | skipped (owner’s live login counter) |
+| Cross-origin `POST /api/register` | 403 | same |
+| `GET /api/register` | 405 | same |
+| `/admin/` | 200 login form, `X-Frame-Options: DENY`, `Cache-Control: no-store` | same |
+| Security headers on `/welcome/` | Content-Security-Policy, `nosniff`, `strict-origin-when-cross-origin`, HSTS | same |
 
 ## Test-record cleanup rule (unchanged from Sprint v4)
 

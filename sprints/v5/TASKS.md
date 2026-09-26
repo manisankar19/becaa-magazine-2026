@@ -73,9 +73,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 
 ## Stream E — Verification (P0)
 
-- [ ] Task 12: `v5-updates` regression suite (P0)
+- [x] Task 12: `v5-updates` regression suite (P0)
   - Acceptance: `npm run test:v5-updates` (after `build` + `pdf`) checks, on website, print HTML and PDF text: new `MSG-001` heading, paragraphs, `<ul>` with 4 `<li>` (web) and 4 bullet lines (PDF), 3-line signature with `CE ’87`; no sentence of the archived old message anywhere in `_site/` or the PDF; `ART-011` byline exact, no `Civil` in it; every other item's byline unchanged vs `V4_REVIEW_02`. Added to `test:integration`.
   - Files: `05_WEBSITE/tests/integration/v5-updates.test.mjs`, `05_WEBSITE/package.json`
+  - Completed: 2026-09-26 — `tests/integration/v5-updates.test.mjs` (`npm run test:v5-updates`, also at the end of `test:integration`). Web: title kept, heading, prose samples, one `<ul>` with the 4 items in order, signature `Manik Barman<br>CE ’87<br>President…`, no image; print: 4 `<li>`, signature; PDF: prose, 4 indented list lines (pdftotext drops the CSS bullet), signature on 3 lines. Every paragraph of the archived old message (read with mammoth) plus 4 distinctive phrases absent from website, print HTML and PDF. ART-011 byline exact on all three surfaces, old byline absent; 46 other bylines equal to `V4_REVIEW_02`. Written after Tasks 4–10, so its failing mode was proven by mutation instead: reverting the ART-011 byline, the signature apostrophe or one list item in the built HTML each fails it.
 
 - [ ] Task 13: Page-count and hard-coded expectation sweep (P0)
   - Acceptance: after a fresh build and PDF, `print-cover-page` and any other suite with a fixed page count or `MSG-001` page range (`v4-pages-core` fixtures, QA scripts) is updated or derived, with the reason recorded; message print pages visually inspected (list, signature, no overflow).

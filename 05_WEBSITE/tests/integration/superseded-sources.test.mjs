@@ -54,3 +54,24 @@ assert.ok(readme15.includes("ART-010"), "README.md must identify the published i
 assert.ok(readme15.includes("<w:br/>"), "README.md must describe the superseded break form");
 
 console.log("superseded-sources 2026-09-15: OK");
+
+// Sprint v5 Task 1 — the President's message DOCX that V1–V4 were built from is
+// archived under 2026-09-26/ before it leaves 02_INCOMING_CONTENT (PRD Decision G);
+// the new message is the authoritative MSG-001 source.
+const archive26 = path.join(projectRoot, "04_MAGAZINE_WORKING", "SUPERSEDED_SOURCES", "2026-09-26");
+const archived26 = path.join(archive26, "President Desk.docx");
+const liveSource26 = path.join(projectRoot, "02_INCOMING_CONTENT", "Souvenir President message 05-09-2026.docx");
+const ARCHIVED_PRESIDENT_SHA = "c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb";
+const LIVE_PRESIDENT_SHA = "67d8a418d781e5bdad16985ceca4f64c6a40bd40d10a3cf075c9bd18dc9f3bf7";
+
+assert.ok(fs.existsSync(archived26), `archived copy missing: ${archived26}`);
+assert.equal(sha256(archived26), ARCHIVED_PRESIDENT_SHA, "archived President Desk.docx hash mismatch");
+assert.ok(fs.existsSync(liveSource26), `new President's message missing: ${liveSource26}`);
+assert.equal(sha256(liveSource26), LIVE_PRESIDENT_SHA, "new President's message hash mismatch");
+
+const readme26 = fs.readFileSync(path.join(archive26, "README.md"), "utf8");
+assert.ok(readme26.includes(ARCHIVED_PRESIDENT_SHA), "README.md must list the archived DOCX hash");
+assert.ok(readme26.includes(LIVE_PRESIDENT_SHA), "README.md must list the new source hash");
+assert.ok(readme26.includes("MSG-001"), "README.md must identify the published item");
+
+console.log("superseded-sources 2026-09-26: OK");

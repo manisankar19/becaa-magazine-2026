@@ -22,9 +22,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 
 ## Stream B — `MSG-001` replacement (P0)
 
-- [ ] Task 3: Opt-in list mode in `docxHtmlToParagraphText` [Decision E] (P0)
+- [x] Task 3: Opt-in list mode in `docxHtmlToParagraphText` [Decision E] (P0)
   - Acceptance: `docxHtmlToParagraphText(html, { lists: true })` renders consecutive `<li>` items as one block of `- item` lines (entities decoded, images stripped); without the option the output is byte-identical to today for existing fixtures, including `MSG-003`'s; unit tests written first.
   - Files: `05_WEBSITE/scripts/article-markdown-core.mjs`, `05_WEBSITE/tests/unit/article-markdown-core.test.mjs`
+  - Completed: 2026-09-26 — `{ lists: true }` option added (soft break inside an item is kept as a hard break with an indented continuation). 5 unit tests written first, red, then green; default mode proven identical for all 6 fixtures (incl. an `MSG-003`-shaped one), and re-running the v3 `MSG-003`/`ART-012` extractors left both files unchanged. `test:unit` green; semgrep clean; `npm audit` 3 allow-listed highs (playwright, sharp, xlsx).
 
 - [ ] Task 4: `extract-v5-president-desk.mjs` and its integration test [Decisions A, B, F] (P0)
   - Acceptance: refuses to run unless the source SHA-256 is `67d8a418…`; writes `MSG-001-president-desk.md` with front matter `title: "President Desk"`, the new `source_file`/`source_fingerprint`; body = heading `From the President's Desk`, 11 paragraphs, a 4-bullet list, the closing line and the 3-line signature (hard breaks); no `data:` image or `<img>`; idempotent; `npm run extract:v5-president-desk` added. Integration test asserts all of this against the real source.

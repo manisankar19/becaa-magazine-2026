@@ -40,21 +40,40 @@ export function decodeHtmlEntities(text) {
   });
 }
 
-export function docxHtmlToParagraphText(html) {
-  const blocks = String(html)
-    // Block boundaries: closing p/h1-6/li. Opening tags are stripped below.
-    .split(/<\/(?:p|h[1-6]|li)\s*>/i)
-    .map((block) =>
-      block
-        .replace(/<br\s*\/?>/gi, "  \n")           // soft line break → Markdown hard break
-        .replace(/<img\b[^>]*>/gi, "")             // images are never inlined in body text
-        .replace(/<[^>]+>/g, "")                   // every remaining tag (strong/em/p/ul/…)
-    )
-    .map((block) => decodeHtmlEntities(block))
-    .map((block) => block.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, ""))
-    // A hard break that ends up at a block edge has nothing to break; drop it.
-    .map((block) => block.replace(/^(  \n)+/, "").replace(/(  \n)+$/, ""))
-    .filter((block) => block.length > 0);
+function cleanHtmlBlock(block) {
+  const text = decodeHtmlEntities(
+    block
+      .replace(/<br\s*\/?>/gi, "  \n")           // soft line break → Markdown hard break
+      .replace(/<img\b[^>]*>/gi, "")             // images are never inlined in body text
+      .replace(/<[^>]+>/g, "")                   // every remaining tag (strong/em/p/ul/…)
+  ).replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, "");
+  // A hard break that ends up at a block edge has nothing to break; drop it.
+  return text.replace(/^(  \n)+/, "").replace(/(  \n)+$/, "");
+}
+
+// Sprint v5 Task 3 (Decision E): with { lists: true }, consecutive <li> items
+// become ONE block of "- item" lines (a soft break inside an item keeps its
+// hard break, with the continuation indented so it stays in the item). The
+// default (no option) output is unchanged, byte for byte.
+export function docxHtmlToParagraphText(html, { lists = false } = {}) {
+  // Block boundaries: closing p/h1-6/li (captured so list items are known).
+  // split() with a capture group alternates [text, tag, text, tag, …, text].
+  const parts = String(html).split(/<\/(p|h[1-6]|li)\s*>/i);
+  const blocks = [];
+  let previousWasItem = false;
+  for (let index = 0; index < parts.length; index += 2) {
+    const text = cleanHtmlBlock(parts[index]);
+    if (text.length === 0) continue;
+    const isItem = lists && String(parts[index + 1] ?? "").toLowerCase() === "li";
+    if (!isItem) {
+      blocks.push(text);
+    } else {
+      const bullet = `- ${text.replaceAll("\n", "\n  ")}`;
+      if (previousWasItem) blocks[blocks.length - 1] += `\n${bullet}`;
+      else blocks.push(bullet);
+    }
+    previousWasItem = isItem;
+  }
   return blocks.join("\n\n");
 }
 

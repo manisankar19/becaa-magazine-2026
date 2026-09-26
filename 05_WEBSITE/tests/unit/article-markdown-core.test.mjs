@@ -99,6 +99,84 @@ runHeadingsAndListItemsAreBlocks();
 console.log("All docxHtmlToParagraphText unit tests passed.");
 
 // ---------------------------------------------------------------------------
+// Sprint v5 Task 3 (Decision E) — opt-in list mode: docxHtmlToParagraphText(
+// html, { lists: true }) renders consecutive <li> items as ONE block of
+// "- item" lines. Without the option the output is byte-identical to today.
+// ---------------------------------------------------------------------------
+const DEFAULT_MODE_FIXTURES = [
+  "<p>With warm regards,</p><p><strong>Secretary</strong><br /><strong>BECAA Maharashtra</strong></p>",
+  "<p><strong><em>“BECAA Maharashtra is more than an alumni association.”</em></strong></p>",
+  "<p>প্যাঁড়া/ সিদ্ধার্থ মুখোপাধ্যায়</p><p>বি ই কলেজ থেকে পাশ করে না বেরোলে…</p><p>থ্যংক ইউ রামগুলাম।</p>",
+  "<p>Roofs &amp; Ceilings &lt;2026&gt; &#39;92 &quot;q&quot; &#x2019;s</p><p><strong><img src=\"data:image/png;base64,AAAA\" /></strong></p><p>  Abir Banerjee  </p><p></p>",
+  "<h1>Title</h1><ul><li>one</li><li>two</li></ul><p>end</p>",
+  // MSG-003-shaped closing (the v3 caller whose output carries a soft break).
+  "<p><strong><em>From the Secretary's Desk</em></strong></p><p>With warm regards,</p><p>Abir Banerjee</p><p>ETC '92</p><p>Secretary<br />BECAA Maharashtra</p>",
+];
+const DEFAULT_MODE_EXPECTED = [
+  "With warm regards,\n\nSecretary  \nBECAA Maharashtra",
+  "“BECAA Maharashtra is more than an alumni association.”",
+  "প্যাঁড়া/ সিদ্ধার্থ মুখোপাধ্যায়\n\nবি ই কলেজ থেকে পাশ করে না বেরোলে…\n\nথ্যংক ইউ রামগুলাম।",
+  "Roofs & Ceilings <2026> '92 \"q\" ’s\n\nAbir Banerjee",
+  "Title\n\none\n\ntwo\n\nend",
+  "From the Secretary's Desk\n\nWith warm regards,\n\nAbir Banerjee\n\nETC '92\n\nSecretary  \nBECAA Maharashtra",
+];
+
+function runDefaultModeIsByteIdentical() {
+  DEFAULT_MODE_FIXTURES.forEach((html, index) => {
+    const expected = DEFAULT_MODE_EXPECTED[index];
+    assert.equal(docxHtmlToParagraphText(html), expected, `fixture ${index}: default output unchanged`);
+    assert.equal(docxHtmlToParagraphText(html, {}), expected, `fixture ${index}: empty options = default`);
+    assert.equal(docxHtmlToParagraphText(html, { lists: false }), expected, `fixture ${index}: lists:false = default`);
+  });
+  console.log("PASS: without { lists: true } the output is byte-identical to the v3 behaviour for every existing fixture.");
+}
+
+function runListItemsBecomeOneBulletBlock() {
+  const html = "<p>Few to mention:</p><ul><li>Extending Donation</li><li>Extending Charity</li><li>Extending Aid</li></ul><p>Thanks.</p>";
+  assert.equal(
+    docxHtmlToParagraphText(html, { lists: true }),
+    "Few to mention:\n\n- Extending Donation\n- Extending Charity\n- Extending Aid\n\nThanks.",
+    "consecutive <li> items are one block of '- ' lines, separated from neighbouring blocks by a blank line",
+  );
+  console.log("PASS: consecutive list items become one '- ' bullet block.");
+}
+
+function runListItemsDecodeEntitiesAndStripImages() {
+  const html = "<ul><li><strong>Science &amp; Technology</strong></li><li><img src=\"data:image/jpeg;base64,AAAA\" />Extending Medical aids &#x2019;s</li><li><img src=\"data:image/png;base64,BBBB\" /></li></ul>";
+  const text = docxHtmlToParagraphText(html, { lists: true });
+  assert.equal(text, "- Science & Technology\n- Extending Medical aids ’s", "entities decoded, images stripped, image-only items dropped");
+  assert.ok(!/data:|<img/.test(text), "no image survives");
+  console.log("PASS: list items decode entities and strip images.");
+}
+
+function runListItemSoftBreakStaysInsideItem() {
+  const html = "<ul><li>first<br />continued</li><li>second</li></ul>";
+  assert.equal(
+    docxHtmlToParagraphText(html, { lists: true }),
+    "- first  \n  continued\n- second",
+    "a soft break inside an item is a hard break; the continuation line is indented so it stays within the item",
+  );
+  console.log("PASS: soft break inside a list item stays inside that item.");
+}
+
+function runSeparateListsAndHeadingsWithListMode() {
+  const html = "<h1>Title</h1><ul><li>one</li><li>two</li></ul><p>middle</p><ol><li>three</li></ol><p>Manik Barman<br />CE  87<br />President</p>";
+  assert.equal(
+    docxHtmlToParagraphText(html, { lists: true }),
+    "Title\n\n- one\n- two\n\nmiddle\n\n- three\n\nManik Barman  \nCE  87  \nPresident",
+    "lists separated by a paragraph are separate blocks; non-list blocks behave exactly as in default mode",
+  );
+  console.log("PASS: list mode leaves non-list blocks unchanged and keeps separate lists separate.");
+}
+
+runDefaultModeIsByteIdentical();
+runListItemsBecomeOneBulletBlock();
+runListItemsDecodeEntitiesAndStripImages();
+runListItemSoftBreakStaysInsideItem();
+runSeparateListsAndHeadingsWithListMode();
+console.log("All docxHtmlToParagraphText list-mode unit tests passed.");
+
+// ---------------------------------------------------------------------------
 // Sprint v4 Task 5 — readVerseSource(): validates and parses the verse
 // source Markdown convention (# heading, **author**, blank line, N lines
 // each ending "<br>") used by the authoritative poem source

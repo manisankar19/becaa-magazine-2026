@@ -96,4 +96,34 @@ assert.ok(fake.args[0].includes("lib/node_modules/npm/bin/npm-cli.js"), "picks t
 assert.equal(inv.command, process.execPath, "npm is run through the current Node binary");
 assert.ok(fs.existsSync(inv.args[0]) && /npm-cli\.js$/.test(inv.args[0]), `first argument is npm-cli.js: ${inv.args[0]}`);
 assert.deepEqual(inv.args.slice(1), ["run", "build"]);
+// --- Sprint v5 (Task 15, Decision L): V5 step list and reproduction ---
+{
+  const v4 = stepsForVersion("V4_REVIEW_02");
+  const v5 = stepsForVersion("V5_REVIEW_01");
+  const at = (name) => { const i = v5.indexOf(name); assert.ok(i >= 0, `V5 step ${name} present`); return i; };
+  assert.equal(new Set(v5).size, v5.length, "V5: no duplicate steps");
+  assert.equal(v5[v5.length - 1], "audit", "V5: dependency audit gate runs last");
+  // V5 = V4 with the comparison and page renders moved to their V5 forms, plus the hero and v5 suites.
+  const V5_RENAMED = { "qa:pdf-compare": "qa:pdf-compare:v5", "qa:v4-pages": "qa:v5-pages" };
+  assert.deepEqual(v5.filter((s) => !["test:e2e:hero", "test:v5-updates"].includes(s)), v4.map((s) => V5_RENAMED[s] ?? s), "V5 keeps the V4 order otherwise");
+  assert.ok(!v5.includes("qa:pdf-compare") && !v5.includes("qa:v4-pages"), "V5 does not run the V3-baseline comparison or the V4 renders");
+  assert.ok(at("build") < at("pdf") && at("pdf") < at("test:integration"), "V5: pdf before the integration suite");
+  for (const s of ["qa:pdf-compare:v5", "qa:v5-pages", "test:e2e:hero", "test:e2e:nav", "e2e:app"]) assert.ok(at("qa") < at(s), `V5: ${s} after qa (qa-output wipe)`);
+  for (const s of ["qa:pdf-compare:v5", "qa:v5-pages", "test:v5-updates"]) assert.ok(at("pdf") < at(s), `V5: ${s} needs the PDF`);
+  assert.equal(at("test:e2e:hero"), at("test:e2e:nav") + 1, "V5: hero test runs next to the navigation test");
+  assert.equal(at("test:v5-updates"), at("test:v4-committee-corrections") + 1, "V5: v5 suite follows the v4 suites");
+  // V4 is unchanged (its releases are closed and must stay reproducible).
+  assert.ok(v4.includes("qa:pdf-compare") && v4.includes("qa:v4-pages") && !v4.includes("test:e2e:hero") && !v4.includes("test:v5-updates"), "V4 list unchanged");
+
+  const md5 = reproductionMarkdown("V5_REVIEW_01", v5, { node: "22.23.2", commit: "abc5555" });
+  assert.ok(md5.includes("# Reproduction — V5_REVIEW_01") && md5.includes("abc5555"));
+  assert.ok(md5.includes("npm run release:v5") && !md5.includes("release:v4"), "V5 reproduction names release:v5 only");
+  for (const s of v5.filter((x) => x !== "audit")) assert.ok(md5.includes(`npm run ${s}`), `V5 step ${s} listed`);
+  assert.ok(md5.includes("V4_REVIEW_02"), "V5 reproduction names the comparison baseline");
+  assert.ok(md5.includes("unzip") && md5.includes("pdftotext") && md5.includes("pdftoppm"));
+  const mig = ["extract:v5-president-desk", "corrections:apply-v5", "tracker:apply-v5"];
+  for (const s of mig) assert.ok(md5.includes(`npm run ${s}`), `V5 content migration ${s} listed`);
+  assert.ok(md5.indexOf("npm run extract:v5-president-desk") < md5.indexOf("npm run corrections:apply-v5"), "corrections re-applied after re-extraction");
+}
+
 console.log("All release-core (incl. Task 42) unit tests passed.");

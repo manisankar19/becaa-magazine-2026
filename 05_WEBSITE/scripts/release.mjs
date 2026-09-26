@@ -9,6 +9,8 @@ import { auditGate, buildReleaseManifest, npmInvocation, reproductionMarkdown, s
 //            suites → secret + SQL gates → dependency-audit gate, then packaging.
 //   V4_*   — the V3 order plus the Sprint v4 suites, PDF comparison and page renders, with
 //            `pdf` straight after `build` (see release-core.mjs).
+//   V5_*   — the V4 order with the PDF comparison against V4_REVIEW_02 and the v5 page renders,
+//            plus the front-page hero test and the v5 regression suite.
 //   others — the sequence used for V0–V2 releases.
 // The output folder must not already exist: releases are never overwritten.
 const releaseVersion = process.env.RELEASE_VERSION || "V0_PROTOTYPE_01";

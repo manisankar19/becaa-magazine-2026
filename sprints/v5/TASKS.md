@@ -90,9 +90,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 
 ## Stream F — Build and release (P0/P1)
 
-- [ ] Task 15: `V5_STEPS` and `release:v5` [Decision L] (P0)
+- [x] Task 15: `V5_STEPS` and `release:v5` [Decision L] (P0)
   - Acceptance: `stepsForVersion("V5_*")` = V4 list + `test:e2e:hero` + `test:v5-updates` (order constraints from v4 respected: `pdf` after `build`, evidence after `qa`); `V4_STEPS` unchanged and asserted; V5 reproduction text; `release:v5` → `V5_REVIEW_01`; release-core unit test first.
   - Files: `05_WEBSITE/scripts/release-core.mjs`, `05_WEBSITE/tests/unit/release-core.test.mjs`, `05_WEBSITE/package.json`
+  - Completed: 2026-09-26 — `stepsForVersion("V5_*")` returns `V5_STEPS`: the V4 order with `qa:pdf-compare` → `qa:pdf-compare:v5` and `qa:v4-pages` → `qa:v5-pages` (added in Task 16), `test:e2e:hero` right after `test:e2e:nav`, `test:v5-updates` right after `test:v4-committee-corrections`; `V4_STEPS` untouched so closed V4 releases stay reproducible. `reproductionMarkdownV5` names `release:v5`, the `V4_REVIEW_02` baseline and `V5_CONTENT_MIGRATION` (`extract:v5-president-desk` → `corrections:apply-v5` → `tracker:apply-v5`). `release:v5` → `V5_REVIEW_01`. release-core unit test red (V5 fell back to the legacy list) then green. Full `test:unit` (32 files) green on Node 22, re-run after the host's Node 22 install vanished mid-task and was reinstalled (see session log).
 
 - [ ] Task 16: PDF comparison against `V4_REVIEW_02` (P0)
   - Acceptance: `pdf-compare` baseline and corrections selected per version; new `replaced-item` class for `MSG-001` (all its pages, contents title unchanged); `ART-011` byline classed as `correction` via `V5_CORRECTIONS`; unit tests for replaced items and a wrong replacement; real run vs `V4_REVIEW_02` reports 0 unexplained; `--no-corrections` fails as expected. `qa:v5-pages` (or a generalised `qa:v4-pages`) renders contents, `MSG-001` and `ART-011` pages.

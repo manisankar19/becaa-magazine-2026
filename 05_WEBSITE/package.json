@@ -84,7 +84,8 @@
     "corrections:apply-v4": "node scripts/apply-v4-committee-corrections.mjs",
     "release:v3:02": "RELEASE_VERSION=V3_REVIEW_02 node scripts/release.mjs",
     "release:v4": "RELEASE_VERSION=V4_REVIEW_01 node scripts/release.mjs",
-    "release:v4:02": "RELEASE_VERSION=V4_REVIEW_02 node scripts/release.mjs"
+    "release:v4:02": "RELEASE_VERSION=V4_REVIEW_02 node scripts/release.mjs",
+    "release:v5": "RELEASE_VERSION=V5_REVIEW_01 node scripts/release.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.2",

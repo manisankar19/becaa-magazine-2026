@@ -1,5 +1,34 @@
 # Changelog
 
+## V5_REVIEW_01 — 2026-09-26
+
+Local review build (`06_FINAL_OUTPUT/V5_REVIEW_01/`, built by `npm run release:v5`; Sprint v5, `sprints/v5/`). It also captures the front-page hero update, so the release archive matches what Production will serve. 47 publication items; the PDF has 72 pages; `qa:pdf-compare:v5` explains every page difference against `V4_REVIEW_02`.
+
+### Changed
+
+- `MSG-001` (President Desk): replaced by the President's new message, `02_INCOMING_CONTENT/Souvenir President message 05-09-2026.docx` (English; the previous message was Bengali). Published as supplied, with the four charity items as a bulleted list and the signature on three lines. One recorded correction restores the signature's lost apostrophe (`CE  87` → `CE ’87`; `02_INCOMING_CONTENT/BECAA Owner Corrections 2026-09-26.md`). Display title, byline and position are unchanged; manifest `source_file`, `source_fingerprint`, `language` (`en`) and `notes` updated.
+- `ART-011`: byline now reads "Palash Biswas, Mechanical, 2006 Batch" (manifest `branch` Civil → Mechanical); the article body is unchanged.
+- Tracker: row 16 (`MSG-001`) source file, received date 26.09.2026 and remark; row 23 (`ART-011`) branch and remark (snapshot first).
+- The Sprint v4 committee correction to `MSG-001` (`বেকান পরিচয়` → `BECAA-র পরিচয়`) is retired as superseded — kept as history, skipped by `corrections:apply-v4`; the 2026-09-16 correction record has a §11 addendum.
+- Release list: `release:v5` runs the V4 list plus `test:e2e:hero` (the hero test now gates releases) and `test:v5-updates`, with `qa:pdf-compare:v5` and `qa:v5-pages` in place of the V3-baseline comparison and the V4 renders.
+- Deployed PDF (`05_WEBSITE/release-assets/print/`): replaced with the `V5_REVIEW_01` PDF.
+
+### Added
+
+- `extract:v5-president-desk` (fingerprint-gated), `corrections:apply-v5`, `tracker:apply-v5`; an opt-in list mode in `docxHtmlToParagraphText`.
+- `qa:pdf-compare:v5` (profile `v5` of `pdf-compare.mjs`) with a `replaced-item` page class: a replaced item must exist in both PDFs, differ from the baseline and equal its expected text, which is taken from the built print HTML and checked against the approved content file.
+- `qa:v5-pages`: renders the contents, `MSG-001` and `ART-011` PDF pages.
+- Tests: `v5-updates` (web, print, PDF), `extract-v5-president-desk`, `apply-v5-corrections`, `v5-manifest-msg001`, `apply-v5-tracker-updates`, `v5-source-references`, `render-v5-pages`; unit tests for the v5 corrections, tracker core, superseded v4 correction, list mode and replaced items.
+
+### Removed
+
+- `02_INCOMING_CONTENT/President Desk.docx` — archived byte for byte in `04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-26/` (git history keeps it too); no live code refers to it.
+
+### Unchanged
+
+- The other 45 items, their order and titles; the application layer (registration, gate, admin, database — no migration), navigation and security headers.
+- Published as supplied and listed for the owner's review: suspected slips in the new message (owner correction record §3).
+
 ## Front-page hero update — 2026-09-17 (deployed on top of `V4_REVIEW_02`)
 
 Owner request; front page only, commit `79ae6d0`. No new review release folder was built.

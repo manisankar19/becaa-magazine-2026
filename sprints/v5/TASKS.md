@@ -61,9 +61,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
 
 ## Stream D — Tracker (P0)
 
-- [ ] Task 11: `tracker-v5-core` + apply script for rows 16 and 23 [Decisions I, J] (P0)
+- [x] Task 11: `tracker-v5-core` + apply script for rows 16 and 23 [Decisions I, J] (P0)
   - Acceptance: pure `buildV5TrackerRows` sets row "Item ID 16" `Source File Name` → new DOCX name, `Received Date` → `26.09.2026`, appends a Remarks note; row "Item ID 23" `Branch` → `Mechanical` + Remarks note; existing remarks preserved; unit test first. `npm run tracker:apply-v5` snapshots first, style-preserving write, no-op on re-run; integration test: only those cells changed, 54 rows, 3 sheets; `tracker:validate` passes.
   - Files: `05_WEBSITE/scripts/tracker-v5-core.mjs`, `05_WEBSITE/scripts/apply-v5-tracker-updates.mjs`, `05_WEBSITE/tests/unit/tracker-v5-core.test.mjs`, `05_WEBSITE/tests/integration/apply-v5-tracker-updates.test.mjs`, `04_MAGAZINE_WORKING/BECAA_2026_Content_Tracker.xlsx`, `package.json`
+  - Completed: 2026-09-26 — unit test red (module missing) then green; `tracker:apply-v5` run on the real tracker (snapshot `BECAA_2026_Content_Tracker_2026-09-26T03-46-43-816Z_pre-v5-tracker-updates.xlsx` committed, as earlier snapshots are); row 16 `President Desk.docx`/`01.08.2026` → new DOCX/`26.09.2026`, row 23 `Civil` → `Mechanical`, remarks appended; integration test green (re-run byte-identical no-op, only those cells changed vs the snapshot); `tracker:validate` 54 rows, 3 sheets; semgrep clean; `npm audit` 3 allow-listed highs.
 
 ## Stream E — Verification (P0)
 

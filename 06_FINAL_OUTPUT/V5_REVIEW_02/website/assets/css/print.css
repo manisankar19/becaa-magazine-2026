@@ -1,0 +1,170 @@
+@page {
+  size: A4;
+  margin: 18mm;
+  @bottom-center {
+    content: counter(page);
+    color: #626057;
+    font-size: 9pt;
+  }
+}
+
+.print-preview {
+  background: #fff;
+}
+
+.print-cover, .print-contents {
+  min-height: 250mm;
+  break-after: page;
+}
+
+.print-cover {
+  margin: -18mm;
+  padding: 0;
+}
+
+.print-cover img { display: block; width: 210mm; height: 297mm; object-fit: contain; }
+
+.print-cover h1 { font-size: 36pt; }
+/* Sprint v3 Task 41 (v2 Task 19), root cause of the cover-page sliver: the Bengali glyphs of the
+   contents heading (vowel hooks and the headline curve of "একই শিকড়") extend above the first
+   line box, and Chromium paints that ink overflow at the foot of the previous page fragment.
+   Padding inside the heading's own box keeps the glyphs on page 2. (Rewriting the cover box was
+   tried first and is not the cause: it re-paginated the whole document, so it was dropped.) */
+.print-contents h1 { padding-top: 6mm; line-height: 1.5; margin-top: 0; }
+.print-contents li { margin: 0 0 2mm; }
+.print-contents li span { color: #626057; font-size: 9pt; }
+
+.print-page {
+  break-after: page;
+  min-height: 250mm;
+}
+
+.print-page h1 { font-size: 22pt; }
+.print-page p { orphans: 3; widows: 3; }
+.print-page table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 8.5pt; }
+.print-page thead { display: table-header-group; }
+.print-page tr { break-inside: avoid; }
+.print-page th, .print-page td { border: 0.25mm solid #9b9489; padding: 1.5mm; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+/* Sprint v5 Task 25: Markdown column alignment as classes (was an inline style; same result). */
+.print-page th.align-left, .print-page td.align-left { text-align: left; }
+.print-page th.align-center, .print-page td.align-center { text-align: center; }
+.print-page th.align-right, .print-page td.align-right { text-align: right; }
+.print-page th:first-child, .print-page td:first-child { width: 8%; }
+.print-page th:nth-child(2), .print-page td:nth-child(2) { width: 48%; }
+.print-page th:nth-child(3), .print-page td:nth-child(3) { width: 44%; }
+.print-page figure { break-inside: avoid; margin: 5mm 0; }
+
+.print-page:last-child {
+  break-after: auto;
+}
+
+/* Sprint v4 Task 7 (sprints/v4/PRD.md §4.2): a paragraph containing a hard
+   break is verse (e.g. ART-010, "গোলাপ") — force left alignment, a relaxed
+   line-height and no hyphenation so it never gets justified or broken
+   mid-word in print, regardless of any future prose-justification rule
+   elsewhere (Decision S, Task 27: verse must continue to win). */
+.prose p:has(br) {
+  text-align: left;
+  line-height: 1.6;
+  hyphens: none;
+}
+
+/* Sprint v4 Task 27 (PRD §4.7 item 6, Decision S): the committee asked for justified
+   article prose in print only. Scoped to ordinary paragraphs inside article bodies:
+   verse (p with <br>, rule above), list items and quotations are excluded, and titles,
+   bylines, messages, gallery, advertisements, memorial text and contents are outside
+   .print-page--article .prose. The website stylesheet is not changed. */
+.print-page--article .prose p:not(:has(br)):not(li p):not(blockquote p) {
+  text-align: justify;
+}
+
+.print-ad {
+  display: block;
+  max-width: 100%;
+  max-height: 240mm;
+  object-fit: contain;
+}
+
+/* Sprint v3 §4.4 — advertisement pages are tinted on the content box (inside the
+   18mm @page margins, so the page number stays on white) with a colour sampled from
+   or configured for each artwork; --ad-bg / --ad-ink come from the manifest via the
+   adPageStyle filter. The artwork itself is untouched: contain-fit, centred. */
+.print-page--advertisement {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-items: start;
+  min-height: 261mm;               /* 297mm - 2 × 18mm: fill the printable box */
+  box-sizing: border-box;
+  padding: 8mm 8mm 10mm;
+  background: var(--ad-bg, #fff);
+  color: var(--ad-ink, #20201d);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* 2026-09-17 approval: text-only and memorial pages have no heading, so the content moves up
+   into the stretching row and stays centred exactly as before. */
+.print-page--advertisement:not(:has(> h1)) {
+  grid-template-rows: auto 1fr;
+}
+.print-page--advertisement .section-kicker,
+.print-page--advertisement h1,
+.print-page--advertisement figcaption { color: var(--ad-ink, #20201d); }
+.print-page--advertisement figure { align-self: center; justify-self: center; width: 100%; margin: 0; display: grid; justify-items: center; }
+.print-page--advertisement .print-ad { max-height: 215mm; }
+
+/* Sprint v4 §4.3, Task 10 (Decisions F, G) — text-only advertisement pages: the
+   approved sentence fills the same 1fr grid row the artwork figure otherwise
+   occupies, centred both ways within the tinted page box. */
+.print-page--advertisement .ad-text {
+  align-self: center;
+  justify-self: center;
+  max-width: 20ch;
+  margin: 0;
+  font-size: 30pt;
+  line-height: 1.35;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ad-ink, #20201d);
+}
+
+/* Sprint v4 §4.4, Task 11 (Decisions F, G, J) — memorial page: the uncropped
+   photograph (contained, bounded height so the square scan never overflows
+   the page) followed by the seven centred text_lines, name line emphasised. */
+.print-page--advertisement .artwork-frame--memorial {
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  margin: 0;
+  display: grid;
+  justify-items: center;
+}
+.print-page--advertisement .artwork-frame--memorial .print-ad {
+  max-height: 130mm;
+  object-fit: contain;
+}
+.print-page--advertisement .ad-memorial {
+  align-self: start;
+  justify-self: center;
+  width: 100%;
+  margin: 4mm 0 0;
+  text-align: center;
+  display: grid;
+  gap: 2mm;
+  font-size: 16pt;
+  line-height: 1.4;
+}
+.print-page--advertisement .ad-memorial p {
+  margin: 0;
+}
+.print-page--advertisement .ad-memorial .ad-memorial__name {
+  font-size: 18pt;
+  font-weight: 700;
+}
+
+.print-thanks { display: grid; align-content: center; }
+.print-contact { break-after: page; }
+.print-link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-top: 8mm; }
+.print-link-grid article { display: grid; grid-template-columns: 28mm 1fr; gap: 4mm; align-items: center; break-inside: avoid; }
+.print-link-grid img { width: 28mm; height: 28mm; }
+.print-link-grid strong, .print-link-grid a { display: block; overflow-wrap: anywhere; }
+.print-link-grid a { font-size: 8pt; color: #20201d; text-decoration: none; }

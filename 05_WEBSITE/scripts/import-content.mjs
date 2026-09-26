@@ -1,3 +1,12 @@
+// HISTORICAL — Sprint 1 importer. It imported the original sources for the first three items
+// (MSG-001, ART-001, ADV-001) and wrote a fresh manifest; later sprints extend the manifest
+// and content with their own scripts, so re-running this would overwrite their work. It is
+// kept as a record of how Sprint 1 content was produced (`npm run import`, `npm run normalize`).
+//
+// Sprint v5 (Decision G): the MSG-001 source used here (the President's earlier message) was
+// removed from 02_INCOMING_CONTENT/ on 2026-09-26 and replaced by his new message; the byte-exact
+// original lives at 04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-26/President Desk.docx, and
+// the path below points there so the historical importer still resolves.
 import fs from "node:fs";
 import path from "node:path";
 import mammoth from "mammoth";
@@ -31,7 +40,7 @@ const selections = [
     branch: "Civil",
     section: "messages",
     order: 10,
-    source: "02_INCOMING_CONTENT/President Desk.docx",
+    source: "04_MAGAZINE_WORKING/SUPERSEDED_SOURCES/2026-09-26/President Desk.docx",
     contentRel: "messages/MSG-001-president-desk.md",
     permission: "Print and web",
     editorial_status: "Approved",

@@ -52,9 +52,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `05_WEBSITE/scripts/v4-corrections.mjs`, `05_WEBSITE/scripts/apply-v4-committee-corrections.mjs`, `05_WEBSITE/tests/integration/v4-committee-corrections.test.mjs`, `02_INCOMING_CONTENT/BECAA Committee Corrections 2026-09-16.md`
   - Completed: 2026-09-26 — `MSG-001` entries kept and marked `superseded: MSG001_SUPERSEDED` (plus `isSuperseded`/`activeCorrections` helpers); apply script skips them with date and reason, never reading the file; tracker remark (row 16) and `pdf-compare` (V3 baseline) deliberately keep the history; `v4-committee-corrections` drops the `MSG-001` checks, adds the skip check and masks the `MSG-001`/`ART-011` manifest blocks changed by Sprint v5; §11 addendum appended. New unit test `v4-corrections-superseded` red then green; `test:unit` green; build-dependent `v4-committee-corrections` not run here (non-build parts executed via a scratch harness).
 
-- [ ] Task 9: Remove live references to `President Desk.docx` [Decision G] (P0)
+- [x] Task 9: Remove live references to `President Desk.docx` [Decision G] (P0)
   - Acceptance: `grep` over `05_WEBSITE/scripts`, `src`, `tests` finds no live reference to the removed file (the Sprint 1 importer `import-content.mjs` gets a `HISTORICAL` header or the new path); a test asserts the absence (allow-listing only historical records outside those folders).
   - Files: `05_WEBSITE/scripts/import-content.mjs`, `05_WEBSITE/tests/integration/v5-source-references.test.mjs`
+  - Completed: 2026-09-26 — test written first (red on `import-content.mjs`, `publication.yaml`, `MSG-001` front matter); importer given a `HISTORICAL` header and pointed at the 2026-09-26 archive (not run by any test; it rewrites the manifest, so it was not executed). Test scans `scripts/`, `src/`, `tests/` (197 text files), allow-lists only itself and `superseded-sources.test.mjs`, checks the archive SHA-256; added to `test:integration`. Goes green only after Tasks 4 and 7 rewrite the two `src/` files (verified with a scratch run skipping just those two). semgrep clean.
 
 ## Stream C — `ART-011` (P0)
 

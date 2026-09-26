@@ -5,12 +5,13 @@
 // on three lines.
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { projectRoot, sha256 } from "../../scripts/lib.mjs";
 import {
   EXPECTED_SOURCE_SHA256,
+  buildPresidentDeskMarkdown,
   extractPresidentDesk,
-  outputPath,
   sourcePath,
   verifySourceFingerprint,
 } from "../../scripts/extract-v5-president-desk.mjs";
@@ -25,12 +26,16 @@ async function run() {
   const otherDocx = path.join(projectRoot, "02_INCOMING_CONTENT", "secretary desk.docx");
   assert.throws(() => verifySourceFingerprint(otherDocx), /SHA-256/, "a different file must be refused");
 
-  await extractPresidentDesk();
+  // Sprint v5 Task 6: extraction writes to a temporary file here, never to the real
+  // MSG-001 file, which carries the recorded signature correction on top of the extraction.
+  const outputPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "v5-msg001-")), "MSG-001-president-desk.md");
+  await extractPresidentDesk({ outputPath });
   assert.ok(fs.existsSync(outputPath), "output Markdown file must exist");
   const first = fs.readFileSync(outputPath, "utf8");
+  assert.equal(first, await buildPresidentDeskMarkdown(), "the writer writes exactly the built Markdown");
 
   // Idempotent: a second run writes byte-identical output.
-  await extractPresidentDesk();
+  await extractPresidentDesk({ outputPath });
   const written = fs.readFileSync(outputPath, "utf8");
   assert.equal(written, first, "second run must be byte-identical");
 

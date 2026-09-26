@@ -37,9 +37,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `02_INCOMING_CONTENT/BECAA Owner Corrections 2026-09-26.md`, `05_WEBSITE/scripts/v5-corrections.mjs`, `05_WEBSITE/tests/unit/v5-corrections.test.mjs`
   - Completed: 2026-09-26 — record written (MSG-001 `CE  87` → `CE ’87`, U+2019, count 1; ART-011 anchored four-line manifest find `branch: Civil` → `branch: Mechanical`, count 1, unique in the real manifest; nine §1.1 slips quoted verbatim as published as supplied); `v5-corrections.mjs` mirrors it; unit test red (module missing) then green, added to `test:unit`. No working file changed (Tasks 6 and 10 apply). semgrep clean; `npm audit` 3 allow-listed highs.
 
-- [ ] Task 6: Apply v5 corrections script; apply the `MSG-001` signature fix (P0)
+- [x] Task 6: Apply v5 corrections script; apply the `MSG-001` signature fix (P0)
   - Acceptance: `npm run corrections:apply-v5 [-- --only ID]` (same safeguards as the v4 script: paths inside `05_WEBSITE/`, pending/applied/stop) applies `MSG-001` only in this task; re-run reports `already applied`; signature reads `CE ’87`; integration test proves the file equals Task 4's extraction plus only this substitution.
   - Files: `05_WEBSITE/scripts/apply-v5-corrections.mjs`, `05_WEBSITE/tests/integration/apply-v5-corrections.test.mjs`, `05_WEBSITE/package.json`
+  - Completed: 2026-09-26 — `scripts/apply-v5-corrections.mjs` (reuses the v4 applier with `V5_FILE_CORRECTIONS`) and `npm run corrections:apply-v5`; MSG-001 signature `CE  87` → `CE ’87` applied, re-run reports `already applied`. Found while doing this: the Task 4 test re-ran the extractor onto the real file and would have undone the correction on every `test:integration` run, so the extractor is split into `buildPresidentDeskMarkdown()` + a writer with an overridable `outputPath`, and the Task 4 test now writes to a temp file. The new integration test proves the real file = extraction + the one recorded substitution; red (module missing) then green.
 
 - [ ] Task 7: `MSG-001` manifest update [Decisions A, K] (P0)
   - Acceptance: in `publication.yaml` only `MSG-001`'s `source_file`, `source_fingerprint`, `language: english` and `notes` change (count-guarded line edits); `title`, `alt`, order and all other items unchanged; `npm run validate` 0 errors, 47 items, fingerprint matches the new DOCX.

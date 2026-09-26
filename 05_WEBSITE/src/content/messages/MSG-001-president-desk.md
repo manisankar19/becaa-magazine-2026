@@ -31,5 +31,5 @@ In our journey so far, I felt all our members and their families were deeply inv
 On behalf of my entire Managing Committee and its members I sincerely thank you all.
 
 Manik Barman  
-CE  87  
+CE ’87  
 President, BECAA Maharashtra

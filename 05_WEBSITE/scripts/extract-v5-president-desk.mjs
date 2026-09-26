@@ -28,22 +28,29 @@ export function verifySourceFingerprint(filePath) {
   return actual;
 }
 
-export async function extractPresidentDesk() {
+// The extracted Markdown, verbatim from the fingerprinted source. Sprint v5 Task 6: the
+// published file is this plus the recorded owner corrections (npm run corrections:apply-v5),
+// so re-running the extraction on the real file must be followed by that step.
+export async function buildPresidentDeskMarkdown() {
   const fingerprint = verifySourceFingerprint(sourcePath);
   const { value: html } = await mammoth.convertToHtml({ path: sourcePath });
-  const markdown = buildArticleMarkdown({
+  return buildArticleMarkdown({
     id: "MSG-001",
     title: "President Desk",
     sourceFile: SOURCE_RELATIVE,
     fingerprint,
     bodyText: docxHtmlToParagraphText(html, { lists: true }),
   });
-  ensureDir(path.dirname(outputPath));
-  fs.writeFileSync(outputPath, markdown, "utf8");
-  return outputPath;
+}
+
+export async function extractPresidentDesk({ outputPath: target = outputPath } = {}) {
+  const markdown = await buildPresidentDeskMarkdown();
+  ensureDir(path.dirname(target));
+  fs.writeFileSync(target, markdown, "utf8");
+  return target;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   await extractPresidentDesk();
-  console.log(`Extracted: ${path.relative(projectRoot, outputPath)}`);
+  console.log(`Extracted: ${path.relative(projectRoot, outputPath)} — now run: npm run corrections:apply-v5`);
 }

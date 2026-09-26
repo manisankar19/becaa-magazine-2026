@@ -2,7 +2,7 @@
 // advertisement byline suppressed. Extended Sprint v4 Task 15 (sprints/v4/PRD.md
 // §4.3-4.4, Decision K): counts are derived from the manifest, not hard-coded, and
 // text/memorial presentation cards get their own assertions instead of the
-// artwork-only `.ad-frame`/`<img>` checks. Requires `npm run build` first.
+// artwork-only `.artwork-frame`/`<img>` checks. Requires `npm run build` first.
 import assert from "node:assert/strict";
 import path from "node:path";
 import { chromium } from "playwright";
@@ -26,7 +26,7 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: 
     const presentation = ad.presentation ?? "artwork";
 
     if (presentation === "text") {
-      // Task 10: no .ad-frame, no <img> — the tinted card is .ad-text itself.
+      // Task 10: no .artwork-frame, no <img> — the tinted card is .ad-text itself.
       const s = await card.evaluate((el) => {
         const adText = el.querySelector(".ad-text");
         const kicker = el.querySelector(".section-kicker");
@@ -57,10 +57,10 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: 
       continue;
     }
 
-    // artwork and memorial share the .ad-frame + <img> structure (the memorial
-    // figure carries both "ad-frame" and "ad-frame--memorial" classes).
+    // artwork and memorial share the .artwork-frame + <img> structure (the memorial
+    // figure carries both "artwork-frame" and "artwork-frame--memorial" classes).
     const s = await card.evaluate((el) => {
-      const frame = el.querySelector(".ad-frame");
+      const frame = el.querySelector(".artwork-frame");
       const h2 = el.querySelector("h2");
       const kicker = el.querySelector(".section-kicker");
       const img = frame.querySelector("img");
@@ -105,8 +105,12 @@ for (const viewport of [{ name: "desktop", width: 1440, height: 1100 }, { name: 
       assert.ok(!memorial.cardText.includes("With best compliments"), `${viewport.name} ${ad.id}: memorial must not carry the artwork compliments wording`);
     }
   }
+  // Sprint v5 Task 23 (PRD §11, Decision O): no element uses the names EasyList hides site-wide.
+  const blockerNames = await page.evaluate(() => document.querySelectorAll(".ad-frame, .ad-link").length);
+  assert.equal(blockerNames, 0, `${viewport.name}: no .ad-frame/.ad-link elements (hidden by ad blockers)`);
+  assert.equal(await page.locator(".artwork-frame img").count(), await page.locator(".publication-item img").count(), `${viewport.name}: every publication image sits in an .artwork-frame`);
   // Gallery cards keep the plain white frame and their byline.
-  const gal = await page.locator("#GAL-007").evaluate((el) => ({ bg: getComputedStyle(el.querySelector(".ad-frame")).backgroundColor, bylines: el.querySelectorAll(".byline").length }));
+  const gal = await page.locator("#GAL-007").evaluate((el) => ({ bg: getComputedStyle(el.querySelector(".artwork-frame")).backgroundColor, bylines: el.querySelectorAll(".byline").length }));
   assert.equal(gal.bg, "rgb(255, 255, 255)", `${viewport.name}: gallery frame stays white`);
   assert.equal(gal.bylines, 1, `${viewport.name}: gallery byline retained`);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);

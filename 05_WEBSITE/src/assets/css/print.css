@@ -126,7 +126,7 @@
 /* Sprint v4 §4.4, Task 11 (Decisions F, G, J) — memorial page: the uncropped
    photograph (contained, bounded height so the square scan never overflows
    the page) followed by the seven centred text_lines, name line emphasised. */
-.print-page--advertisement .ad-frame--memorial {
+.print-page--advertisement .artwork-frame--memorial {
   align-self: center;
   justify-self: center;
   width: 100%;
@@ -134,7 +134,7 @@
   display: grid;
   justify-items: center;
 }
-.print-page--advertisement .ad-frame--memorial .print-ad {
+.print-page--advertisement .artwork-frame--memorial .print-ad {
   max-height: 130mm;
   object-fit: contain;
 }

@@ -26,10 +26,10 @@ for (const viewport of [
     }));
   });
   await page.screenshot({ path: path.join(outDir, `${viewport.name}-home.png`), fullPage: false, timeout: 30000 });
-  const adFrame = page.locator("#ADV-001 .ad-frame");
+  const adFrame = page.locator("#ADV-001 .artwork-frame");
   if (await adFrame.count()) {
     await adFrame.scrollIntoViewIfNeeded();
-    await adFrame.screenshot({ path: path.join(outDir, `${viewport.name}-ad-frame.png`) });
+    await adFrame.screenshot({ path: path.join(outDir, `${viewport.name}-artwork-frame.png`) });
   }
   const issues = await page.evaluate(() => ({
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
@@ -46,7 +46,7 @@ for (const viewport of [
     const img = item.querySelector("img");
     const rect = img?.getBoundingClientRect();
     const adText = item.querySelector(".ad-text");
-    const kind = adText ? "text" : item.querySelector(".ad-frame--memorial") ? "memorial" : "artwork";
+    const kind = adText ? "text" : item.querySelector(".artwork-frame--memorial") ? "memorial" : "artwork";
     const textRect = adText?.getBoundingClientRect();
     return { id: item.id, kind, hasImg: Boolean(img), text: adText?.textContent.trim() ?? "", textWidth: textRect?.width || 0, objectFit: img ? getComputedStyle(img).objectFit : "", naturalWidth: img?.naturalWidth || 0, naturalHeight: img?.naturalHeight || 0, displayWidth: rect?.width || 0, displayHeight: rect?.height || 0 };
   }));
@@ -65,7 +65,7 @@ for (const viewport of [
       const displayRatio = ad.displayWidth / ad.displayHeight;
       if (!ad.naturalWidth || !ad.displayWidth || Math.abs(naturalRatio - displayRatio) > 0.02) await fail("advertisement is broken or distorted.");
     }
-    const target = page.locator(ad.kind === "text" ? `#${ad.id}` : `#${ad.id} .ad-frame`);
+    const target = page.locator(ad.kind === "text" ? `#${ad.id}` : `#${ad.id} .artwork-frame`);
     await target.scrollIntoViewIfNeeded();
     await target.screenshot({ path: path.join(adOutDir, `${viewport.name}-${ad.id}.png`) });
   }

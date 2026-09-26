@@ -286,7 +286,7 @@ h2 {
   line-height: 1.85;
 }
 
-.ad-frame {
+.artwork-frame {
   margin: 1.5rem 0 0;
   width: min(740px, 100%);
   padding: clamp(0.75rem, 2vw, 1.25rem);
@@ -296,13 +296,13 @@ h2 {
   box-shadow: var(--shadow);
 }
 
-.ad-frame img {
+.artwork-frame img {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.ad-link {
+.artwork-link {
   display: block;
 }
 
@@ -310,7 +310,7 @@ h2 {
    the print page (--ad-bg / --ad-ink from the manifest via the adPageStyle filter).
    Only the frame and the card's own heading/kicker change; the artwork is untouched
    and gallery cards keep the plain white frame. */
-.publication-item--advertisement .ad-frame {
+.publication-item--advertisement .artwork-frame {
   background: var(--ad-bg, #ffffff);
 }
 .publication-item--advertisement .section-kicker,
@@ -319,19 +319,19 @@ h2 {
   color: var(--ad-ink, var(--ink));
 }
 .publication-item--advertisement .item-header {
-  width: min(740px, 100%);          /* same width as .ad-frame so header + frame read as one tinted card */
+  width: min(740px, 100%);          /* same width as .artwork-frame so header + frame read as one tinted card */
   box-sizing: border-box;
   padding: 0.9rem 1rem 0.2rem;
   border-radius: 8px 8px 0 0;
   background: var(--ad-bg, transparent);
 }
-.publication-item--advertisement .ad-frame {
+.publication-item--advertisement .artwork-frame {
   margin-top: 0;
   border-radius: 0 0 8px 8px;
 }
 
 /* Sprint v4 §4.3, Task 10 (Decisions F, G) — text-only advertisement pages have
-   no artwork: the approved sentence itself replaces .ad-frame as the tinted
+   no artwork: the approved sentence itself replaces .artwork-frame as the tinted
    card's lower half, so it keeps the same width/rounding pairing with
    .item-header and reuses --ad-bg/--ad-ink from the manifest via adPageStyle. */
 .ad-text {
@@ -354,11 +354,11 @@ h2 {
 /* Sprint v4 §4.4, Task 11 (Decisions F, G, J) — memorial page: the uncropped
    photograph (contained, bounded height, no crop) sits between the shared
    .item-header and the seven centred text_lines; the two pieces share one
-   tinted card the same way .item-header + .ad-frame do for artwork ads. */
-.publication-item--advertisement .ad-frame--memorial {
+   tinted card the same way .item-header + .artwork-frame do for artwork ads. */
+.publication-item--advertisement .artwork-frame--memorial {
   border-radius: 0;
 }
-.ad-frame--memorial img {
+.artwork-frame--memorial img {
   display: block;
   width: 100%;
   height: auto;

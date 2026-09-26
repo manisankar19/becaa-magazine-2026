@@ -253,7 +253,11 @@ const pdfContents = pages.filter((p) => p.includes("— Contents")).join("\n");
   }
   assert.ok(!/text-align\s*:\s*justify/.test(read("src/assets/css/site.css")), "website stylesheet has no text justification");
   // The only website stylesheet change since the corrections began is Task 43's scroll offset.
-  const siteCss = read("src/assets/css/site.css");
+  // …and Sprint v5 Task 23 (PRD §11, Decision O) renamed .ad-frame/.ad-link to
+  // .artwork-frame/.artwork-link, which ad blockers do not hide; map the names back so that
+  // exact rename is the only difference tolerated.
+  const siteCss = read("src/assets/css/site.css").replaceAll("artwork-frame", "ad-frame").replaceAll("artwork-link", "ad-link");
+  assert.ok(!read("src/assets/css/site.css").includes(".ad-frame") && !read("src/assets/css/site.css").includes(".ad-link"), "site.css uses the Task 23 names");
   const task43 = siteCss.indexOf("\n/* Sprint v4 Task 43");
   assert.ok(task43 > 0, "site.css carries the Task 43 scroll-padding block");
   // …and the 2026-09-17 front-page hero, which replaced the old cover badges (.cover__meta)

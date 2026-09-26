@@ -46,7 +46,7 @@ title: একই শিকড় — BECAA Maharashtra Magazine 2026
     {% if item.type == "advertisement" and item.presentation == "text" %}
       <p class="ad-text" data-testid="ad-text-{{ item.id }}">{{ item.text_lines[0] }}</p>
     {% elif item.type == "advertisement" and item.presentation == "memorial" %}
-      <figure class="ad-frame ad-frame--memorial">
+      <figure class="artwork-frame artwork-frame--memorial">
         {% if item.web_asset %}
           <img src="{{ item.web_asset }}" alt="{{ item.alt }}" loading="eager" decoding="async">
         {% else %}
@@ -59,9 +59,9 @@ title: একই শিকড় — BECAA Maharashtra Magazine 2026
         {% endfor %}
       </div>
     {% elif item.type == "advertisement" or item.type == "gallery" %}
-      <figure class="ad-frame">
+      <figure class="artwork-frame">
         {% if item.web_asset %}
-          <a class="ad-link" href="{{ item.web_asset }}" target="_blank" rel="noopener" aria-label="Open {{ item.title }} at larger size">
+          <a class="artwork-link" href="{{ item.web_asset }}" target="_blank" rel="noopener" aria-label="Open {{ item.title }} at larger size">
             <img src="{{ item.web_asset }}" alt="{{ item.alt }}" loading="eager" decoding="async">
           </a>
         {% else %}

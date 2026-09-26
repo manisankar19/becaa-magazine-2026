@@ -1,6 +1,6 @@
 # Sprint v5 — Tasks
 
-## Status: Addendum in progress (2026-09-26) — Tasks 1–28 done; `V5_REVIEW_02` built and verified locally; Tasks 29–30 (Preview, Production) await the owner's go-ahead; Production still serves `V5_REVIEW_01`
+## Status: Sprint v5 complete (2026-09-26) — Tasks 1–30 done; `V5_REVIEW_02` in production at https://becaa-magazine-2026-portal.vercel.app
 
 Reference: `sprints/v5/PRD.md`, `sprints/v5/Changev5.md`.
 **Decisions:** A–N approved as recommended (2026-09-26). Tasks that depend on a specific decision name it as `[Decision X]`.
@@ -168,9 +168,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`
   - Completed: 2026-09-26 — Preview `…-k5q4b6721-…` (`dpl_E5F59cTnDPMG7mSk6nPKwgWJ1cxx`) from `76b39df`; migrations Applied 1 / Pending none. Probes 12/12. 6 public files byte-identical (incl. `ad-tints.css`). Content check under the deployed CSP: page and PDF byte-identical to `V5_REVIEW_02`, 30/30 images visible, 25/25 tints, ART-006 alignment, 0 CSP errors, and 30/30 images with all EasyList generic rules injected. `e2e:app --public-only` 14 steps. 4 test visitors and 3 rate-limit windows removed; DB back to 3/3/0/0. Recorded in `PREVIEW_DEPLOYMENT.md`.
 
-- [ ] Task 30: Production deployment of `V5_REVIEW_02` — **requires a further explicit go-ahead** (P1)
+- [x] Task 30: Production deployment of `V5_REVIEW_02` — **requires a further explicit go-ahead** (P1)
   - Acceptance: as Task 21 (checks that leave nothing behind unless Production reads are permitted), plus `ad-tints.css` and `site.css` served byte-identical to the build; previous deployment kept for rollback; recorded; walkthrough updated.
   - Files: `sprints/v5/PREVIEW_DEPLOYMENT.md`, `sprints/v5/WALKTHROUGH.md`
+  - Completed: 2026-09-26 — Production `…-acdyrs0h7-…` (`dpl_Yy9VsSJ5VoSZ9LF9ewsfswsdR4hS`) from the Preview-verified tree, aliased to the production domain; `…-efkqodur5-…` (`V5_REVIEW_01`) and `…-3rbvgbgd5-…` kept for rollback. No-trace checks: probes 11/11 (wrong password skipped); 6 public files incl. `ad-tints.css` byte-identical to `V5_REVIEW_02`. No Production env or database access, no registration. Incident: two untracked throwaway scripts in `05_WEBSITE/` were uploaded with the deployment source (no secrets; 404 when requested; not in the built site); deleted, follow-up recorded. Scratch environment files shredded. Walkthrough updated.
 
 ## Session log
 
@@ -230,3 +231,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - The web copy of `/print/` keeps inline tints (untinted on the live site; the PDF is unaffected).
   - Image paths containing "advertisement" are deferred to Sprint v6.
 - **Next task:** Task 29 (Preview) — needs the owner's explicit go-ahead; then Task 30 (Production), a further go-ahead.
+
+### 2026-09-26 — Tasks 29–30
+- **Completed task(s):** 29 (Preview of `V5_REVIEW_02`), 30 (Production).
+- **Commits:** `fe49e0e` (29), then the Task 30 record and walkthrough update.
+- **Test results:** Preview: probes 12/12, 6 public files byte-identical, content check (30/30 images, 25/25 tints, 0 CSP errors, images survive EasyList rules), `e2e:app --public-only` 14 steps; Production: probes 11/11, 6 public files byte-identical.
+- **Unresolved issues:** throwaway scripts were uploaded with the deployment source (no secrets, 404, now deleted) — add `.*.mjs` to `.vercelignore` or keep drivers outside `05_WEBSITE/`; Production content behind the gate verified via the identical Preview only (owner-chosen scope).
+- **Next task:** none in Sprint v5.

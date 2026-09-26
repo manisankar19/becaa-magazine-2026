@@ -82,6 +82,7 @@
     "test:e2e:nav": "node tests/e2e/site-navigation.test.mjs",
     "test:e2e:hero": "node tests/e2e/front-page-hero.test.mjs",
     "test:e2e:csp": "node tests/e2e/csp.test.mjs",
+    "test:e2e:blocker": "node tests/e2e/ad-blocker.test.mjs",
     "test:v4-advertisements": "node tests/integration/v4-advertisements.test.mjs",
     "test:v4-committee-corrections": "node tests/integration/v4-committee-corrections.test.mjs",
     "test:v5-updates": "node tests/integration/v5-updates.test.mjs",

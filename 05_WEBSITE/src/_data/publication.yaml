@@ -8,15 +8,15 @@ items:
   - id: MSG-001
     type: message
     title: President Desk
-    language: mixed
+    language: en
     contributor: Manik Barman
     designation: President
     passing_year: '1987'
     branch: Civil
     section: messages
     order: 10
-    source_file: 02_INCOMING_CONTENT/President Desk.docx
-    source_fingerprint: c9f5d073f3b732ef6c30466b210db2622a7e9afc756bff070e537bce2db38ddb
+    source_file: 02_INCOMING_CONTENT/Souvenir President message 05-09-2026.docx
+    source_fingerprint: 67d8a418d781e5bdad16985ceca4f64c6a40bd40d10a3cf075c9bd18dc9f3bf7
     content_file: messages/MSG-001-president-desk.md
     web_asset: ''
     print_asset: ''
@@ -28,7 +28,7 @@ items:
     caption: ''
     credit: ''
     alt: President Desk — Manik Barman
-    notes: 'Tracker Item ID 16. Exact approved source: President Desk.docx.'
+    notes: 'Tracker Item ID 16. Exact approved source: Souvenir President message 05-09-2026.docx.'
   - id: MSG-002
     type: message
     title: Vice President Desk

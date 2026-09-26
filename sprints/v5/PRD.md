@@ -67,7 +67,7 @@ No item is added, removed or reordered: the manifest stays at 47 items and `MSG-
   - keeps the signature's soft breaks as three lines.
 - **List support (Decision E):** extend `docxHtmlToParagraphText` with an opt-in (e.g. `{ lists: true }`) that renders `<li>` items as Markdown `- ` bullets in one block. Existing callers keep today's output byte for byte (unit test).
 - **Wording:** body published as supplied (Decision C). The only proposed change is the signature's `CE  87` → `CE ’87` (Decision D), made through a v5 correction record and the count-guarded `text-correction-core`, never by hand.
-- **Manifest** (`publication.yaml`, `MSG-001` only): `source_file`, `source_fingerprint`, `language: english` (Decision K), `notes` (`Tracker Item ID 16. Exact approved source: Souvenir President message 05-09-2026.docx.`). `title`, `alt`, `contributor`, `designation`, `passing_year`, `branch`, `order` unchanged (Decision A).
+- **Manifest** (`publication.yaml`, `MSG-001` only): `source_file`, `source_fingerprint`, `language: en` (Decision K), `notes` (`Tracker Item ID 16. Exact approved source: Souvenir President message 05-09-2026.docx.`). `title`, `alt`, `contributor`, `designation`, `passing_year`, `branch`, `order` unchanged (Decision A).
 - **Other live references:** `scripts/import-content.mjs` (Sprint 1 importer) gets a `HISTORICAL` note or the new path, so no live file names the removed source; historical sprint documents and working reports stay as records (Decision G).
 
 ### 4.3 Retire the Sprint v4 `MSG-001` correction (Decision H)
@@ -130,7 +130,7 @@ tracker-v5-core ─▶ tracker rows 16, 23 (snapshot first)        pdf-compare v
 President Desk.docx ──git show HEAD──▶ SUPERSEDED_SOURCES/2026-09-26/  then git rm from intake
 ```
 
-Data model: no new fields. `branch` gains a new value `Mechanical`; there is no allow-list to extend. `MSG-001.language` becomes `english`.
+Data model: no new fields. `branch` gains a new value `Mechanical`; there is no allow-list to extend. `MSG-001.language` becomes `en` (the manifest's code for English).
 
 ## 6. Validation criteria for `V5_REVIEW_01`
 
@@ -154,7 +154,7 @@ Data model: no new fields. `branch` gains a new value `Mechanical`; there is no 
 - **H. The Sprint v4 `MSG-001` correction.** *Recommended:* mark it superseded (data, apply script, test, correction-record addendum, tracker remark) rather than delete its history. *Alternative:* leave the v4 code as is and let v5 tests skip it (leaves failing v4 suites — not viable for the release gate).
 - **I. Tracker received date for the new message.** *Recommended:* `26.09.2026`, the date the file arrived (the `05-09-2026` in its name is the message's date). *Alternative:* `05.09.2026`.
 - **J. `ART-011` branch value.** *Recommended:* `Mechanical`, as the owner wrote it and in the style of `Civil`/`Electrical`; changed in the manifest and tracker through the count-guarded correction path. The article body's own `Mech 2006` line is left as written.
-- **K. `MSG-001` language.** *Recommended:* `english`.
+- **K. `MSG-001` language.** *Recommended:* English — manifest code `en`.
 - **L. Release.** *Recommended:* `release:v5` → `V5_REVIEW_01`; comparison baseline `V4_REVIEW_02`; add `test:e2e:hero` to the release list (closes the v4 follow-up). The new release also captures the hero change, so the archive matches Production again.
 - **M. Deployment.** Preview after `/walkthrough`, with separate approval; Production only after a further explicit approval, following `05_WEBSITE/DEPLOYMENT.md` (smoke test still 47 items). The previous Production deployment is kept for rollback.
 - **N. Commit plan.** (1) intake and archive/removal, then one commit per task as in v4; no commit of release output until the pipeline is green.

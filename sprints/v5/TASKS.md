@@ -1,6 +1,6 @@
 # Sprint v5 — Tasks
 
-## Status: Addendum in progress (2026-09-26) — Tasks 1–21 done, `V5_REVIEW_01` in production; addendum Tasks 22–30 (PRD §11) approved, not started
+## Status: Addendum in progress (2026-09-26) — Tasks 1–28 done; `V5_REVIEW_02` built and verified locally; Tasks 29–30 (Preview, Production) await the owner's go-ahead; Production still serves `V5_REVIEW_01`
 
 Reference: `sprints/v5/PRD.md`, `sprints/v5/Changev5.md`.
 **Decisions:** A–N approved as recommended (2026-09-26). Tasks that depend on a specific decision name it as `[Decision X]`.
@@ -158,9 +158,10 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - Files: `scripts/release-core.mjs`, `tests/unit/release-core.test.mjs`, `package.json`, `CHANGELOG.md`, `06_FINAL_OUTPUT/V5_REVIEW_02/**`
   - Completed: 2026-09-26 — `V5_STEPS` gains `qa:blocklist` (after `qa:v5-pages`) and `test:e2e:csp`, `test:e2e:blocker` (after the hero test): 35 steps. release-core unit test red first (my first grep read an earlier success line; the real exit was 1), then green. `release:v5:02` and the CHANGELOG section committed first (`fa83b7d`). `V5_REVIEW_02` built detached with an exit-code waiter at `fa83b7d`: 35/35 steps passed (comparison unchanged 69 / correction 1 / replaced-item 2 / 0 unexplained; blocklist guard, 0 CSP violations, 30/30 images under 13,078 blocker rules). 294 files; 47 items. 0 local secret values; tracked release folders unchanged. PDF text identical and all 72 pages pixel-identical to `V5_REVIEW_01`; the bytes differ only by creation date, so `release-assets/print/` was replaced with the V5_REVIEW_02 PDF (`d274c154…`).
 
-- [ ] Task 28: Manual verification addendum (P1)
+- [x] Task 28: Manual verification addendum (P1)
   - Acceptance: `sprints/v5/MANUAL_VERIFICATION.md` addendum: local gate at 1440/390 px with and without the injected blocker rules (images visible, tints shown, no CSP errors); screenshots inspected.
   - Files: `sprints/v5/MANUAL_VERIFICATION.md`
+  - Completed: 2026-09-26 — `MANUAL_VERIFICATION.md` addendum. Throwaway driver through the local dev-app gate at 1440/390 px, each as a normal browser (CSP enforced) and with all 13,078 EasyList generic hide rules injected. 4/4 runs pass: 30/30 images visible in every run; ADV-001 tint `rgb(182, 226, 242)` from `ad-tints.css`; ART-006 column right-aligned; 0 CSP errors; no `.ad-frame`/`.ad-link`. Screenshots inspected; 4 test registrations deleted; driver not committed. No findings.
 
 - [ ] Task 29: Preview deployment of `V5_REVIEW_02` — **requires the owner's explicit go-ahead** (P1)
   - Acceptance: as Task 20, plus on Preview: images visible, tints computed from the stylesheet, no CSP violations, and images still visible with the blocker rules injected; test records removed; recorded in `PREVIEW_DEPLOYMENT.md`.
@@ -209,3 +210,22 @@ Session handoff: as in Sprint v4 — every `/dev` session appends a dated `## Se
   - The admin flow was not run on either deployment; it passed locally.
   - Deployment records are committed locally; push when wanted.
 - **Next task:** none in Sprint v5. Open owner decisions: the wording slips (owner correction record §3) and the review-era front-page wording.
+
+### 2026-09-26 — Tasks 22–28 (addendum, PRD §11)
+- **Completed task(s):** 22 (ad-blocker guard), 23 (class rename), 24 (tests under the production CSP), 25 (tints and table alignment without inline styles), 26 (ad-blocker simulation, full gate), 27 (`V5_REVIEW_02`), 28 (manual verification).
+- **Commits:** `ec5a3c1` (22), `f516bb9` (23), `84f9cf8` (24), `20f5bbf` (25), `cbcaa0b` (26), `fa83b7d` + `1d10015` (27), then the Task 28 record.
+- **Changed files:**
+  - as declared, plus `ad-backgrounds-qa.mjs`, `visual-qa.mjs`, `front-page-hero`/`site-navigation` tests (moved to the CSP-enforcing server);
+  - `v4-committee-corrections` (narrow allowances for the rename and the alignment block);
+  - `tests/unit/ad-tints-core.test.mjs` and `scripts/ad-tints-core.mjs` (Task 25's shared helper).
+- **Test results:**
+  - release `V5_REVIEW_02`: 35/35 steps (incl. `qa:blocklist`, `test:e2e:csp`, `test:e2e:blocker`);
+  - PDF: all 72 pages pixel-identical to `V5_REVIEW_01`;
+  - manual: 4/4 runs;
+  - semgrep clean; `npm audit` 3 allow-listed.
+- **Unresolved issues:**
+  - Task 24 found a second CSP casualty (ART-006 table alignment), fixed in Task 25 within the same scope.
+  - `test:e2e:csp` and `web-ad-cards` were knowingly red between the Task 24 and Task 25 commits.
+  - The web copy of `/print/` keeps inline tints (untinted on the live site; the PDF is unaffected).
+  - Image paths containing "advertisement" are deferred to Sprint v6.
+- **Next task:** Task 29 (Preview) — needs the owner's explicit go-ahead; then Task 30 (Production), a further go-ahead.
